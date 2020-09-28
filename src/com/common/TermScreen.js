@@ -8,10 +8,6 @@ const {width, height} = Dimensions.get('window');
 
 class TermScreen extends React.Component{
     render() {
-        analytics().setCurrentScreen(Def.SCREEN_TERM);
-        const renderItem = ({ item }) => (
-            <NotificationItemrenderer item={item} />
-        );
         return (
             <View style={{flex:1}}>
                 <View style={styles.header}>

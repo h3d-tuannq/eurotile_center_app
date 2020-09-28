@@ -6,7 +6,7 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    Dimensions,
+    Dimensions,Button,
     Alert,StatusBar, PixelRatio
 
 } from 'react-native';
@@ -19,6 +19,12 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import RadioIcon from './assets/icon/icon-radio.svg';
 import RadioIconSelect from './assets/icon/icon_radio_select.svg';
+
+import NewsIcon from './assets/icon/icon-news.svg';
+import NewsIconSelect from './assets/icon/icon_news_select.svg';
+
+import MyProfileIcon from './assets/icon/icon-myprofile.svg';
+import MyProfileIconSelect from './assets/icon/icon_myprofile_select.svg';
 
 import BackIcon from './assets/icon/icon-back.svg';
 
@@ -68,16 +74,16 @@ function MyTabBar(props) {
 
     return (
         <View>
-            {!(
-                state.index == 1  &&
-                state.routes[1] &&
-                state.routes[1].state &&
-                state.routes[1].state.routes &&
-                state.routes[1].state.routes[state.routes[1].state.index].state.index == 1) ? (
-                <View />
-            ) : (
-                <View />
-            )}
+            {/*{!(*/}
+                {/*state.index == 1  &&*/}
+                {/*state.routes[1] &&*/}
+                {/*state.routes[1].state &&*/}
+                {/*state.routes[1].state.routes &&*/}
+                {/*state.routes[1].state.routes[state.routes[1].state.index].state.index == 1) ? (*/}
+                {/*<View />*/}
+            {/*) : (*/}
+                {/*<View />*/}
+            {/*)}*/}
             <View style={{flexDirection: 'row',
                 backgroundColor : '#fff',
                 borderTopWidth:1,
@@ -160,7 +166,7 @@ function MainTab() {
     return (
         <Tab.Navigator
             style={{height: 120, paddingVertical: 20 , backgroundColor : 'red'}}
-            tabBar={(props) => <MyTabBar {...props} item={program} />}
+            tabBar={(props) => <MyTabBar {...props} item={null} />}
             tabBarOptions={{
                 activeTintColor: Style.DEFAUT_RED_COLOR,
                 inactiveTintColor: '#b3b3b3',
@@ -174,19 +180,34 @@ function MainTab() {
                 },
                 // item:program
             }}>
+
             <Tab.Screen
                 name="Home"
-                component={RadioStack}
+                component={MyStack}
                 options={(route) => {
-                    return route.route.state &&
-                    route.route.state.routes &&
-                    route.route.state.routes[1] &&
-                    route.route.state.routes[1].params.screen == 'player'
+                    return false
                         ? {tabBarVisible: false}
                         : {
-                            tabBarLabel: 'Radio',
+                            tabBarLabel: 'Home',
                             tabBarIcon: ({focused, color, size}) => {
-                                analytics().setCurrentScreen(Def.TAB_RADIO);
+                                if (focused) {
+                                    return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
+                                }
+                                return <MyProfileIcon style={styles.tabBarIconStyle} />;
+                            },
+                        };
+                }}
+            />
+
+            <Tab.Screen
+                name="Product"
+                component={ProductStack}
+                options={(route) => {
+                    return false
+                        ? {tabBarVisible: false}
+                        : {
+                            tabBarLabel: 'Product',
+                            tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
                                     return <RadioIconSelect style={styles.tabBarIconStyle} />;
                                 }
@@ -195,6 +216,24 @@ function MainTab() {
                         };
                 }}
             />
+            <Tab.Screen
+                name="News"
+                component={NewsStack}
+                options={(route) => {
+                    return false
+                        ? {tabBarVisible: false}
+                        : {
+                            tabBarLabel: 'News',
+                            tabBarIcon: ({focused, color, size}) => {
+                                if (focused) {
+                                    return <NewsIconSelect style={styles.tabBarIconStyle} />;
+                                }
+                                return <NewsIcon style={styles.tabBarIconStyle} />;
+                            },
+                        };
+                }}
+            />
+
         </Tab.Navigator>
     );
 }
@@ -202,6 +241,7 @@ function MainTab() {
 function AppStack() {
     return (
         <RootStack.Navigator headerMode="none">
+            <Stack.Screen name="MainTab" component={MainTab} />
             <Stack.Screen name="Login" component={LoginStack} />
         </RootStack.Navigator>
     );
@@ -213,7 +253,7 @@ import {
     DrawerContentScrollView,
     DrawerItem,
 } from '@react-navigation/drawer';
-import {Container, Content, Header, Left, Body, Icon} from 'native-base';
+
 
 const Drawer = createDrawerNavigator();
 
@@ -309,10 +349,6 @@ function CustomDrawerContent(props) {
                     )}
 
                     <DrawerItemList {...props} />
-                    {/*<DrawerItem*/}
-                    {/*label="Help"*/}
-                    {/*onPress={() => {console.log('item click')}}*/}
-                    {/*/>*/}
                 </View>
             </DrawerContentScrollView>
             <View
@@ -323,9 +359,9 @@ function CustomDrawerContent(props) {
                     paddingLeft: 10,
                     zIndex: 10,
                 }}>
-                <Text style={styles.infoText}>Hotline: (024).38256622</Text>
-                <Text style={styles.infoText}>Email: trungtamkythuatvov@gmail.com</Text>
-                <Text style={styles.infoText}>Website: http://kythuatvov.vn</Text>
+                <Text style={styles.infoText}>Hotline: 0902798538</Text>
+                <Text style={styles.infoText}>Email: admin-eurtile@gmail.com</Text>
+                <Text style={styles.infoText}>Website: http://eurotiledev.house3d.net</Text>
                 <Text style={styles.infoText}>Phiên bản 1.0</Text>
             </View>
         </View>
@@ -341,10 +377,35 @@ import TermScreen from './src/com/common/TermScreen';
 
 
 import GuideScreen from "./src/com/common/GuideScreen";
+import LoginStack from "./src/views/LoginStack";
+import ProductStack from "./src/views/ProductStack";
+import NewsStack from "./src/views/NewsStack";
+import MyStack from "./src/views/MyStack";
+
+
+// function HomeScreen({ navigation }) {
+//     return (
+//         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//             <Button
+//                 onPress={() => navigation.navigate('Notifications')}
+//                 title="Go to notifications"
+//             />
+//         </View>
+//     );
+// }
+
+function NotificationsScreen({ navigation }) {
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Button onPress={() => navigation.goBack()} title="Go back home" />
+        </View>
+    );
+}
+
+
 
 function AppDrawer() {
     const iconSize = PixelRatio.get() <2 ? 18 : 20;
-    analytics().setCurrentScreen(Def.SCREEN_APP_DRAWER);
     return (
         <Drawer.Navigator
             drawerStyle={{
@@ -355,43 +416,17 @@ function AppDrawer() {
                 // activeTintColor: '#e91e63',
                 itemStyle: { marginVertical: 0, height : PixelRatio.get() < 2 ? 35 :40, paddingVertical:0, justifyContent:'center'},
             }}
-
-            drawerContent={(props) => <CustomDrawerContent {...props} />}>
-            {/*<Drawer.Screen*/}
-                {/*name="Eurotile Center"*/}
-                {/*component={AppStack}*/}
-                {/*options={{*/}
-                    {/*drawerIcon: ({focused: boolean, color: string, size: number}) => {*/}
-                        {/*return <NotiIcon width={iconSize} height={iconSize} />;*/}
-                    {/*},*/}
-                {/*}}*/}
-            {/*/>*/}
+             drawerContent={(props) => <CustomDrawerContent {...props} />}
+        >
             <Drawer.Screen
-                name="Góp ý, báo lỗi"
+                name="Center"
+                component={AppStack}
                 options={{
                     drawerIcon: ({focused: boolean, color: string, size: number}) => {
-                        return <FeedbackIcon width={iconSize} height={iconSize} />;
-                    },
-                }}>
-                {(props) => (
-                    <FeedbackScreen
-                        {...props}
-                        title={'Góp ý phản hồi'}
-                        hidePlayer={true}
-                    />
-                )}
-            </Drawer.Screen>
-
-            <Drawer.Screen
-                name="Hẹn giờ tắt"
-                component={ShutDownAlarmModal}
-                options={{
-                    drawerIcon: ({focused: boolean, color: string, size: number}) => {
-                        return <AlarmIcon width={iconSize} height={iconSize} />;
+                        return <GuideIcon width={iconSize} height={iconSize} />;
                     },
                 }}
             />
-
             <Drawer.Screen
                 name="Hướng dẫn sử dụng"
                 component={GuideScreen}
@@ -401,6 +436,7 @@ function AppDrawer() {
                     },
                 }}
             />
+
 
             <Drawer.Screen
                 name="Điều khoản sử dụng"

@@ -2,7 +2,6 @@ import React from 'react'
 import {View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, FlatList} from 'react-native'
 import DownIconSvg from '../../../assets/icon/icon-down-black.svg'
 
-import analytics from '@react-native-firebase/analytics';
 import Def from '../../../src/def/Def'
 import Style from "../../../src/def/Style";
 
@@ -11,10 +10,6 @@ const {width, height} = Dimensions.get('window');
 
 class PrivacyScreen extends React.Component{
     render() {
-        analytics().setCurrentScreen(Def.SCREEN_PRIVACY);
-        const renderItem = ({ item }) => (
-            <NotificationItemrenderer item={item} />
-        );
         return (
             <View style={{flex:1}}>
                 <View style={styles.header}>

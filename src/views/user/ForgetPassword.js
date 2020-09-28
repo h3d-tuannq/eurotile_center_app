@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {Text, Image, StyleSheet, View, TextInput, Dimensions, TouchableOpacity} from 'react-native'
-import FirebaseController from '../../../Controller/FirebaseController'
-import Style from "../../../Def/Style";
+import Style from "../../../src/def/Style";
 
 const {width,height} = Dimensions.get('window');
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, FlatList} from 'react-native'
+import {View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, FlatList, Button} from 'react-native'
 import DownIconSvg from '../../../assets/icon/icon-down-black.svg'
 import Style from "../../../src/def/Style";
 
@@ -11,20 +11,8 @@ class GuideScreen extends React.Component{
     render() {
         return (
             <View style={{flex:1}}>
-                <View style={styles.header}>
-                    <TouchableOpacity style={{justifyContent:'center',  paddingLeft: 10, width:50}}
-                                      onPress={() => {
-                                          this.props.navigation.goBack();
-                                      }}
-                    >
-                        <DownIconSvg width={25} height={25} />
-                    </TouchableOpacity>
-                    <View style={{alignItems:'center', justifyContent: 'center', marginLeft: 30}}>
-                        <Text style={styles.title}>
-                            {'Hướng dẫn sử dụng' }
-                        </Text>
-                    </View>
-
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <Button onPress={() => navigation.goBack()} title="Go back home" />
                 </View>
             </View>
         )
