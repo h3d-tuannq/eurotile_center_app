@@ -1,6 +1,8 @@
 import React from 'react'
 import {View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, FlatList, Button} from 'react-native'
 import DownIconSvg from '../../../assets/icon/icon-down-black.svg'
+import Net from '../../../src/net/Net'
+import Def from '../../../src/def/Def'
 import Style from "../../../src/def/Style";
 
 
@@ -8,6 +10,23 @@ const {width, height} = Dimensions.get('window');
 
 
 class GuideScreen extends React.Component{
+
+    componentDidMount() {
+        Net.sendRequest(this.onSlideSuccess,this.onSlideFailed,'http://192.168.1.190//v1/article/index' ,Def.GET_METHOD);
+    }
+
+    onSlideSuccess(data){
+        console.log("onSlideSuccess");
+        console.log(data);
+        // this.setState({ slide_data: data["data"]["slides"]  });
+    }
+
+    onSlideFailed(data){
+        console.log("onSlideFalse");
+        console.log(data);
+    }
+
+
     render() {
         return (
             <View style={{flex:1}}>
