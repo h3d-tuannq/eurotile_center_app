@@ -1,6 +1,8 @@
 import Net from "../net/Net";
 import Def from "../def/Def";
 
+import AsyncStorage  from '@react-native-community/async-storage'
+
 
 export default class UserController{
 
@@ -34,6 +36,18 @@ export default class UserController{
         let param = {'username' : email, 'password' : password};
         Net.sendRequest(successCallback,falseCallback,'https://eurotiledev.house3d.net/api/user/login' , Def.POST_METHOD , param);
     };
+
+    static onLoginSuccess(data){
+        console.log("on login success");
+        if(data){
+
+        }
+
+    }
+
+    static onLoginFalse(){
+        console.log('Login false');
+    }
 
 
     static resetPassword(email){
