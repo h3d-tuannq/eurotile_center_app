@@ -15,6 +15,7 @@ import FacebookIcon from '../../../assets/icon/icon-facebook.svg'
 import GoogleIcon from '../../../assets/icon/icon-google.svg'
 import ZaloIcon from '../../../assets/icon/icon-zalo.svg'
 import Def from "../../../src/def/Def";
+import UserController from  "../../../src/controller/UserController"
 
 const {width,height} = Dimensions.get('window');
 
@@ -37,6 +38,8 @@ export default class SignIn extends Component {
         }
         this.signIn = this.signIn.bind(this);
         this.setLoader = this.setLoader.bind(this);
+        this.loginFalseCallback = this.loginFalseCallback.bind(this);
+        this.loginFalseCallback = this.loginFalseCallback.bind(this);
         Def.setLoader = this.setLoader;
     }
 
@@ -53,8 +56,17 @@ export default class SignIn extends Component {
             const {navigation} = this.props;
             this.setState({isLoging:true});
             console.log('signIn');
-            FirebaseController.emailLogin(this.state.email,this.state.password,navigation);
+             UserController.login(this.state.email,this.state.password,navigation, this.loginSuccessCallback, this.loginFalseCallback);
         }
+    }
+
+    loginSuccessCallback(data){
+        console.log('Login success');
+    }
+
+    loginFalseCallback(data){
+        console.log('Login false : ' + JSON.stringify(data));
+
     }
 
 

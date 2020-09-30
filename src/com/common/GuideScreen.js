@@ -12,7 +12,7 @@ const {width, height} = Dimensions.get('window');
 class GuideScreen extends React.Component{
 
     componentDidMount() {
-        Net.sendRequest(this.onSlideSuccess,this.onSlideFailed,'http://192.168.1.190//v1/article/index' ,Def.GET_METHOD);
+        Net.sendRequest(this.onSlideSuccess,this.onSlideFailed,'https://eurotiledev.house3d.net/api/article/news' ,Def.GET_METHOD);
     }
 
     onSlideSuccess(data){
