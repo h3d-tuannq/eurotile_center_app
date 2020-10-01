@@ -11,6 +11,9 @@ import {
 
 } from 'react-native';
 
+import AsyncStorage from '@react-native-community/async-storage'
+import RNRestart from 'react-native-restart';
+
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -34,6 +37,10 @@ import GuideIcon from './assets/icon/icon-how-to-use.svg'
 import AlarmIcon from './assets/icon/icon-sleep-time.svg'
 import FeedbackIcon from './assets/icon/icon-feedback2.svg'
 import RuleIcon from './assets/icon/icon-rule.svg';
+
+
+import Icon from 'react-native-vector-icons/FontAwesome5';
+const myIcon = <Icon name="far fa-user-circle" size={30} />;
 
 const {width, height} = Dimensions.get('window');
 
@@ -182,18 +189,38 @@ function MainTab() {
             }}>
 
             <Tab.Screen
-                name="Home"
+                name="My"
                 component={MyStack}
                 options={(route) => {
                     return false
                         ? {tabBarVisible: false}
                         : {
-                            tabBarLabel: 'Home',
+                            tabBarLabel: 'Cá nhân',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
-                                    return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
+                                    return <Icon name="user-circle" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
                                 }
-                                return <MyProfileIcon style={styles.tabBarIconStyle} />;
+                                return <Icon name="user-circle" size={25} color={Style.GREY_TEXT_COLOR} />
+                            },
+                        };
+                }}
+            />
+
+            <Tab.Screen
+                name="Home"
+                component={HomeStack}
+                options={(route) => {
+                    return false
+                        ? {tabBarVisible: false}
+                        : {
+                            tabBarLabel: 'Trang chủ',
+                            tabBarIcon: ({focused, color, size}) => {
+                                if (focused) {
+                                    return <Icon name="home" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
+                                }
+                                return <Icon name="home" size={25} color={Style.GREY_TEXT_COLOR} />
                             },
                         };
                 }}
@@ -206,12 +233,13 @@ function MainTab() {
                     return false
                         ? {tabBarVisible: false}
                         : {
-                            tabBarLabel: 'Product',
+                            tabBarLabel: 'Sản phẩm',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
-                                    return <RadioIconSelect style={styles.tabBarIconStyle} />;
+                                    return <Icon name="th" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
                                 }
-                                return <RadioIcon style={styles.tabBarIconStyle} />;
+                                return <Icon name="th" size={25} color={Style.GREY_TEXT_COLOR} />
                             },
                         };
                 }}
@@ -223,12 +251,13 @@ function MainTab() {
                     return false
                         ? {tabBarVisible: false}
                         : {
-                            tabBarLabel: 'News',
+                            tabBarLabel: 'Tin tức',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
-                                    return <NewsIconSelect style={styles.tabBarIconStyle} />;
+                                    return <Icon name="newspaper" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
                                 }
-                                return <NewsIcon style={styles.tabBarIconStyle} />;
+                                return <Icon name="newspaper" size={25} color={Style.GREY_TEXT_COLOR} />
                             },
                         };
                 }}
@@ -340,6 +369,9 @@ function CustomDrawerContent(props) {
                                 }}
                                 onPress={() => {
                                     AsyncStorage.removeItem('email');
+                                    AsyncStorage.removeItem('login_token');
+                                    AsyncStorage.removeItem('user_info');
+                                    AsyncStorage.removeItem('username');
                                     AsyncStorage.removeItem('firebase_token');
                                     RNRestart.Restart();
                                 }}>
@@ -381,6 +413,8 @@ import LoginStack from "./src/views/LoginStack";
 import ProductStack from "./src/views/ProductStack";
 import NewsStack from "./src/views/NewsStack";
 import MyStack from "./src/views/MyStack";
+import HomeStack from "./src/views/HomeStack"
+
 
 
 // function HomeScreen({ navigation }) {
@@ -469,6 +503,23 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
+
+
+        AsyncStorage.getItem('access_token').then((value) => {
+            if (value) {
+                Def.login_token = value;
+                console.log(Def.login_token);
+            }
+        });
+
+        AsyncStorage.getItem('user_info').then((value) => {
+             if(value){
+                 Def.user_info = JSON.parse(value);
+                 Def.username = Def.user_info['user_name'];
+                 Def.email = Def.user_info['email'];
+             }
+        });
+
     }
 
     componentDidMount() {

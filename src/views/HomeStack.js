@@ -1,6 +1,11 @@
 import React from 'react'
 import {Text, View, Button, TouchableOpacity} from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack';
+
+import SignInScreen from './user/SignIn'
+import SignUpScreen from './user/SignUp'
+// import ForgetPassScreen from './user/ForgetPassword'
+
 import MenuIcon from '../../assets/icon/menu.svg';
 import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
@@ -8,34 +13,31 @@ import Style from "../../src/def/Style";
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 
-// function NewsListScreen({navigation} ) {
-//     return (
-//         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//             <Text>News List</Text>
-//             <Button
-//                 title="Go to News Details"
-//                 onPress={() => navigation.navigate('news-detail')}
-//             />
-//         </View>
-//     );
-// }
+function ProductListScreen({navigation} ) {
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text>Product List</Text>
+            <Button
+                title="Go to Details"
+                onPress={() => navigation.navigate('product-detail')}
+            />
+        </View>
+    );
+}
 
-import NewsScreen from './news/NewsScreen';
-import NewsDetail from './news/NewsDetailScreen';
+function ProductDetailScreen({navigation} ) {
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text>Prodcut Detail</Text>
+            <Button
+                title="Go to Product-List"
+                onPress={() => navigation.navigate('product-list')}
+            />
+        </View>
+    );
+}
 
-// function NewsDetailScreen({navigation} ) {
-//     return (
-//         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//             <Text>News Detail</Text>
-//             <Button
-//                 title="Go to News-List"
-//                 onPress={() => navigation.navigate('news-list')}
-//             />
-//         </View>
-//     );
-// }
-
-class NewsStack extends React.Component {
+class ProductStack extends React.Component {
     constructor(props){
         super(props);
     }
@@ -44,8 +46,8 @@ class NewsStack extends React.Component {
         return (
             <RootStack.Navigator>
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
-                <RootStack.Screen name="news-list" component={NewsScreen} options={{
-                    title: 'News List',
+                <RootStack.Screen name="product-list" component={ProductListScreen} options={{
+                    title: 'Product List',
                     headerLeft: () => (
                         <TouchableOpacity
                             style=  {
@@ -78,8 +80,8 @@ class NewsStack extends React.Component {
                     }
                 }} />
 
-                <RootStack.Screen name="news-detail" component={NewsDetail} options={{
-                    title: 'News Detail',
+                <RootStack.Screen name="product-detail" component={ProductDetailScreen} options={{
+                    title: 'Product Detail',
                     // headerLeft: () => (
                     //     <TouchableOpacity
                     //         style=  {
@@ -117,4 +119,4 @@ class NewsStack extends React.Component {
     }
 }
 
-export default NewsStack;
+export default ProductStack;

@@ -61,6 +61,7 @@ export default class SignIn extends Component {
     }
 
     loginSuccessCallback(data){
+        this.state.isLoging = false;
         console.log('Login success');
     }
 
@@ -137,7 +138,7 @@ export default class SignIn extends Component {
                         console.log('test');
                         this.setState({isLoging:true});
 
-                         FirebaseController.facebookLogin(navigation)
+                         // FirebaseController.facebookLogin(navigation)
                     }}>
                         <FacebookIcon style={styles.icon}
 
@@ -149,7 +150,7 @@ export default class SignIn extends Component {
 
                     <TouchableOpacity style={[button, {backgroundColor:'#ffffff'}]} onPress={()=> {
                         this.setState({isLoging:true});
-                        FirebaseController.googleLogin(navigation);
+                        // FirebaseController.googleLogin(navigation);
 
                     }}>
                         <GoogleIcon style={styles.icon}

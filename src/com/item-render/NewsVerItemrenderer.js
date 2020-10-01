@@ -3,8 +3,8 @@ import {View, Button, StyleSheet, Image, Dimensions, Text, TouchableOpacity, Ale
 import DefaultProgramImage from "../../../assets/icon/logo-vov.svg";
 import SpeakerIcon from "../../../assets/icon/icon-speaker.svg";
 import React from "react";
-import Def from '../../../Def/Def'
-import Style from "../../../Def/Style";
+import Def from '../../def/Def'
+import Style from "../../def/Style";
 
 const {width, height} = Dimensions.get('window');
 

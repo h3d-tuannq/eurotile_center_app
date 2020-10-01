@@ -8,7 +8,7 @@ export default class Style{
     static NORMAL_SIZE = PixelRatio.get() < 2 ? 11 :12;
     static SMALL_SIZE = PixelRatio.get() < 2 ? 10:11;
     static BIG_SIZE = PixelRatio.get() < 2 ? 17 :19;
-    static DEFAUT_RED_COLOR = '#EF4135';
+    static DEFAUT_RED_COLOR = '#AD2428';
     static DEFAUT_BLUE_COLOR = '#0A6BB5';
 
     static GREY_TEXT_COLOR = '#b3b3b3';

@@ -3,6 +3,7 @@ import {Text, Image, StyleSheet, View, TextInput, Dimensions, TouchableOpacity} 
 import Style from "../../../src/def/Style";
 import FacebookIcon from "../../../assets/icon/icon-facebook.svg";
 import GoogleIcon from "../../../assets/icon/icon-google.svg";
+import UserController from "../../controller/UserController";
 
 const {width,height} = Dimensions.get('window');
 
@@ -11,6 +12,7 @@ export default class SignUp extends Component {
         super(props);
         this.state = {
             focus : 0,
+            display_name : "",
             email:"",
             password:"",
             re_password:""
@@ -27,7 +29,7 @@ export default class SignUp extends Component {
             alert("Mật khẩu phải dài hơn 8 ký tự");
         }else{
             const {navigation} = this.props;
-            FirebaseController.emailSignup(this.state.email,this.state.password,navigation);
+            UserController.signup(this.state.email,this.state.password, this.state.disableNextPrev,navigation);
         }
     }
     render() {
@@ -45,6 +47,17 @@ export default class SignUp extends Component {
                     {/*</Text>*/}
 
                     {/*<Text style={this.state.focus == 1 ? labelInputHover : labelInputNormal}>Email</Text>*/}
+                    <TextInput
+                        onFocus={() => this.setState({focus:1})}
+                        onBlur={()=> this.setState({focus:0})}
+                        style={this.state.focus == 1 ? textInputHover : textInputNormal}
+                        value={this.state.display_name}
+                        onChangeText={text => this.setState({display_name:text})}
+                        placeholder='Tên hiển thị'
+                        placeholderTextColor="#b3b3b3"
+                        autoCapitalize = 'none'
+                        // underlineColorAndroid = "transparent"
+                    />
                     <TextInput
                         onFocus={() => this.setState({focus:1})}
                         onBlur={()=> this.setState({focus:0})}
