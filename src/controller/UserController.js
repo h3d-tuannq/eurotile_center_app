@@ -40,7 +40,10 @@ export default class UserController{
     static onLoginSuccess(data){
         console.log("on login success");
         if(data){
-
+            let acess_token = data['access_token'];
+            AsyncStorage.setItem('access_token', `Bearer ${token}`);
+            AsyncStorage.setItem('user_info', data);
+            Def.login_token = `Bearer ${token}`;
         }
 
     }
