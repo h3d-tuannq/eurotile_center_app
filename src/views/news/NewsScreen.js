@@ -14,90 +14,96 @@ const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2
 
 const news_data =  {
-    "tin chuyen nganh": [
-        {
-            "id": "30",
-            "category": "chinh-tri",
-            "link": "https://vov.vn/chinh-tri/lam-tuyen-giao-chua-bao-gio-la-cong-viec-de-dang-1075124.vov",
-            "title": "Làm tuyên giáo chưa bao giờ là công việc dễ dàng",
-            "reader_link": "",
-            "thumbnail": "",
-            "date": "2020-08-01 22:20:49"
+    "tin chuyen nganh": {
+        "name_vi" : "Tin chuyên ngành",
+        "data" : [
+            {
+                "id": "30",
+                "category": "chinh-tri",
+                "link": "https://vov.vn/chinh-tri/lam-tuyen-giao-chua-bao-gio-la-cong-viec-de-dang-1075124.vov",
+                "title": "Làm tuyên giáo chưa bao giờ là công việc dễ dàng",
+                "reader_link": "",
+                "thumbnail": "https://eurotiledev.house3d.net/data/eurotileData/1/euHYKYXEj7WPpwH_7eaAv_4QglT5iwe1.png",
+                "date": "2020-08-01 22:20:49"
+
+            },
+            {
+                "id": "14",
+                "category": "chinh-tri",
+                "link": "https://vov.vn/chinh-tri/ong-tong-the-anh-trung-cu-bi-thu-huyen-uy-yen-chau-son-la-1076661.vov",
+                "title": "Ông Tòng Thế Anh trúng cử Bí thư Huyện ủy Yên Châu, Sơn La",
+                "reader_link": "",
+                "thumbnail": "https://eurotiledev.house3d.net/data/eurotileData/1/euHYKYXEj7WPpwH_7eaAv_4QglT5iwe1.png",
+                "date": "2020-08-01 22:20:49"
+            },
+            {
+                "id": "22",
+                "category": "chinh-tri",
+                "link": "https://vov.vn/chinh-tri/ong-huynh-quoc-thai-duoc-bau-giu-chuc-vu-bi-thu-thi-uy-tan-chau-1076131.vov",
+                "title": "Ông Huỳnh Quốc Thái được bầu giữ chức vụ Bí thư Thị ủy Tân Châu",
+                "reader_link": "",
+                "thumbnail": "",
+                "date": "2020-08-01 22:20:49"
+            },
+            {
+                "id": "6",
+                "category": "chinh-tri",
+                "link": "https://vov.vn/chinh-tri/bo-chinh-tri-lam-viec-ve-chuan-bi-dai-hoi-cac-dang-bo-truc-thuoc-tu-1077133.vov",
+                "title": "Bộ Chính trị làm việc về chuẩn bị Đại hội các đảng bộ trực thuộc TƯ",
+                "reader_link": "",
+                "thumbnail": "",
+                "date": "2020-08-01 22:20:49"
+            },
+            {
+                "id": "23",
+                "category": "chinh-tri",
+                "link": "https://vov.vn/chinh-tri/trao-quyet-dinh-cho-quyen-truong-ban-bql-lang-chu-tich-ho-chi-minh-1076060.vov",
+                "title": "Trao quyết định cho quyền Trưởng ban BQL Lăng Chủ tịch Hồ Chí Minh",
+                "reader_link": "",
+                "thumbnail": "",
+                "date": "2020-08-01 22:20:49"
+            },
+            {
+                "id": "7",
+                "category": "chinh-tri",
+                "link": "https://vov.vn/chinh-tri/thu-tuong-kiem-tra-tien-do-thi-cong-cao-toc-trung-luong-my-thuan-1077019.vov",
+                "title": "Thủ tướng kiểm tra tiến độ thi công cao tốc Trung Lương - Mỹ Thuận",
+                "reader_link": "",
+                "thumbnail": "",
+                "date": "2020-08-01 22:20:49"
+            },
+            {
+                "id": "24",
+                "category": "chinh-tri",
+                "link": "https://vov.vn/chinh-tri/pho-thu-tuong-pham-binh-minh-thi-sat-khu-vuc-bien-gioi-tai-lao-cai-1076047.vov",
+                "title": "Phó Thủ tướng Phạm Bình Minh thị sát khu vực biên giới tại Lào Cai",
+                "reader_link": "",
+                "thumbnail": "",
+                "date": "2020-08-01 22:20:49"
+            },
+            {
+                "id": "8",
+                "category": "chinh-tri",
+                "link": "https://vov.vn/chinh-tri/khi-doi-ngu-tri-thuc-van-nghe-sy-vung-manh-se-nang-tam-tri-tue-dan-toc-1076941.vov",
+                "title": "Khi đội ngũ trí thức, văn nghệ sỹ vững mạnh sẽ nâng tầm trí tuệ dân tộc",
+                "reader_link": "",
+                "thumbnail": "",
+                "date": "2020-08-01 22:20:49"
+            }
+        ]
         },
-        {
-            "id": "14",
-            "category": "chinh-tri",
-            "link": "https://vov.vn/chinh-tri/ong-tong-the-anh-trung-cu-bi-thu-huyen-uy-yen-chau-son-la-1076661.vov",
-            "title": "Ông Tòng Thế Anh trúng cử Bí thư Huyện ủy Yên Châu, Sơn La",
-            "reader_link": "",
-            "thumbnail": "",
-            "date": "2020-08-01 22:20:49"
-        },
-        {
-            "id": "22",
-            "category": "chinh-tri",
-            "link": "https://vov.vn/chinh-tri/ong-huynh-quoc-thai-duoc-bau-giu-chuc-vu-bi-thu-thi-uy-tan-chau-1076131.vov",
-            "title": "Ông Huỳnh Quốc Thái được bầu giữ chức vụ Bí thư Thị ủy Tân Châu",
-            "reader_link": "",
-            "thumbnail": "",
-            "date": "2020-08-01 22:20:49"
-        },
-        {
-            "id": "6",
-            "category": "chinh-tri",
-            "link": "https://vov.vn/chinh-tri/bo-chinh-tri-lam-viec-ve-chuan-bi-dai-hoi-cac-dang-bo-truc-thuoc-tu-1077133.vov",
-            "title": "Bộ Chính trị làm việc về chuẩn bị Đại hội các đảng bộ trực thuộc TƯ",
-            "reader_link": "",
-            "thumbnail": "",
-            "date": "2020-08-01 22:20:49"
-        },
-        {
-            "id": "23",
-            "category": "chinh-tri",
-            "link": "https://vov.vn/chinh-tri/trao-quyet-dinh-cho-quyen-truong-ban-bql-lang-chu-tich-ho-chi-minh-1076060.vov",
-            "title": "Trao quyết định cho quyền Trưởng ban BQL Lăng Chủ tịch Hồ Chí Minh",
-            "reader_link": "",
-            "thumbnail": "",
-            "date": "2020-08-01 22:20:49"
-        },
-        {
-            "id": "7",
-            "category": "chinh-tri",
-            "link": "https://vov.vn/chinh-tri/thu-tuong-kiem-tra-tien-do-thi-cong-cao-toc-trung-luong-my-thuan-1077019.vov",
-            "title": "Thủ tướng kiểm tra tiến độ thi công cao tốc Trung Lương - Mỹ Thuận",
-            "reader_link": "",
-            "thumbnail": "",
-            "date": "2020-08-01 22:20:49"
-        },
-        {
-            "id": "24",
-            "category": "chinh-tri",
-            "link": "https://vov.vn/chinh-tri/pho-thu-tuong-pham-binh-minh-thi-sat-khu-vuc-bien-gioi-tai-lao-cai-1076047.vov",
-            "title": "Phó Thủ tướng Phạm Bình Minh thị sát khu vực biên giới tại Lào Cai",
-            "reader_link": "",
-            "thumbnail": "",
-            "date": "2020-08-01 22:20:49"
-        },
-        {
-            "id": "8",
-            "category": "chinh-tri",
-            "link": "https://vov.vn/chinh-tri/khi-doi-ngu-tri-thuc-van-nghe-sy-vung-manh-se-nang-tam-tri-tue-dan-toc-1076941.vov",
-            "title": "Khi đội ngũ trí thức, văn nghệ sỹ vững mạnh sẽ nâng tầm trí tuệ dân tộc",
-            "reader_link": "",
-            "thumbnail": "",
-            "date": "2020-08-01 22:20:49"
-        }
-    ],
-        "tin su kien": [
-        {
-            "id": "309",
-            "category": "cong-nghe",
-            "link": "https://vov.vn/cong-nghe/tim-loi-giai-cho-bai-toan-phat-trien-nguon-thu-cho-bao-chi-viet-nam-1073739.vov",
-            "title": "Tìm lời giải cho bài toán phát triển nguồn thu cho báo chí Việt Nam",
-            "reader_link": "",
-            "thumbnail": "",
-            "date": "2020-08-01 22:20:52"
-        },
+        "tin su kien": {
+            "name_vi" : "Tin tức sự kiện",
+            "data" : [
+                {
+                    "id": "309",
+                    "category": "cong-nghe",
+                    "link": "https://vov.vn/cong-nghe/tim-loi-giai-cho-bai-toan-phat-trien-nguon-thu-cho-bao-chi-viet-nam-1073739.vov",
+                    "title": "Tìm lời giải cho bài toán phát triển nguồn thu cho báo chí Việt Nam",
+                    "reader_link": "",
+                    "thumbnail": "",
+                    "date": "2020-08-01 22:20:52"
+                },
         {
             "id": "294",
             "category": "cong-nghe",
@@ -215,21 +221,21 @@ const news_data =  {
             "thumbnail": "",
             "date": "2020-08-01 22:20:52"
         },
-    ]
+    ]}
 };
 
-let dataMenu = [
-    {key: 'tin-thiet-ke',name_vi:'Tin Thiết Kế', hidden:0, data:data},
-    {key: 'tin-chuyen-nganh',name_vi:'Tin Chuyên Ngành', hidden:0, data:data},
-];
+// let dataMenu = [
+//     {key: 'tin-thiet-ke',name_vi:'Tin Thiết Kế', hidden:0, data:data},
+//     {key: 'tin-chuyen-nganh',name_vi:'Tin Chuyên Ngành', hidden:0, data:data},
+// ];
 
 class NewsScreen extends React.Component {
 
 
     state = {
-        news_data: Def.news_data,
+        news_data: news_data,
         stateCount: 0.0,
-        configMenu: dataMenu
+        configMenu: Def.config_news_menu
     };
 
     constructor(props){
@@ -242,12 +248,16 @@ class NewsScreen extends React.Component {
 
         Def.mainNavigate = this.props.navigation;
 
+        Def.news_data = news_data;
 
-        // if(!Def.news_data)
-            // NetNews.listNews(this.onNewsSuccess,this.onNewsFailed);
-        // else if (!Def.config_news_menu){
-            // Def.config_news_menu = this.createConfigData(Def.news_data);
-            // this.setState({ configMenu: Def.config_news_menu});
+        if(!Def.news_data) {
+            // NetNews.listNews(this.onNewsSuccess, this.onNewsFailed);
+            Def.news_data = news_data;
+        }
+        else if (!Def.config_news_menu) {
+            Def.config_news_menu = this.createConfigData(Def.news_data);
+            this.setState({configMenu: Def.config_news_menu});
+        }
 
     }
 
@@ -272,6 +282,7 @@ class NewsScreen extends React.Component {
     createConfigData(data){
         if(data){
             let configData =  Object.entries(data).map((prop, key) => {
+                console.log("Props : " + JSON.stringify(prop));
                 return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
             });
             return configData;
@@ -285,8 +296,8 @@ class NewsScreen extends React.Component {
 
     formatText(text){
         let rs = text;
-        if(text.length > 10){
-            rs = text.substring(0, 15) ;
+        if(text && text.length > 10){
+            rs = text.substring(0, 20) ;
         }
         return rs;
     }
@@ -304,11 +315,12 @@ class NewsScreen extends React.Component {
 
     render() {
         const {navigation} = this.props;
-        const configMenu = dataMenu;
+        const configMenu = Def.config_news_menu;
+        console.log("Config menu : " + JSON.stringify(configMenu));
         return (
-            <ScrollableTabView   >
+            <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >
                 {
-                     configMenu &&Object.entries(configMenu).map((prop, key) => {
+                    this.state.news_data && configMenu &&Object.entries(configMenu).map((prop, key) => {
                         console.log(key + " Props " + JSON.stringify(prop))
                         if((prop[1]["hidden"]) == 0){
                             return (

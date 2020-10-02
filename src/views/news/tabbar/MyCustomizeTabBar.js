@@ -328,14 +328,14 @@ componentDidMount() {
             style={[styles.container, {backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center'}, this.props.style, ]}
             onLayout={this.onContainerLayout}
         >
-            <TouchableOpacity style={{marginLeft : 5, paddingLeft: 10, width : 50 , paddingRight: 15 }} onPress={()=> {
-                // this.setModalVisible(true);
-                console.log("Tabs :"+ JSON.stringify(this.props.tabs));
-                this.props.navigation.navigate('CustomMenu', {data:this.props.tabs});
-            }}
-            >
-                <SortMenuIcon width={25} height={25}/>
-            </TouchableOpacity>
+            {/*<TouchableOpacity style={{marginLeft : 5, paddingLeft: 10, width : 50 , paddingRight: 15 }} onPress={()=> {*/}
+                {/*// this.setModalVisible(true);*/}
+                {/*console.log("Tabs :"+ JSON.stringify(this.props.tabs));*/}
+                {/*this.props.navigation.navigate('CustomMenu', {data:this.props.tabs});*/}
+            {/*}}*/}
+            {/*>*/}
+                {/*<SortMenuIcon width={25} height={25}/>*/}
+            {/*</TouchableOpacity>*/}
             <ScrollView
                 ref={(scrollView) => { this._scrollView = scrollView; }}
                 horizontal={true}
