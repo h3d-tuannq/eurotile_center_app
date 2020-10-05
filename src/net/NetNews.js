@@ -1,26 +1,12 @@
 import Def from '../def/Def';
+import Net from './Net';
 /*
   Phục vụ mục đích đăng nhập, đăng ký
 */
-export default class Net{
+export default class NetNews{
 
-    static signIn(callback,errCallback,firebaseJWT) {
-        // postParams =  {'jwtToken':firebaseJWT};
-        Net.sendRequest(callback,errCallback,Def.URL_LOGIN ,Def.POST_METHOD,postParams);
-    }
-
-    static setNotification(callback,errCallback) {
-        postParams =  {
-            'firebase_token':Def.notification_token,
-            'email':Def.email,
-            'os':Def.os
-        };
-        Net.sendRequest(callback,errCallback,Def.URL_NOTIFICATION ,Def.POST_METHOD,postParams);
-    }
-
-
-    static listNotification(callback,errCallback) {
-        Net.sendRequest(callback,errCallback,Def.URL_LIST_NOTIFICATION ,Def.GET_METHOD);
+    static listNews(callback,errCallback ) {
+        Net.sendRequest(callback,errCallback,"https://eurotiledev.house3d.net/api/article/news" ,Def.POST_METHOD, {'slug': 'xu-huong-thiet-ke,tin-chuyen-mon,su-kien'});
     }
 
 }

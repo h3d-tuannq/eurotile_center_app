@@ -46,6 +46,8 @@ const {width, height} = Dimensions.get('window');
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
+import NetNews from './src/net/NetNews'
+import NetCollection from './src/net/NetCollection'
 
 const styles = StyleSheet.create({
     baseText: {
@@ -509,8 +511,22 @@ export default class App extends Component {
             if (value) {
                 Def.login_token = value;
                 console.log(Def.login_token);
+                console.log('load new data');
+                NetNews.listNews(this.onNewSuccess, this.onNewFailed);
             }
         });
+
+        NetCollection.listCollection(this.onCollectionSuccess, this.onNewFailed);
+        NetNews.listNews(this.onNewSuccess, this.onNewFailed);
+
+        // AsyncStorage.getItem('access_token').then((value) => {
+        //     if (value) {
+        //         Def.login_token = value;
+        //         console.log(Def.login_token);
+        //         console.log('load new collection');
+        //         NetCollection.listCollection(this.onCollectionSuccess, this.onNewFailed);
+        //     }
+        // });
 
         AsyncStorage.getItem('user_info').then((value) => {
              if(value){
@@ -520,6 +536,25 @@ export default class App extends Component {
              }
         });
 
+
+        // if(!Def.news_data){
+
+        // }
+
+    }
+
+    onNewSuccess(data){
+        // console.log('onNewSuccess : ' + JSON.stringify(data));
+        Def.news_data = data['data'];
+    }
+
+    onCollectionSuccess(data){
+        // console.log('onNewSuccess : ' + JSON.stringify(data));
+        Def.collection_data = data['data'];
+    }
+
+    onNewFailed(data){
+        console.log('onNewFailed d: ' + JSON.stringify(data));
     }
 
     componentDidMount() {

@@ -1,4 +1,4 @@
-import {PixelRatio} from 'react-native'
+import {PixelRatio, StyleSheet} from 'react-native'
 
 
 export default class Style{
@@ -13,4 +13,66 @@ export default class Style{
 
     static GREY_TEXT_COLOR = '#b3b3b3';
     static DEFAULT_BACKGROUN_COLOR = "#e6e6e6";
+
+
+    static styles = StyleSheet.create({
+        container: {
+            flex : 1,
+            paddingLeft: 15,
+            // justifyContent: 'flex-start',
+            // marginVertical : 5,
+            // marginBottom : 5,
+            backgroundColor: '#fff',
+            paddingTop : 5
+        },
+        slider: {
+            justifyContent: 'center',
+            paddingTop: 5,
+            padding: 8,
+            height: 120,
+            borderRadius: 5,
+            backgroundColor: "#e6e6e6",
+            marginRight : 15
+        },
+        cardStyle: {
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: width-20,
+            height: width/2,
+
+        },
+        programListStyle : {
+
+        },
+        itemImage: {
+            width: PROGRAM_IMAGE_WIDTH -5,
+            height : PROGRAM_IMAGE_HEIGHT -5,
+            borderRadius: 5,
+        },
+
+    });
+
+    static text_styles = StyleSheet.create({
+        tit: {
+            flex : 1,
+            paddingLeft: 15,
+            // justifyContent: 'flex-start',
+            // marginVertical : 5,
+            // marginBottom : 5,
+            backgroundColor: '#fff',
+            paddingTop : 5
+        },
+        textTitle: {
+            flex : 1,
+            paddingLeft: 15,
+            // justifyContent: 'flex-start',
+            // marginVertical : 5,
+            // marginBottom : 5,
+            backgroundColor: '#fff',
+            paddingTop : 5
+        },
+
+
+    });
+
 }

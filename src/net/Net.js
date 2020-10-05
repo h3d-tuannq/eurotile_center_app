@@ -35,18 +35,33 @@ export default class Net{
     }
     else if(method == Def.POST_METHOD )
     {
-
       let formData = new FormData();
-      for (var property in dataObject) {
-        formData.append(property, dataObject[property]);
+      if(dataObject){
+          for (var property in dataObject) {
+              formData.append(property, dataObject[property]);
+          }
       }
-      fetch(url, {
-        method: method,
-        headers: {
-          'Authorization': Def.login_token
-        },
-        body: formData
-      })
+
+      let sendObj = {
+          method: method,
+          headers: {
+              'Authorization': Def.login_token
+          }
+      };
+
+      if(dataObject){
+          sendObj = {
+              method: method,
+              headers: {
+                  'Authorization': Def.login_token
+              },
+              body : formData
+          }
+      }
+
+
+
+      fetch(url, sendObj)
       .then(response => response.text())
       .then(text => {
         try {

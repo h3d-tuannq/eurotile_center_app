@@ -47,6 +47,11 @@ export default class Def{
 
     static PLAYBACK_SUB_TYPE      = 1;
 
+    static news_data = null;
+    static collection_data = null;
+
+    static config_collection_menu = null;
+
 
 
     static getDateString(date, format) {
