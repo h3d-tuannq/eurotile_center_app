@@ -44,7 +44,7 @@ class LoginStack extends React.Component {
                     //
                     // ),
                     headerStyle: {
-                        backgroundColor: Style.DEFAUT_RED_COLOR,
+                        backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
@@ -52,7 +52,7 @@ class LoginStack extends React.Component {
                         fontWeight: 'bold',
                     },
                     headerBackImage: ()=> {
-                        return <BackIconSvg width={26} height={26} />
+                        return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
                 }} />
                 <RootStack.Screen name="signUp" component={SignUpScreen}
@@ -86,7 +86,7 @@ class LoginStack extends React.Component {
                                           fontWeight: 'bold',
                                       },
                                       headerBackImage: ()=> {
-                                          return <BackIconSvg width={26} height={26} />
+                                          return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                                       }
                                   }}
                 />
@@ -121,7 +121,7 @@ class LoginStack extends React.Component {
                                           fontWeight: 'bold',
                                       },
                                       headerBackImage: ()=> {
-                                          return <BackIconSvg width={26} height={26} />
+                                          return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                                       }
                                   }}
 

@@ -32,8 +32,8 @@ class HomeStack extends React.Component {
                         <TouchableOpacity
                             style=  {
                                 {
-                                    width: 40,
-                                    height:40,
+                                    width: Style.DRAWER_MENU_SIZE,
+                                    height:Style.DRAWER_MENU_SIZE,
                                     justifyContent: 'center',
                                     paddingLeft:15 ,
                                     alignItems : 'center'
@@ -41,14 +41,14 @@ class HomeStack extends React.Component {
                             }
                             onPress={() => this.props.navigation.toggleDrawer()}>
                             <MenuIcon
-                                width="30"
-                                height="30"
+                                width={Style.DRAWER_MENU_ICON_SIZE}
+                                height={Style.DRAWER_MENU_ICON_SIZE}
                             />
                         </TouchableOpacity>
 
                     ),
                     headerStyle: {
-                        backgroundColor: Style.DEFAUT_RED_COLOR,
+                        backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
@@ -56,7 +56,7 @@ class HomeStack extends React.Component {
                         fontWeight: 'bold',
                     },
                     headerBackImage: ()=> {
-                        return <BackIconSvg width={26} height={26} />
+                        return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
                 }} />
 
