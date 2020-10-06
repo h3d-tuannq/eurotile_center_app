@@ -294,7 +294,7 @@ function CustomDrawerContent(props) {
             <View
                 style={{
                     height: Style.HEADER_HEIGHT,
-                    backgroundColor: Style.DEFAUT_RED_COLOR,
+                    backgroundColor: Style.DEFAUT_BLUE_COLOR,
                     flexDirection: 'row',
                     // justifyContent: 'space-between',
                     alignItems: 'center',
@@ -549,7 +549,7 @@ export default class App extends Component {
     }
 
     onCollectionSuccess(data){
-        // console.log('onNewSuccess : ' + JSON.stringify(data));
+        // console.log('onCollectionSuccess : ' + JSON.stringify(data));
         Def.collection_data = data['data'];
     }
 
@@ -566,7 +566,7 @@ export default class App extends Component {
     render() {
         return (
             <NavigationContainer>
-                <StatusBar backgroundColor={Style.DEFAUT_RED_COLOR} />
+                <StatusBar backgroundColor={Style.DEFAUT_BLUE_COLOR} />
                 <AppDrawer />
             </NavigationContainer>
         );
