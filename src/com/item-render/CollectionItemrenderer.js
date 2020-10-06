@@ -75,9 +75,12 @@ class ProgramItemrenderer extends PureComponent{
                 }
 
                 </TouchableOpacity>
-                {/*{*/}
-                     {/*this.props.type == 'music' ? <Text style={{marginTop:5, zIndex: 10, fontSize : Style.SMALL_SIZE, color : '#b3b3b3', width:this.props.styleImage.width}}>{this.formatText(model.name, 15)}</Text> : null*/}
-                {/*}*/}
+
+                <View style = {{width:this.props.styleImage.width, justifyContent:'center', alignItems: 'center'}}>
+                    <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:2 , borderRadius : 3 ,bottom:10, backgroundColor:Style.DEFAUT_RED_COLOR, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>
+                          {this.formatText(model.name, 15)}
+                    </Text>
+                </View>
             </View>
 
         )
