@@ -1,233 +1,28 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
 import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
 import CollectionTab from './CollectionTab'
 import MyCustomizeTabBar from  './tabbar/MyCustomizeTabBar'
-
 import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
-
 const {width, height} = Dimensions.get('window');
 
+import Carousel from 'react-native-snap-carousel';
+import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
+import Style from '../../def/Style';
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
-
-const news_data =  {
-    "tin chuyen nganh": {
-        "name_vi" : "Tin chuyên ngành",
-        "data" : [
-            {
-                "id": "30",
-                "category": "chinh-tri",
-                "link": "https://vov.vn/chinh-tri/lam-tuyen-giao-chua-bao-gio-la-cong-viec-de-dang-1075124.vov",
-                "title": "Làm tuyên giáo chưa bao giờ là công việc dễ dàng",
-                "reader_link": "",
-                "thumbnail": "https://eurotiledev.house3d.net/data/eurotileData/1/euHYKYXEj7WPpwH_7eaAv_4QglT5iwe1.png",
-                "date": "2020-08-01 22:20:49"
-
-            },
-            {
-                "id": "14",
-                "category": "chinh-tri",
-                "link": "https://vov.vn/chinh-tri/ong-tong-the-anh-trung-cu-bi-thu-huyen-uy-yen-chau-son-la-1076661.vov",
-                "title": "Ông Tòng Thế Anh trúng cử Bí thư Huyện ủy Yên Châu, Sơn La",
-                "reader_link": "",
-                "thumbnail": "https://eurotiledev.house3d.net/data/eurotileData/1/euHYKYXEj7WPpwH_7eaAv_4QglT5iwe1.png",
-                "date": "2020-08-01 22:20:49"
-            },
-            {
-                "id": "22",
-                "category": "chinh-tri",
-                "link": "https://vov.vn/chinh-tri/ong-huynh-quoc-thai-duoc-bau-giu-chuc-vu-bi-thu-thi-uy-tan-chau-1076131.vov",
-                "title": "Ông Huỳnh Quốc Thái được bầu giữ chức vụ Bí thư Thị ủy Tân Châu",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:49"
-            },
-            {
-                "id": "6",
-                "category": "chinh-tri",
-                "link": "https://vov.vn/chinh-tri/bo-chinh-tri-lam-viec-ve-chuan-bi-dai-hoi-cac-dang-bo-truc-thuoc-tu-1077133.vov",
-                "title": "Bộ Chính trị làm việc về chuẩn bị Đại hội các đảng bộ trực thuộc TƯ",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:49"
-            },
-            {
-                "id": "23",
-                "category": "chinh-tri",
-                "link": "https://vov.vn/chinh-tri/trao-quyet-dinh-cho-quyen-truong-ban-bql-lang-chu-tich-ho-chi-minh-1076060.vov",
-                "title": "Trao quyết định cho quyền Trưởng ban BQL Lăng Chủ tịch Hồ Chí Minh",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:49"
-            },
-            {
-                "id": "7",
-                "category": "chinh-tri",
-                "link": "https://vov.vn/chinh-tri/thu-tuong-kiem-tra-tien-do-thi-cong-cao-toc-trung-luong-my-thuan-1077019.vov",
-                "title": "Thủ tướng kiểm tra tiến độ thi công cao tốc Trung Lương - Mỹ Thuận",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:49"
-            },
-            {
-                "id": "24",
-                "category": "chinh-tri",
-                "link": "https://vov.vn/chinh-tri/pho-thu-tuong-pham-binh-minh-thi-sat-khu-vuc-bien-gioi-tai-lao-cai-1076047.vov",
-                "title": "Phó Thủ tướng Phạm Bình Minh thị sát khu vực biên giới tại Lào Cai",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:49"
-            },
-            {
-                "id": "8",
-                "category": "chinh-tri",
-                "link": "https://vov.vn/chinh-tri/khi-doi-ngu-tri-thuc-van-nghe-sy-vung-manh-se-nang-tam-tri-tue-dan-toc-1076941.vov",
-                "title": "Khi đội ngũ trí thức, văn nghệ sỹ vững mạnh sẽ nâng tầm trí tuệ dân tộc",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:49"
-            }
-        ]
+const carouselItems = [
+    {
+        id:1,
+        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/24/1/main_img.jpg',
     },
-    "tin su kien": {
-        "name_vi" : "Tin tức sự kiện",
-        "data" : [
-            {
-                "id": "309",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/tim-loi-giai-cho-bai-toan-phat-trien-nguon-thu-cho-bao-chi-viet-nam-1073739.vov",
-                "title": "Tìm lời giải cho bài toán phát triển nguồn thu cho báo chí Việt Nam",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "294",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/microsoft-tim-cach-mua-lai-tiktok-1077232.vov",
-                "title": "Microsoft tìm cách mua lại TikTok",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "310",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/nhan-vien-robot-phat-dong-lan-song-tu-dong-hoa-trong-nganh-ban-le-1073474.vov",
-                "title": "Nhân viên robot: Phát động làn sóng tự động hóa trong ngành bán lẻ",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "295",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/khau-trang-dien-tu-bluezone-vuot-1-trieu-luot-cai-dat-trong-4-ngay-1076898.vov",
-                "title": "“Khẩu trang điện tử” Bluezone vượt 1 triệu lượt cài đặt trong 4 ngày",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "311",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/smartphone-sieu-nho-ra-mat-nguoi-dung-1073357.vov",
-                "title": "Smartphone siêu nhỏ ra mắt người dùng",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "296",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/google-va-facebook-co-the-bi-phat-hang-tram-trieu-aud-tai-australia-1076860.vov",
-                "title": "Google và Facebook có thể bị phạt hàng trăm triệu AUD tại Australia",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "312",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/bao-chi-dung-cong-nghe-de-tao-ra-doanh-thu-va-gia-tri-moi-cho-minh-1073331.vov",
-                "title": "Báo chí dùng công nghệ để tạo ra doanh thu và giá trị mới cho mình",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "297",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/9-phu-kien-giup-game-thu-chinh-phuc-dinh-cao-moi-1076764.vov",
-                "title": "9 phụ kiện giúp game thủ chinh phục đỉnh cao mới",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "313",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/ha-vien-my-bo-phieu-cam-su-dung-tik-tok-tren-cac-thiet-bi-chinh-phu-1073066.vov",
-                "title": "Hạ viện Mỹ bỏ phiếu cấm sử dụng Tik Tok trên các thiết bị Chính phủ",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "298",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/tik-tok-moi-quan-ngai-chung-cua-google-facebook-va-chinh-phu-my-1076508.vov",
-                "title": "Tik Tok – mối quan ngại chung của Google, Facebook và Chính phủ Mỹ",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "314",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/hang-sieu-xe-mclaren-hop-tac-cung-klipsch-de-san-xuat-tai-nghe-1072777.vov",
-                "title": "Hãng siêu xe McLaren hợp tác cùng Klipsch để sản xuất tai nghe",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "315",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/nhung-camera-dinh-cao-giup-giam-sat-va-bao-ve-an-toan-nha-ban-1072479.vov",
-                "title": "Những camera đỉnh cao giúp giám sát và bảo vệ an toàn nhà bạn",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "299",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/vi-sao-toi-pham-cong-nghe-cao-an-cap-duoc-thong-tin-ca-nhan-1076384.vov",
-                "title": "Vì sao tội phạm công nghệ cao “ăn cắp” được thông tin cá nhân?",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-            {
-                "id": "316",
-                "category": "cong-nghe",
-                "link": "https://vov.vn/cong-nghe/samsung-tiep-buoc-apple-loai-bo-bo-sac-di-kem-smartphone-1072187.vov",
-                "title": "Samsung tiếp bước Apple loại bỏ bộ sạc đi kèm smartphone",
-                "reader_link": "",
-                "thumbnail": "",
-                "date": "2020-08-01 22:20:52"
-            },
-        ]}
-};
-
-// let dataMenu = [
-//     {key: 'tin-thiet-ke',name_vi:'Tin Thiết Kế', hidden:0, data:data},
-//     {key: 'tin-chuyen-nganh',name_vi:'Tin Chuyên Ngành', hidden:0, data:data},
-// ];
+    {
+        id:2,
+        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/30/2/main_img.jpg',
+    }
+];
 
 class HomeScreen extends React.Component {
 
@@ -235,7 +30,8 @@ class HomeScreen extends React.Component {
     state = {
         collection_data: null,
         stateCount: 0.0,
-        configMenu: Def.config_collection_menu
+        configMenu: Def.config_collection_menu,
+        slide_data : carouselItems,
     };
 
     constructor(props){
@@ -322,34 +118,79 @@ class HomeScreen extends React.Component {
 
     }
 
+    get pagination () {
+        const { slide_data, activeSlide } = this.state;
+        return (
+            <Pagination
+                dotsLength={slide_data.length}
+                activeDotIndex={activeSlide}
+                containerStyle={{ position:'absolute',top : 5, right : 0, width : slide_data.length  * 5,  paddingVertical: 5  }}
+                dotContainerStyle={{marginHorizontal : 6,}}
+                dotStyle={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: 5,
+                    borderWidth : 1,
+                    backgroundColor : 'rgba(179, 179, 179, 0.92)',
+                }}
+                inactiveDotStyle={{
+
+                    backgroundColor: 'rgba(255, 255, 255, 0.92)'
+                }}
+                inactiveDotOpacity={1}
+                inactiveDotScale={1}
+            />
+        );
+    }
+    renderItem = ({item, index}) => {
+
+        return (
+            <View key={index} style={Style.styles.cardStyle}>
+                <TouchableOpacity >
+                    <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
+                </TouchableOpacity>
+            </View>
+        );
+
+    }
+
 
     render() {
         const {navigation} = this.props;
         const configMenu = Def.config_collection_menu;
-        Object.entries(configMenu).map((prop, key) => {
-            console.log("start" + key);
-            console.log("prop" + JSON.stringify(prop));
-
-            console.log("prop[0]" + prop[0]);
-            console.log("prop[1]" + prop[1]["name_vi"]);
-
-            console.log("data" + prop[1]["data"]);
-
-            console.log("end");
-        });
         return (
+            <View style={{flex:1}}>
+                <View style={Style.styles.carousel}>
+                    <Carousel
+                        ref={(c) => { this._carousel = c; }}
+                        // keyExtractor={(item, index) => `${item.id}--${item.index}`}
+                        data={this.state.slide_data}
+                        renderItem={this.renderItem}
+                        itemWidth={width}
+                        sliderWidth={width}
+                        inactiveSlideOpacity={1}
+                        inactiveSlideScale={1}
+                        activeSlideAlignment={'start'}
+                        loop={true}
+                        autoplay={true}
+                        autoplayInterval={5000}
+                        onSnapToItem={(index) => this.setState({ activeSlide: index }) }
+                    />
+                    { this.pagination }
+                </View>
 
-            <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >
-                {
-                    configMenu && Object.entries(configMenu).map((prop, key) => {
-                        if((prop[1]["hidden"]) == 0){
-                            return (
-                                <CollectionTab key ={prop[0] + "acv"}  navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />
-                            );
-                        }
-                    })
-                }
-            </ScrollableTabView>
+                <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >
+                    {
+                        configMenu && Object.entries(configMenu).map((prop, key) => {
+                            if((prop[1]["hidden"]) == 0){
+                                return (
+                                    <CollectionTab key ={prop[0] + "acv"}  navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />
+                                );
+                            }
+                        })
+                    }
+                </ScrollableTabView>
+            </View>
         )
     }
 }

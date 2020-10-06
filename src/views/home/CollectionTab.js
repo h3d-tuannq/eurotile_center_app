@@ -18,23 +18,23 @@ class CollectionTab extends React.Component {
 
     itemClick(item){
         console.log(item.id);
-        this.props.navigation.navigate('collectionDetail', { item:item});
+        this.props.navigation.navigate('Product',{screen:'collection-detail-screen', params:{ item:item}});
 
     }
 
     render() {
         const {navigation} = this.props;
         const renderItem = ({ item }) => (
-            <CollectionItemrenderer item={item} click={this.itemClick} favorite={true} item={item} favorite={true} styleImage={{width:PROGRAM_IMAGE_WIDTH -2, height:PROGRAM_IMAGE_HEIGHT-5, marginRight:6, marginBottom : 5 }} />
+            <CollectionItemrenderer click={this.itemClick}  item={item} favorite={true} styleImage={{width:PROGRAM_IMAGE_WIDTH -2, height:PROGRAM_IMAGE_HEIGHT-5, marginRight:6, marginBottom : 5 }} />
         );
         return (
             <View style={styles.container}>
                 <View>
-                    <Text style={}>
+                    <Text style={[Style.text_styles.titleText, {textAlign:'center', padingVertical:5}]}>
                         Bộ sưu tập
                     </Text>
                 </View>
-                <View style={{}}>
+                <View style={{marginTop :8, flex:1}}>
                     <FlatList
                         data={this.props.data}
                         renderItem={renderItem}
