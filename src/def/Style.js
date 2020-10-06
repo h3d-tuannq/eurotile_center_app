@@ -1,5 +1,6 @@
-import {PixelRatio, StyleSheet} from 'react-native'
+import {PixelRatio, StyleSheet, Dimensions} from 'react-native'
 
+const {width, height} = Dimensions.get('window');
 
 export default class Style{
     static HEADER_HEIGHT = PixelRatio.get() < 2? 36 :37;
@@ -14,14 +15,17 @@ export default class Style{
     static GREY_TEXT_COLOR = '#b3b3b3';
     static DEFAULT_BACKGROUN_COLOR = "#e6e6e6";
 
+    static DRAWER_MENU_SIZE = PixelRatio.get() < 2? 36 :38;
+
+    static DRAWER_MENU_ICON_SIZE = PixelRatio.get() < 2 ? 27 :29;
+
+    static BACK_ICON_SIZE = PixelRatio.get() < 2? 24 :26;
+
 
     static styles = StyleSheet.create({
         container: {
             flex : 1,
             paddingLeft: 15,
-            // justifyContent: 'flex-start',
-            // marginVertical : 5,
-            // marginBottom : 5,
             backgroundColor: '#fff',
             paddingTop : 5
         },
@@ -37,42 +41,58 @@ export default class Style{
         cardStyle: {
             justifyContent: 'center',
             alignItems: 'center',
-            width: width-20,
+            width: width,
             height: width/2,
 
         },
+
         programListStyle : {
 
         },
-        itemImage: {
-            width: PROGRAM_IMAGE_WIDTH -5,
-            height : PROGRAM_IMAGE_HEIGHT -5,
+        carousel: {
+            paddingVertical: 2,
+            // maxHeight : width*0.95,
             borderRadius: 5,
+            // marginHorizontal : 10,
+            justifyContent:'center',
+
+        },
+
+        cardImg: {
+            width: width,
+            paddingVertical :5,
+            height: width * 0.5,
+            borderRadius : 5,
         },
 
     });
 
     static text_styles = StyleSheet.create({
-        tit: {
-            flex : 1,
-            paddingLeft: 15,
-            // justifyContent: 'flex-start',
-            // marginVertical : 5,
-            // marginBottom : 5,
-            backgroundColor: '#fff',
-            paddingTop : 5
+        titleText: {
+            fontSize : Style.TITLE_SIZE,
+            fontWeight: 'bold',
         },
-        textTitle: {
-            flex : 1,
-            paddingLeft: 15,
-            // justifyContent: 'flex-start',
-            // marginVertical : 5,
-            // marginBottom : 5,
-            backgroundColor: '#fff',
-            paddingTop : 5
+        redTitleText: {
+            fontSize : Style.TITLE_SIZE,
+            fontWeight: 'bold',
+            color: Style.DEFAUT_RED_COLOR,
+        },
+        whiteTitleText: {
+            fontSize : Style.TITLE_SIZE,
+            // fontWeight: 'bold',
+            color: '#fff',
         },
 
+        infoText: {
+            fontSize : Style.SMALL_SIZE,
+            color: Style.GREY_TEXT_COLOR,
+        },
+        normalText: {
+            fontSize : Style.SMALL_SIZE,
+        },
+        redText:{
 
+        },
     });
 
 }
