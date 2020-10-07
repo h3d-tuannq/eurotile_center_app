@@ -157,56 +157,7 @@ class MyScreen extends React.Component {
         const configMenu = Def.config_collection_menu;
         return (
             <View style={{flex:1}}>
-                <View style={Style.styles.carousel}>
-                    <Carousel
-                        ref={(c) => { this._carousel = c; }}
-                        // keyExtractor={(item, index) => `${item.id}--${item.index}`}
-                        data={this.state.slide_data}
-                        renderItem={this.renderItem}
-                        itemWidth={width}
-                        sliderWidth={width}
-                        inactiveSlideOpacity={1}
-                        inactiveSlideScale={1}
-                        activeSlideAlignment={'start'}
-                        loop={true}
-                        autoplay={true}
-                        autoplayInterval={5000}
-                        onSnapToItem={(index) => this.setState({ activeSlide: index }) }
-                    />
-                    { this.pagination }
-                </View>
-
-                <ScrollView style={{flex:1, paddingLeft:5}}>
-
-                {
-                    configMenu && Object.entries(configMenu).map((prop, key) => {
-                        prop[0] = (prop[0] == "" ? "Khác" : prop[0]);
-                        return (
-
-                            <View key={key} style={[styles.programListStyle, {marginTop: key == 0 ? 5 : 10}]}>
-                                <ProgramHozList refresh={this.refresh} stack={'Product'}
-                                screen={'collection-detail-screen'} favorite={true}
-                                navigation={this.props.navigation} name={prop[0]}
-                                style={styles.programListStyle} data={prop[1]["data"]} title={this.formatText(prop[1]["name_vi"])}/>
-                            </View>
-                        )
-                        }
-                    )
-
-                }
-                </ScrollView>
-
-                {/*<ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >*/}
-                    {/*{*/}
-                        {/*configMenu && Object.entries(configMenu).map((prop, key) => {*/}
-                            {/*if((prop[1]["hidden"]) == 0){*/}
-                                {/*return (*/}
-                                    {/*<CollectionTab key ={prop[0] + "acv"} displayTitle={'Bộ sưu tập'} type={"collection"} navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />*/}
-                                {/*);*/}
-                            {/*}*/}
-                        {/*})*/}
-                    {/*}*/}
-                {/*</ScrollableTabView>*/}
+                <Image  style={[this.props.styleImage, styles.imageStyle ]}  source={{uri:Def.user_info.ava}}  />
             </View>
         )
     }
