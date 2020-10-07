@@ -10,7 +10,7 @@ export default class Style{
     static SMALL_SIZE = PixelRatio.get() < 2 ? 10:11;
     static BIG_SIZE = PixelRatio.get() < 2 ? 17 :19;
     static DEFAUT_RED_COLOR = '#AD2428';
-    static DEFAUT_BLUE_COLOR = '#0A6BB5';
+    static DEFAUT_BLUE_COLOR = '#305E74';
 
     static GREY_TEXT_COLOR = '#b3b3b3';
     static DEFAULT_BACKGROUN_COLOR = "#e6e6e6";
@@ -88,7 +88,7 @@ export default class Style{
             color: Style.GREY_TEXT_COLOR,
         },
         normalText: {
-            fontSize : Style.SMALL_SIZE,
+            fontSize : Style.NORMAL_SIZE,
         },
         redText:{
 

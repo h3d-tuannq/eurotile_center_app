@@ -53,6 +53,10 @@ export default class Def{
     static config_collection_menu = null;
 
 
+    static collection_detail_data = null;
+    static collection_detail_menu = null;
+
+
 
     static getDateString(date, format) {
         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
