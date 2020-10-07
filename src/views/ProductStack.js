@@ -73,8 +73,9 @@ class ProductStack extends React.Component {
                     })}
                 />
 
-                <RootStack.Screen name="product-detail" component={ProductDetailScreen} options={{
-                    title: 'Sản phẩm chi tiết',
+                <RootStack.Screen name="product-detail" component={ProductDetailScreen} options=
+                    {({route}) => ({
+                    title: route.params.item && route.params.item.name ? route.params.item.name :'Sản phẩm chi tiết',
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
@@ -85,8 +86,9 @@ class ProductStack extends React.Component {
                     },
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
-                    }
-                }} />
+                    }}
+                    )
+                    } />
 
             </RootStack.Navigator>
         )

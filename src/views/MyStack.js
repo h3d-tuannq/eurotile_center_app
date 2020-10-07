@@ -10,32 +10,10 @@ import MenuIcon from '../../assets/icon/menu.svg';
 import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
 
+import MyScreen from './my/MyScreen'
+
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
-
-function UpdateProfileScreen({navigation} ) {
-    return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Thông tin tài khoản</Text>
-            <Button
-                title="Go to my profile"
-                onPress={() => navigation.navigate('my-profile')}
-            />
-        </View>
-    );
-}
-
-function ProfileScreen({navigation} ) {
-    return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Cập nhật thông tin</Text>
-            <Button
-                title="Go to update profile"
-                onPress={() => navigation.navigate('update-profile')}
-            />
-        </View>
-    );
-}
 
 class MyStack extends React.Component {
     constructor(props){
@@ -46,8 +24,8 @@ class MyStack extends React.Component {
         return (
             <RootStack.Navigator>
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
-                <RootStack.Screen name="my-profile" component={ProfileScreen} options={{
-                    title: 'My Profile',
+                <RootStack.Screen name="my-screen" component={MyScreen} options={{
+                    title: 'Dashboard',
                     headerLeft: () => (
                         <TouchableOpacity
                             style=  {
@@ -80,8 +58,8 @@ class MyStack extends React.Component {
                     }
                 }} />
 
-                <RootStack.Screen name="update-profile" component={UpdateProfileScreen} options={{
-                    title: 'Update Profile',
+                <RootStack.Screen name="my-profile" component={MyScreen} options={{
+                    title: 'Thông tin cá nhân',
                     // headerLeft: () => (
                     //     <TouchableOpacity
                     //         style=  {
