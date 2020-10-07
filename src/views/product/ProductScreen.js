@@ -7,6 +7,8 @@ import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 
+import ProgramHozList from '../../../src/com/common/ProgramHozList';
+
 import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
@@ -25,21 +27,20 @@ const carouselItems = [
 ];
 
 class ProductScreen extends React.Component {
-
-
-    state = {
-        collection_data: null,
-        stateCount: 0.0,
-        configMenu: Def.config_collection_menu,
-        slide_data : carouselItems,
-    };
-
     constructor(props){
         super(props);
         this.onGetCollectionSuccess     = this.onGetCollectionSuccess.bind(this);
         this.onGetCollectionFalse     = this.onGetCollectionFalse.bind(this);
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
+
+        this.state = {
+        collection_data: null,
+        stateCount: 0.0,
+        configMenu: Def.config_collection_menu,
+        slide_data : carouselItems,
+        activeSlide : 0,
+    };
 
         Def.mainNavigate = this.props.navigation;
 
@@ -123,7 +124,7 @@ class ProductScreen extends React.Component {
             <Pagination
                 dotsLength={slide_data.length}
                 activeDotIndex={activeSlide}
-                containerStyle={{ position:'absolute',top : 5, right : 0, width : slide_data.length  * 5,  paddingVertical: 5  }}
+                containerStyle={{ position:'absolute',top : 5, right : slide_data.length  * 5, width : slide_data.length  * 5,  paddingVertical: 5  }}
                 dotContainerStyle={{marginHorizontal : 6,}}
                 dotStyle={{
                     width: 10,
@@ -178,17 +179,37 @@ class ProductScreen extends React.Component {
                     { this.pagination }
                 </View>
 
-                <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >
-                    {
-                        configMenu && Object.entries(configMenu).map((prop, key) => {
-                            if((prop[1]["hidden"]) == 0){
-                                return (
-                                    <CollectionTab key ={prop[0] + "acv"}  navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />
-                                );
-                            }
-                        })
-                    }
-                </ScrollableTabView>
+                <ScrollView style={{flex:1, paddingLeft:5}}>
+
+                {
+                    configMenu && Object.entries(configMenu).map((prop, key) => {
+                        prop[0] = (prop[0] == "" ? "Khác" : prop[0]);
+                        return (
+
+                            <View key={key} style={[styles.programListStyle, {marginTop: key == 0 ? 5 : 10}]}>
+                                <ProgramHozList refresh={this.refresh} stack={'Product'}
+                                screen={'collection-detail-screen'} favorite={true}
+                                navigation={this.props.navigation} name={prop[0]}
+                                style={styles.programListStyle} data={prop[1]["data"]} title={this.formatText(prop[1]["name_vi"])}/>
+                            </View>
+                        )
+                        }
+                    )
+
+                }
+                </ScrollView>
+
+                {/*<ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >*/}
+                    {/*{*/}
+                        {/*configMenu && Object.entries(configMenu).map((prop, key) => {*/}
+                            {/*if((prop[1]["hidden"]) == 0){*/}
+                                {/*return (*/}
+                                    {/*<CollectionTab key ={prop[0] + "acv"} displayTitle={'Bộ sưu tập'} type={"collection"} navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />*/}
+                                {/*);*/}
+                            {/*}*/}
+                        {/*})*/}
+                    {/*}*/}
+                {/*</ScrollableTabView>*/}
             </View>
         )
     }

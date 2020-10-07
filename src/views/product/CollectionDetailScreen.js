@@ -33,6 +33,8 @@ class CollectionDetailScreen extends React.Component {
         configMenu: Def.config_collection_menu,
         slide_data : this.props.route.params.item ? this.getImageForCollection(this.props.route.params.item) : carouselItems,
         item: this.props.route.params.item,
+        collection_detail_data : this.props.route.params.item["brickBox"],
+        activeSlide : 0,
     };
 
     constructor(props){
@@ -43,25 +45,21 @@ class CollectionDetailScreen extends React.Component {
         this.refresh     = this.refresh.bind(this);
 
         let item = this.props.route.params.item;
-        let collectionImages = [this.props.route.params.item.image_path];
-        if(item.sub_images){
-            let subImgs = item.sub_images.split(',');
-            subImgs = subImgs.map(x => Def.URL_CONTENT_BASE + x);
-            collectionImages = collectionImages.concat(subImgs);
-        }
+
+        // console.log("Item data"+JSON.stringify(item));
+        // let collectionImages = [this.props.route.params.item.image_path];
+        // if(item.sub_images){
+        //     let subImgs = item.sub_images.split(',');
+        //     subImgs = subImgs.map(x => Def.URL_CONTENT_BASE + x);
+        //     collectionImages = collectionImages.concat(subImgs);
+        // }
 
 
 
         Def.mainNavigate = this.props.navigation;
-
-        // if(!Def.collection_data) {
-        //     NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
-        // }
-        // else if (!Def.config_collection_menu) {
-        //     Def.config_collection_menu = this.createConfigData(Def.collection_data);
-        //     this.setState({configMenu: Def.config_news_menu});
-        // }
-
+        Def.collection_detail_data = item['brickBox'];
+        Def.collection_detail_menu = this.createConfigData(Def.collection_detail_data);
+        // this.setState({configMenu: Def.collection_detail_menu});
     }
 
     getImageForCollection(item){
@@ -92,8 +90,8 @@ class CollectionDetailScreen extends React.Component {
             // console.log('Start');
         });
         this.setState({ collection_data: data["data"] });
-        Def.collection_data = data["data"];
-        Def.config_collection_menu = this.createConfigData(data["data"]) ;
+        Def.collection_detail_data = data["data"];
+        Def.collection_detail_menu = this.createConfigData(data["data"]) ;
         this.setState({ configMenu: Def.config_collection_menu});
     }
 
@@ -103,15 +101,15 @@ class CollectionDetailScreen extends React.Component {
         if(data){
             let configData =  Object.entries(data).map((prop, key) => {
                 // console.log("Props : " + JSON.stringify(prop));
-                return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
+                // let reObj = {key: prop[0],name_vi:prop[1]["name"], hidden:0, data:prop[1]["product"]};
+                // console.log(JSON.stringify("return-Obj" + JSON.stringify(reObj)));
+                return {key: prop[0],name_vi:prop[1]["name"], hidden:0, data:prop[1]["product"]};
             });
             Object.entries(configData).map((prop, key) => {
                 console.log("start" + key);
                 console.log("prop[0]" + prop[0]);
                 console.log("prop[1]" + prop[1]["name_vi"]);
-
                 console.log("data" + prop[1]["data"]);
-
                 console.log("end");
             });
             return configData;
@@ -147,7 +145,7 @@ class CollectionDetailScreen extends React.Component {
             <Pagination
                 dotsLength={slide_data.length}
                 activeDotIndex={activeSlide}
-                containerStyle={{ position:'absolute',top : 5, right : 0, width : slide_data.length  * 5,  paddingVertical: 5  }}
+                containerStyle={{ position:'absolute',top : 5, right : slide_data.length  * 5, width : slide_data.length  * 5,  paddingVertical: 5  }}
                 dotContainerStyle={{marginHorizontal : 6,}}
                 dotStyle={{
                     width: 10,
@@ -180,7 +178,7 @@ class CollectionDetailScreen extends React.Component {
 
     render() {
         const {navigation} = this.props;
-        // const configMenu = Def.config_collection_menu;
+        const configMenu = Def.collection_detail_menu;
         return (
             <View style={{flex:1}}>
                 <View style={Style.styles.carousel}>
@@ -202,17 +200,17 @@ class CollectionDetailScreen extends React.Component {
                     { this.pagination }
                 </View>
 
-                {/*<ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >*/}
-                    {/*{*/}
-                        {/*configMenu && Object.entries(configMenu).map((prop, key) => {*/}
-                            {/*if((prop[1]["hidden"]) == 0){*/}
-                                {/*return (*/}
-                                    {/*<CollectionTab key ={prop[0] + "acv"}  navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />*/}
-                                {/*);*/}
-                            {/*}*/}
-                        {/*})*/}
-                    {/*}*/}
-                {/*</ScrollableTabView>*/}
+                <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >
+                    {
+                        configMenu && Object.entries(configMenu).map((prop, key) => {
+                            if((prop[1]["hidden"]) == 0){
+                                return (
+                                    <CollectionTab key ={prop[0] + "acv"} displayTitle={'Sản phẩm'} type={"product"} navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />
+                                );
+                            }
+                        })
+                    }
+                </ScrollableTabView>
             </View>
         )
     }
