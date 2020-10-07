@@ -124,7 +124,7 @@ class HomeScreen extends React.Component {
             <Pagination
                 dotsLength={slide_data.length}
                 activeDotIndex={activeSlide}
-                containerStyle={{ position:'absolute',top : 5, right : 0, width : slide_data.length  * 5,  paddingVertical: 5  }}
+                containerStyle={{ position:'absolute',top : 5, right : slide_data.length  * 5 , width : slide_data.length  * 5,  paddingVertical: 5  }}
                 dotContainerStyle={{marginHorizontal : 6,}}
                 dotStyle={{
                     width: 10,

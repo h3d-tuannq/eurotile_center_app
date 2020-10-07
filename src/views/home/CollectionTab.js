@@ -30,7 +30,7 @@ class CollectionTab extends React.Component {
         return (
             <View style={styles.container}>
                 <View>
-                    <Text style={[Style.text_styles.titleText, {textAlign:'center', padingVertical:5}]}>
+                    <Text style={[Style.text_styles.titleText, {textAlign:'center', paddingVertical:5}]}>
                         Bộ sưu tập
                     </Text>
                 </View>
