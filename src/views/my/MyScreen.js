@@ -181,22 +181,8 @@ class MyScreen extends React.Component {
 
                 </View> :
             <View style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
-                {/*<View style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}>*/}
-                    {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
-                    {/*<Image  style={styles.imageStyle}  source={{uri:user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />*/}
-                    {/*<View style={{marginLeft: 10, justifyContent:'space-between'}}>*/}
-                        {/*<Text style={Style.text_styles.middleText}>*/}
-                            {/*{user['email']}*/}
-                        {/*</Text>*/}
-                        {/*<Text style={Style.text_styles.middleText}>*/}
-                            {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
-                        {/*</Text>*/}
-                    {/*</View>*/}
-                    {/*</View>*/}
-                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                {/*</View>*/}
 
-                <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}>
+                <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginBottom: 10}}>
                     <View style={{flexDirection : 'row', alignItems : 'center'}}>
                         <Image  style={styles.imageStyle}  source={{uri:user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />
 
@@ -206,11 +192,28 @@ class MyScreen extends React.Component {
                             {user['email']}
                         </Text>
                         {/*<Text style={Style.text_styles.middleText}>*/}
-                            {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
+                        {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
                         {/*</Text>*/}
                     </View>
                     {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                 </View>
+
+                <View style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}>
+                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                    <Image  style={styles.imageStyleInfo}  source={{uri:user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />
+                    <View style={{marginLeft: 10, justifyContent:'space-between'}}>
+                        <Text style={Style.text_styles.middleText}>
+                            {user['email']}
+                        </Text>
+                        <Text style={Style.text_styles.middleText}>
+                            {user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}
+                        </Text>
+                    </View>
+                    </View>
+                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                </View>
+
+
 
                 <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
                     <View style={{flexDirection : 'row', alignItems : 'center'}}>
@@ -303,6 +306,13 @@ const styles = StyleSheet.create({
 
         borderRadius: width / 6,
     },
+    imageStyleInfo : {
+        width : width /8,
+        height : width / 8,
+
+        borderRadius: width / 16,
+    },
+
 });
 
 export default MyScreen;
