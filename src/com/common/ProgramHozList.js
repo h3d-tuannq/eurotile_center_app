@@ -9,12 +9,12 @@ import WishlistIcon from '../../../assets/icon/icon-wishlist.svg'
 import MusicWishlistIcon from '../../../assets/icon/icon-catalog-music.svg'
 
 import DefaultProgramImage from '../../../assets/icon/logo-vov.svg'
-import ProgramItemrenderer from '../item-render/ProgramItemrenderer'
+import CollectionItemrenderer from '../item-render/CollectionItemrenderer'
 import Style from "../../../src/def/Style";
 
 const {width, height} = Dimensions.get('window');
-const PROGRAM_IMAGE_WIDTH = (width - 15) /3.5;
-const PROGRAM_IMAGE_HEIGHT = (width - 15) /3.5;
+const PROGRAM_IMAGE_WIDTH = (width - 15) /2.5;
+const PROGRAM_IMAGE_HEIGHT = (width - 15) /2.5;
 
 
 
@@ -68,7 +68,7 @@ class ProgramHozList extends React.Component {
         const minusSize = this.props.programType == 'music' ? 12 : 5;
         const renderItem = ({ item }) => (
 
-            <ProgramItemrenderer
+            <CollectionItemrenderer
                 click={this.itemClick}
                 refresh={this.refresh}
                 item={item}
