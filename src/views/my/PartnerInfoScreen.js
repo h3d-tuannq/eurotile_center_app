@@ -26,24 +26,20 @@ const carouselItems = [
     }
 ];
 
-class MyScreen extends React.Component {
+class PartnerInfoScreen extends React.Component {
     constructor(props){
         super(props);
         this.formatText    = this.formatText.bind(this);
         this.onGetUserInfoFun = this.onGetUserInfoFun.bind(this);
-        Def.mainNavigate = this.props.navigation;
-        this.gotoProfile = this.gotoProfile.bind(this);
-        this.gotoPartnerInfo = this.gotoPartnerInfo.bind(this);
-        if(this.props.navigation){
-            console.log('isset naviagtion');
-        }
 
         this.state = {
             user: Def.user_info,
             stateCount: 0.0,
             configMenu: Def.config_collection_menu,
-            slide_data : carouselItems,
-            activeSlide : 0,
+            project_slide_data : this.calProSlideData(Def.user_info['partnerInfo']),
+            cmt_slide_data : this.calCmtSlideData(Def.user_info['userProfile']),
+            activeProSlide : 0,
+            activeCmtSlide : 0,
         };
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
@@ -51,12 +47,39 @@ class MyScreen extends React.Component {
 
     }
 
-    gotoProfile(){
-        this.props.navigation.navigate('My', {'screen':'my-profile'});
+    calCmtSlideData(userProfile){
+
+        console.log('User Profile : ' + JSON.stringify(userProfile));
+
+        let rs = [];
+        if (userProfile){
+            if(userProfile['infront_cmt_img']){
+                rs.push( {
+                    id : 'infrontOf',
+                    image_path : Def.URL_CONTENT_BASE + userProfile['infront_cmt_img']
+                });
+            }
+            if(userProfile['behind_cmt_img']){
+                rs.push( {
+                    id : 'behind',
+                    image_path : Def.URL_CONTENT_BASE + userProfile['behind_cmt_img']
+                });
+            }
+        }
+        return rs;
+
     }
 
-    gotoPartnerInfo(){
-        this.props.navigation.navigate('My', {'screen':'partner-info'});
+    calProSlideData(partnerInfo){
+        let rs = [];
+
+        if(partnerInfo && partnerInfo.project_img){
+            let subImgs = partnerInfo.project_img.split(',');
+            rs = subImgs.map(x => {
+                return {image_path:Def.URL_CONTENT_BASE  + 'partnerInfo/'+ x}
+            });
+        }
+        return rs;
     }
 
     onGetUserInfoFun(value){
@@ -66,7 +89,9 @@ class MyScreen extends React.Component {
             Def.username = Def.user_info['user_name'];
             Def.email = Def.user_info['email'];
 
-            this.setState({user:Def.user_info});
+            this.setState({user:Def.user_info, project_slide_data : this.calProSlideData(Def.user_info['partnerInfo']),
+                cmt_slide_data : this.calCmtSlideData(Def.user_info['userProfile'])});
+
             console.log("State : " +  JSON.stringify(this.state.user));
         }
     }
@@ -136,12 +161,12 @@ class MyScreen extends React.Component {
     }
 
     get pagination () {
-        const { slide_data, activeSlide } = this.state;
+        const { project_slide_data, activeProSlide } = this.state;
         return (
             <Pagination
-                dotsLength={slide_data.length}
-                activeDotIndex={activeSlide}
-                containerStyle={{ position:'absolute',top : 5, right : slide_data.length  * 5, width : slide_data.length  * 5,  paddingVertical: 5  }}
+                dotsLength={project_slide_data.length}
+                activeDotIndex={activeProSlide}
+                containerStyle={{ position:'absolute',top : 5, right : project_slide_data.length  * 5, width : project_slide_data.length  * 5,  paddingVertical: 5  }}
                 dotContainerStyle={{marginHorizontal : 6,}}
                 dotStyle={{
                     width: 10,
@@ -159,6 +184,32 @@ class MyScreen extends React.Component {
             />
         );
     }
+
+    get cmtPagination () {
+        const { cmt_slide_data, activeCmtSlide } = this.state;
+        return (
+            <Pagination
+                dotsLength={cmt_slide_data.length}
+                activeDotIndex={activeCmtSlide}
+                containerStyle={{ position:'absolute',top : 5, right : cmt_slide_data.length  * 5, width : cmt_slide_data.length  * 5,  paddingVertical: 5  }}
+                dotContainerStyle={{marginHorizontal : 6,}}
+                dotStyle={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: 5,
+                    borderWidth : 1,
+                    backgroundColor : 'rgba(179, 179, 179, 0.92)',
+                }}
+                inactiveDotStyle={{
+
+                    backgroundColor: 'rgba(255, 255, 255, 0.92)'
+                }}
+                inactiveDotOpacity={1}
+                inactiveDotScale={1}
+            />
+        );
+    }
+
     renderItem = ({item, index}) => {
 
         return (
@@ -194,27 +245,9 @@ class MyScreen extends React.Component {
                     </Text>
 
                 </View> :
-            <View style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
+            <ScrollView style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
 
-                <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginBottom: 10}}>
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <Image  style={styles.imageStyle}  source={{uri:user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />
-
-                    </View>
-                    <View style={{marginTop: 10, justifyContent:'space-between'}}>
-                        <Text style={Style.text_styles.titleTextNotBold}>
-                            {user['email']}
-                        </Text>
-                        {/*<Text style={Style.text_styles.middleText}>*/}
-                        {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
-                        {/*</Text>*/}
-                    </View>
-                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                </View>
-
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}
-                    onPress={this.gotoProfile}
-                    >
+                <View style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}>
                     <View style={{flexDirection : 'row', alignItems : 'center'}}>
                     <Image  style={styles.imageStyleInfo}  source={{uri:user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />
                     <View style={{marginLeft: 10, justifyContent:'space-between'}}>
@@ -227,60 +260,119 @@ class MyScreen extends React.Component {
                     </View>
                     </View>
                     <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                </TouchableOpacity>
+                </View>
 
 
 
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <View style={{width :30}}>
-                        <Icon name="user-cog" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                            Thiết lập bảo vệ tài khoản
+                <View style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff'}}>
+
+                        <Text style={[Style.text_styles.middleText, {}]}>
+                            Xếp hạng
                         </Text>
+
+                        <Text style={[Style.text_styles.middleText, {}]}>
+                            {user['partnerInfo']['level_id']}
+                        </Text>
+                 </View>
+
+
+
+                    <View style={{flexDirection : 'row', alignItems : 'center' , justifyContent:'space-between', paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}>
+                        <Text style={[Style.text_styles.middleText,{}]}>
+                            Năm kinh nghiệm
+                        </Text>
+                        <Text style={[Style.text_styles.middleText,{}]}>
+                            {user['partnerInfo']['experience']}
+                        </Text>
+
                     </View>
-                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+
+                    <View style={{flexDirection : 'row', alignItems : 'center' , justifyContent:'space-between', paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}>
+                        <Text style={[Style.text_styles.middleText,{}]}>
+                            Phong cách
+                        </Text>
+                        <Text style={[Style.text_styles.middleText,{}]}>
+                            {user['partnerInfo']['tags']}
+                        </Text>
+
+                    </View>
+                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}>
+                    <Text style={[Style.text_styles.middleText,{}]}>
+                        Nơi làm việc
+                    </Text>
+                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+
+                        <Text style={[Style.text_styles.middleText, {marginRight :10}]}>
+                            {user['userProfile']['address']}
+                        </Text>
+                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                    </View>
+
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
-                    onPress={this.gotoPartnerInfo}
-                >
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <View style={{width :30}}>
-                        <Icon name="id-card" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                            Hồ sơ Partner
-                        </Text>
-                    </View>
-                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                </TouchableOpacity>
+                <View style={{flexDirection : 'row', alignItems : 'center' , justifyContent:'space-between', paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
+                    <Text style={[Style.text_styles.middleText,{}]}>
+                        CMND
+                    </Text>
+                    <Text style={[Style.text_styles.middleText,{}]}>
+                        {user['userProfile']['card_number']}
+                    </Text>
 
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <View style={{width :30}}>
-                        <Icon name="credit-card" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                            Cài đặt thanh toán
-                        </Text>
-                    </View>
-                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                </TouchableOpacity>
+                </View>
 
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}>
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <View style={{width :30}}>
-                            <Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                            Danh sách đơn hàng
-                        </Text>
+                <View>
+                    <View style={Style.styles.carousel}>
+                        <Carousel
+                            ref={(c) => { this._carousel = c; }}
+                            // keyExtractor={(item, index) => `${item.id}--${item.index}`}
+                            data={this.state.cmt_slide_data}
+                            renderItem={this.renderItem}
+                            itemWidth={width}
+                            sliderWidth={width}
+                            inactiveSlideOpacity={1}
+                            inactiveSlideScale={1}
+                            activeSlideAlignment={'start'}
+                            loop={true}
+                            autoplay={true}
+                            autoplayInterval={5000}
+                            onSnapToItem={(index) => this.setState({ activeCmtSlide: index }) }
+                        />
+                        { this.pagination }
                     </View>
-                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                </TouchableOpacity>
-            </View>
+                </View>
+
+                <View style={{flexDirection : 'row', alignItems : 'center' , justifyContent:'space-between', paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
+                    <Text style={[Style.text_styles.middleText,{}]}>
+                        Dự án
+                    </Text>
+
+
+                </View>
+
+                <View>
+                    <View style={Style.styles.carousel}>
+                        <Carousel
+                            ref={(c) => { this._carousel = c; }}
+                            // keyExtractor={(item, index) => `${item.id}--${item.index}`}
+                            data={this.state.project_slide_data}
+                            renderItem={this.renderItem}
+                            itemWidth={width}
+                            sliderWidth={width}
+                            inactiveSlideOpacity={1}
+                            inactiveSlideScale={1}
+                            activeSlideAlignment={'start'}
+                            loop={true}
+                            autoplay={true}
+                            autoplayInterval={5000}
+                            onSnapToItem={(index) => this.setState({ activeProSlide: index }) }
+                        />
+                        { this.pagination }
+                    </View>
+                </View>
+
+
+
+            </ScrollView>
         )
     }
 }
@@ -333,4 +425,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default MyScreen;
+export default PartnerInfoScreen;
