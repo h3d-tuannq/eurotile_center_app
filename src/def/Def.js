@@ -2,6 +2,7 @@
 export default class Def{
     static URL_BASE = "http://vovadmin.duchungtech.com/api";
     static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
+    static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com//uploads/2019/07/02/5d1aa12048236.jpg";
 
     // token nhận được sau khi đăng nhập để gửi lên server lấy token user
     static firebase_token = '';

@@ -13,7 +13,8 @@ export default class Style{
     static DEFAUT_BLUE_COLOR = '#305E74';
 
     static GREY_TEXT_COLOR = '#b3b3b3';
-    static DEFAULT_BACKGROUN_COLOR = "#e6e6e6";
+    static GREY_BACKGROUND_COLOR = "#e6e6e6";
+
 
     static DRAWER_MENU_SIZE = PixelRatio.get() < 2? 36 :38;
 
@@ -68,10 +69,21 @@ export default class Style{
     });
 
     static text_styles = StyleSheet.create({
+        bigText:{
+          fontSize : Style.BIG_SIZE
+        },
         titleText: {
             fontSize : Style.TITLE_SIZE,
             fontWeight: 'bold',
         },
+        titleTextNotBold: {
+            fontSize : Style.TITLE_SIZE,
+        },
+
+        middleText: {
+            fontSize : Style.MIDLE_SIZE,
+        },
+
         redTitleText: {
             fontSize : Style.TITLE_SIZE,
             fontWeight: 'bold',
