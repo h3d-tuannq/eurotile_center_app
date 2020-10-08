@@ -531,6 +531,7 @@ export default class App extends Component {
         AsyncStorage.getItem('user_info').then((value) => {
              if(value){
                  Def.user_info = JSON.parse(value);
+                 console.log("Usser info from storage : " +  JSON.stringify(Def.user_info));
                  Def.username = Def.user_info['user_name'];
                  Def.email = Def.user_info['email'];
              }
