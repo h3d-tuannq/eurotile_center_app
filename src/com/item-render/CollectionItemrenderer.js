@@ -10,7 +10,7 @@ import FavoriteIconSelect from "../../../assets/icon/icon-like.svg";
 import Def from '../../def/Def'
 import Style from "../../def/Style";
 
-class ProgramItemrenderer extends PureComponent{
+class CollectionItemrenderer extends PureComponent{
     state = {
         stateCount: 0.0,
 
@@ -25,6 +25,10 @@ class ProgramItemrenderer extends PureComponent{
 
     formatText(text, maxCharacter = 20){
         let rs = text;
+        // if(this.props.type == "product"){
+        //     rs = text.replace("Sản phẩm ", '');
+        // }
+
         if(text.length > maxCharacter -2){
             rs = text.substring(0, maxCharacter -2) + " ...";
         }
@@ -76,9 +80,10 @@ class ProgramItemrenderer extends PureComponent{
 
                 </TouchableOpacity>
 
-                <View style = {{width:this.props.styleImage.width, justifyContent:'center', alignItems: 'center'}}>
-                    <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:2 , borderRadius : 3 ,bottom:10, backgroundColor:Style.DEFAUT_RED_COLOR, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>
-                          {this.formatText(model.name, 15)}
+                <View style = {{width:this.props.styleImage.width, justifyContent:'center', alignItems: (this.props.type == 'product' ? 'flex-start' :'center')}}>
+
+                    <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:1 , borderRadius : 3 ,bottom:5, backgroundColor: this.props.type == 'product' ? Style.DEFAUT_BLUE_COLOR :Style.DEFAUT_RED_COLOR, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>
+                          {this.formatText(this.props.type == 'product' ?model.model :model.name, 15)}
                     </Text>
                 </View>
             </View>
@@ -111,4 +116,4 @@ const  styles = StyleSheet.create({
     }
 });
 
-export default ProgramItemrenderer;
+export default CollectionItemrenderer;

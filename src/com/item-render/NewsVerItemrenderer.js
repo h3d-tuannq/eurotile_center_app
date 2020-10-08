@@ -50,14 +50,14 @@ class NewsVerItemrenderer extends PureComponent{
                     <View style={styles.info}>
                         <Text style={styles.titleInfo}>{model.title}</Text>
                         <View style={styles.listenView}>
-                            {/*<Text style={{fontSize:Style.MIDLE_SIZE, color:Style.GREY_TEXT_COLOR , paddingTop:5, paddingRight:5}}>{ (model.created_at.split(" ")[0]).split("-")[2] + "/"+ (model.date.split(" ")[0]).split("-")[1] + "/"+ (model.date.split(" ")[0]).split("-")[0] }*/}
-                            {/*</Text>*/}
-                            <TouchableOpacity style={[styles.listenButton, { backgroundColor: model.reader_link ? 'red' : '#cccccc'}]} onPress={this.onClickNews}>
-                                <SpeakerIcon style={styles.favoriteIcon}  />
-                                <Text style={[styles.infoText,{ marginLeft:5}]}>
-                                    Nghe tin tức
-                                </Text>
-                            </TouchableOpacity>
+                            <Text style={{fontSize:Style.MIDLE_SIZE, color:Style.GREY_TEXT_COLOR , paddingTop:5, paddingRight:5}}>{model.created_at}
+                            </Text>
+                            {/*<TouchableOpacity style={[styles.listenButton, { backgroundColor: model.reader_link ? 'red' : '#cccccc'}]} onPress={this.onClickNews}>*/}
+                                {/*<SpeakerIcon style={styles.favoriteIcon}  />*/}
+                                {/*<Text style={[styles.infoText,{ marginLeft:5}]}>*/}
+                                    {/*Nghe tin tức*/}
+                                {/*</Text>*/}
+                            {/*</TouchableOpacity>*/}
                         </View>
                     </View>
             </TouchableOpacity>
