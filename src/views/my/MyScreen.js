@@ -1,17 +1,17 @@
 import React from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
-import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
-import CollectionTab from './CollectionTab'
-import MyCustomizeTabBar from  '../../com/common/tabar/MyCustomizeTabBar'
-import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
+import IconArrow from '../../../assets/icon/icon_arrow.svg'
 
 import ProgramHozList from '../../../src/com/common/ProgramHozList';
 
 import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
+import AsyncStorage from "@react-native-community/async-storage";
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -30,25 +30,31 @@ class MyScreen extends React.Component {
     constructor(props){
         super(props);
         this.formatText    = this.formatText.bind(this);
+        this.onGetUserInfoFun = this.onGetUserInfoFun.bind(this);
 
         this.state = {
-            user: null,
+            user: Def.user_info,
             stateCount: 0.0,
             configMenu: Def.config_collection_menu,
             slide_data : carouselItems,
             activeSlide : 0,
         };
-
-        Def.mainNavigate = this.props.navigation;
-
-        if(!Def.collection_data) {
-            NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
-        }
-        else if (!Def.config_collection_menu) {
-            Def.config_collection_menu = this.createConfigData(Def.collection_data);
-            this.setState({configMenu: Def.config_news_menu});
+        if(!Def.user_info){
+            AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
 
+    }
+
+    onGetUserInfoFun(value){
+        if(value){
+            Def.user_info = JSON.parse(value);
+            console.log("Usser info from storage : " +  JSON.stringify(Def.user_info));
+            Def.username = Def.user_info['user_name'];
+            Def.email = Def.user_info['email'];
+
+            this.setState({user:Def.user_info});
+            console.log("State : " +  JSON.stringify(this.state.user));
+        }
     }
 
     refresh()
@@ -154,10 +160,105 @@ class MyScreen extends React.Component {
 
     render() {
         const {navigation} = this.props;
-        const configMenu = Def.config_collection_menu;
+        const {user} = this.state;
         return (
-            <View style={{flex:1}}>
-                <Image  style={[this.props.styleImage, styles.imageStyle ]}  source={{uri:Def.user_info.ava}}  />
+            (!this.state.user) ?
+
+                <View style={{justifyContent :'center',flex: 1, alignItems : 'center', width: width}}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={{fontSize:Style.TITLE_SIZE, color:'#b3b3b3'}}>
+                            Vui lòng
+                        </Text>
+                        <TouchableOpacity onPress={this.signInBtnClick}>
+                            <Text style={{fontSize:Style.TITLE_SIZE, marginLeft:5 , color:Style.DEFAUT_RED_COLOR}}>
+                                đăng nhập
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={{fontSize:Style.TITLE_SIZE, color:'#b3b3b3'}}>
+                        để sử dụng đầy đủ tính năng cá nhân
+                    </Text>
+
+                </View> :
+            <View style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
+                {/*<View style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}>*/}
+                    {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
+                    {/*<Image  style={styles.imageStyle}  source={{uri:user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />*/}
+                    {/*<View style={{marginLeft: 10, justifyContent:'space-between'}}>*/}
+                        {/*<Text style={Style.text_styles.middleText}>*/}
+                            {/*{user['email']}*/}
+                        {/*</Text>*/}
+                        {/*<Text style={Style.text_styles.middleText}>*/}
+                            {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
+                        {/*</Text>*/}
+                    {/*</View>*/}
+                    {/*</View>*/}
+                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                {/*</View>*/}
+
+                <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}>
+                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                        <Image  style={styles.imageStyle}  source={{uri:user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />
+
+                    </View>
+                    <View style={{marginTop: 10, justifyContent:'space-between'}}>
+                        <Text style={Style.text_styles.titleTextNotBold}>
+                            {user['email']}
+                        </Text>
+                        {/*<Text style={Style.text_styles.middleText}>*/}
+                            {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
+                        {/*</Text>*/}
+                    </View>
+                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                </View>
+
+                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
+                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                        <View style={{width :30}}>
+                        <Icon name="user-cog" size={25} color={Style.GREY_TEXT_COLOR} />
+                        </View>
+                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                            Thiết lập bảo vệ tài khoản
+                        </Text>
+                    </View>
+                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}>
+                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                        <View style={{width :30}}>
+                        <Icon name="id-card" size={25} color={Style.GREY_TEXT_COLOR} />
+                        </View>
+                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                            Hồ sơ Partner
+                        </Text>
+                    </View>
+                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
+                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                        <View style={{width :30}}>
+                        <Icon name="credit-card" size={25} color={Style.GREY_TEXT_COLOR} />
+                        </View>
+                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                            Cài đặt thanh toán
+                        </Text>
+                    </View>
+                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}>
+                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                        <View style={{width :30}}>
+                            <Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />
+                        </View>
+                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                            Danh sách đơn hàng
+                        </Text>
+                    </View>
+                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                </TouchableOpacity>
             </View>
         )
     }
@@ -195,6 +296,12 @@ const styles = StyleSheet.create({
         width: PROGRAM_IMAGE_WIDTH -5,
         height : PROGRAM_IMAGE_HEIGHT -5,
         borderRadius: 5,
+    },
+    imageStyle : {
+        width : width /3,
+        height : width / 3,
+
+        borderRadius: width / 6,
     },
 });
 
