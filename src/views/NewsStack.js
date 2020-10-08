@@ -45,7 +45,7 @@ class NewsStack extends React.Component {
             <RootStack.Navigator>
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="news-list" component={NewsScreen} options={{
-                    title: 'News List',
+                    title: 'Tin Tức',
                     headerLeft: () => (
                         <TouchableOpacity
                             style=  {
@@ -71,7 +71,7 @@ class NewsStack extends React.Component {
                     },
                     headerTintColor: '#fff',
                     headerTitleStyle: {
-                        fontWeight: 'bold',
+                        // fontWeight: 'bold',
                     },
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />

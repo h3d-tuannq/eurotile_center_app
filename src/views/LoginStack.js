@@ -118,7 +118,7 @@ class LoginStack extends React.Component {
                                       },
                                       headerTintColor: '#fff',
                                       headerTitleStyle: {
-                                          fontWeight: 'bold',
+                                          // fontWeight: 'bold',
                                       },
                                       headerBackImage: ()=> {
                                           return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />

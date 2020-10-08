@@ -27,7 +27,7 @@ class HomeStack extends React.Component {
             <RootStack.Navigator>
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="home-screen" component={HomeScreen} options={{
-                    title: 'Home',
+                    title: 'Trang chủ',
                     headerLeft: () => (
                         <TouchableOpacity
                             style=  {
@@ -53,7 +53,7 @@ class HomeStack extends React.Component {
                     },
                     headerTintColor: '#fff',
                     headerTitleStyle: {
-                        fontWeight: 'bold',
+                        // fontWeight: 'bold',
                     },
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
