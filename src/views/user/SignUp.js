@@ -1,9 +1,47 @@
 import React, {Component} from 'react'
-import {Text, Image, StyleSheet, View, TextInput, Dimensions, TouchableOpacity} from 'react-native'
+import {Text, Image, StyleSheet, View, TextInput, Dimensions, TouchableOpacity, Button} from 'react-native'
 import Style from "../../../src/def/Style";
 import FacebookIcon from "../../../assets/icon/icon-facebook.svg";
 import GoogleIcon from "../../../assets/icon/icon-google.svg";
 import UserController from "../../controller/UserController";
+import ImagePicker  from 'react-native-image-picker'
+import Def from '../../def/Def';
+
+const options = {
+    title: 'Select Avatar',
+    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    },
+};
+
+/**
+ * The first arg is the options object for customization (it can also be null or omitted for default options),
+ * The second arg is the callback which sends object: response (more info in the API Reference)
+ */
+// ImagePicker.showImagePicker(options, (response) => {
+//     console.log('Response = ', response);
+//
+//     if (response.didCancel) {
+//         console.log('User cancelled image picker');
+//     } else if (response.error) {
+//         console.log('ImagePicker Error: ', response.error);
+//     } else if (response.customButton) {
+//         console.log('User tapped custom button: ', response.customButton);
+//     } else {
+//         const source = { uri: response.uri };
+//
+//         // You can also display the image using data:
+//         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+//
+//         this.setState({
+//             avatarSource: source,
+//         });
+//     }
+// });
+
+
 
 const {width,height} = Dimensions.get('window');
 
@@ -15,9 +53,33 @@ export default class SignUp extends Component {
             display_name : "",
             email:"",
             password:"",
-            re_password:""
+            re_password:"",
+            isPartner:false,
+            avatarSource:{uri:Def.URL_DEFAULT_AVATAR},
+
         }
         this.signUp = this.signUp.bind(this);
+    }
+
+    handleChoosePhoto = () => {
+        console.log('image picker');
+        const options = {
+            title: 'Chọn ảnh đại diện',
+            // customButtons: [{ name: 'Eurotile', title: 'Chọn ảnh đại diện' }],
+            takePhotoButtonTitle : "Chụp ảnh",
+            chooseFromLibraryButtonTitle : "Chọn từ thư viện",
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+            noData :true,
+        };
+        ImagePicker.showImagePicker(options, response => {
+            console.log(response);
+            if (response.uri) {
+                this.setState({ avatarSource: response })
+            }
+        })
     }
 
     signUp(){
@@ -47,6 +109,24 @@ export default class SignUp extends Component {
                     {/*</Text>*/}
 
                     {/*<Text style={this.state.focus == 1 ? labelInputHover : labelInputNormal}>Email</Text>*/}
+
+
+                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                        {this.state.avatarSource ?
+                            <Image
+                                source={{ uri: this.state.avatarSource.uri }}
+                                style={{ width: 300, height: 300 }}
+                            /> : <View/>
+                        }
+                        <TouchableOpacity style={[button, {backgroundColor:'#1976d2'}]}
+                                          onPress={this.handleChoosePhoto} >
+                            <Text style={styles.buttonText}>
+                                Chọn ảnh
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+
+
                     <TextInput
                         onFocus={() => this.setState({focus:1})}
                         onBlur={()=> this.setState({focus:0})}
@@ -91,6 +171,7 @@ export default class SignUp extends Component {
                         autoCapitalize = 'none'
                         placeholderTextColor="#b3b3b3"
                     />
+
 
                     <View style={{flexDirection: 'row', justifyContent : 'flex-end', alignItems : 'center' , marginTop:10 }}>
                         <TouchableOpacity style={{alignItems: 'center', marginRight : 20}} onPress={()=> {
@@ -168,5 +249,9 @@ const styles = StyleSheet.create({
     labelInputNormal : { color:'#9e9e9e', fontSize : 14, marginTop : 20 },
     labelInputHover : { color:'#48a5ea', fontSize : 14, marginTop : 20 },
     logoContainer : {alignItems : 'center', width :  width * 0.8, justifyContent: 'center', paddingBottom : 10 , marginTop: height / 10 },
-    logoStyle : {width : width /5 , height : width /5 }
+    logoStyle : {width : width /5 , height : width /5 },
+    uploadAvatar : {
+        width :width /2,
+        height :width /2,
+    }
 });

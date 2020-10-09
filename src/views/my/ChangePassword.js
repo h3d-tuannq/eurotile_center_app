@@ -40,7 +40,7 @@ export default class ChangePassword extends Component {
         return (
             <View style={wraper}>
 
-                <View style={[loginform, {marginTop:-10}]}>
+                <View style={[loginform, {marginTop:10}]}>
 
                     {/*<Text style={{fontSize:Style.BIG_SIZE, fontWeight: 'bold', color: '#000', marginBottom :20}}>*/}
                     {/*Đăng ký*/}
@@ -64,7 +64,7 @@ export default class ChangePassword extends Component {
                         style={this.state.focus == 1 ? textInputHover : textInputNormal}
                         value={this.state.email}
                         onChangeText={text => this.setState({email:text})}
-                        placeholder='Nhập Email'
+                        placeholder='Mật khẩu hiện tại'
                         placeholderTextColor="#b3b3b3"
                         autoCapitalize = 'none'
                         // underlineColorAndroid = "transparent"
@@ -91,58 +91,11 @@ export default class ChangePassword extends Component {
                         autoCapitalize = 'none'
                         placeholderTextColor="#b3b3b3"
                     />
-
-                    <View style={{flexDirection: 'row', justifyContent : 'flex-end', alignItems : 'center' , marginTop:10 }}>
-                        <TouchableOpacity style={{alignItems: 'center', marginRight : 20}} onPress={()=> {
-                            navigation.navigate('forgetPass');
-                        }}>
-                            <Text style={{fontSize:Style.MIDLE_SIZE, color:'#b3b3b3'}}>
-                                Quên mật khẩu?
-                            </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={loginButton} onPress={()=>this.signUp()}>
-                            <Text style={loginText}>
-                                Đăng ký
-                            </Text>
-                        </TouchableOpacity>
-
-                    </View>
-
-                    {/*<TouchableOpacity style={button} onPress={()=> {*/}
-                    {/*navigation.navigate('signIn');*/}
-                    {/*}}>*/}
-                    {/*<Text style={buttonText}>*/}
-                    {/*Đăng nhập*/}
-                    {/*</Text>*/}
-                    {/*</TouchableOpacity>*/}
-
-                    <TouchableOpacity style={{alignItems: 'center', marginTop : 20, paddingVertical: 5,marginRight : 20, flexDirection : 'row'}} onPress={()=> {
-                        navigation.navigate('signIn');
-                    }}>
-                        <Text style={{fontSize:Style.TITLE_SIZE, color:'#b3b3b3'}}>
-                            Tài khoản bạn đã sẵn sàng?
-                        </Text>
-                        <Text style={{fontSize:Style.MIDLE_SIZE, marginLeft:5 , color:Style.DEFAUT_RED_COLOR}}>
-                            Đăng nhập ngay
+                    <TouchableOpacity style={[loginButton, {marginTop:10}]} onPress={()=>this.signUp()}>
+                        <Text style={loginText}>
+                            Cập nhật
                         </Text>
                     </TouchableOpacity>
-
-                    <TouchableOpacity style={[button, {backgroundColor:'#1976d2'}]} onPress={()=> FirebaseController.facebookLogin(navigation)}>
-                        <FacebookIcon style={styles.icon}/>
-                        <Text style={styles.buttonText}>
-                            Đăng nhập với Facebook
-                        </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={[button, {backgroundColor:'#ffffff'}]} onPress={()=> FirebaseController.googleLogin(navigation)}>
-                        <GoogleIcon style={styles.icon}/>
-                        <Text style={[styles.buttonText, {color: '#b3b3b3'}]}>
-                            Đăng nhập với Google
-                        </Text>
-                    </TouchableOpacity>
-
-
                 </View>
             </View>
         )
@@ -150,11 +103,11 @@ export default class ChangePassword extends Component {
 }
 
 const styles = StyleSheet.create({
-    wraper : {flex:1, alignItems: 'center' , backgroundColor: '#fff', justifyContent : 'center'},
-    loginform : { width : width * 0.9, marginTop: height / 20,},
+    wraper : {flex:1, alignItems: 'center' , backgroundColor: '#fff'},
+    loginform : { width : width * 0.95,marginTop:20},
     textInputNormal : {height: 45, backgroundColor : '#fff', borderColor: "#9e9e9e", borderWidth : 1 ,color:'black', fontSize : 18, borderRadius: 5, marginTop: 10, paddingHorizontal: 10  },
     textInputHover : {height: 45, backgroundColor : '#fff', borderColor: "#48a5ea", borderWidth : 1 , color:'black', fontSize : 18,borderRadius: 5, marginTop: 10, paddingHorizontal: 10 },
-    loginButton : { backgroundColor : '#ff3c29' ,borderRadius : 5, paddingLeft: 20, paddingRight : 10 },
+    loginButton : { backgroundColor : Style.DEFAUT_RED_COLOR ,borderRadius : 5, paddingLeft: 20, paddingRight : 10 },
     button : {
         paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 5, paddingLeft: 20, marginTop : 20, borderWidth : 1, borderColor:'#b3b3b3',
         flexDirection : 'row', alignItems: 'center',

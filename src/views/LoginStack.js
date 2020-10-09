@@ -78,12 +78,12 @@ class LoginStack extends React.Component {
                                       //
                                       // ),
                                       headerStyle: {
-                                          backgroundColor: Style.DEFAUT_RED_COLOR,
+                                          backgroundColor: Style.DEFAUT_BLUE_COLOR,
                                           height: Style.HEADER_HEIGHT,
                                       },
                                       headerTintColor: '#fff',
                                       headerTitleStyle: {
-                                          fontWeight: 'bold',
+                                          // fontWeight: 'bold',
                                       },
                                       headerBackImage: ()=> {
                                           return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
@@ -113,7 +113,7 @@ class LoginStack extends React.Component {
                                       //
                                       // ),
                                       headerStyle: {
-                                          backgroundColor: Style.DEFAUT_RED_COLOR,
+                                          backgroundColor: Style.DEFAUT_BLUE_COLOR,
                                           height: Style.HEADER_HEIGHT,
                                       },
                                       headerTintColor: '#fff',

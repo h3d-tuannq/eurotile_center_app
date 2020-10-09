@@ -31,9 +31,11 @@ class MyScreen extends React.Component {
         super(props);
         this.formatText    = this.formatText.bind(this);
         this.onGetUserInfoFun = this.onGetUserInfoFun.bind(this);
+
         Def.mainNavigate = this.props.navigation;
         this.gotoProfile = this.gotoProfile.bind(this);
         this.gotoPartnerInfo = this.gotoPartnerInfo.bind(this);
+        this.gotoChangePass = this.gotoChangePass.bind(this);
         if(this.props.navigation){
             console.log('isset naviagtion');
         }
@@ -57,6 +59,10 @@ class MyScreen extends React.Component {
 
     gotoPartnerInfo(){
         this.props.navigation.navigate('My', {'screen':'partner-info'});
+    }
+
+    gotoChangePass() {
+        this.props.navigation.navigate('My', {'screen':'change-password'});
     }
 
     onGetUserInfoFun(value){
@@ -231,13 +237,14 @@ class MyScreen extends React.Component {
 
 
 
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
+                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
+                                  onPress={this.gotoChangePass}>
                     <View style={{flexDirection : 'row', alignItems : 'center'}}>
                         <View style={{width :30}}>
                         <Icon name="user-cog" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
                         <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                            Thiết lập bảo vệ tài khoản
+                            Thiết lập tài khoản
                         </Text>
                     </View>
                     <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
