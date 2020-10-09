@@ -85,5 +85,31 @@ export default class Def{
         return formattedDate;
     };
 
+    static getAvatarUrlFromUserInfo(){
+        let rsUrl = '';
+        if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['avatar_path']){
+            rsUrl =Def.user_info['userProfile']['avatar_base_url'] + '/' + Def.user_info['userProfile']['avatar_path'];
+        }
+        return rsUrl;
+    }
+
+    static getInfrontOfImg(){
+        let rsUrl = '';
+        if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['infront_cmt_img']){
+            rsUrl = Def.URL_CONTENT_BASE + Def.user_info['userProfile']['infront_cmt_img'];
+        }
+        return rsUrl;
+    }
+
+    static getBehindImg(){
+        let rsUrl = '';
+        if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['behind_cmt_img']){
+            rsUrl = Def.URL_CONTENT_BASE + Def.user_info['userProfile']['behind_cmt_img'];
+        }
+        return rsUrl;
+    }
+
+
+
 
 }

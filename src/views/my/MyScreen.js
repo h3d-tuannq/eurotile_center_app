@@ -36,6 +36,8 @@ class MyScreen extends React.Component {
         this.gotoProfile = this.gotoProfile.bind(this);
         this.gotoPartnerInfo = this.gotoPartnerInfo.bind(this);
         this.gotoChangePass = this.gotoChangePass.bind(this);
+        this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
+
         if(this.props.navigation){
             console.log('isset naviagtion');
         }
@@ -59,6 +61,10 @@ class MyScreen extends React.Component {
 
     gotoPartnerInfo(){
         this.props.navigation.navigate('My', {'screen':'partner-info'});
+    }
+
+    updatePartnerInfo(){
+        this.props.navigation.navigate('My', {'screen':'update-partner'});
     }
 
     gotoChangePass() {
@@ -287,6 +293,21 @@ class MyScreen extends React.Component {
                     </View>
                     <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                 </TouchableOpacity>
+
+                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
+                                  onPress={this.updatePartnerInfo}
+                >
+                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                        <View style={{width :30}}>
+                            <Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />
+                        </View>
+                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                            Cập nhật Hồ sơ Partner
+                        </Text>
+                    </View>
+                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                </TouchableOpacity>
+
             </View>
         )
     }
@@ -337,6 +358,7 @@ const styles = StyleSheet.create({
 
         borderRadius: width / 16,
     },
+    buttonText : { color:'#fff', fontSize : 18, paddingVertical: 8, marginLeft : 15},
 
 });
 

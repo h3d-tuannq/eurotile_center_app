@@ -14,6 +14,8 @@ import MyScreen from './my/MyScreen'
 import UserProfileScreen from  './my/UserProfileScreen'
 import PartnerInfoScreen from './my/PartnerInfoScreen'
 import ChangePassword from './my/ChangePassword';
+import UpdatePartnerInfoScreen from './my/UpdatePartnerInfoScreen'
+
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
@@ -63,25 +65,6 @@ class MyStack extends React.Component {
 
                 <RootStack.Screen name="my-profile" component={UserProfileScreen} options={{
                     title: 'Thông tin cá nhân',
-                    // headerLeft: () => (
-                    //     <TouchableOpacity
-                    //         style=  {
-                    //             {
-                    //                 width: 40,
-                    //                 height:40,
-                    //                 justifyContent: 'center',
-                    //                 paddingLeft:15 ,
-                    //                 alignItems : 'center'
-                    //             }
-                    //         }
-                    //         onPress={() => this.props.navigation.toggleDrawer()}>
-                    //         <MenuIcon
-                    //             width="30"
-                    //             height="30"
-                    //         />
-                    //     </TouchableOpacity>
-                    //
-                    // ),
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
@@ -98,25 +81,6 @@ class MyStack extends React.Component {
 
                 <RootStack.Screen name="partner-info" component={PartnerInfoScreen} options={{
                     title: 'Hồ sơ Partner',
-                    // headerLeft: () => (
-                    //     <TouchableOpacity
-                    //         style=  {
-                    //             {
-                    //                 width: 40,
-                    //                 height:40,
-                    //                 justifyContent: 'center',
-                    //                 paddingLeft:15 ,
-                    //                 alignItems : 'center'
-                    //             }
-                    //         }
-                    //         onPress={() => this.props.navigation.toggleDrawer()}>
-                    //         <MenuIcon
-                    //             width="30"
-                    //             height="30"
-                    //         />
-                    //     </TouchableOpacity>
-                    //
-                    // ),
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
@@ -132,25 +96,6 @@ class MyStack extends React.Component {
 
                 <RootStack.Screen name="change-password" component={ChangePassword} options={{
                     title: 'Thay đổi mật khẩu',
-                    // headerLeft: () => (
-                    //     <TouchableOpacity
-                    //         style=  {
-                    //             {
-                    //                 width: 40,
-                    //                 height:40,
-                    //                 justifyContent: 'center',
-                    //                 paddingLeft:15 ,
-                    //                 alignItems : 'center'
-                    //             }
-                    //         }
-                    //         onPress={() => this.props.navigation.toggleDrawer()}>
-                    //         <MenuIcon
-                    //             width="30"
-                    //             height="30"
-                    //         />
-                    //     </TouchableOpacity>
-                    //
-                    // ),
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
@@ -163,6 +108,21 @@ class MyStack extends React.Component {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
                 }} />
+                <RootStack.Screen name="update-partner" component={UpdatePartnerInfoScreen} options={{
+                    title: 'Cập nhật Hồ sơ Partner',
+                    headerStyle: {
+                        backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                        height: Style.HEADER_HEIGHT,
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        // fontWeight: 'bold',
+                    },
+                    headerBackImage: ()=> {
+                        return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                    }
+                }} />
+
 
             </RootStack.Navigator>
         )
