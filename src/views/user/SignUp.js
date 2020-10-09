@@ -115,7 +115,7 @@ export default class SignUp extends Component {
                         {this.state.avatarSource ?
                             <Image
                                 source={{ uri: this.state.avatarSource.uri }}
-                                style={{ width: 300, height: 300 }}
+                                style={{ width: 160, height: 160 , marginTop: 20 }}
                             /> : <View/>
                         }
                         <TouchableOpacity style={[button, {backgroundColor:'#1976d2'}]}
