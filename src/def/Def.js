@@ -1,6 +1,6 @@
 
 export default class Def{
-    static URL_BASE = "http://vovadmin.duchungtech.com/api";
+    static URL_BASE = "https://eurotiledev.house3d.net";
     static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
     static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com//uploads/2019/07/02/5d1aa12048236.jpg";
 
@@ -109,7 +109,11 @@ export default class Def{
         return rsUrl;
     }
 
-
-
-
+    static getLinkOfNews(item){
+        console.log("link" + Def.URL_BASE + '/eurotile/news?slug=' + item.slug);
+        if(item && item.slug){
+            return Def.URL_BASE + '/eurotile/news?view=app&slug=' + item.slug;
+        }
+        return false;
+    }
 }
