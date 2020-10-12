@@ -78,39 +78,19 @@ class NewsStack extends React.Component {
                     }
                 }} />
 
-                <RootStack.Screen name="news-detail" component={NewsDetail} options={{
-                    title: 'News Detail',
-                    // headerLeft: () => (
-                    //     <TouchableOpacity
-                    //         style=  {
-                    //             {
-                    //                 width: 40,
-                    //                 height:40,
-                    //                 justifyContent: 'center',
-                    //                 paddingLeft:15 ,
-                    //                 alignItems : 'center'
-                    //             }
-                    //         }
-                    //         onPress={() => this.props.navigation.toggleDrawer()}>
-                    //         <MenuIcon
-                    //             width="30"
-                    //             height="30"
-                    //         />
-                    //     </TouchableOpacity>
-                    //
-                    // ),
+                <RootStack.Screen name="news-detail" component={NewsDetail} options= {({route}) => ({
+                    title: 'Chi tiết tin tức',
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
                     headerTitleStyle: {
-                        fontWeight: 'bold',
                     },
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
-                }} />
+                })} />
 
             </RootStack.Navigator>
         )

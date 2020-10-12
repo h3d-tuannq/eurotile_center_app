@@ -85,14 +85,10 @@ class PartnerInfoScreen extends React.Component {
     onGetUserInfoFun(value){
         if(value){
             Def.user_info = JSON.parse(value);
-            console.log("Usser info from storage : " +  JSON.stringify(Def.user_info));
             Def.username = Def.user_info['user_name'];
             Def.email = Def.user_info['email'];
-
             this.setState({user:Def.user_info, project_slide_data : this.calProSlideData(Def.user_info['partnerInfo']),
                 cmt_slide_data : this.calCmtSlideData(Def.user_info['userProfile'])});
-
-            console.log("State : " +  JSON.stringify(this.state.user));
         }
     }
 

@@ -245,7 +245,9 @@ const styles = StyleSheet.create({
         height : 25
     },
     loginText : { color:'#fff', fontSize : 18, textAlign : 'center', paddingVertical: 8},
+
     buttonText : { color:'#fff', fontSize : 18, paddingVertical: 8, marginLeft : 15},
+
     labelInputNormal : { color:'#9e9e9e', fontSize : 14, marginTop : 20 },
     labelInputHover : { color:'#48a5ea', fontSize : 14, marginTop : 20 },
     logoContainer : {alignItems : 'center', width :  width * 0.8, justifyContent: 'center', paddingBottom : 10 , marginTop: height / 10 },

@@ -74,12 +74,10 @@ class MyScreen extends React.Component {
     onGetUserInfoFun(value){
         if(value){
             Def.user_info = JSON.parse(value);
-            console.log("Usser info from storage : " +  JSON.stringify(Def.user_info));
             Def.username = Def.user_info['user_name'];
             Def.email = Def.user_info['email'];
 
             this.setState({user:Def.user_info});
-            console.log("State : " +  JSON.stringify(this.state.user));
         }
     }
 
@@ -188,7 +186,7 @@ class MyScreen extends React.Component {
         const {navigation} = this.props;
         const {user} = this.state;
         return (
-            (!this.state.user) ?
+            (!Def.user_info) ?
 
                 <View style={{justifyContent :'center',flex: 1, alignItems : 'center', width: width}}>
                     <View style={{flexDirection: 'row'}}>

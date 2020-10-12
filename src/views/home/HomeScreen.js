@@ -32,6 +32,7 @@ class HomeScreen extends React.Component {
         stateCount: 0.0,
         configMenu: Def.config_collection_menu,
         slide_data : carouselItems,
+        activeSlide : 0
     };
 
     constructor(props){

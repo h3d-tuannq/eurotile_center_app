@@ -18,24 +18,11 @@ import RNRestart from 'react-native-restart';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
-
-import RadioIcon from './assets/icon/icon-radio.svg';
-import RadioIconSelect from './assets/icon/icon_radio_select.svg';
-
-import NewsIcon from './assets/icon/icon-news.svg';
-import NewsIconSelect from './assets/icon/icon_news_select.svg';
-
-import MyProfileIcon from './assets/icon/icon-myprofile.svg';
-import MyProfileIconSelect from './assets/icon/icon_myprofile_select.svg';
-
 import BackIcon from './assets/icon/icon-back.svg';
 
 
 import PolicyIcon from './assets/icon/icon-policy.svg';
 import GuideIcon from './assets/icon/icon-how-to-use.svg'
-import AlarmIcon from './assets/icon/icon-sleep-time.svg'
-import FeedbackIcon from './assets/icon/icon-feedback2.svg'
 import RuleIcon from './assets/icon/icon-rule.svg';
 
 
@@ -510,8 +497,6 @@ export default class App extends Component {
         AsyncStorage.getItem('access_token').then((value) => {
             if (value) {
                 Def.login_token = value;
-                console.log(Def.login_token);
-                console.log('load new data');
                 NetNews.listNews(this.onNewSuccess, this.onNewFailed);
             }
         });
@@ -530,8 +515,6 @@ export default class App extends Component {
 
         AsyncStorage.getItem('user_info').then((value) => {
              if(value){
-                 Def.user_info = JSON.parse(value);
-                 console.log("Usser info from storage : " +  JSON.stringify(Def.user_info));
                  Def.username = Def.user_info['user_name'];
                  Def.email = Def.user_info['email'];
              }

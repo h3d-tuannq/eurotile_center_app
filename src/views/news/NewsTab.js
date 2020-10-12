@@ -18,7 +18,7 @@ class NewsTab extends React.Component {
 
     itemClick(item){
         console.log(item.id);
-        this.props.navigation.navigate('newsDetail', { item:item});
+        this.props.navigation.navigate('news-detail', { item:item});
 
     }
 

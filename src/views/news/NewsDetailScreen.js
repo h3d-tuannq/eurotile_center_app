@@ -1,89 +1,38 @@
 import React, {PureComponent} from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList, TouchableOpacity} from 'react-native'
-import SpeakerIcon from "../../../assets/icon/icon-speaker-around.svg";
-import SpeakerDisableIcon from "../../../assets/icon/icon-speaker-around-disable.svg";
 import { WebView } from 'react-native-webview';
 import Def from '../../def/Def'
-
-// import analytics from '@react-native-firebase/analytics';
-// import admob, { MaxAdContentRating ,BannerAd, BannerAdSize, TestIds} from '@react-native-firebase/admob';
 import Style from "../../def/Style";
 const {width, height} = Dimensions.get('window');
-
-
-const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2
-const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2
-
 
 
 class NewsDetailScreen extends React.Component {
     constructor(props){
         super(props);
-        this.state = {'model':this.props.route.params.model};
-        console.log("class NewsDetailScreen extends React.Component");
-        console.log(this.props.route.params.item);
-        this.onClickNews = this.onClickNews.bind(this);
+        this.state = {'item':this.props.route.params.item};
     }
 
-    onClickNews(){
-        console.log("onClickNews");
-        const model = this.props.route.params.item;
-        if(model.reader_link)
-            Def.setItemNews(model);
-    }
     render() {
         const {navigation} = this.props;
         const model = this.props.route.params.item;
 
-        analytics().setCurrentScreen(Def.DETAIL_WEB);
+        console.log(model);
+
         return (
             <View style={styles.container}>
-
-                  {/*<View style={styles.ads}>*/}
-                        {/*<BannerAd*/}
-                            {/*unitId={TestIds.BANNER}*/}
-                            {/*size={BannerAdSize.FULL_BANNER}*/}
-                            {/*requestOptions={{*/}
-                                {/*requestNonPersonalizedAdsOnly: true,*/}
-                            {/*}}*/}
-                            {/*onAdLoaded={() => {*/}
-                                {/*console.log('Advert loaded');*/}
-                            {/*}}*/}
-                            {/*onAdFailedToLoad={(error) => {*/}
-                                {/*console.error('Advert failed to load: ', error);*/}
-                            {/*}}*/}
-                            {/*/>*/}
-
-                {/*</View>*/}
-                <View style={{marginTop : 5, marginBottom : 10 }}>
+                <View style={{marginTop : 5, paddingBottom : 5 }}>
                     {
-                        /*
-                        <Text style={styles.titleText}>
-                        {model.title}
-                    </Text>
-                        */
-
                     }
                     <View style={styles.webView}>
                         <WebView
-                            source={{ uri:model.link }}
+                            source={{ uri: Def.getLinkOfNews(this.state.item) }}
                         />
                     </View>
                 </View>
-                    <TouchableOpacity style={styles.listenButton}>
-                        {
-                            model.reader_link ? <SpeakerIcon style={styles.favoriteIcon}  /> : <SpeakerDisableIcon style={styles.favoriteIcon}  />
-                        }
-
-                    </TouchableOpacity>
-
-
-
             </View>
         )
     }
 }
-
 const styles = StyleSheet.create({
     container: {
       flex : 1,
@@ -144,7 +93,7 @@ const styles = StyleSheet.create({
         marginRight: 15,
     },
     webView : {
-        height : height * 0.8,
+        height : height - Style.HEADER_HEIGHT - 60,
         backgroundColor: '#e6e6e6',
         marginRight: 15,
     },

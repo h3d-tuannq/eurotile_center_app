@@ -18,9 +18,9 @@ export default class Style{
 
     static DRAWER_MENU_SIZE = PixelRatio.get() < 2? 36 :38;
 
-    static DRAWER_MENU_ICON_SIZE = PixelRatio.get() < 2 ? 27 :29;
+    static DRAWER_MENU_ICON_SIZE = PixelRatio.get() < 2 ? 25 :27;
 
-    static BACK_ICON_SIZE = PixelRatio.get() < 2? 24 :26;
+    static BACK_ICON_SIZE = PixelRatio.get() < 2? 22 :24;
 
 
     static styles = StyleSheet.create({
