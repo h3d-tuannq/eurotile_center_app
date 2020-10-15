@@ -231,9 +231,9 @@ class MyScreen extends React.Component {
                         <Text style={Style.text_styles.middleText}>
                             {user['email']}
                         </Text>
-                        <Text style={Style.text_styles.middleText}>
-                            {user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}
-                        </Text>
+                        {/*<Text style={Style.text_styles.middleText}>*/}
+                            {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
+                        {/*</Text>*/}
                     </View>
                     </View>
                     <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />

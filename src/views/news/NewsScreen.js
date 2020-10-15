@@ -240,7 +240,7 @@ class NewsScreen extends React.Component {
 
     constructor(props){
         super(props);
-        console.log("Def.news", JSON.stringify(Def.news_data));
+        // console.log("Def.news", JSON.stringify(Def.news_data));
         this.onNewsSuccess     = this.onNewsSuccess.bind(this);
         this.onNewsFailed     = this.onNewsFailed.bind(this);
         this.formatText    = this.formatText.bind(this);
@@ -326,17 +326,17 @@ class NewsScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const configMenu = Def.config_news_menu;
-        Object.entries(configMenu).map((prop, key) => {
-            console.log("start" + key);
-            console.log("prop" + JSON.stringify(prop));
-
-            console.log("prop[0]" + prop[0]);
-            console.log("prop[1]" + prop[1]["name_vi"]);
-
-            console.log("data" + prop[1]["data"]);
-
-            console.log("end");
-        });
+        // Object.entries(configMenu).map((prop, key) => {
+        //     console.log("start" + key);
+        //     console.log("prop" + JSON.stringify(prop));
+        //
+        //     console.log("prop[0]" + prop[0]);
+        //     console.log("prop[1]" + prop[1]["name_vi"]);
+        //
+        //     console.log("data" + prop[1]["data"]);
+        //
+        //     console.log("end");
+        // });
         return (
 
             <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >

@@ -109,13 +109,13 @@ class ProductDetailScreen extends React.Component {
                 return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
             });
             Object.entries(configData).map((prop, key) => {
-                console.log("start" + key);
-                console.log("prop[0]" + prop[0]);
-                console.log("prop[1]" + prop[1]["name_vi"]);
-
-                console.log("data" + prop[1]["data"]);
-
-                console.log("end");
+                // console.log("start" + key);
+                // console.log("prop[0]" + prop[0]);
+                // console.log("prop[1]" + prop[1]["name_vi"]);
+                //
+                // console.log("data" + prop[1]["data"]);
+                //
+                // console.log("end");
             });
             return configData;
         }
@@ -191,7 +191,7 @@ class ProductDetailScreen extends React.Component {
         const {navigation} = this.props;
         // const configMenu = Def.config_collection_menu;
 
-        console.log("Slide Product data : " + JSON.stringify(this.state.slide_data) );
+        // console.log("Slide Product data : " + JSON.stringify(this.state.slide_data) );
         return (
             <View style={{flex:1}}>
                 <View style={Style.styles.carousel}>

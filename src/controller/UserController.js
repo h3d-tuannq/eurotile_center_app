@@ -55,6 +55,15 @@ export default class UserController{
         navigation.navigate('Home');
     };
 
+    static async  updatePartnerInfo(updateInfo, navigation = null, successCallback, falseCallback) {
+        Net.uploadImage(this.onLoginSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/update-partner' , Def.POST_METHOD , updateInfo, 'multipart/form-data');
+        if(Def.setLoader)
+            Def.setLoader(false);
+        // if(navigation)
+        //     navigation.navigate('Home');
+    };
+
+
     static onLoginSuccess(data){
         console.log("on login success 1: " + JSON.stringify(data));
         try {

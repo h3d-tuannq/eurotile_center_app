@@ -24,25 +24,6 @@ class LoginStack extends React.Component {
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="signIn" component={SignInScreen} options={{
                     title: 'Đăng nhập',
-                    // headerLeft: () => (
-                    //     <TouchableOpacity
-                    //         style=  {
-                    //             {
-                    //                 width: 40,
-                    //                 height:40,
-                    //                 justifyContent: 'center',
-                    //                 paddingLeft:15 ,
-                    //                 alignItems : 'center'
-                    //             }
-                    //         }
-                    //         onPress={() => this.props.navigation.toggleDrawer()}>
-                    //         <MenuIcon
-                    //             width="30"
-                    //             height="30"
-                    //         />
-                    //     </TouchableOpacity>
-                    //
-                    // ),
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
@@ -58,25 +39,6 @@ class LoginStack extends React.Component {
                 <RootStack.Screen name="signUp" component={SignUpScreen}
                                   options={{
                                       title: 'Đăng ký',
-                                      // headerLeft: () => (
-                                      //     <TouchableOpacity
-                                      //         style=  {
-                                      //             {
-                                      //                 width: 40,
-                                      //                 height:40,
-                                      //                 justifyContent: 'center',
-                                      //                 paddingLeft:15 ,
-                                      //                 alignItems : 'center'
-                                      //             }
-                                      //         }
-                                      //         onPress={() => this.props.navigation.toggleDrawer()}>
-                                      //         <MenuIcon
-                                      //             width="30"
-                                      //             height="30"
-                                      //         />
-                                      //     </TouchableOpacity>
-                                      //
-                                      // ),
                                       headerStyle: {
                                           backgroundColor: Style.DEFAUT_BLUE_COLOR,
                                           height: Style.HEADER_HEIGHT,
@@ -93,25 +55,6 @@ class LoginStack extends React.Component {
                 <RootStack.Screen name="forgetPass" component={ForgetPassScreen}
                                   options={{
                                       title: 'Quên mật khẩu',
-                                      // headerLeft: () => (
-                                      //     <TouchableOpacity
-                                      //         style=  {
-                                      //             {
-                                      //                 width: 40,
-                                      //                 height:40,
-                                      //                 justifyContent: 'center',
-                                      //                 paddingLeft:15 ,
-                                      //                 alignItems : 'center'
-                                      //             }
-                                      //         }
-                                      //         onPress={() => this.props.navigation.toggleDrawer()}>
-                                      //         <MenuIcon
-                                      //             width="30"
-                                      //             height="30"
-                                      //         />
-                                      //     </TouchableOpacity>
-                                      //
-                                      // ),
                                       headerStyle: {
                                           backgroundColor: Style.DEFAUT_BLUE_COLOR,
                                           height: Style.HEADER_HEIGHT,

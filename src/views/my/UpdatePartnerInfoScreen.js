@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform} from 'react-native'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -16,6 +16,7 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import {Picker} from '@react-native-community/picker';
+import UserController from "../../controller/UserController";
 
 class UpdatePartnerInfoScreen extends React.Component {
     constructor(props){
@@ -24,9 +25,11 @@ class UpdatePartnerInfoScreen extends React.Component {
         this.showDateTimePicker = this.showDateTimePicker.bind();
         this.handleDatePicked = this.handleDatePicked.bind();
         this.hideDateTimePicker = this.hideDateTimePicker.bind();
+        this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
 
         this.state = {
             focus : 0,
+            isUpdate: 0,
             user: Def.user_info,
             stateCount: 0.0,
             avatarSource : {uri:Def.getAvatarUrlFromUserInfo() ? Def.getAvatarUrlFromUserInfo() :Def.URL_DEFAULT_AVATAR},
@@ -49,6 +52,86 @@ class UpdatePartnerInfoScreen extends React.Component {
             dateAttribute : 'birth_day',
         };
     }
+
+    updatePartnerInfo() {
+        const {navigation} = this.props;
+
+        // if(!this.state.avatarSource){
+        //     alert("Vui lòng cập nhật ảnh Avatar");
+        // }else if(!this.state.mobile){
+        //     alert("Vui lòng điền số điện thoại");
+        // }else if(!this.state.birth_day){
+        //     alert("Vui lòng nhập thông tin ngày sinh");
+        // }else if(!this.state.gender){
+        //     alert("Vui lòng nhập thông tin giới tính");
+        // }else if(!this.state.address){
+        //     alert("Vui lòng nhập địa chỉ");
+        // }else if(!this.state.card_no){
+        //     alert("Vui lòng nhập số CMND");
+        // } else if(!this.state.issue_on){
+        //     alert("Vui lòng nhập ngày cấp");
+        // }else if(!this.state.issue_at){
+        //     alert("Vui lòng nhập nơi cấp");
+        // }else if(!this.state.infront_cmt_img){
+        //     alert("Vui lòng chụp ảnh mặt trước CMND");
+        // }else if(!this.state.behind_cmt_img){
+        //     alert("Vui lòng chụp ảnh mặt sau CMND");
+        // }else if(!this.state.project_img1){
+        //     alert("Vui lòng tải lên ảnh dự án");
+        // }else if(!this.state.project_img2){
+        //     alert("Vui lòng tải lên ảnh dự án");
+        // }
+        // else if(!this.state.project_img3){
+        //     alert("Vui lòng tải lên ảnh dự án");
+        // } else {
+        let userInfo = {
+            user_id : Def.user_info ? Def.user_info['id'] : 14,
+            avatar: {
+                name: this.state.avatarSource.fileName,
+                type: this.state.avatarSource.type,
+                uri: Platform.OS === "android" ? this.state.avatarSource.uri : this.state.avatarSource.uri.replace("file://", "")
+            },
+            infront_cmt_img : {
+                name: this.state.infront_cmt_img.fileName,
+                type: this.state.infront_cmt_img.type,
+                uri: Platform.OS === "android" ? this.state.infront_cmt_img.uri : this.state.infront_cmt_img.uri.replace("file://", "")
+            },
+            behind_cmt_img : {
+                name: this.state.behind_cmt_img.fileName,
+                type: this.state.behind_cmt_img.type,
+                uri: Platform.OS === "android" ? this.state.behind_cmt_img.uri : this.state.behind_cmt_img.uri.replace("file://", "")
+            },
+            project_img1: {
+                name: this.state.project_img1.fileName,
+                type: this.state.project_img1.type,
+                uri: Platform.OS === "android" ? this.state.project_img1.uri : this.state.project_img1.uri.replace("file://", "")
+            },
+            project_img2 : {
+                name: this.state.project_img2.fileName,
+                type: this.state.project_img2.type,
+                uri: Platform.OS === "android" ? this.state.project_img2.uri : this.state.project_img2.uri.replace("file://", "")
+            },
+            project_img3 : {
+                name: this.state.project_img3.fileName,
+                type: this.state.project_img3.type,
+                uri: Platform.OS === "android" ? this.state.project_img3.uri : this.state.project_img3.uri.replace("file://", "")
+            },
+
+            card_no: this.state.card_no,
+            birth_day: this.state.birth_day,
+            mobile: this.state.mobile,
+            address: this.state.address,
+            issue_on: this.state.issue_on,
+            issue_at: this.state.issue_at,
+            gender: this.state.gender,
+            full_name: this.state.full_name,
+        };
+        UserController.updatePartnerInfo(userInfo, navigation);
+    // }
+    }
+
+
+
 
     showDateTimePicker = (attr = null) => {
         this.setState({ isDateTimePickerVisible: true , selectedDate : this.state[attr] ? this.state[attr] : new Date() , dateAttribute : attr });
@@ -118,25 +201,10 @@ class UpdatePartnerInfoScreen extends React.Component {
         const {navigation} = this.props;
         const {user} = this.state;
         return (
+            <View style={{flex:1}}>
             <ScrollView style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}>
-
-                {/*<View style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}>*/}
-                    {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
-                    {/*<Image  style={styles.imageStyleInfo}  source={{uri:user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />*/}
-                    {/*<View style={{marginLeft: 10, justifyContent:'space-between'}}>*/}
-                        {/*<Text style={Style.text_styles.middleText}>*/}
-                            {/*{user['email']}*/}
-                        {/*</Text>*/}
-                        {/*<Text style={Style.text_styles.middleText}>*/}
-                            {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
-                        {/*</Text>*/}
-                    {/*</View>*/}
-                    {/*</View>*/}
-                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                {/*</View>*/}
-
                 <TouchableOpacity onPress={() => this.handleChoosePhoto('avatarSource')} style={{ alignItems: 'center', justifyContent: 'center' , marginBottom: 5 }}>
-                    {!this.state.avatarSource ?
+                    {this.state.avatarSource ?
                         <Image
                             source={{ uri: this.state.avatarSource.uri }}
                             style={{ width: width/3, height: width/3 , marginTop: 20 , borderRadius : width / 6 }}
@@ -177,18 +245,6 @@ class UpdatePartnerInfoScreen extends React.Component {
                     />
 
                 <View style={{flexDirection : 'row', alignItems:'center', backgroundColor: '#fff'}}>
-                    {/*<TextInput*/}
-                        {/*onFocus={() => this.setState({focus:1})}*/}
-                        {/*onBlur={()=> this.setState({focus:0})}*/}
-                        {/*style={[this.state.focus == 1 ? styles.textInputHover : styles.textInputNormal, {flex : 1.5, marginRight: 5}]}*/}
-                        {/*value={this.state.birth_day}*/}
-                        {/*onChangeText={text => this.setState({birth_day:text})}*/}
-                        {/*placeholder='Ngày sinh'*/}
-                        {/*placeholderTextColor="#b3b3b3"*/}
-                        {/*autoCapitalize = 'none'*/}
-                        {/*// underlineColorAndroid = "transparent"*/}
-                    {/*/>*/}
-
                     <TouchableOpacity style={{flex: 1.5, marginRight: 5, height :45, borderRadius:5, justifyContent : 'center', borderWidth :2}} onPress={() => this.showDateTimePicker('birth_day')} >
                         <Text style={[Style.text_styles.titleTextNotBold, {justifyContent : 'center', paddingLeft: 5, color:Style.GREY_TEXT_COLOR} ]}>
                             {this.state.birth_day ? Def.getDateString(this.state.birth_day , "dd-MM-yyyy")  : "Ngày sinh"}
@@ -205,24 +261,6 @@ class UpdatePartnerInfoScreen extends React.Component {
                         datePickerModeAndroid='spinner'
                         timePickerModeAndroid='spinner'
                     />
-
-
-
-                    {/*<View style={{ height: 45, flex:1.5, borderWidth:1,borderColor:Style.DEFAUT_RED_COLOR, borderRadius:5 }}>*/}
-
-                    {/*<DateTimePicker*/}
-                        {/*testID="dateTimePicker"*/}
-                        {/*value={new Date()}*/}
-                        {/*is24Hour={true}*/}
-                        {/*mode='default'*/}
-                        {/*display='default'*/}
-                        {/*onChange={(selectedDate) => {*/}
-                            {/*this.setState({birth_day:selectedDate});*/}
-                        {/*}}*/}
-                    {/*/>*/}
-
-                    {/*</View>*/}
-
                     <View style={{ height: 45, flex:1, borderWidth:1,borderColor:Style.DEFAUT_RED_COLOR, backgroundColor:'#fff', borderRadius:5 }}>
                         <Picker
                             selectedValue={this.state.gender}
@@ -235,18 +273,6 @@ class UpdatePartnerInfoScreen extends React.Component {
                             <Picker.Item label="Nữ" value="1" />
                         </Picker>
                     </View>
-
-                    {/*<TextInput*/}
-                        {/*onFocus={() => this.setState({focus:1})}*/}
-                        {/*onBlur={()=> this.setState({focus:0})}*/}
-                        {/*style={[this.state.focus == 1 ? styles.textInputHover : styles.textInputNormal, {flex : 1}]}*/}
-                        {/*value={this.state.gender}*/}
-                        {/*onChangeText={text => this.setState({gender:text})}*/}
-                        {/*placeholder='Giới tính'*/}
-                        {/*placeholderTextColor="#b3b3b3"*/}
-                        {/*autoCapitalize = 'none'*/}
-                        {/*// underlineColorAndroid = "transparent"*/}
-                    {/*/>*/}
                 </View>
 
                 <TextInput
@@ -403,7 +429,7 @@ class UpdatePartnerInfoScreen extends React.Component {
                     }
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.handleChoosePhoto('project_img3')} style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingVertical:5}}>
+                <TouchableOpacity onPress={() => this.handleChoosePhoto('project_img3')} style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingTop:5}}>
                     <View style={{flex:1, width : width -10, height:Style.HEADER_HEIGHT}}>
                         <Text style={[Style.text_styles.titleTextNotBold, {marginLeft:5}]}>
                             Dự án 3
@@ -422,7 +448,17 @@ class UpdatePartnerInfoScreen extends React.Component {
                         </View>
                     }
                 </TouchableOpacity>
+
+
             </ScrollView>
+                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.updatePartnerInfo}>
+
+                    <Text style={styles.buttonText}>
+                        Cập nhật
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
         )
     }
 }
@@ -474,7 +510,7 @@ const styles = StyleSheet.create({
     },
 
     button : {
-        paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 5,  marginTop : 20, borderWidth : 1, borderColor:'#b3b3b3',
+        paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 5, marginTop : 5, borderWidth : 1, borderColor:'#b3b3b3',
         flexDirection : 'row', alignItems: 'center', paddingHorizontal : 5
     },
     textInputNormal : {height: 45, backgroundColor : '#fff', borderColor: "#9e9e9e", borderWidth : 1 ,color:'black', fontSize : 18, borderRadius: 5, marginVertical:3, paddingHorizontal: 10  },
