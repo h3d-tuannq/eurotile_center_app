@@ -128,7 +128,6 @@ export default class Net{
                     headers: {
                         'Accept': 'application/json',
                         'Authorization': Def.login_token,
-                        'Content-Type': contentType,
                     },
                     body: formData
                 }
@@ -142,6 +141,7 @@ export default class Net{
                     )
                     .then(text => {
                         try {
+                            console.log(text);
                             let data = JSON.parse(text);
                             callback(data)
                         } catch (err) {

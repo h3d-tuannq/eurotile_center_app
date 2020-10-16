@@ -86,46 +86,63 @@ class UpdatePartnerInfoScreen extends React.Component {
         // } else {
         let userInfo = {
             user_id : Def.user_info ? Def.user_info['id'] : 14,
-            avatar: {
-                name: this.state.avatarSource.fileName,
-                type: this.state.avatarSource.type,
-                uri: Platform.OS === "android" ? this.state.avatarSource.uri : this.state.avatarSource.uri.replace("file://", "")
-            },
-            infront_cmt_img : {
-                name: this.state.infront_cmt_img.fileName,
-                type: this.state.infront_cmt_img.type,
-                uri: Platform.OS === "android" ? this.state.infront_cmt_img.uri : this.state.infront_cmt_img.uri.replace("file://", "")
-            },
-            behind_cmt_img : {
-                name: this.state.behind_cmt_img.fileName,
-                type: this.state.behind_cmt_img.type,
-                uri: Platform.OS === "android" ? this.state.behind_cmt_img.uri : this.state.behind_cmt_img.uri.replace("file://", "")
-            },
-            project_img1: {
-                name: this.state.project_img1.fileName,
-                type: this.state.project_img1.type,
-                uri: Platform.OS === "android" ? this.state.project_img1.uri : this.state.project_img1.uri.replace("file://", "")
-            },
-            project_img2 : {
-                name: this.state.project_img2.fileName,
-                type: this.state.project_img2.type,
-                uri: Platform.OS === "android" ? this.state.project_img2.uri : this.state.project_img2.uri.replace("file://", "")
-            },
-            project_img3 : {
-                name: this.state.project_img3.fileName,
-                type: this.state.project_img3.type,
-                uri: Platform.OS === "android" ? this.state.project_img3.uri : this.state.project_img3.uri.replace("file://", "")
-            },
-
             card_no: this.state.card_no,
-            birth_day: this.state.birth_day,
+            birth_day: this.state.birth_day ?  Def.getDateString(this.state.birth_day , "dd-MM-yyyy") : "",
             mobile: this.state.mobile,
             address: this.state.address,
             issue_on: this.state.issue_on,
             issue_at: this.state.issue_at,
-            gender: this.state.gender,
+            gender: this.state.gender ? 1 :0,
             full_name: this.state.full_name,
         };
+
+        if(this.state.avatarSource && this.state.avatarSource.fileName ) {
+            userInfo.avatar =   {
+                name: this.state.avatarSource.fileName,
+                type: this.state.avatarSource.type,
+                uri: Platform.OS === "android" ? this.state.avatarSource.uri : this.state.avatarSource.uri.replace("file://", "")
+            };
+        }
+
+        if(this.state.infront_cmt_img && this.state.infront_cmt_img.fileName ) {
+            userInfo.infront_cmt_img =   {
+                name: this.state.infront_cmt_img.fileName,
+                type: this.state.infront_cmt_img.type,
+                uri: Platform.OS === "android" ? this.state.infront_cmt_img.uri : this.state.infront_cmt_img.uri.replace("file://", "")
+            };
+        }
+
+        if(this.state.behind_cmt_img && this.state.behind_cmt_img.fileName ) {
+            userInfo.behind_cmt_img =   {
+                name: this.state.behind_cmt_img.fileName,
+                type: this.state.behind_cmt_img.type,
+                uri: Platform.OS === "android" ? this.state.behind_cmt_img.uri : this.state.behind_cmt_img.uri.replace("file://", "")
+            };
+        }
+
+        if(this.state.project_img1 && this.state.project_img1.fileName ) {
+            userInfo.project_img1 =   {
+                name: this.state.project_img1.fileName,
+                type: this.state.project_img1.type,
+                uri: Platform.OS === "android" ? this.state.project_img1.uri : this.state.project_img1.uri.replace("file://", "")
+            };
+        }
+
+        if(this.state.project_img2 && this.state.project_img1.fileName ) {
+            userInfo.project_img2 =   {
+                name: this.state.project_img2.fileName,
+                type: this.state.project_img2.type,
+                uri: Platform.OS === "android" ? this.state.project_img2.uri : this.state.project_img2.uri.replace("file://", "")
+            };
+        }
+
+        if(this.state.project_img3 && this.state.project_img3.fileName ) {
+            userInfo.project_img3 =   {
+                name: this.state.project_img3.fileName,
+                type: this.state.project_img3.type,
+                uri: Platform.OS === "android" ? this.state.project_img3.uri : this.state.project_img3.uri.replace("file://", "")
+            };
+        }
         UserController.updatePartnerInfo(userInfo, navigation);
     // }
     }
@@ -245,7 +262,7 @@ class UpdatePartnerInfoScreen extends React.Component {
                     />
 
                 <View style={{flexDirection : 'row', alignItems:'center', backgroundColor: '#fff'}}>
-                    <TouchableOpacity style={{flex: 1.5, marginRight: 5, height :45, borderRadius:5, justifyContent : 'center', borderWidth :2}} onPress={() => this.showDateTimePicker('birth_day')} >
+                    <TouchableOpacity style={{flex: 1.5, marginRight: 5, height :45, borderRadius:5, justifyContent : 'center', borderWidth :1, borderColor:Style.GREY_TEXT_COLOR}} onPress={() => this.showDateTimePicker('birth_day')} >
                         <Text style={[Style.text_styles.titleTextNotBold, {justifyContent : 'center', paddingLeft: 5, color:Style.GREY_TEXT_COLOR} ]}>
                             {this.state.birth_day ? Def.getDateString(this.state.birth_day , "dd-MM-yyyy")  : "Ngày sinh"}
                         </Text>
@@ -261,7 +278,7 @@ class UpdatePartnerInfoScreen extends React.Component {
                         datePickerModeAndroid='spinner'
                         timePickerModeAndroid='spinner'
                     />
-                    <View style={{ height: 45, flex:1, borderWidth:1,borderColor:Style.DEFAUT_RED_COLOR, backgroundColor:'#fff', borderRadius:5 }}>
+                    <View style={{ height: 45, flex:1, borderWidth:1,borderColor:Style.GREY_TEXT_COLOR, backgroundColor:'#fff', borderRadius:5 }}>
                         <Picker
                             selectedValue={this.state.gender}
                             style={{height: 45 }}
@@ -301,7 +318,7 @@ class UpdatePartnerInfoScreen extends React.Component {
                         autoCapitalize = 'none'
                         // underlineColorAndroid = "transparent"
                     />
-                    <TouchableOpacity style={{flex: 1.5, marginRight: 5, height :45, borderRadius:5, justifyContent : 'center', borderWidth :2}} onPress={() => this.showDateTimePicker('issue_on')} >
+                    <TouchableOpacity style={{flex: 1.5, marginRight: 5, height :45, borderRadius:5, justifyContent : 'center', borderWidth :1, borderColor:Style.GREY_TEXT_COLOR}} onPress={() => this.showDateTimePicker('issue_on')} >
                         <Text style={[Style.text_styles.titleTextNotBold, {justifyContent : 'center', paddingLeft: 5, color:Style.GREY_TEXT_COLOR} ]}>
                             {this.state.issue_on ? Def.getDateString(this.state.issue_on , "dd-MM-yyyy")  : "Ngày cấp"}
                         </Text>

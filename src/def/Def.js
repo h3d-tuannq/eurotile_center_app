@@ -87,9 +87,12 @@ export default class Def{
 
     static getAvatarUrlFromUserInfo(){
         let rsUrl = '';
+        console.log(Def.user_info);
         if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['avatar_path']){
             rsUrl =Def.user_info['userProfile']['avatar_base_url'] + '/' + Def.user_info['userProfile']['avatar_path'];
         }
+
+        console.log('rs : ' +rsUrl);
         return rsUrl;
     }
 
