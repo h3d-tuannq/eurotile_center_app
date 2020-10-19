@@ -2,7 +2,14 @@ import Net from "../net/Net";
 import Def from "../def/Def";
 
 import AsyncStorage  from '@react-native-community/async-storage'
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
+import auth from '@react-native-firebase/auth';
+
 import {Alert} from 'react-native'
+
+GoogleSignin.configure({
+    webClientId: Def.WEB_CLIENT_ID,
+});
 
 
 export default class UserController{
@@ -26,7 +33,62 @@ export default class UserController{
     }
 
     static async  googleLogin(navigation=null) {
+        try {
+            console.log("hasPlayServices");
+            await GoogleSignin.hasPlayServices();
+            console.log("hasPlayServices");
+            console.log('test -1');
+            const data = await GoogleSignin.signIn();
+            console.log('test -12');
+            console.log(data);
+            const {accessToken, idToken} = data;
+            console.log("Token: " + accessToken + "," +  idToken);
+            const credential = auth.GoogleAuthProvider.credential( idToken, accessToken,);
+            const googleUserCredential = await auth().signInWithCredential(credential);
+
+            auth().currentUser.getIdToken( true).then(function(idToken) {
+                console.log(`TOKEN: ${idToken}`);
+                if(navigation)
+                    navigation.navigate('Home');
+                AsyncStorage.setItem('firebase_token', idToken);
+                // NetUser.signIn(FirebaseController.onLoginSuccess,FirebaseController.onLoginFailed,idToken);
+            }).catch(function(error) {
+
+                console.log(`error: ${error}`);
+
+                analytics().logEvent('google_login', {
+                    is: 'failed',
+                    message: `error: ${error}`
+                } );
+            });
+
+
+            //await auth().signInWithCredential(credential);
+
+        } catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // user cancelled the login flow
+
+                alert('Cancel');
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                alert('Signin in progress');
+                // operation (f.e. sign in) is in progress already
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                alert('PLAY_SERVICES_NOT_AVAILABLE');
+                // play services not available or outdated
+            } else {
+                // some other error happened
+                alert('test' + JSON.stringify(error));
+
+            }
+
+
+            if(  Def.setLoader)
+                Def.setLoader(false);
+        }
     };
+
+
 
     static async facebookLogin(navigation=null) {
 

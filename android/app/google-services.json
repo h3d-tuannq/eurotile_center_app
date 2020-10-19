@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "491520516021",
+    "firebase_url": "https://eurotileapptest.firebaseio.com",
+    "project_id": "eurotileapptest",
+    "storage_bucket": "eurotileapptest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491520516021:android:0204c0060fa089709303fc",
+        "android_client_info": {
+          "package_name": "com.eurotile_center_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491520516021-n0f00k9fmk1l1rorc08en6k4dvdc0lsg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eurotile_center_app",
+            "certificate_hash": "0daeed03dc32f13ca1bcc794a3600e2ae179b3c8"
+          }
+        },
+        {
+          "client_id": "491520516021-1no68o939c9s80mbc87albgin4h20teb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS3z-hgUxzznB5ay4rOGI6ecgRWpdZ8tc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491520516021-13u08fsqn0v9g7u1bl49maqup74fkmqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

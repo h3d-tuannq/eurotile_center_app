@@ -38,7 +38,7 @@ export default class Def{
     static ERROR_LOADING_DATA                   = 'Đang tải dữ liệu, vui lòng chờ';
     static ALERT_DISABLE_SELECTION              = "Lựa chọn này đã bị khóa, vui lòng chọn mục khác";
 
-    static WEB_CLIENT_ID = '362818592929-d97hfbqln6qqc23qfvre2f1m4be6qimb.apps.googleusercontent.com';
+    static WEB_CLIENT_ID = "491520516021-1no68o939c9s80mbc87albgin4h20teb.apps.googleusercontent.com";
 
     static TYPE_RADIO      = 1;
     static TYPE_MUSIC      = 2;

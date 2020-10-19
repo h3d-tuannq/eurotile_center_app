@@ -150,7 +150,7 @@ export default class SignIn extends Component {
 
                     <TouchableOpacity style={[button, {backgroundColor:'#ffffff'}]} onPress={()=> {
                         this.setState({isLoging:true});
-                        // FirebaseController.googleLogin(navigation);
+                        UserController.googleLogin(navigation);
 
                     }}>
                         <GoogleIcon style={styles.icon}
