@@ -37,6 +37,7 @@ class MyScreen extends React.Component {
         this.gotoPartnerInfo = this.gotoPartnerInfo.bind(this);
         this.gotoChangePass = this.gotoChangePass.bind(this);
         this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
+        this.refresh = this.refresh.bind(this);
 
         if(this.props.navigation){
             console.log('isset naviagtion');
@@ -52,6 +53,8 @@ class MyScreen extends React.Component {
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
+
+        Def.refreshDashBoard = this.refresh;
 
     }
 
@@ -84,6 +87,17 @@ class MyScreen extends React.Component {
     refresh()
     {
         //NetChannel.listChannel(this.onChannelSuccess,this.onChannelFailed);
+        this.state = {
+            user: Def.user_info,
+            stateCount: 0.0,
+            configMenu: Def.config_collection_menu,
+            slide_data : carouselItems,
+            activeSlide : 0,
+        };
+        if(!Def.user_info){
+            AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
+        }
+
         this.setState({ stateCount: Math.random() });
     }
 
