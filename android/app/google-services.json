@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "491520516021-n0f00k9fmk1l1rorc08en6k4dvdc0lsg.apps.googleusercontent.com",
+          "client_id": "491520516021-omh62afgchc8re8kp524hesj0jc1mrqt.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.eurotile_center_app",
-            "certificate_hash": "0daeed03dc32f13ca1bcc794a3600e2ae179b3c8"
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
