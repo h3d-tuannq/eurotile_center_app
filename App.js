@@ -485,10 +485,38 @@ function AppDrawer() {
 }
 
 //import SplashScreen from 'react-native-splash-screen'
+import messaging from '@react-native-firebase/messaging';
+import UserController from "./src/controller/UserController";
+
+messaging().onMessage(async (remoteMessage) => {
+    //
+    //alert(JSON.stringify(remoteMessage));
+    Alert.alert(
+        remoteMessage.notification.title,
+        remoteMessage.notification.body,
+        [
+            {
+                text: 'Bỏ qua',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            {
+                text: 'Đồng ý',
+                onPress: () => {
+                    goLink(remoteMessage.data.url);
+                },
+            },
+        ],
+        {cancelable: false},
+    );
+});
+
 
 export default class App extends Component {
     state = {
     };
+
+
 
     constructor(props) {
         super(props);
@@ -520,9 +548,8 @@ export default class App extends Component {
              }
         });
 
-
+        UserController.requestUserPermission();
         // if(!Def.news_data){
-
         // }
 
     }
@@ -542,8 +569,6 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-
-
     }
 
 
