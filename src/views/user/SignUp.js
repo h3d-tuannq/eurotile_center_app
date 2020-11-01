@@ -91,7 +91,7 @@ export default class SignUp extends Component {
             alert("Mật khẩu phải dài hơn 8 ký tự");
         }else{
             const {navigation} = this.props;
-            UserController.signup(this.state.email,this.state.password, this.state.disableNextPrev,navigation);
+            UserController.signup(this.state.email, this.state.password ,this.state.display_name,navigation);
         }
     }
     render() {
@@ -111,20 +111,20 @@ export default class SignUp extends Component {
                     {/*<Text style={this.state.focus == 1 ? labelInputHover : labelInputNormal}>Email</Text>*/}
 
 
-                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                        {this.state.avatarSource ?
-                            <Image
-                                source={{ uri: this.state.avatarSource.uri }}
-                                style={{ width: 160, height: 160 , marginTop: 20 }}
-                            /> : <View/>
-                        }
-                        <TouchableOpacity style={[button, {backgroundColor:'#1976d2'}]}
-                                          onPress={this.handleChoosePhoto} >
-                            <Text style={styles.buttonText}>
-                                Chọn ảnh
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                    {/*<View style={{ alignItems: 'center', justifyContent: 'center' }}>*/}
+                        {/*{this.state.avatarSource ?*/}
+                            {/*<Image*/}
+                                {/*source={{ uri: this.state.avatarSource.uri }}*/}
+                                {/*style={{ width: 160, height: 160 , marginTop: 20 }}*/}
+                            {/*/> : <View/>*/}
+                        {/*}*/}
+                        {/*<TouchableOpacity style={[button, {backgroundColor:'#1976d2'}]}*/}
+                                          {/*onPress={this.handleChoosePhoto} >*/}
+                            {/*<Text style={styles.buttonText}>*/}
+                                {/*Chọn ảnh*/}
+                            {/*</Text>*/}
+                        {/*</TouchableOpacity>*/}
+                    {/*</View>*/}
 
 
                     <TextInput

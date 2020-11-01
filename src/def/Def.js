@@ -57,6 +57,8 @@ export default class Def{
     static collection_detail_data = null;
     static collection_detail_menu = null;
 
+    static refreshDashBoard = null;
+
 
 
     static getDateString(date, format) {
@@ -113,6 +115,7 @@ export default class Def{
     }
 
     static getLinkOfNews(item){
+        // return "https://gianglt.com/rangdong/?s=hopcom";
         console.log("link" + Def.URL_BASE + '/eurotile/news?slug=' + item.slug);
         if(item && item.slug){
             return Def.URL_BASE + '/eurotile/news?view=app&slug=' + item.slug;

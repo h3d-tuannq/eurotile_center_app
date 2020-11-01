@@ -137,8 +137,7 @@ export default class SignIn extends Component {
                     <TouchableOpacity style={[button, {backgroundColor:'#1976d2'}]}  onPress={()=>{
                         console.log('test');
                         this.setState({isLoging:true});
-
-                         // FirebaseController.facebookLogin(navigation)
+                        UserController.facebookLogin(navigation);
                     }}>
                         <FacebookIcon style={styles.icon}
 
