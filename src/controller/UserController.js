@@ -29,10 +29,10 @@ export default class UserController{
     static googlesignOut = async () => {
     };
 
-    // static onLoginSuccess(data){
-    //
-    //
-    // }
+    static onLoginSuccess(data){
+
+
+    }
 
     static logout(){
     }
@@ -199,7 +199,7 @@ export default class UserController{
         if(Def.setLoader)
             Def.setLoader(false);
 
-        navigation.navigate('Home');
+        // navigation.navigate('Home');
     };
 
 
@@ -218,6 +218,7 @@ export default class UserController{
         Net.uploadImage(this.onLoginSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/update-partner' , Def.POST_METHOD , updateInfo, 'multipart/form-data');
         if(Def.setLoader)
             Def.setLoader(false);
+        navigation.navigate('My', {'screen':'my-screen'});
         // if(navigation)
         //     navigation.navigate('Home');
     };
@@ -254,7 +255,7 @@ export default class UserController{
         if(is_new){
             Def.mainNavigate.navigate('My', {'screen':'update-partner'});
         }
-        Def.mainNavigate.navigate('Home');
+        Def.mainNavigate.navigate('My');
     }
 
     static onLoginFalse(data){

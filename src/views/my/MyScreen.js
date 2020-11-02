@@ -87,15 +87,19 @@ class MyScreen extends React.Component {
     refresh()
     {
         //NetChannel.listChannel(this.onChannelSuccess,this.onChannelFailed);
-        this.state = {
+        console.log('Refress affter login');
+
+        this.setState( {
             user: Def.user_info,
             stateCount: 0.0,
             configMenu: Def.config_collection_menu,
             slide_data : carouselItems,
             activeSlide : 0,
-        };
+        });
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
+        } else {
+           console.log('exits User info');
         }
 
         this.setState({ stateCount: Math.random() });
@@ -200,7 +204,7 @@ class MyScreen extends React.Component {
         const {navigation} = this.props;
         const {user} = this.state;
         return (
-            (!Def.user_info) ?
+            (!user) ?
 
                 <View style={{justifyContent :'center',flex: 1, alignItems : 'center', width: width}}>
                     <View style={{flexDirection: 'row'}}>
@@ -222,7 +226,7 @@ class MyScreen extends React.Component {
 
                 <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginBottom: 10}}>
                     <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <Image  style={styles.imageStyle}  source={{uri:user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />
+                        <Image  style={styles.imageStyle}  source={{uri:user && user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />
 
                     </View>
                     <View style={{marginTop: 10, justifyContent:'space-between'}}>

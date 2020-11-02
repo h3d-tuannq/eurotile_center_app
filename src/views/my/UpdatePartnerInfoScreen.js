@@ -88,12 +88,12 @@ class UpdatePartnerInfoScreen extends React.Component {
             user_id : Def.user_info ? Def.user_info['id'] : 14,
             card_no: this.state.card_no,
             birth_day: this.state.birth_day ?  Def.getDateString(this.state.birth_day , "dd-MM-yyyy") : "",
-            mobile: this.state.mobile,
-            address: this.state.address,
-            issue_on: this.state.issue_on,
-            issue_at: this.state.issue_at,
-            gender: this.state.gender ? 1 :0,
-            full_name: this.state.full_name,
+            mobile: this.state.mobile
+            // address: this.state.address,
+            // issue_on: this.state.issue_on,
+            // issue_at: this.state.issue_at,
+            // gender: this.state.gender ? 1 :0,
+            // full_name: this.state.full_name,
         };
 
         if(this.state.avatarSource && this.state.avatarSource.fileName ) {
