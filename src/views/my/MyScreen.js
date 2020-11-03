@@ -226,7 +226,7 @@ class MyScreen extends React.Component {
 
                 <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginBottom: 10}}>
                     <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <Image  style={styles.imageStyle}  source={{uri:user && user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />
+                        <Image  style={styles.imageStyle}  source={{uri: Def.getAvatarUrlFromUserInfo() }}  />
 
                     </View>
                     <View style={{marginTop: 10, justifyContent:'space-between'}}>
@@ -244,7 +244,7 @@ class MyScreen extends React.Component {
                     onPress={this.gotoProfile}
                     >
                     <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                    <Image  style={styles.imageStyleInfo}  source={{uri:user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />
+                    <Image  style={styles.imageStyleInfo}  source={{uri:Def.getAvatarUrlFromUserInfo() }}  />
                     <View style={{marginLeft: 10, justifyContent:'space-between'}}>
                         <Text style={Style.text_styles.middleText}>
                             {user['email']}

@@ -245,7 +245,7 @@ class PartnerInfoScreen extends React.Component {
 
                 <View style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}>
                     <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                    <Image  style={styles.imageStyleInfo}  source={{uri:user['userProfile'] && user['userProfile']['avatar_path'] ? user['userProfile']['avatar_base_url'] + '/' + user['userProfile']['avatar_path'] : Def.URL_DEFAULT_AVATAR }}  />
+                    <Image  style={styles.imageStyleInfo}  source={{uri: Def.getAvatarUrlFromUserInfo()}}  />
                     <View style={{marginLeft: 10, justifyContent:'space-between'}}>
                         <Text style={Style.text_styles.middleText}>
                             {user['email']}

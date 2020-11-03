@@ -5,6 +5,7 @@ import CollectionTab from './CollectionTab'
 import MyCustomizeTabBar from  '../../com/common/tabar/MyCustomizeTabBar'
 import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
+import { WebView } from 'react-native-webview';
 const {width, height} = Dimensions.get('window');
 
 import Carousel from 'react-native-snap-carousel';
@@ -24,6 +25,8 @@ const carouselItems = [
     }
 ];
 
+let uri = "";
+
 class CollectionDetailScreen extends React.Component {
 
 
@@ -37,6 +40,8 @@ class CollectionDetailScreen extends React.Component {
         activeSlide : 0,
     };
 
+
+
     constructor(props){
         super(props);
         this.onGetCollectionSuccess     = this.onGetCollectionSuccess.bind(this);
@@ -46,7 +51,15 @@ class CollectionDetailScreen extends React.Component {
 
         let item = this.props.route.params.item;
 
-        // console.log("Item data"+JSON.stringify(item));
+        if(this.props.route.params.item.model === 'SIG.P-01') {
+            uri = "https://3dplayer.house3d.net/rangdong/?file=27223000";
+        } else {
+            uri = "https://3dplayer.house3d.net/rangdong/?file=41712000";
+        }
+
+
+
+        console.log("Item data"+JSON.stringify(item));
         // let collectionImages = [this.props.route.params.item.image_path];
         // if(item.sub_images){
         //     let subImgs = item.sub_images.split(',');
@@ -181,6 +194,9 @@ class CollectionDetailScreen extends React.Component {
         const configMenu = Def.collection_detail_menu;
         return (
             <View style={{flex:1}}>
+                {
+                    ! (this.state.item.model === 'SIG.P-01' || this.props.route.params.item.model === 'SIG.P-02') ?
+
                 <View style={Style.styles.carousel}>
                     <Carousel
                         ref={(c) => { this._carousel = c; }}
@@ -198,7 +214,14 @@ class CollectionDetailScreen extends React.Component {
                         onSnapToItem={(index) => this.setState({ activeSlide: index }) }
                     />
                     { this.pagination }
-                </View>
+                </View>:
+                        <View style={styles.webView}>
+                            <WebView
+                                source={{ uri: uri }}
+                            />
+                        </View>
+
+                }
 
                 <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >
                     {
@@ -224,6 +247,11 @@ const styles = StyleSheet.create({
         // marginVertical : 5,
         marginBottom : 125,
         backgroundColor: '#fff'
+    },
+
+    webView : {
+        height : height * 0.4,
+        backgroundColor: '#e6e6e6',
     },
     slider: {
         justifyContent: 'center',

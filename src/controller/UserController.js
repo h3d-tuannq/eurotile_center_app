@@ -29,10 +29,23 @@ export default class UserController{
     static googlesignOut = async () => {
     };
 
-    static onLoginSuccess(data){
+    static onUpdateSuccess(data){
+        console.log('Update success');
+        this.updateData(data);
+        if(Def.setLoader)
+            Def.setLoader(false);
 
+        if(Def.refreshDashBoard)
+            Def.refreshDashBoard();
+
+        Def.mainNavigate.native('my');
 
     }
+
+    static onLoginSuccess(data){
+
+    }
+
 
     static logout(){
     }
@@ -98,8 +111,6 @@ export default class UserController{
                 alert('test' + JSON.stringify(error));
 
             }
-
-
             if(  Def.setLoader)
                 Def.setLoader(false);
         }
@@ -215,7 +226,7 @@ export default class UserController{
     };
 
     static async  updatePartnerInfo(updateInfo, navigation = null, successCallback, falseCallback) {
-        Net.uploadImage(this.onLoginSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/update-partner' , Def.POST_METHOD , updateInfo, 'multipart/form-data');
+        Net.uploadImage(this.onUpdateSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/update-partner' , Def.POST_METHOD , updateInfo, 'multipart/form-data');
         if(Def.setLoader)
             Def.setLoader(false);
         navigation.navigate('My', {'screen':'my-screen'});
@@ -257,6 +268,25 @@ export default class UserController{
         }
         Def.mainNavigate.navigate('My');
     }
+
+    static updateData(userData){
+        try {
+            if(data){
+                let acess_token = userData['access_token'];
+                AsyncStorage.setItem('access_token', `Bearer ${acess_token}`);
+                AsyncStorage.setItem('user_info', JSON.stringify(userData));
+                AsyncStorage.setItem('email', userData['email']);
+                Def.login_token = `Bearer ${acess_token}`;
+                Def.email = userData['email'];
+                Def.username = userData['username'];
+                Def.user_info = userData;
+            }
+        } catch (err){
+            console.log('Error : ' + err);
+        }
+    }
+
+
 
     static onLoginFalse(data){
         console.log('Login false 1');

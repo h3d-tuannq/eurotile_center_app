@@ -38,12 +38,12 @@ class UpdatePartnerInfoScreen extends React.Component {
             project_img1 : projectImg && projectImg.length > 0 ? projectImg[0]: null ,
             project_img2 : projectImg && projectImg.length > 1 ? projectImg[1]: null,
             project_img3 : projectImg && projectImg.length > 2 ? projectImg[2]: null,
-            birth_day : Def.user_info['userProfile']['birth_day'],
-            full_name : Def.user_info['userProfile']['first_name'],
+            birth_day :Def.user_info['userProfile']['date_of_birth'] ? new Date(Def.user_info['userProfile']['date_of_birth']) :new Date() , //Def.user_info['userProfile']['birth_day'],
+            full_name : Def.user_info['userProfile']['firstname'],
             gender : Def.user_info['userProfile']['gender'],
             mobile:Def.user_info['userProfile']['phone'],
             card_no : Def.user_info['userProfile']['card_number'],
-            issue_on : Def.user_info['userProfile']['issued_on'], // Ngày cấp
+            issue_on : Def.user_info['userProfile']['issued_on'] ? new Date(Def.user_info['userProfile']['issued_on']) :new Date() , // Def.user_info['userProfile']['issued_on'], // Ngày cấp
             issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
             address : Def.user_info['userProfile']['gender'],
             isDateTimePickerVisible :false,
@@ -52,7 +52,9 @@ class UpdatePartnerInfoScreen extends React.Component {
         };
 
         console.log("Front-end" + Def.getInfrontOfImg());
-         this.parseDataToView();
+        this.refresh = this.refresh.bind(this);
+        Def.setLoader = this.refresh;
+         // this.parseDataToView();
     }
 
     parseDataToView(){
@@ -83,19 +85,19 @@ class UpdatePartnerInfoScreen extends React.Component {
             project_img1 : projectImg && projectImg.length > 0 ? projectImg[0]: null ,
             project_img2 : projectImg && projectImg.length > 1 ? projectImg[1]: null,
             project_img3 : projectImg && projectImg.length > 2 ? projectImg[2]: null,
-            birth_day : Def.user_info['userProfile']['birth_day'],
+            birth_day : Def.user_info['userProfile']['birth_day'] ? new Date(Def.user_info['userProfile']['birth_day']) :null , //Def.user_info['userProfile']['birth_day'],
             full_name : Def.user_info['userProfile']['first_name'],
             gender : Def.user_info['userProfile']['gender'],
             mobile:Def.user_info['userProfile']['phone'],
             card_no : Def.user_info['userProfile']['card_number'],
-            issue_on : Def.user_info['userProfile']['issued_on'], // Ngày cấp
+            issue_on : Def.user_info['userProfile']['issued_on'] ? new Date(Def.user_info['userProfile']['issued_on']) : null , // Def.user_info['userProfile']['issued_on'], // Ngày cấp
             issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
             address : Def.user_info['userProfile']['gender'],
             isDateTimePickerVisible :false,
             selectedDate : new Date(),
             dateAttribute : 'birth_day',
         });
-    }
+    }r
 
     getProjectImage(item){
         var partnerInfo = Def.user_info['partnerInfo'];
@@ -109,6 +111,39 @@ class UpdatePartnerInfoScreen extends React.Component {
 
         }
         return result;
+    }
+
+    validate(is_create = true){
+        if (is_create){
+            if(!this.state.avatarSource){
+                alert("Vui lòng cập nhật ảnh Avatar");
+            }else if(!this.state.mobile){
+                alert("Vui lòng điền số điện thoại");
+            }else if(!this.state.birth_day){
+                alert("Vui lòng nhập thông tin ngày sinh");
+            }else if(!this.state.gender){
+                alert("Vui lòng nhập thông tin giới tính");
+            }else if(!this.state.address){
+                alert("Vui lòng nhập địa chỉ");
+            }else if(!this.state.card_no){
+                alert("Vui lòng nhập số CMND");
+            } else if(!this.state.issue_on){
+                alert("Vui lòng nhập ngày cấp");
+            }else if(!this.state.issue_at){
+                alert("Vui lòng nhập nơi cấp");
+            }else if(!this.state.infront_cmt_img){
+                alert("Vui lòng chụp ảnh mặt trước CMND");
+            }else if(!this.state.behind_cmt_img){
+                alert("Vui lòng chụp ảnh mặt sau CMND");
+            }else if(!this.state.project_img1){
+                alert("Vui lòng tải lên ảnh dự án");
+            }else if(!this.state.project_img2){
+                alert("Vui lòng tải lên ảnh dự án");
+            }
+            else if(!this.state.project_img3){
+                alert("Vui lòng tải lên ảnh dự án");
+            }
+        }
     }
 
     updatePartnerInfo() {
@@ -145,10 +180,10 @@ class UpdatePartnerInfoScreen extends React.Component {
         let userInfo = {
             user_id : Def.user_info ? Def.user_info['id'] : 14,
             card_no: this.state.card_no,
-            birth_day: this.state.birth_day ?  Def.getDateString(this.state.birth_day , "dd-MM-yyyy") : "",
+            birth_day: this.state.birth_day ?  Def.getDateString(this.state.birth_day , "yyyy-MM-dd") : "",
             mobile: this.state.mobile,
             // address: this.state.address,
-            issue_on: this.state.issue_on,
+            issue_on: this.state.issue_on ? Def.getDateString(this.state.issue_on , "yyyy-MM-dd") : "",
             issue_at: this.state.issue_at,
             gender: this.state.gender ? 1 :0,
             full_name: this.state.full_name,
@@ -202,6 +237,7 @@ class UpdatePartnerInfoScreen extends React.Component {
             };
         }
         UserController.updatePartnerInfo(userInfo, navigation);
+        Def.setLoader = this.refresh.bind(this);
     // }
     }
 
@@ -227,6 +263,7 @@ class UpdatePartnerInfoScreen extends React.Component {
 
     refresh()
     {
+        // this.parseDataToView();
         this.setState({ stateCount: Math.random() });
     }
 
@@ -322,7 +359,7 @@ class UpdatePartnerInfoScreen extends React.Component {
                 <View style={{flexDirection : 'row', alignItems:'center', backgroundColor: '#fff'}}>
                     <TouchableOpacity style={{flex: 1.5, marginRight: 5, height :45, borderRadius:5, justifyContent : 'center', borderWidth :1, borderColor:Style.GREY_TEXT_COLOR}} onPress={() => this.showDateTimePicker('birth_day')} >
                         <Text style={[Style.text_styles.titleTextNotBold, {justifyContent : 'center', paddingLeft: 5, color:Style.GREY_TEXT_COLOR} ]}>
-                            {this.state.birth_day ? Def.getDateString(this.state.birth_day , "dd-MM-yyyy")  : "Ngày sinh"}
+                            {this.state.birth_day ? Def.getDateString(this.state.birth_day , "yyyy-MM-dd")  : "Ngày sinh"}
                         </Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
@@ -350,17 +387,17 @@ class UpdatePartnerInfoScreen extends React.Component {
                     </View>
                 </View>
 
-                <TextInput
-                    onFocus={() => this.setState({focus:1})}
-                    onBlur={()=> this.setState({focus:0})}
-                    style={this.state.focus == 1 ? styles.textInputHover : styles.textInputNormal}
-                    value={this.state.address}
-                    onChangeText={text => this.setState({address:text})}
-                    placeholder='Địa chỉ'
-                    placeholderTextColor="#b3b3b3"
-                    autoCapitalize = 'none'
-                    // underlineColorAndroid = "transparent"
-                />
+                {/*<TextInput*/}
+                    {/*onFocus={() => this.setState({focus:1})}*/}
+                    {/*onBlur={()=> this.setState({focus:0})}*/}
+                    {/*style={this.state.focus == 1 ? styles.textInputHover : styles.textInputNormal}*/}
+                    {/*value={this.state.address}*/}
+                    {/*onChangeText={text => this.setState({address:text})}*/}
+                    {/*placeholder='Địa chỉ'*/}
+                    {/*placeholderTextColor="#b3b3b3"*/}
+                    {/*autoCapitalize = 'none'*/}
+                    {/*// underlineColorAndroid = "transparent"*/}
+                {/*/>*/}
 
 
 
@@ -378,7 +415,7 @@ class UpdatePartnerInfoScreen extends React.Component {
                     />
                     <TouchableOpacity style={{flex: 1.5, marginRight: 5, height :45, borderRadius:5, justifyContent : 'center', borderWidth :1, borderColor:Style.GREY_TEXT_COLOR}} onPress={() => this.showDateTimePicker('issue_on')} >
                         <Text style={[Style.text_styles.titleTextNotBold, {justifyContent : 'center', paddingLeft: 5, color:Style.GREY_TEXT_COLOR} ]}>
-                            {this.state.issue_on ? Def.getDateString(this.state.issue_on , "dd-MM-yyyy")  : "Ngày cấp"}
+                            {this.state.issue_on ? Def.getDateString(this.state.issue_on , "yyyy-MM-dd")  : "Ngày cấp"}
                         </Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
