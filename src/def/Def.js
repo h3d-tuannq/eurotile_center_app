@@ -91,7 +91,8 @@ export default class Def{
         let rsUrl = '';
         console.log(Def.user_info);
         if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['avatar_path']){
-            rsUrl =Def.user_info['userProfile']['avatar_base_url'] + '/' + Def.user_info['userProfile']['avatar_path'];
+            rsUrl = Def.user_info['userProfile']['avatar_base_url'] && Def.user_info['userProfile']['avatar_base_url'] != ''? Def.user_info['userProfile']['avatar_base_url'] + '/' + Def.user_info['userProfile']['avatar_path'] :
+                Def.user_info['userProfile']['avatar_path'];
         }
 
         console.log('rs : ' +rsUrl);
@@ -102,7 +103,11 @@ export default class Def{
         let rsUrl = '';
         if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['infront_cmt_img']){
             rsUrl = Def.URL_CONTENT_BASE + Def.user_info['userProfile']['infront_cmt_img'];
+            console.log('' + Def.user_info['userProfile']['infront_cmt_img']);
         }
+
+
+
         return rsUrl;
     }
 

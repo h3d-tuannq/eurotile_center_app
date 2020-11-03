@@ -26,31 +26,89 @@ class UpdatePartnerInfoScreen extends React.Component {
         this.handleDatePicked = this.handleDatePicked.bind();
         this.hideDateTimePicker = this.hideDateTimePicker.bind();
         this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
-
+        let projectImg = this.getProjectImage();
         this.state = {
             focus : 0,
             isUpdate: 0,
             user: Def.user_info,
             stateCount: 0.0,
             avatarSource : {uri:Def.getAvatarUrlFromUserInfo() ? Def.getAvatarUrlFromUserInfo() :Def.URL_DEFAULT_AVATAR},
-
-            infront_cmt_img: null,
-            behind_cmt_img: null,
-            project_img1 : null,
-            project_img2 : null,
-            project_img3 : null,
-            birth_day : "",
-            full_name : '',
-            gender : null,
-            mobile:'',
-            card_no : '',
-            issue_on : '', // Ngày cấp
-            issue_at : '', // Nơi cấp
-            address : '',
+            infront_cmt_img: Def.getInfrontOfImg() ? {uri:Def.getInfrontOfImg()} : null,
+            behind_cmt_img: Def.getBehindImg() ? {uri:Def.getBehindImg()} : null,
+            project_img1 : projectImg && projectImg.length > 0 ? projectImg[0]: null ,
+            project_img2 : projectImg && projectImg.length > 1 ? projectImg[1]: null,
+            project_img3 : projectImg && projectImg.length > 2 ? projectImg[2]: null,
+            birth_day : Def.user_info['userProfile']['birth_day'],
+            full_name : Def.user_info['userProfile']['first_name'],
+            gender : Def.user_info['userProfile']['gender'],
+            mobile:Def.user_info['userProfile']['phone'],
+            card_no : Def.user_info['userProfile']['card_number'],
+            issue_on : Def.user_info['userProfile']['issued_on'], // Ngày cấp
+            issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
+            address : Def.user_info['userProfile']['gender'],
             isDateTimePickerVisible :false,
             selectedDate : new Date(),
             dateAttribute : 'birth_day',
         };
+
+        console.log("Front-end" + Def.getInfrontOfImg());
+         this.parseDataToView();
+    }
+
+    parseDataToView(){
+        let projectImg = this.getProjectImage();
+        let userInfo = {
+            avatarSource : {uri:Def.getAvatarUrlFromUserInfo() ? Def.getAvatarUrlFromUserInfo() :Def.URL_DEFAULT_AVATAR},
+            infront_cmt_img: Def.getInfrontOfImg(),
+            behind_cmt_img: Def.getBehindImg(),
+            project_img1 : projectImg && projectImg.length > 0 ? projectImg[0]: null ,
+            project_img2 : projectImg && projectImg.length > 1 ? projectImg[1]: null,
+            project_img3 : projectImg && projectImg.length > 2 ? projectImg[2]: null,
+            birth_day : Def.user_info['userProfile']['birth_day'],
+            full_name : Def.user_info['userProfile']['first_name'],
+            gender : Def.user_info['userProfile']['gender'],
+            mobile:Def.user_info['userProfile']['phone'],
+            card_no : Def.user_info['userProfile']['card_number'],
+            issue_on : Def.user_info['userProfile']['issued_on'], // Ngày cấp
+            issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
+            address : Def.user_info['userProfile']['gender'],
+            isDateTimePickerVisible :false,
+            selectedDate : new Date(),
+            dateAttribute : 'birth_day',
+        }
+        this.setState({
+            avatarSource : {uri:Def.getAvatarUrlFromUserInfo() ? Def.getAvatarUrlFromUserInfo() :Def.URL_DEFAULT_AVATAR},
+            infront_cmt_img: Def.getInfrontOfImg(),
+            behind_cmt_img: Def.getBehindImg(),
+            project_img1 : projectImg && projectImg.length > 0 ? projectImg[0]: null ,
+            project_img2 : projectImg && projectImg.length > 1 ? projectImg[1]: null,
+            project_img3 : projectImg && projectImg.length > 2 ? projectImg[2]: null,
+            birth_day : Def.user_info['userProfile']['birth_day'],
+            full_name : Def.user_info['userProfile']['first_name'],
+            gender : Def.user_info['userProfile']['gender'],
+            mobile:Def.user_info['userProfile']['phone'],
+            card_no : Def.user_info['userProfile']['card_number'],
+            issue_on : Def.user_info['userProfile']['issued_on'], // Ngày cấp
+            issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
+            address : Def.user_info['userProfile']['gender'],
+            isDateTimePickerVisible :false,
+            selectedDate : new Date(),
+            dateAttribute : 'birth_day',
+        });
+    }
+
+    getProjectImage(item){
+        var partnerInfo = Def.user_info['partnerInfo'];
+        var result = [];
+        if(partnerInfo && partnerInfo['project_img']){
+            let projectImg = partnerInfo['project_img'].split(',');
+            result = projectImg.map(x => {
+                return {uri:Def.URL_CONTENT_BASE +'partnerInfo/'+ x}
+            });
+
+
+        }
+        return result;
     }
 
     updatePartnerInfo() {
@@ -88,12 +146,12 @@ class UpdatePartnerInfoScreen extends React.Component {
             user_id : Def.user_info ? Def.user_info['id'] : 14,
             card_no: this.state.card_no,
             birth_day: this.state.birth_day ?  Def.getDateString(this.state.birth_day , "dd-MM-yyyy") : "",
-            mobile: this.state.mobile
+            mobile: this.state.mobile,
             // address: this.state.address,
-            // issue_on: this.state.issue_on,
-            // issue_at: this.state.issue_at,
-            // gender: this.state.gender ? 1 :0,
-            // full_name: this.state.full_name,
+            issue_on: this.state.issue_on,
+            issue_at: this.state.issue_at,
+            gender: this.state.gender ? 1 :0,
+            full_name: this.state.full_name,
         };
 
         if(this.state.avatarSource && this.state.avatarSource.fileName ) {
