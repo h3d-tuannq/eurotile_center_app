@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Modal} from 'react-native'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -20,31 +20,9 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {Picker} from '@react-native-community/picker';
 import UserController from "../../controller/UserController";
 import Autocomplete from 'react-native-autocomplete-input';
-import AutocompleteModal from '../../com/common/i'
+import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
 
-const AutocompletePopup = (props) => {
-    <Modal>
-        <View>
-            <View style={styles.autocompleteContainer}>
-                <Autocomplete data={props.data}
-                              defaultValue={this.state.query}
-                              onChangeText={text => this.setState({ query : text })}
-                              renderItem={({ item, i }) => (
-                                  <TouchableOpacity onPress={() => this.setState({ city_item: item })}>
-                                      <Text>{item.city_name}</Text>
-                                  </TouchableOpacity>
-                              )}
-                              keyboardShouldPersistTaps='always'
-                />
-            </View>
-            <View>
-                <Text>Some content</Text>
-            </View>
-        </View>
-    </Modal>
-
-}
 
 class UpdatePartnerScreen extends React.Component {
     constructor(props){
@@ -89,6 +67,7 @@ class UpdatePartnerScreen extends React.Component {
             ward_code: '',
             ward_name: '',
             query : '',
+            choseAddress : false
 
 
 
@@ -107,15 +86,21 @@ class UpdatePartnerScreen extends React.Component {
 
     onGetCites(res){
         this.setState({cities: res});
-        console.log('Cites : ' + JSON.stringify(res))
-
-
+        console.log('Cities'+ JSON.stringify(this.state.cities))
     }
 
     onGetCitesFalse(){
 
     }
 
+    closeFunction = (item) => {
+        if (item) {
+            // console.log('city_item ' + JSON.stringify(item));
+            this.setState({city_item: item, choseAddress: false});
+        } else {
+            this.setState({choseAddress: false})
+        }
+    }
     parseDataToView(){
         let projectImg = this.getProjectImage();
         let userInfo = {
@@ -381,7 +366,7 @@ class UpdatePartnerScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const {user} = this.state;
-        const data = this.filterData(this.state.query);
+        // const data = this.filterData(this.state.query);
         return (
             <View style={{flex:1}}>
                 <ScrollView style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}>
@@ -389,9 +374,9 @@ class UpdatePartnerScreen extends React.Component {
                         {this.state.avatarSource ?
                             <Image
                                 source={{ uri: this.state.avatarSource.uri }}
-                                style={{ width: width/3, height: width/3 , marginTop: 20 , borderRadius : width / 6 }}
+                                style={{ width: width/3, height: width/3 , marginTop: 5 , borderRadius : width / 6 }}
                             /> :
-                            <View style={{ width: width/3, height: width/3 , marginTop: 20 , borderRadius : width / 6, borderWidth: 2 , borderColor:Style.DEFAUT_RED_COLOR,
+                            <View style={{ width: width/3, height: width/3 , marginTop: 5 , borderRadius : width / 6, borderWidth: 2 , borderColor:Style.DEFAUT_RED_COLOR,
                                 alignItems: 'center', justifyContent: 'center'
                             }}>
                                 <Icon size={30} name="camera" color={Style.DEFAUT_RED_COLOR}/>
@@ -482,14 +467,16 @@ class UpdatePartnerScreen extends React.Component {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:5}}>
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:5}}
+                        onPress={() => this.setState({choseAddress: true})}
+                    >
                         <Text style={[Style.text_styles.middleText,{}]}>
                             Tỉnh/Thành phố
                         </Text>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
 
                             <Text style={[Style.text_styles.middleText,{ marginRight : 5}]}>
-                                Chọn tỉnh/thành phố
+                                {this.state.city_item ? this.state.city_item.city_name : 'Chọn tỉnh/thành phố'}
                             </Text>
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
@@ -531,7 +518,7 @@ class UpdatePartnerScreen extends React.Component {
                                 onFocus={() => this.setState({focus:1})}
                                 onBlur={()=> this.setState({focus:0})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
-                                value={this.state.address}
+                                value={this.state.address.toString()}
                                 onChangeText={text => this.setState({address:text})}
                             />
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
@@ -598,28 +585,6 @@ class UpdatePartnerScreen extends React.Component {
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
                     </TouchableOpacity>
-
-                    {/*<View style={{flexDirection : 'row', alignItems:'center', backgroundColor: '#fff' , marginTop : 2}}>*/}
-                        {/*<View style={{ height: 45, flex:1, borderWidth:1,borderColor:Style.GREY_TEXT_COLOR, backgroundColor:'#fff', borderRadius:5 }}>*/}
-                            {/*<Picker*/}
-                                {/*selectedValue={this.state.gender}*/}
-                                {/*style={{height: 45 }}*/}
-                                {/*mode="dropdown"*/}
-                                {/*onValueChange={(itemValue, itemIndex) =>*/}
-                                    {/*this.setState({gender: itemValue})*/}
-                                {/*}>*/}
-                                {/*<Picker.Item label="Nam" value="0" />*/}
-                                {/*<Picker.Item label="Nữ" value="1" />*/}
-                            {/*</Picker>*/}
-                        {/*</View>*/}
-                    {/*</View>*/}
-
-                    {/*<View style={{flexDirection : 'row', alignItems : 'center' , justifyContent:'space-between', paddingHorizontal:5 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>*/}
-                        {/*<Text style={[Style.text_styles.titleTextNotBold,{}]}>*/}
-                            {/*Ảnh chụp chứng minh thư*/}
-                        {/*</Text>*/}
-                    {/*</View>*/}
-
 
                     <TouchableOpacity onPress={() => this.handleChoosePhoto('infront_cmt_img')} style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingVertical:5}}>
                         <View style={{flex:1, width : width -10, height:Style.HEADER_HEIGHT}}>
@@ -733,6 +698,15 @@ class UpdatePartnerScreen extends React.Component {
 
 
                 </ScrollView>
+                <Modal onRequestClose={() => {this.closeFunction(null)}}visible={this.state.choseAddress}  transparent={false} styles={{backgroundColor : 'green'}} >
+                    {/*{this.state.choseAddress ?*/}
+                    <AutocompleteModal
+                        data={this.state.cities}
+                        filterAttr="city_name"
+                        closeFunction={this.closeFunction}
+
+                    />
+                </Modal>
                 <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.updatePartnerInfo}>
 
                     <Text style={styles.buttonText}>
