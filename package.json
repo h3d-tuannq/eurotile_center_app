@@ -27,6 +27,7 @@
     "native-base": "^2.13.13",
     "react": "16.13.1",
     "react-native": "0.63.2",
+    "react-native-autocomplete-input": "github:mrlaessig/react-native-autocomplete-input",
     "react-native-datepicker": "^1.7.2",
     "react-native-draggable-flatlist": "^2.4.0",
     "react-native-fbsdk": "^2.0.0",

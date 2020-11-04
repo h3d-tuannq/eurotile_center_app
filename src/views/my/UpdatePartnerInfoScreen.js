@@ -53,8 +53,13 @@ class UpdatePartnerInfoScreen extends React.Component {
 
         console.log("Front-end" + Def.getInfrontOfImg());
         this.refresh = this.refresh.bind(this);
+        Def.mainNavigate = this.props.navigation;
         Def.setLoader = this.refresh;
          // this.parseDataToView();
+    }
+
+    componentDidMount(){
+
     }
 
     parseDataToView(){
@@ -97,7 +102,7 @@ class UpdatePartnerInfoScreen extends React.Component {
             selectedDate : new Date(),
             dateAttribute : 'birth_day',
         });
-    }r
+    }
 
     getProjectImage(item){
         var partnerInfo = Def.user_info['partnerInfo'];

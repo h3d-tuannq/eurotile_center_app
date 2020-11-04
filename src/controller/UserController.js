@@ -31,14 +31,14 @@ export default class UserController{
 
     static onUpdateSuccess(data){
         console.log('Update success');
-        this.updateData(data);
+        UserController.updateData(data);
         if(Def.setLoader)
             Def.setLoader(false);
 
         if(Def.refreshDashBoard)
             Def.refreshDashBoard();
 
-        Def.mainNavigate.native('my');
+        Def.mainNavigate.navigate('My');
 
     }
 
@@ -213,6 +213,10 @@ export default class UserController{
         // navigation.navigate('Home');
     };
 
+    static async getCities ( ){
+        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/city' , Def.POST_METHOD);
+    }
+
 
     static async  signup(email, password , displayName,navigation=null, successCallback, falseCallback) {
 
@@ -271,7 +275,7 @@ export default class UserController{
 
     static updateData(userData){
         try {
-            if(data){
+            if(userData){
                 let acess_token = userData['access_token'];
                 AsyncStorage.setItem('access_token', `Bearer ${acess_token}`);
                 AsyncStorage.setItem('user_info', JSON.stringify(userData));
