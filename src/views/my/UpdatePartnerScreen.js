@@ -34,6 +34,14 @@ class UpdatePartnerScreen extends React.Component {
         this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
         this.onGetCites = this.onGetCites.bind(this);
         this.onGetCitesFalse = this.onGetCitesFalse.bind(this);
+        this.onGetAddress = this.onGetAddress.bind(this);
+        this.onGetAddressFalse = this.onGetAddressFalse.bind(this);
+
+        this.choseCityClick = this.choseCityClick.bind(this);
+        this.choseDistrictClick = this.choseDistrictClick.bind(this);
+        this.choseWardClick = this.choseWardClick.bind(this);
+        this.showAutocompleteModal = this.showAutocompleteModal.bind(this);
+        this.parseDataToView = this.parseDataToView.bind(this);
 
         let projectImg = this.getProjectImage();
         this.state = {
@@ -54,23 +62,22 @@ class UpdatePartnerScreen extends React.Component {
             card_no : Def.user_info['userProfile']['card_number'],
             issue_on : Def.user_info['userProfile']['issued_on'] ? new Date(Def.user_info['userProfile']['issued_on']) :new Date() , // Def.user_info['userProfile']['issued_on'], // Ngày cấp
             issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
-            address : Def.user_info['userProfile']['gender'],
+            address : Def.getAddressFromUserInfo() ? Def.getAddressFromUserInfo()['address_detail'] : '',
             isDateTimePickerVisible :false,
             selectedDate : new Date(),
             dateAttribute : 'birth_day',
             cities : [],
-            city_code: '',
-            city_name: '',
-            city_item: null,
-            district_code: '',
-            district_name: '',
-            ward_code: '',
-            ward_name: '',
+            district : [],
+            ward:[],
+            city_item: Def.getCityItemFromUserInfo(),
+            district_item: Def.getDistrictItemFromUserInfo(),
+            ward_item: Def.getWardItemFromUserInfo(),
             query : '',
-            choseAddress : false
-
-
-
+            choseAddress : false,
+            currentAddress : 1, // 1 select city, 2 select district, 3 select ward
+            nextAddress : 1, // 1 select city, 2 select district, 3 select ward
+            filterAttr: 'city_name',
+            filterData: [],
         };
 
         console.log("Front-end" + Def.getInfrontOfImg());
@@ -86,60 +93,122 @@ class UpdatePartnerScreen extends React.Component {
 
     onGetCites(res){
         this.setState({cities: res});
-        console.log('Cities'+ JSON.stringify(this.state.cities))
     }
 
-    onGetCitesFalse(){
+    getAdministrativeUnit(url, params = null, callBack = null){
+        Net.sendRequest(callBack !== null ? callBack : this.onGetAddress,this.onGetCitesFalse,url , Def.POST_METHOD, params);
+    }
+
+
+
+    onGetAddress(res){
+        let unit = this.state.nextAddress == 1 ? 'cities' : this.state.nextAddress == 2 ? 'district' : 'ward';
+        this.setState({[unit]: res});
+    }
+
+    onGetAddressFalse(err){
+        console.log('onGetAddressFalse' + JSON.stringify(err));
+    }
+
+
+    onGetCitesFalse(res){
 
     }
+
+    showAutocompleteModal(res){
+        let unit = this.state.currentAddress == 1 ? 'city_item' : this.state.currentAddress == 2 ? 'district_item' : 'ward_item';
+        if(this.state.currentAddress == 1){
+            this.setState({ filterData: res, cites: res, filterAttr: 'city_name'});
+        }
+
+        if(this.state.currentAddress == 2){
+            this.setState({filterData: res, district: res, filterAttr: 'district_name'});
+        }
+        if(this.state.currentAddress == 3){
+            this.setState({filterData: res, ward: res, filterAttr: 'ward_name'});
+        }
+    }
+
+
+    choseCityClick(){
+        this.setState({currentAddress:1});
+        if(!this.state.cities){
+            this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/city', null, this.showAutocompleteModal);
+        } else {
+            this.setState({filterData: this.state.cities, filterAttr: 'city_name'});
+        }
+
+        this.setState({choseAddress: true});
+
+
+    }
+
+    choseDistrictClick(){
+        this.setState({currentAddress:2});
+        if(!this.state.district){
+            this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/district', {city_code: this.state.city_item.city_code}, this.showAutocompleteModal);
+        }else {
+            this.setState({ filterData: this.state.district, filterAttr: 'district_name'});
+        }
+
+        this.setState({choseAddress: true});
+    }
+
+    choseWardClick(){
+        this.setState({currentAddress:3});
+        if(!this.state.ward){
+            this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/ward', {district_code: this.state.district_item.district_code}, this.showAutocompleteModal);
+        }else {
+            this.setState({filterData: this.state.ward, filterAttr: 'ward_name'});
+        }
+        this.setState({choseAddress: true})
+    }
+
 
     closeFunction = (item) => {
         if (item) {
-            // console.log('city_item ' + JSON.stringify(item));
-            this.setState({city_item: item, choseAddress: false});
+            if(this.state.currentAddress == 1){
+               if (!this.state.city_item || (this.state.city_item.city_code !== item.city_code)){
+                   this.setState({nextAddress:2, district_item : null, ward_item : null });
+                   this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/district', {city_code: item.city_code});
+               }
+            }
+
+            if(this.state.currentAddress == 2){
+                if (!this.state.district_item || this.state.district_item.district_code !== item.district_code){
+                    this.setState({nextAddress:3 , ward_item : null});
+                    this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/ward', {district_code: item.district_code});
+                }
+            }
+
+            let unit = this.state.currentAddress == 1 ? 'city_item' : this.state.currentAddress == 2 ? 'district_item' : 'ward_item';
+            this.setState({[unit]: item, choseAddress: false});
+
         } else {
             this.setState({choseAddress: false})
         }
     }
     parseDataToView(){
         let projectImg = this.getProjectImage();
-        let userInfo = {
-            avatarSource : {uri:Def.getAvatarUrlFromUserInfo() ? Def.getAvatarUrlFromUserInfo() :Def.URL_DEFAULT_AVATAR},
-            infront_cmt_img: Def.getInfrontOfImg(),
-            behind_cmt_img: Def.getBehindImg(),
-            project_img1 : projectImg && projectImg.length > 0 ? projectImg[0]: null ,
-            project_img2 : projectImg && projectImg.length > 1 ? projectImg[1]: null,
-            project_img3 : projectImg && projectImg.length > 2 ? projectImg[2]: null,
-            birth_day : Def.user_info['userProfile']['birth_day'],
-            full_name : Def.user_info['userProfile']['first_name'],
-            gender : Def.user_info['userProfile']['gender'],
-            mobile:Def.user_info['userProfile']['phone'],
-            card_no : Def.user_info['userProfile']['card_number'],
-            issue_on : Def.user_info['userProfile']['issued_on'], // Ngày cấp
-            issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
-            address : Def.user_info['userProfile']['gender'],
-            isDateTimePickerVisible :false,
-            selectedDate : new Date(),
-            dateAttribute : 'birth_day',
-        }
         this.setState({
+            user: Def.user_info,
             avatarSource : {uri:Def.getAvatarUrlFromUserInfo() ? Def.getAvatarUrlFromUserInfo() :Def.URL_DEFAULT_AVATAR},
-            infront_cmt_img: Def.getInfrontOfImg(),
-            behind_cmt_img: Def.getBehindImg(),
+            infront_cmt_img: Def.getInfrontOfImg() ? {uri:Def.getInfrontOfImg()} : null,
+            behind_cmt_img: Def.getBehindImg() ? {uri:Def.getBehindImg()} : null,
             project_img1 : projectImg && projectImg.length > 0 ? projectImg[0]: null ,
             project_img2 : projectImg && projectImg.length > 1 ? projectImg[1]: null,
             project_img3 : projectImg && projectImg.length > 2 ? projectImg[2]: null,
-            birth_day : Def.user_info['userProfile']['birth_day'] ? new Date(Def.user_info['userProfile']['birth_day']) :null , //Def.user_info['userProfile']['birth_day'],
-            full_name : Def.user_info['userProfile']['first_name'],
+            birth_day :Def.user_info['userProfile']['date_of_birth'] ? new Date(Def.user_info['userProfile']['date_of_birth']) :new Date() , //Def.user_info['userProfile']['birth_day'],
+            full_name : Def.user_info['userProfile']['firstname'],
             gender : Def.user_info['userProfile']['gender'],
             mobile:Def.user_info['userProfile']['phone'],
             card_no : Def.user_info['userProfile']['card_number'],
-            issue_on : Def.user_info['userProfile']['issued_on'] ? new Date(Def.user_info['userProfile']['issued_on']) : null , // Def.user_info['userProfile']['issued_on'], // Ngày cấp
+            issue_on : Def.user_info['userProfile']['issued_on'] ? new Date(Def.user_info['userProfile']['issued_on']) :new Date() , // Def.user_info['userProfile']['issued_on'], // Ngày cấp
             issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
-            address : Def.user_info['userProfile']['gender'],
-            isDateTimePickerVisible :false,
-            selectedDate : new Date(),
-            dateAttribute : 'birth_day',
+            address : Def.getAddressFromUserInfo() ? '26 Cự lộc' : '',
+            city_item: Def.getCityItemFromUserInfo(),
+            district_item: Def.getDistrictItemFromUserInfo(),
+            ward_item: Def.getWardItemFromUserInfo(),
         });
     }
 
@@ -190,9 +259,41 @@ class UpdatePartnerScreen extends React.Component {
         }
     }
 
+    validateAddress(){
+        let err = 0;
+        if(!this.state.city_item){
+            alert("Vui cập nhật dữ liệu tỉnh/thành phố");
+            err = 1;
+        }
+
+        if(!this.state.district_item){
+            alert("Vui cập nhật dữ liệu quận/huyện");
+            err = 2;
+        }
+
+        if(!this.state.ward_item){
+            alert("Vui cập nhật dữ liệu phường/xã");
+            err = 3;
+        }
+        return err;
+    }
+
+
+    buildAddress(){
+        let address = Def.getAddressFromUserInfo();
+        let submitAddress = {};
+            submitAddress.id = address ? address['id'] : null;
+            submitAddress.address_detail = this.state.address;
+            submitAddress.city_code = this.state.city_item.city_code;
+            submitAddress.district_code = this.state.district_item.district_code;
+            submitAddress.ward_code = this.state.ward_item.ward_code;
+        return submitAddress;
+    }
+
+
     updatePartnerInfo() {
         const {navigation} = this.props;
-
+        console.log('Update user info');
         // if(!this.state.avatarSource){
         //     alert("Vui lòng cập nhật ảnh Avatar");
         // }else if(!this.state.mobile){
@@ -221,12 +322,13 @@ class UpdatePartnerScreen extends React.Component {
         // else if(!this.state.project_img3){
         //     alert("Vui lòng tải lên ảnh dự án");
         // } else {
+        // this.validateAddress();
         let userInfo = {
             user_id : Def.user_info ? Def.user_info['id'] : 14,
             card_no: this.state.card_no,
             birth_day: this.state.birth_day ?  Def.getDateString(this.state.birth_day , "yyyy-MM-dd") : "",
             mobile: this.state.mobile,
-            // address: this.state.address,
+            address: JSON.stringify(this.buildAddress()),
             issue_on: this.state.issue_on ? Def.getDateString(this.state.issue_on , "yyyy-MM-dd") : "",
             issue_at: this.state.issue_at,
             gender: this.state.gender ? 1 :0,
@@ -265,7 +367,7 @@ class UpdatePartnerScreen extends React.Component {
             };
         }
 
-        if(this.state.project_img2 && this.state.project_img1.fileName ) {
+        if(this.state.project_img2 && this.state.project_img2.fileName ) {
             userInfo.project_img2 =   {
                 name: this.state.project_img2.fileName,
                 type: this.state.project_img2.type,
@@ -280,6 +382,7 @@ class UpdatePartnerScreen extends React.Component {
                 uri: Platform.OS === "android" ? this.state.project_img3.uri : this.state.project_img3.uri.replace("file://", "")
             };
         }
+        console.log('UserInfo: ' + JSON.stringify(userInfo));
         UserController.updatePartnerInfo(userInfo, navigation);
         Def.setLoader = this.refresh.bind(this);
         // }
@@ -307,7 +410,7 @@ class UpdatePartnerScreen extends React.Component {
 
     refresh()
     {
-        // this.parseDataToView();
+        this.parseDataToView();
         this.setState({ stateCount: Math.random() });
     }
 
@@ -371,7 +474,7 @@ class UpdatePartnerScreen extends React.Component {
             <View style={{flex:1}}>
                 <ScrollView style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}>
                     <TouchableOpacity onPress={() => this.handleChoosePhoto('avatarSource')} style={{ alignItems: 'center', justifyContent: 'center' , marginBottom: 5 }}>
-                        {this.state.avatarSource ?
+                        {this.state.avatarSource && this.state.avatarSource.uri ?
                             <Image
                                 source={{ uri: this.state.avatarSource.uri }}
                                 style={{ width: width/3, height: width/3 , marginTop: 5 , borderRadius : width / 6 }}
@@ -468,7 +571,7 @@ class UpdatePartnerScreen extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:5}}
-                        onPress={() => this.setState({choseAddress: true})}
+                        onPress={this.choseCityClick}
                     >
                         <Text style={[Style.text_styles.middleText,{}]}>
                             Tỉnh/Thành phố
@@ -482,27 +585,31 @@ class UpdatePartnerScreen extends React.Component {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}>
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}
+                                      onPress={this.choseDistrictClick}
+                    >
                         <Text style={[Style.text_styles.middleText,{}]}>
                             Quận/Huyện
                         </Text>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
 
                             <Text style={[Style.text_styles.middleText,{ marginRight : 5}]}>
-                                Chọn Quận/Huyện
+                                {this.state.district_item ? this.state.district_item.district_name : 'Chọn quận/huyện'}
                             </Text>
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}>
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}
+                                      onPress={this.choseWardClick}
+                    >
                         <Text style={[Style.text_styles.middleText,{}]}>
                             Phường/Xã
                         </Text>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
 
                             <Text style={[Style.text_styles.middleText,{ marginRight : 5}]}>
-                                Chọn Phường/Xã
+                                {this.state.ward_item ? this.state.ward_item.ward_name : 'Chọn phường/xã'}
                             </Text>
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
@@ -513,13 +620,13 @@ class UpdatePartnerScreen extends React.Component {
                             Địa chỉ cụ thể
                         </Text>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
-
                             <TextInput
                                 onFocus={() => this.setState({focus:1})}
                                 onBlur={()=> this.setState({focus:0})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                 value={this.state.address.toString()}
                                 onChangeText={text => this.setState({address:text})}
+                                placeholder={'Số nhà, tên đường'}
                             />
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
@@ -532,7 +639,6 @@ class UpdatePartnerScreen extends React.Component {
                             CMND
                         </Text>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
-
                             <TextInput
                                 onFocus={() => this.setState({focus:1})}
                                 onBlur={()=> this.setState({focus:0})}
@@ -593,11 +699,17 @@ class UpdatePartnerScreen extends React.Component {
                             </Text>
                         </View>
 
-                        {this.state.infront_cmt_img ?
-                            <Image
-                                source={{ uri: this.state.infront_cmt_img.uri }}
-                                style={{ width: width, height:150, maxHeight: 200 , marginTop: 5 }}
-                            /> :
+                        {this.state.infront_cmt_img && this.state.infront_cmt_img.uri?
+                            <View>
+                                <Image
+                                    source={{ uri: this.state.infront_cmt_img.uri }}
+                                    style={{ width: width, height:150, maxHeight: 200 , marginTop: 5 }}
+                                />
+                                <Text>
+                                    Test
+                                </Text>
+                            </View>
+                            :
                             <View style={{ width: width * 0.8, height: 150 , marginTop: 5 , borderWidth: 2 , borderColor:Style.DEFAUT_RED_COLOR,
                                 alignItems: 'center', justifyContent: 'center'
                             }}>
@@ -614,7 +726,7 @@ class UpdatePartnerScreen extends React.Component {
                             </Text>
                         </View>
 
-                        {this.state.behind_cmt_img ?
+                        {this.state.behind_cmt_img && this.state.behind_cmt_img.uri ?
                             <Image
                                 source={{ uri: this.state.behind_cmt_img.uri }}
                                 style={{ width: width, height: 200 , marginTop: 5 }}
@@ -642,7 +754,7 @@ class UpdatePartnerScreen extends React.Component {
                             </Text>
                         </View>
 
-                        {this.state.project_img1 ?
+                        {this.state.project_img1 && this.state.project_img1.uri ?
                             <Image
                                 source={{ uri: this.state.project_img1.uri }}
                                 style={{ width: width, height: 200 , marginTop: 5 }}
@@ -663,7 +775,7 @@ class UpdatePartnerScreen extends React.Component {
                             </Text>
                         </View>
 
-                        {this.state.project_img2 ?
+                        {this.state.project_img2 && this.state.project_img2.uri ?
                             <Image
                                 source={{ uri: this.state.project_img2.uri }}
                                 style={{ width: width, height: 200 , marginTop: 5 }}
@@ -683,7 +795,7 @@ class UpdatePartnerScreen extends React.Component {
                             </Text>
                         </View>
 
-                        {this.state.project_img3 ?
+                        {this.state.project_img3 && this.state.project_img3.uri?
                             <Image
                                 source={{ uri: this.state.project_img3.uri }}
                                 style={{ width: width, height: 200 , marginTop: 5 }}
@@ -698,11 +810,11 @@ class UpdatePartnerScreen extends React.Component {
 
 
                 </ScrollView>
-                <Modal onRequestClose={() => {this.closeFunction(null)}}visible={this.state.choseAddress}  transparent={false} styles={{backgroundColor : 'green'}} >
+                <Modal onRequestClose={() => {this.closeFunction(null)}} visible={this.state.choseAddress}  transparent={false} styles={{backgroundColor : 'green'}} >
                     {/*{this.state.choseAddress ?*/}
                     <AutocompleteModal
-                        data={this.state.cities}
-                        filterAttr="city_name"
+                        data={this.state.filterData}
+                        filterAttr={this.state.filterAttr}
                         closeFunction={this.closeFunction}
 
                     />
@@ -761,7 +873,6 @@ const styles = StyleSheet.create({
     imageStyleInfo : {
         width : width /8,
         height : width / 8,
-
         borderRadius: width / 16,
     },
 

@@ -17,10 +17,6 @@ class AutocompleteModal extends React.Component {
             data : this.props.data.length > 0 ? this.props.data : initData,
             query : ""
         };
-
-        console.log('Autocomplete Data' +JSON.stringify(this.props.data));
-
-
     }
 
     filterData = (query) => {
@@ -34,15 +30,12 @@ class AutocompleteModal extends React.Component {
     }
 
     item_click = (item) => {
-        console.log(Object.entries(item));
-
         this.props.closeFunction(item);
     }
 
 
     render() {
         const filterData = this.filterData(this.state.query);
-        console.log('Filter Data : ' + JSON.stringify(filterData));
         return (
                 <View style={{height: height}}>
                         <Autocomplete data={filterData}
@@ -50,8 +43,6 @@ class AutocompleteModal extends React.Component {
                                       onChangeText={text => this.setState({ query : text })}
                                       renderItem={({ item, i }) => (
                                           <TouchableOpacity style={styles.itemStyle} onPress={() => {
-                                              // console.log('item-data1: ' + JSON.stringify(item))
-                                              // console.log('item-data2: ' + JSON.stringify(item2))
                                               this.item_click(item)
 
                                           }}>

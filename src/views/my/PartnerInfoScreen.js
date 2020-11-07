@@ -292,19 +292,19 @@ class PartnerInfoScreen extends React.Component {
                         </Text>
 
                     </View>
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}>
-                    <Text style={[Style.text_styles.middleText,{}]}>
-                        Nơi làm việc
-                    </Text>
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}>*/}
+                    {/*<Text style={[Style.text_styles.middleText,{}]}>*/}
+                        {/*Nơi làm việc*/}
+                    {/*</Text>*/}
+                    {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
 
-                        <Text style={[Style.text_styles.middleText, {marginRight :10}]}>
-                            {user['userProfile']['address']}
-                        </Text>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </View>
+                        {/*<Text style={[Style.text_styles.middleText, {marginRight :10}]}>*/}
+                            {/*{user['userProfile']['address']}*/}
+                        {/*</Text>*/}
+                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                    {/*</View>*/}
 
-                </TouchableOpacity>
+                {/*</TouchableOpacity>*/}
 
                 <View style={{flexDirection : 'row', alignItems : 'center' , justifyContent:'space-between', paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
                     <Text style={[Style.text_styles.middleText,{}]}>

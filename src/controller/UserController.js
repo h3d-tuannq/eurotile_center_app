@@ -43,7 +43,28 @@ export default class UserController{
     }
 
     static onLoginSuccess(data){
-
+        try {
+            if(data){
+                console.log('data login success' + JSON.stringify(data));
+                let acess_token = data['access_token'];
+                AsyncStorage.setItem('access_token', `Bearer ${acess_token}`);
+                AsyncStorage.setItem('user_info', JSON.stringify(data));
+                AsyncStorage.setItem('email', data['email']);
+                Def.login_token = `Bearer ${acess_token}`;
+                Def.email = data['email'];
+                Def.username = data['username'];
+                Def.user_info = data;
+            }
+        } catch (err){
+            console.log('Error : ' + err);
+        }
+        // if(Def.setLoader)
+        //     Def.setLoader(false);
+        //
+        // if(Def.refreshDashBoard)
+        //     Def.refreshDashBoard();
+        //
+        // Def.mainNavigate.navigate('My');
     }
 
 

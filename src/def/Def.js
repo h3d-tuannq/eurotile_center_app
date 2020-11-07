@@ -2,7 +2,7 @@
 export default class Def{
     static URL_BASE = "https://eurotiledev.house3d.net";
     static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
-    static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com//uploads/2019/07/02/5d1aa12048236.jpg";
+    static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com/uploads/2019/07/02/5d1aa12048236.jpg";
 
     // token nhận được sau khi đăng nhập để gửi lên server lấy token user
     static firebase_token = '';
@@ -88,8 +88,7 @@ export default class Def{
     };
 
     static getAvatarUrlFromUserInfo(){
-        let rsUrl = '';
-        console.log(Def.user_info);
+        let rsUrl = Def.URL_DEFAULT_AVATAR;
         if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['avatar_path']){
             if(Def.user_info['userProfile']['avatar_base_url'] && Def.user_info['userProfile']['avatar_base_url'].length > 0) {
                 console.log("Avatar Url" + Def.user_info['userProfile']['avatar_base_url'].length);
@@ -131,4 +130,39 @@ export default class Def{
         }
         return false;
     }
+
+    static getCityItemFromUserInfo(){
+        let address = Def.getAddressFromUserInfo();
+        if (address && address['city']){
+            return address['city']
+        }
+        return null;
+
+    }
+
+    static getDistrictItemFromUserInfo(){
+        let address = Def.getAddressFromUserInfo();
+        if (address && address['district']){
+            return address['district']
+        }
+        return null;
+    }
+    static getWardItemFromUserInfo(){
+        let address = Def.getAddressFromUserInfo();
+        if (address && address['ward']){
+            return address['ward']
+        }
+        return null;
+    }
+
+    static getAddressFromUserInfo(){
+        let rs = null;
+        if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['address']){
+            rs = Def.user_info['userProfile']['address'];
+        }
+        return rs;
+    }
+
+
+
 }

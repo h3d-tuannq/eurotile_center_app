@@ -141,7 +141,6 @@ export default class Net{
                     )
                     .then(text => {
                         try {
-                            console.log(text);
                             let data = JSON.parse(text);
                             callback(data)
                         } catch (err) {

@@ -63,7 +63,7 @@ class MyScreen extends React.Component {
     }
 
     gotoPartnerInfo(){
-        this.props.navigation.navigate('My', {'screen':'partner-info'});
+        this.props.navigation.navigate('My', {'screen':'update-partner'});
     }
 
     updatePartnerInfo(){
@@ -225,6 +225,7 @@ class MyScreen extends React.Component {
             <View style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
 
                 <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginBottom: 10}}>
+
                     <View style={{flexDirection : 'row', alignItems : 'center'}}>
                         <Image  style={styles.imageStyle}  source={{uri: Def.getAvatarUrlFromUserInfo() }}  />
 
@@ -310,19 +311,19 @@ class MyScreen extends React.Component {
                     <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
-                                  onPress={this.updatePartnerInfo}
-                >
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <View style={{width :30}}>
-                            <Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                            Cập nhật Hồ sơ Partner
-                        </Text>
-                    </View>
-                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                </TouchableOpacity>
+                {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}*/}
+                                  {/*onPress={this.updatePartnerInfo}*/}
+                {/*>*/}
+                    {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
+                        {/*<View style={{width :30}}>*/}
+                            {/*<Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                        {/*</View>*/}
+                        {/*<Text style={[Style.text_styles.middleText, {marginLeft :10}]}>*/}
+                            {/*Cập nhật Hồ sơ Partner*/}
+                        {/*</Text>*/}
+                    {/*</View>*/}
+                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                {/*</TouchableOpacity>*/}
 
             </View>
         )
