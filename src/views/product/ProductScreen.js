@@ -35,7 +35,7 @@ class ProductScreen extends React.Component {
         this.refresh     = this.refresh.bind(this);
 
         this.state = {
-        collection_data: null,
+        collection_data: Def.demoData,
         stateCount: 0.0,
         configMenu: Def.config_collection_menu,
         slide_data : carouselItems,
@@ -151,24 +151,24 @@ class ProductScreen extends React.Component {
         const configMenu = Def.config_collection_menu;
         return (
             <View style={{flex:1}}>
-                <View style={Style.styles.carousel}>
-                    <Carousel
-                        ref={(c) => { this._carousel = c; }}
-                        // keyExtractor={(item, index) => `${item.id}--${item.index}`}
-                        data={this.state.slide_data}
-                        renderItem={this.renderItem}
-                        itemWidth={width}
-                        sliderWidth={width}
-                        inactiveSlideOpacity={1}
-                        inactiveSlideScale={1}
-                        activeSlideAlignment={'start'}
-                        loop={true}
-                        autoplay={true}
-                        autoplayInterval={5000}
-                        onSnapToItem={(index) => this.setState({ activeSlide: index }) }
-                    />
-                    { this.pagination }
-                </View>
+                {/*<View style={Style.styles.carousel}>*/}
+                    {/*<Carousel*/}
+                        {/*ref={(c) => { this._carousel = c; }}*/}
+                        {/*// keyExtractor={(item, index) => `${item.id}--${item.index}`}*/}
+                        {/*data={this.state.slide_data}*/}
+                        {/*renderItem={this.renderItem}*/}
+                        {/*itemWidth={width}*/}
+                        {/*sliderWidth={width}*/}
+                        {/*inactiveSlideOpacity={1}*/}
+                        {/*inactiveSlideScale={1}*/}
+                        {/*activeSlideAlignment={'start'}*/}
+                        {/*loop={true}*/}
+                        {/*autoplay={true}*/}
+                        {/*autoplayInterval={5000}*/}
+                        {/*onSnapToItem={(index) => this.setState({ activeSlide: index }) }*/}
+                    {/*/>*/}
+                    {/*{ this.pagination }*/}
+                {/*</View>*/}
 
                 <ScrollView style={{flex:1, paddingLeft:5}}>
 

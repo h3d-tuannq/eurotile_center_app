@@ -177,20 +177,41 @@ function MainTab() {
                 // item:program
             }}>
 
+            {/*<Tab.Screen*/}
+                {/*name="My"*/}
+                {/*component={MyStack}*/}
+                {/*options={(route) => {*/}
+                    {/*return false*/}
+                        {/*? {tabBarVisible: false}*/}
+                        {/*: {*/}
+                            {/*tabBarLabel: 'Cá nhân',*/}
+                            {/*tabBarIcon: ({focused, color, size}) => {*/}
+                                {/*if (focused) {*/}
+                                    {/*return <Icon name="user-circle" size={25} color={Style.DEFAUT_RED_COLOR} />*/}
+                                    {/*// return <MyProfileIconSelect style={styles.tabBarIconStyle} />;*/}
+                                {/*}*/}
+                                {/*return <Icon name="user-circle" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                            {/*},*/}
+                        {/*};*/}
+                {/*}}*/}
+            {/*/>*/}
+
+
+
             <Tab.Screen
-                name="My"
-                component={MyStack}
+                name="Product"
+                component={ProductStack}
                 options={(route) => {
                     return false
                         ? {tabBarVisible: false}
                         : {
-                            tabBarLabel: 'Cá nhân',
+                            tabBarLabel: 'Sản phẩm',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
-                                    return <Icon name="user-circle" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    return <Icon name="th" size={25} color={Style.DEFAUT_RED_COLOR} />
                                     // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
                                 }
-                                return <Icon name="user-circle" size={25} color={Style.GREY_TEXT_COLOR} />
+                                return <Icon name="th" size={25} color={Style.GREY_TEXT_COLOR} />
                             },
                         };
                 }}
@@ -215,24 +236,6 @@ function MainTab() {
                 }}
             />
 
-            <Tab.Screen
-                name="Product"
-                component={ProductStack}
-                options={(route) => {
-                    return false
-                        ? {tabBarVisible: false}
-                        : {
-                            tabBarLabel: 'Sản phẩm',
-                            tabBarIcon: ({focused, color, size}) => {
-                                if (focused) {
-                                    return <Icon name="th" size={25} color={Style.DEFAUT_RED_COLOR} />
-                                    // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
-                                }
-                                return <Icon name="th" size={25} color={Style.GREY_TEXT_COLOR} />
-                            },
-                        };
-                }}
-            />
             <Tab.Screen
                 name="News"
                 component={NewsStack}

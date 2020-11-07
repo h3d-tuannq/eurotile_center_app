@@ -16,27 +16,183 @@ const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 const carouselItems = [
     {
         id:1,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/24/1/main_img.jpg',
+        image_path : 'https://bizweb.dktcdn.net/100/125/230/themes/698647/assets/slider_3.png?1603763113314',
     },
     {
         id:2,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/30/2/main_img.jpg',
+        image_path : 'https://bizweb.dktcdn.net/100/125/230/themes/698647/assets/slider_2.png?1603763113314',
     }
 ];
 
+const demoData = {
+    'gach-op-lat' : {
+        "name_vi" : "Gạch Ốp Lát",
+        "data" : [
+            {
+                "id": 1,
+                "name": "6071",
+                "model": "6071",
+                "status": 1,
+                "image_path": "../../../assets/data/6071.jpg",
+                "sub_images": "collection/202010/03/19/collection0.jpg",
+                "description": "Gạch Ốp Lát 6071",
+                "version": null,
+                "sort": 1,
+                "category": "Gạch Ốp Lát",
+
+            },
+            {
+                "id": 2,
+                "name": "6073",
+                "model": "6073",
+                "status": 1,
+                "image_path": "../../../assets/data/6073.jpg",
+                "sub_images": "collection/202010/03/19/collection0.jpg",
+                "description": "Gạch Ốp Lát 6073",
+                "version": null,
+                "sort": 2,
+                "category": "Gạch Ốp Lát",
+
+            },
+            {
+                "id": 3,
+                "name": "8063",
+                "model": "8063",
+                "status": 1,
+                "image_path": "../../../assets/data/8063.jpg",
+                "sub_images": "collection/202010/03/19/collection0.jpg",
+                "description": "Gạch Ốp Lát 8063",
+                "version": null,
+                "sort": 1,
+                "category": "Gạch Ốp Lát",
+
+            },
+            {
+                "id": 4,
+                "name": "8064",
+                "model": "8064",
+                "status": 1,
+                "image_path": "../../../assets/data/8064.jpg",
+                "sub_images": "collection/202010/03/19/collection0.jpg",
+                "description": "Gạch Ốp Lát 8064",
+                "version": null,
+                "sort": 1,
+                "category": "Gạch Ốp Lát",
+
+            },
+        ]
+    },
+    'tbvs' : {
+        "name_vi" : "TBVS",
+        "data" : [
+            {
+                "id": 11,
+                "name": "Vòi chậu 01",
+                "model": "voichau_01",
+                "status": 1,
+                "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
+                "sub_images": "collection/202010/03/19/collection0.jpg",
+                "description": "Vòi chậu 01",
+                "version": null,
+                "sort": 1,
+                "category": "TBVS",
+
+            },
+            {
+                "id": 12,
+                "name": "3229B-WT",
+                "model": "3229B-WT",
+                "status": 1,
+                "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
+                "sub_images": "collection/202010/03/19/collection0.jpg",
+                "description": "Thiết bị vệ sinh",
+                "version": null,
+                "sort": 2,
+                "category": "TBVS",
+
+            },
+            {
+                "id": 13,
+                "name": "WP-2025",
+                "model": "WP-2025",
+                "status": 1,
+                "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
+                "sub_images": "collection/202010/03/19/collection0.jpg",
+                "description": "Thiết bị VS",
+                "version": null,
+                "sort": 1,
+                "category": "TBVS",
+
+            },
+            {
+                "id": 4,
+                "name": "WP-F525.1H",
+                "model": "WP-F525.1H",
+                "status": 1,
+                "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
+                "sub_images": "collection/202010/03/19/collection0.jpg",
+                "description": "Thiết bị VS",
+                "version": null,
+                "sort": 1,
+                "category": "TBVS",
+
+            },
+        ]
+    },
+    'Grohe' : {
+        "name_vi" : "Grohe",
+        "data" : [
+            {
+                "id": 20,
+                "name": "Talis Hansgrohe – 71403000",
+                "model": "71403000",
+                "status": 1,
+                "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/71403000-p.jpg?v=1558672167797",
+                "sub_images": "collection/202010/03/19/collection0.jpg",
+                "description": "Bộ trộn sen tắm nóng lạnh Talis Hansgrohe – 71403000",
+                "version": null,
+                "sort": 1,
+                "category": "Grohe",
+
+            },
+            {
+                "id": 21,
+                "name": "Rainfinity - 26844000",
+                "model": "26844000",
+                "status": 1,
+                "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/37-hpr01954-tif.jpg?v=1590825422163",
+                "sub_images": "collection/202010/03/19/collection0.jpg",
+                "description": "Bộ trộn Rainfinity - 26844000",
+                "version": null,
+                "sort": 2,
+                "category": "TBVS",
+
+            },
+
+        ]
+    }
+};
+
 class HomeScreen extends React.Component {
-
-
-    state = {
-        collection_data: null,
-        stateCount: 0.0,
-        configMenu: Def.config_collection_menu,
-        slide_data : carouselItems,
-        activeSlide : 0
-    };
-
     constructor(props){
         super(props);
+        Def.config_collection_menu = null;
+        Def.collection_data = Def.demoData;
+
+        // if(!Def.collection_data) {
+        //     NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
+        // }
+        if (!Def.config_collection_menu) {
+            Def.config_collection_menu = this.createConfigData(Def.collection_data);
+            // this.setState({configMenu: Def.config_news_menu});
+        }
+        this.state = {
+            collection_data: Def.demoData,
+            stateCount: 0.0,
+            configMenu: Def.config_collection_menu,
+            slide_data : carouselItems,
+            activeSlide : 0
+        };
         this.onGetCollectionSuccess     = this.onGetCollectionSuccess.bind(this);
         this.onGetCollectionFalse     = this.onGetCollectionFalse.bind(this);
         this.formatText    = this.formatText.bind(this);
@@ -44,13 +200,6 @@ class HomeScreen extends React.Component {
 
         Def.mainNavigate = this.props.navigation;
 
-        if(!Def.collection_data) {
-            NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
-        }
-        else if (!Def.config_collection_menu) {
-            Def.config_collection_menu = this.createConfigData(Def.collection_data);
-            this.setState({configMenu: Def.config_news_menu});
-        }
 
     }
 
@@ -168,6 +317,10 @@ class HomeScreen extends React.Component {
                         onSnapToItem={(index) => this.setState({ activeSlide: index }) }
                     />
                     { this.pagination }
+                </View>
+
+                <View style={{alignItems:'center', paddingVertical:8,marginBottom:2, backgroundColor:'#fff', borderColor:Style.DEFAUT_RED_COLOR, justifyContent :'center', borderBottomWidth : 2}}>
+                    <Text style={Style.text_styles.titleTextNotBold}>Sản phẩm nổi bật</Text>
                 </View>
 
                 <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >

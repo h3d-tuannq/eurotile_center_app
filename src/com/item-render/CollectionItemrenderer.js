@@ -73,7 +73,7 @@ class CollectionItemrenderer extends PureComponent{
 
 
                 {model.image_path ?
-                    <Image  style={[this.props.styleImage, styles.imageStyle ]}  source={{uri:model.image_path}}  />
+                    <Image  style={[this.props.styleImage, styles.imageStyle ]}  source={model.image_path.includes('assets') ? Def.allData[model.image_path] :{uri:model.image_path}}  />
                     :
                     <DefaultProgramImage style={styles.imageStyle} width={this.props.styleImage.width} height={this.props.styleImage.height}/>
                 }
