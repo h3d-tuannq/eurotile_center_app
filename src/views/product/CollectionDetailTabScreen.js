@@ -101,10 +101,14 @@ class CollectionDetailTabScreen extends React.Component {
                 <View style={{marginTop :0, flex:1}}>
                     {
                         this.props.tabLabel === '3D' ?
+                                <View style={{flex:1}}>
+                                    <WebView
+                                        source={{ uri: this.props.data }}
+                                    />
+                                    <TouchableOpacity style={{}}>
 
-                                <WebView
-                                    source={{ uri: this.props.data }}
-                                />
+                                    </TouchableOpacity>
+                                </View>
                             :
                         this.props.tabLabel === 'VR' ?
                                 <WebView
