@@ -34,6 +34,17 @@ class ProductScreen extends React.Component {
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
 
+        Def.config_collection_menu = null;
+        Def.collection_data = Def.demoData;
+
+        // if(!Def.collection_data) {
+        //     NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
+        // }
+        if (!Def.config_collection_menu) {
+            Def.config_collection_menu = this.createConfigData(Def.collection_data);
+            // this.setState({configMenu: Def.config_news_menu});
+        }
+
         this.state = {
         collection_data: Def.demoData,
         stateCount: 0.0,
@@ -41,16 +52,17 @@ class ProductScreen extends React.Component {
         slide_data : carouselItems,
         activeSlide : 0,
     };
+        console.log('Json-Data : ' + JSON.stringify(Def.config_collection_menu));
 
         Def.mainNavigate = this.props.navigation;
 
-        if(!Def.collection_data) {
-            NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
-        }
-        else if (!Def.config_collection_menu) {
-            Def.config_collection_menu = this.createConfigData(Def.collection_data);
-            this.setState({configMenu: Def.config_news_menu});
-        }
+        // if(!Def.collection_data) {
+        //     NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
+        // }
+        // else if (!Def.config_collection_menu) {
+        //     Def.config_collection_menu = this.createConfigData(Def.collection_data);
+        //     this.setState({configMenu: Def.config_news_menu});
+        // }
 
     }
 
