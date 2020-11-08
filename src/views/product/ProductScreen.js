@@ -26,6 +26,8 @@ const carouselItems = [
     }
 ];
 
+
+
 class ProductScreen extends React.Component {
     constructor(props){
         super(props);

@@ -3,6 +3,9 @@ export default class Def {
     static URL_BASE = "https://eurotiledev.house3d.net";
     static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
     static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com/uploads/2019/07/02/5d1aa12048236.jpg";
+    static URL_DEFAULT_VR = "https://vr.house3d.com/web/panorama-player/H00171609";
+    static URL_DEFAULT_3D = "https://3dplayer.house3d.net/rangdong/?file=41712000";
+
 
     // token nhận được sau khi đăng nhập để gửi lên server lấy token user
     static firebase_token = '';
@@ -69,11 +72,14 @@ export default class Def {
                     "model": "6071",
                     "status": 1,
                     "image_path": "../../../assets/data/6071.jpg",
-                    "sub_images": "collection/202010/03/19/collection0.jpg",
+                    "sub_images": "",
                     "description": "Gạch Ốp Lát 6071",
                     "version": null,
                     "sort": 1,
                     "category": "Gạch Ốp Lát",
+                    'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
+                    'url_vr':this.URL_DEFAULT_VR,
+                    'price' : 1000000
 
                 },
                 {
@@ -82,11 +88,14 @@ export default class Def {
                     "model": "6073",
                     "status": 1,
                     "image_path": "../../../assets/data/6073.jpg",
-                    "sub_images": "collection/202010/03/19/collection0.jpg",
+                    "sub_images": "",
+                    'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
+                    'url_vr':this.URL_DEFAULT_VR,
                     "description": "Gạch Ốp Lát 6073",
                     "version": null,
                     "sort": 2,
                     "category": "Gạch Ốp Lát",
+                    'price' : 1000000
 
                 },
                 {
@@ -95,11 +104,14 @@ export default class Def {
                     "model": "8063",
                     "status": 1,
                     "image_path": "../../../assets/data/8063.jpg",
-                    "sub_images": "collection/202010/03/19/collection0.jpg",
+                    "sub_images": "",
+                    'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
+                    'url_vr':this.URL_DEFAULT_VR,
                     "description": "Gạch Ốp Lát 8063",
                     "version": null,
                     "sort": 1,
                     "category": "Gạch Ốp Lát",
+                    'price' : 1000000
 
                 },
                 {
@@ -108,11 +120,14 @@ export default class Def {
                     "model": "8064",
                     "status": 1,
                     "image_path": "../../../assets/data/8064.jpg",
-                    "sub_images": "collection/202010/03/19/collection0.jpg",
+                    "sub_images": "",
+                    'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
+                    'url_vr': this.URL_DEFAULT_VR,
                     "description": "Gạch Ốp Lát 8064",
                     "version": null,
                     "sort": 1,
                     "category": "Gạch Ốp Lát",
+                    'price' : 1000000
 
                 },
             ]
@@ -126,11 +141,14 @@ export default class Def {
                     "model": "voichau_01",
                     "status": 1,
                     "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
-                    "sub_images": "collection/202010/03/19/collection0.jpg",
+                    "sub_images": "",
+                    'url_3d':this.URL_DEFAULT_3D,
+                    'url_vr':this.URL_DEFAULT_VR,
                     "description": "Vòi chậu 01",
                     "version": null,
                     "sort": 1,
                     "category": "TBVS",
+                    'price' : 2000000
 
                 },
                 {
@@ -139,11 +157,14 @@ export default class Def {
                     "model": "3229B-WT",
                     "status": 1,
                     "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
-                    "sub_images": "collection/202010/03/19/collection0.jpg",
+                    "sub_images": "",
+                    'url_3d':this.URL_DEFAULT_3D,
+                    'url_vr':this.URL_DEFAULT_VR,
                     "description": "Thiết bị vệ sinh",
                     "version": null,
                     "sort": 2,
                     "category": "TBVS",
+                    'price' : 2000000
 
                 },
                 {
@@ -152,11 +173,14 @@ export default class Def {
                     "model": "WP-2025",
                     "status": 1,
                     "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
-                    "sub_images": "collection/202010/03/19/collection0.jpg",
+                    "sub_images": "",
+                    'url_3d':Def.URL_DEFAULT_3D,
+                    'url_vr':this.URL_DEFAULT_VR,
                     "description": "Thiết bị VS",
                     "version": null,
                     "sort": 1,
                     "category": "TBVS",
+                    'price' : 2000000
 
                 },
                 {
@@ -165,11 +189,14 @@ export default class Def {
                     "model": "WP-F525.1H",
                     "status": 1,
                     "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
-                    "sub_images": "collection/202010/03/19/collection0.jpg",
+                    "sub_images": "",
+                    'url_3d':Def.URL_DEFAULT_3D,
+                    'url_vr':Def.URL_DEFAULT_VR,
                     "description": "Thiết bị VS",
                     "version": null,
                     "sort": 1,
                     "category": "TBVS",
+                    'price' : 2000000
 
                 },
             ]
@@ -183,11 +210,14 @@ export default class Def {
                     "model": "71403000",
                     "status": 1,
                     "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/71403000-p.jpg?v=1558672167797",
-                    "sub_images": "collection/202010/03/19/collection0.jpg",
+                    "sub_images": "",
+                    'url_3d':Def.URL_DEFAULT_3D,
+                    'url_vr':Def.URL_DEFAULT_VR,
                     "description": "Bộ trộn sen tắm nóng lạnh Talis Hansgrohe – 71403000",
                     "version": null,
                     "sort": 1,
                     "category": "Grohe",
+                    'price' : 10000000
 
                 },
                 {
@@ -196,11 +226,14 @@ export default class Def {
                     "model": "26844000",
                     "status": 1,
                     "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/37-hpr01954-tif.jpg?v=1590825422163",
-                    "sub_images": "collection/202010/03/19/collection0.jpg",
+                    "sub_images": "",
+                    'url_3d':Def.URL_DEFAULT_3D,
+                    'url_vr':Def.URL_DEFAULT_VR,
                     "description": "Bộ trộn Rainfinity - 26844000",
                     "version": null,
                     "sort": 2,
                     "category": "TBVS",
+                    'price' : 10000000
 
                 },
 
