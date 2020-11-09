@@ -3,7 +3,7 @@ import {PixelRatio, StyleSheet, Dimensions} from 'react-native'
 const {width, height} = Dimensions.get('window');
 
 export default class Style{
-    static HEADER_HEIGHT = PixelRatio.get() < 2? 36 :37;
+    static HEADER_HEIGHT = PixelRatio.get() < 2? 46 :47;
     static TITLE_SIZE = PixelRatio.get() < 2 ? 15 :17;
     static MIDLE_SIZE = PixelRatio.get() < 2 ? 13 :14;
     static NORMAL_SIZE = PixelRatio.get() < 2 ? 11 :12;
@@ -19,6 +19,10 @@ export default class Style{
     static DRAWER_MENU_SIZE = PixelRatio.get() < 2? 36 :38;
 
     static DRAWER_MENU_ICON_SIZE = PixelRatio.get() < 2 ? 25 :27;
+
+    static LOGO_WIDTH = PixelRatio.get() < 2 ? 118 :120;
+
+    static LOGO_HEIGHT = PixelRatio.get() < 2 ? 30 :31;
 
     static BACK_ICON_SIZE = PixelRatio.get() < 2? 22 :24;
 

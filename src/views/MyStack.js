@@ -6,7 +6,10 @@ import SignInScreen from './user/SignIn'
 import SignUpScreen from './user/SignUp'
 // import ForgetPassScreen from './user/ForgetPassword'
 
-import MenuIcon from '../../assets/icon/menu.svg';
+import MenuIcon from '../../assets/icons/expand.svg';
+
+import EurotileLogo from '../../assets/icons/Logo w.svg'
+
 import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
 
@@ -30,15 +33,35 @@ class MyStack extends React.Component {
             <RootStack.Navigator>
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="my-screen" component={MyScreen} options={{
-                    title: 'Dashboard',
+                     title: null,
                     headerLeft: () => (
                         <TouchableOpacity
                             style=  {
                                 {
-                                    width: Style.DRAWER_MENU_SIZE,
+                                    width: Style.LOGO_WIDTH + 20,
                                     height:Style.DRAWER_MENU_SIZE,
                                     justifyContent: 'center',
                                     paddingLeft:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            <EurotileLogo
+                                width={Style.LOGO_WIDTH}
+                                height={Style.LOGO_HEIGHT}
+                            />
+                        </TouchableOpacity>
+
+                    ),
+
+                    headerRight: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.DRAWER_MENU_SIZE,
+                                    height: Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingRight:15 ,
                                     alignItems : 'center'
                                 }
                             }
@@ -50,13 +73,14 @@ class MyStack extends React.Component {
                         </TouchableOpacity>
 
                     ),
+
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
                     headerTitleStyle: {
-                        // fontWeight: 'bold',
+                        alignSelf: 'center'
                     },
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
@@ -72,6 +96,7 @@ class MyStack extends React.Component {
                     headerTintColor: '#fff',
                     headerTitleStyle: {
                         // fontWeight: 'bold',
+
                     },
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />

@@ -25,6 +25,18 @@ import PolicyIcon from './assets/icon/icon-policy.svg';
 import GuideIcon from './assets/icon/icon-how-to-use.svg'
 import RuleIcon from './assets/icon/icon-rule.svg';
 
+import UserProfileSelectedIcon from './assets/icons/User b.svg';
+import UserProfileIcon from './assets/icons/user.svg';
+
+import NewsSelectedIcon from './assets/icons/News b.svg';
+import NewsIcon from './assets/icons/News.svg';
+
+import TileSelectedIcon from './assets/icons/Tile b.svg';
+import TileIcon from './assets/icons/Tile.svg';
+
+import GallerySelectedIcon from './assets/icons/List b.svg';
+import GalleryIcon from './assets/icons/list.svg';
+
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 const myIcon = <Icon name="far fa-user-circle" size={30} />;
@@ -187,10 +199,11 @@ function MainTab() {
                             tabBarLabel: 'Cá nhân',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
-                                    return <Icon name="user-circle" size={25} color={Style.DEFAUT_RED_COLOR} />
-                                    // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
+                                    // return <Icon name="user-circle" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    return <UserProfileSelectedIcon style={styles.tabBarIconStyle} />;
                                 }
-                                return <Icon name="user-circle" size={25} color={Style.GREY_TEXT_COLOR} />
+                                // return <Icon name="user-circle" size={25} color={Style.GREY_TEXT_COLOR} />
+                                return <UserProfileIcon style={styles.tabBarIconStyle} />;
                             },
                         };
                 }}
@@ -206,10 +219,10 @@ function MainTab() {
                             tabBarLabel: 'Trang chủ',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
-                                    return <Icon name="home" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    return <GallerySelectedIcon style={styles.tabBarIconStyle} />;
                                     // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
                                 }
-                                return <Icon name="home" size={25} color={Style.GREY_TEXT_COLOR} />
+                                return <GalleryIcon style={styles.tabBarIconStyle} />;
                             },
                         };
                 }}
@@ -225,10 +238,11 @@ function MainTab() {
                             tabBarLabel: 'Sản phẩm',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
+                                    return <TileSelectedIcon style={styles.tabBarIconStyle} />;
                                     return <Icon name="th" size={25} color={Style.DEFAUT_RED_COLOR} />
                                     // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
                                 }
-                                return <Icon name="th" size={25} color={Style.GREY_TEXT_COLOR} />
+                                return <TileIcon style={styles.tabBarIconStyle} />;
                             },
                         };
                 }}
@@ -243,10 +257,10 @@ function MainTab() {
                             tabBarLabel: 'Tin tức',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
-                                    return <Icon name="newspaper" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    return <NewsSelectedIcon style={styles.tabBarIconStyle} />;
                                     // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
                                 }
-                                return <Icon name="newspaper" size={25} color={Style.GREY_TEXT_COLOR} />
+                                return <NewsIcon style={styles.tabBarIconStyle} />;
                             },
                         };
                 }}
