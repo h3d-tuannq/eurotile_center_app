@@ -1,6 +1,7 @@
 import React from 'react'
 import {Text, View, Button, TouchableOpacity} from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import SignInScreen from './user/SignIn'
 import SignUpScreen from './user/SignUp'
@@ -11,6 +12,7 @@ import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
 
 import HomeScreen from './home/HomeScreen'
+import Def from "../def/Def";
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
@@ -44,6 +46,22 @@ class HomeStack extends React.Component {
                                 width={Style.DRAWER_MENU_ICON_SIZE}
                                 height={Style.DRAWER_MENU_ICON_SIZE}
                             />
+                        </TouchableOpacity>
+
+                    ),
+                    headerRight: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.DRAWER_MENU_SIZE,
+                                    height: Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingRight:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={() => Def.showScanQrCode()}>
+                            <Icon name="qrcode" size={25} color={Style.DEFAUT_WHITE_COLOR} />
                         </TouchableOpacity>
 
                     ),

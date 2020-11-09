@@ -7,7 +7,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     Dimensions,Button,
-    Alert,StatusBar, PixelRatio
+    Alert,StatusBar, PixelRatio, Modal
 
 } from 'react-native';
 
@@ -514,9 +514,11 @@ messaging().onMessage(async (remoteMessage) => {
     );
 });
 
+import ScanQrComponent from "./src/com/common/ScanQrComponent";
 
 export default class App extends Component {
     state = {
+        scanQrCode: false,
     };
 
 
@@ -550,11 +552,20 @@ export default class App extends Component {
                  Def.email = Def.user_info['email'];
              }
         });
+        this.closeFunction = this.closeFunction.bind(this);
+        this.showScanQrCode = this.showScanQrCode.bind(this);
+        Def.showScanQrCode = this.showScanQrCode;
+        Def.closeQrCode = this.closeFunction;
+
 
         UserController.requestUserPermission();
         // if(!Def.news_data){
         // }
 
+    }
+
+    showScanQrCode(){
+        this.setState({scanQrCode : true});
     }
 
     onNewSuccess(data){
@@ -574,12 +585,20 @@ export default class App extends Component {
     componentDidMount() {
     }
 
+    closeFunction() {
+        this.setState({scanQrCode: false});
+    }
+
 
     render() {
         return (
             <NavigationContainer>
                 <StatusBar backgroundColor={Style.DEFAUT_BLUE_COLOR} />
+                {/*{ this.state.scanBarCode ? <ScanQrComponent/> :<View/>}*/}
                 <AppDrawer />
+                <Modal onRequestClose={() => {this.closeFunction(null)}} visible={this.state.scanQrCode}  transparent={false} styles={{backgroundColor : 'green'}} >
+                        <ScanQrComponent/>
+                </Modal>
             </NavigationContainer>
         );
 

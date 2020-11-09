@@ -11,6 +11,7 @@ export default class Style{
     static BIG_SIZE = PixelRatio.get() < 2 ? 17 :19;
     static DEFAUT_RED_COLOR = '#AD2428';
     static DEFAUT_BLUE_COLOR = '#305E74';
+    static DEFAUT_WHITE_COLOR = '#ffffff';
 
     static GREY_TEXT_COLOR = '#b3b3b3';
     static GREY_BACKGROUND_COLOR = "#e6e6e6";

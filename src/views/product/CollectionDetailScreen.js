@@ -107,7 +107,7 @@ class CollectionDetailScreen extends React.Component {
         var configData = [];
         if(data){
             if(data.url_3d){
-                configData.push({key: '3D', type:'3D' ,name_vi:"3D", hidden:0, data:data["url_3d"]});
+                configData.push({key: '3D', type:'3D' ,name_vi:"3D", hidden:0, data:{url_3d:data["url_3d"], url_ar:data["url_ar"]}});
             }
             if(data.url_vr){
                 configData.push({key: 'VR', type:'VR' ,name_vi:"VR", hidden:0, data:data["url_vr"]});
@@ -215,7 +215,7 @@ class CollectionDetailScreen extends React.Component {
 
                     {/*}*/}
 
-                    <ScrollableTabView    tabBarPosition={"bottom"} style={{height: height/3}} renderTabBar={() => <MyCustomizeTabBar style={{borderTopWidth:1, borderTopColor : Style.GREY_TEXT_COLOR}} navigation={navigation} />}  >
+                    <ScrollableTabView  locked={false}   tabBarPosition={"bottom"} style={{height: height/3}} renderTabBar={() => <MyCustomizeTabBar style={{borderTopWidth:1, borderTopColor : Style.GREY_TEXT_COLOR}} navigation={navigation} />}  >
                         {
                             configMenu && Object.entries(configMenu).map((prop, key) => {
                                 console.log("Props Item: " + JSON.stringify(prop));

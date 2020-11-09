@@ -62,6 +62,9 @@ export default class Def {
         '../../../assets/data/8064.jpg': require('../../assets/data/8064.jpg')
     };
 
+    static showScanQrCode = null;
+    static closeQrCode = null;
+
     static demoData = {
         'gach-op-lat' : {
             "name_vi" : "Gạch Ốp Lát",
@@ -79,6 +82,7 @@ export default class Def {
                     "category": "Gạch Ốp Lát",
                     'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
                     'url_vr':this.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
                     'price' : 1000000
 
                 },
@@ -91,6 +95,7 @@ export default class Def {
                     "sub_images": "",
                     'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
                     'url_vr':this.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
                     "description": "Gạch Ốp Lát 6073",
                     "version": null,
                     "sort": 2,
@@ -107,6 +112,7 @@ export default class Def {
                     "sub_images": "",
                     'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
                     'url_vr':this.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
                     "description": "Gạch Ốp Lát 8063",
                     "version": null,
                     "sort": 1,
@@ -123,6 +129,7 @@ export default class Def {
                     "sub_images": "",
                     'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
                     'url_vr': this.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
                     "description": "Gạch Ốp Lát 8064",
                     "version": null,
                     "sort": 1,
@@ -140,10 +147,11 @@ export default class Def {
                     "name": "Vòi chậu 01",
                     "model": "voichau_01",
                     "status": 1,
-                    "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
+                    "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/46.jpg?v=1561356858120",
                     "sub_images": "",
                     'url_3d':this.URL_DEFAULT_3D,
                     'url_vr':this.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
                     "description": "Vòi chậu 01",
                     "version": null,
                     "sort": 1,
@@ -156,11 +164,12 @@ export default class Def {
                     "name": "3229B-WT",
                     "model": "3229B-WT",
                     "status": 1,
-                    "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
+                    "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/acacia-evolution-back-to-wall-toilet-image-600x600.jpg?v=1545707591767",
                     "sub_images": "",
                     'url_3d':this.URL_DEFAULT_3D,
                     'url_vr':this.URL_DEFAULT_VR,
-                    "description": "Thiết bị vệ sinh",
+                    'url_ar':this.URL_DEFAULT_3D,
+                    "description": "Acacia Evolution - Bộ cầu đăt sàn Acacia E ko nắp",
                     "version": null,
                     "sort": 2,
                     "category": "TBVS",
@@ -172,11 +181,12 @@ export default class Def {
                     "name": "WP-2025",
                     "model": "WP-2025",
                     "status": 1,
-                    "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
+                    "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/wp-2025.jpg?v=1561347431797",
                     "sub_images": "",
                     'url_3d':Def.URL_DEFAULT_3D,
                     'url_vr':this.URL_DEFAULT_VR,
-                    "description": "Thiết bị VS",
+                    'url_ar':this.URL_DEFAULT_3D,
+                    "description": "BÀN CẦU AMERICAN STANDARD WP-2025",
                     "version": null,
                     "sort": 1,
                     "category": "TBVS",
@@ -188,10 +198,11 @@ export default class Def {
                     "name": "WP-F525.1H",
                     "model": "WP-F525.1H",
                     "status": 1,
-                    "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
+                    "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/1-3.jpg?v=1561348745447",
                     "sub_images": "",
                     'url_3d':Def.URL_DEFAULT_3D,
                     'url_vr':Def.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
                     "description": "Thiết bị VS",
                     "version": null,
                     "sort": 1,
@@ -213,6 +224,7 @@ export default class Def {
                     "sub_images": "",
                     'url_3d':Def.URL_DEFAULT_3D,
                     'url_vr':Def.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
                     "description": "Bộ trộn sen tắm nóng lạnh Talis Hansgrohe – 71403000",
                     "version": null,
                     "sort": 1,
@@ -229,6 +241,7 @@ export default class Def {
                     "sub_images": "",
                     'url_3d':Def.URL_DEFAULT_3D,
                     'url_vr':Def.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
                     "description": "Bộ trộn Rainfinity - 26844000",
                     "version": null,
                     "sort": 2,
@@ -246,6 +259,42 @@ export default class Def {
     static collection_detail_menu = null;
 
     static refreshDashBoard = null;
+
+    static getProductById(id){
+        var rs = null;
+        if(Def.demoData){
+            Object.entries(Def.demoData).map((cate, key) => {
+                // console.log(JSON.stringify(cate[1].data));
+                Object.entries(cate[1].data).map((product, index) => {
+                    console.log(product[1].id + " " + id );
+                    if(rs === null && product && product[1].id == id){
+                        console.log('Bằng');
+                        rs =  product[1];
+                    }
+                })
+            });
+        }
+        if (rs) {
+            return rs;
+        }
+        console.log(id);
+        return {
+            "id": 11,
+            "name": "Vòi chậu 01",
+            "model": "voichau_01",
+            "status": 1,
+            "image_path": "https://eurotiledev.house3d.net/data/eurotileData/collection/202010/03/19/main_img.jpg",
+            "sub_images": "",
+            'url_3d':this.URL_DEFAULT_3D,
+            'url_vr':'https://caominhgroup.vn/wp-f525-1h',
+            "description": "Vòi chậu 01",
+            "version": null,
+            "sort": 1,
+            "category": "TBVS",
+            'price' : 2000000
+
+        };
+    }
 
 
 

@@ -41,8 +41,10 @@ class CollectionDetailTabScreen extends React.Component {
         this.state = {
             // collection_data: null,
             slide_data : this.props.tabLabel === '2D' ? this.props.data : carouselItems,
+            ar_3d_uri: this.props.tabLabel === '3D' ? this.props.data['url_3d'] : '',
             activeSlide : 0,
         };
+        this.goToAr = this.goToAr.bind(this);
     }
 
     // itemClick(item){
@@ -51,6 +53,11 @@ class CollectionDetailTabScreen extends React.Component {
     //     this.props.navigation.navigate(screen, { item:item});
     //
     // }
+
+    goToAr(){
+        this.setState({ar_3d_uri:this.props.data['url_ar']});
+        console.log("Uri : "  + this.props.data['url_ar']);
+    }
 
     get pagination () {
         const { slide_data, activeSlide } = this.state;
@@ -81,7 +88,7 @@ class CollectionDetailTabScreen extends React.Component {
         return (
             <View key={index} style={[Style.styles.cardStyle, {height: height/3}]}>
                 <TouchableOpacity >
-                    <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch', height: height/3}]} source={Def.allData[item.image_path]} />
+                    <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch', height: height/3}]} source={item.image_path.includes('assets') ? Def.allData[item.image_path] : {uri:item.image_path}} />
                 </TouchableOpacity>
             </View>
         );
@@ -103,35 +110,40 @@ class CollectionDetailTabScreen extends React.Component {
                         this.props.tabLabel === '3D' ?
                                 <View style={{flex:1}}>
                                     <WebView
-                                        source={{ uri: this.props.data }}
+                                        source={{ uri: this.state.ar_3d_uri}}
                                     />
-                                    <TouchableOpacity style={{}}>
-
+                                    <TouchableOpacity style={{position:'absolute', right: 20, bottom : 60, zIndex : 5}} onPress={this.goToAr}>
+                                              <Text style={Style.text_styles.titleText}>
+                                                  AR
+                                              </Text>
                                     </TouchableOpacity>
                                 </View>
                             :
-                        this.props.tabLabel === 'VR' ?
+                            this.props.tabLabel === 'VR' ?
                                 <WebView
                                     source={{ uri: this.props.data }}
                                 />
                             :
                                  <View style={Style.styles.carousel}>
-                                     <Carousel
-                                         ref={(c) => { this._carousel = c; }}
-                                         // keyExtractor={(item, index) => `${item.id}--${item.index}`}
-                                         data={this.props.data}
-                                         renderItem={this.renderItem}
-                                         itemWidth={width}
-                                         sliderWidth={width}
-                                         inactiveSlideOpacity={1}
-                                         inactiveSlideScale={1}
-                                         activeSlideAlignment={'start'}
-                                         loop={true}
-                                         autoplay={true}
-                                         autoplayInterval={5000}
-                                         onSnapToItem={(index) => this.setState({ activeSlide: index }) }
-                                     />
-                                     { this.pagination }
+                                     {
+                                         <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch', height: height/3}]} source={this.props.data[0].image_path.includes('assets') ? Def.allData[this.props.data[0].image_path] : {uri:this.props.data[0].image_path}} />
+                                     }
+                                     {/*<Carousel*/}
+                                         {/*ref={(c) => { this._carousel = c; }}*/}
+                                         {/*// keyExtractor={(item, index) => `${item.id}--${item.index}`}*/}
+                                         {/*data={this.props.data}*/}
+                                         {/*renderItem={this.renderItem}*/}
+                                         {/*itemWidth={width}*/}
+                                         {/*sliderWidth={width}*/}
+                                         {/*inactiveSlideOpacity={1}*/}
+                                         {/*inactiveSlideScale={1}*/}
+                                         {/*activeSlideAlignment={'start'}*/}
+                                         {/*loop={true}*/}
+                                         {/*autoplay={true}*/}
+                                         {/*autoplayInterval={5000}*/}
+                                         {/*onSnapToItem={(index) => this.setState({ activeSlide: index }) }*/}
+                                     {/*/>*/}
+                                     {/*{ this.pagination }*/}
                                  </View>
                     }
                 </View>

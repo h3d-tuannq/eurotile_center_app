@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import MenuIcon from '../../assets/icon/menu.svg';
 import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
@@ -22,6 +23,7 @@ const RootStack = createStackNavigator();
 
 import NewsScreen from './news/NewsScreen';
 import NewsDetail from './news/NewsDetailScreen';
+import Def from "../def/Def";
 
 // function NewsDetailScreen({navigation} ) {
 //     return (
@@ -65,6 +67,22 @@ class NewsStack extends React.Component {
                         </TouchableOpacity>
 
                     ),
+                    headerRight: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.DRAWER_MENU_SIZE,
+                                    height: Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingRight:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={() => Def.showScanQrCode()}>
+                            <Icon name="qrcode" size={25} color={Style.DEFAUT_WHITE_COLOR} />
+                        </TouchableOpacity>
+
+                    ),
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
@@ -84,6 +102,22 @@ class NewsStack extends React.Component {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
                     },
+                    headerRight: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.DRAWER_MENU_SIZE,
+                                    height: Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingRight:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={() => Def.showScanQrCode()}>
+                            <Icon name="qrcode" size={25} color={Style.DEFAUT_WHITE_COLOR} />
+                        </TouchableOpacity>
+
+                    ),
                     headerTintColor: '#fff',
                     headerTitleStyle: {
                     },

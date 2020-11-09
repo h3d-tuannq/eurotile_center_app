@@ -12,6 +12,8 @@ import Style from "../../src/def/Style";
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import Def from "../../src/def/Def"
 
 class ProductStack extends React.Component {
     constructor(props){
@@ -43,6 +45,22 @@ class ProductStack extends React.Component {
                         </TouchableOpacity>
 
                     ),
+                    headerRight: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.DRAWER_MENU_SIZE,
+                                    height: Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingRight:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={() => Def.showScanQrCode()}>
+                            <Icon name="qrcode" size={25} color={Style.DEFAUT_WHITE_COLOR} />
+                        </TouchableOpacity>
+
+                    ),
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
@@ -67,6 +85,22 @@ class ProductStack extends React.Component {
                     headerTitleStyle: {
                         fontWeight: 'bold',
                     },
+                        headerRight: () => (
+                            <TouchableOpacity
+                                style=  {
+                                    {
+                                        width: Style.DRAWER_MENU_SIZE,
+                                        height: Style.DRAWER_MENU_SIZE,
+                                        justifyContent: 'center',
+                                        paddingRight:15 ,
+                                        alignItems : 'center'
+                                    }
+                                }
+                                onPress={() => Def.showScanQrCode()}>
+                                <Icon name="qrcode" size={25} color={Style.DEFAUT_WHITE_COLOR} />
+                            </TouchableOpacity>
+
+                        ),
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
