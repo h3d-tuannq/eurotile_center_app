@@ -7,7 +7,7 @@ import {
     Dimensions,
     ScrollView,
     FlatList,
-    Platform,
+    Platform,Linking,
     TouchableOpacity, Image,
 } from 'react-native';
 import Style from "../../../src/def/Style";
@@ -15,6 +15,7 @@ import { WebView } from 'react-native-webview';
 import Def from '../../def/Def';
 import Carousel from 'react-native-snap-carousel';
 import Pagination from 'react-native-snap-carousel/src/pagination/Pagination';
+import SendIntentAndroid from 'react-native-send-intent'
 
 
 const {width, height} = Dimensions.get('window');
@@ -128,11 +129,12 @@ class CollectionDetailTabScreen extends React.Component {
         // redirect somewhere else
         if (url.includes('google.com')) {
             const newURL = 'https://reactnative.dev/';
-            const redirectTo = 'window.location = "' + newURL + '"';
-            this.webview.injectJavaScript(redirectTo);
+            console.log("Url : " + url);
+            // const redirectTo = 'window.location = "' + newURL + '"';
+            // this.webview.injectJavaScript(redirectTo);
         }
     };
-}
+
 
 
     render() {
@@ -151,10 +153,16 @@ class CollectionDetailTabScreen extends React.Component {
                                 <View style={{flex:1}}>
                                     <WebView
                                         source={{ uri: this.state.ar_3d_uri}}
-                                        allowFileAccess={true}
-                                        scalesPageToFit={true}
-                                        originWhitelist={['*']}
-                                        onNavigationStateChange={this.handleWebViewNavigationStateChange}
+                                        originWhitelist={['intent://*']}
+                                        onShouldStartLoadWithRequest={event => {
+                                            if (event.url.includes('arvr.google.com')) {
+                                                SendIntentAndroid.openChromeIntent((event.url));
+                                                return false
+                                            } else {
+                                                return true
+                                            }
+
+                                        }}
 
                                     />
                                     {/*<TouchableOpacity style={{position:'absolute', right: 20, bottom : 60, zIndex : 5}} onPress={this.goToAr}>*/}
