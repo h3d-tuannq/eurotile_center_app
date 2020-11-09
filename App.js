@@ -13,6 +13,7 @@ import {
 
 import AsyncStorage from '@react-native-community/async-storage'
 import RNRestart from 'react-native-restart';
+import SplashScreen from 'react-native-splash-screen';
 
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -583,6 +584,7 @@ export default class App extends Component {
     }
 
     componentDidMount() {
+        // SplashScreen.hide();
     }
 
 
