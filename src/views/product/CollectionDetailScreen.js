@@ -185,7 +185,7 @@ class CollectionDetailScreen extends React.Component {
         const configMenu = Def.collection_detail_menu;
         return (
             <View style={{flex:1}}>
-                <View style={{height:height/3}}>
+                <View style={{height:height/1.5}}>
                     {/*{*/}
                         {/*! (this.state.item.model === 'SIG.P-01' || this.props.route.params.item.model === 'SIG.P-02') ?*/}
 
@@ -215,7 +215,7 @@ class CollectionDetailScreen extends React.Component {
 
                     {/*}*/}
 
-                    <ScrollableTabView  locked={false}   tabBarPosition={"bottom"} style={{height: height/3}} renderTabBar={() => <MyCustomizeTabBar style={{borderTopWidth:1, borderTopColor : Style.GREY_TEXT_COLOR}} navigation={navigation} />}  >
+                    <ScrollableTabView  locked={false}   tabBarPosition={"bottom"} style={{height: height/2}} renderTabBar={() => <MyCustomizeTabBar style={{borderTopWidth:1, borderTopColor : Style.GREY_TEXT_COLOR}} navigation={navigation} />}  >
                         {
                             configMenu && Object.entries(configMenu).map((prop, key) => {
                                 console.log("Props Item: " + JSON.stringify(prop));

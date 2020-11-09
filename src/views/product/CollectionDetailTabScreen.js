@@ -45,6 +45,7 @@ class CollectionDetailTabScreen extends React.Component {
             activeSlide : 0,
         };
         this.goToAr = this.goToAr.bind(this);
+        this.handleWebViewNavigationStateChange = this.handleWebViewNavigationStateChange.bind(this);
     }
 
     // itemClick(item){
@@ -95,6 +96,45 @@ class CollectionDetailTabScreen extends React.Component {
 
     }
 
+    handleWebViewNavigationStateChange = (newNavState) => {
+        // newNavState looks something like this:
+        // {
+        //   url?: string;
+        //   title?: string;
+        //   loading?: boolean;
+        //   canGoBack?: boolean;
+        //   canGoForward?: boolean;
+        // }
+        const { url } = newNavState;
+        if (!url) return;
+
+        // handle certain doctypes
+        if (url.includes('.pdf')) {
+            this.webview.stopLoading();
+            // open a modal with the PDF viewer
+        }
+
+        // one way to handle a successful form submit is via query strings
+        if (url.includes('?message=success')) {
+            this.webview.stopLoading();
+            // maybe close this view?
+        }
+
+        // one way to handle errors is via query string
+        if (url.includes('?errors=true')) {
+            this.webview.stopLoading();
+        }
+
+        // redirect somewhere else
+        if (url.includes('google.com')) {
+            const newURL = 'https://reactnative.dev/';
+            const redirectTo = 'window.location = "' + newURL + '"';
+            this.webview.injectJavaScript(redirectTo);
+        }
+    };
+}
+
+
     render() {
         const {navigation} = this.props;
         console.log("Props Data" + JSON.stringify(this.props.data));
@@ -111,12 +151,17 @@ class CollectionDetailTabScreen extends React.Component {
                                 <View style={{flex:1}}>
                                     <WebView
                                         source={{ uri: this.state.ar_3d_uri}}
+                                        allowFileAccess={true}
+                                        scalesPageToFit={true}
+                                        originWhitelist={['*']}
+                                        onNavigationStateChange={this.handleWebViewNavigationStateChange}
+
                                     />
-                                    <TouchableOpacity style={{position:'absolute', right: 20, bottom : 60, zIndex : 5}} onPress={this.goToAr}>
-                                              <Text style={Style.text_styles.titleText}>
-                                                  AR
-                                              </Text>
-                                    </TouchableOpacity>
+                                    {/*<TouchableOpacity style={{position:'absolute', right: 20, bottom : 60, zIndex : 5}} onPress={this.goToAr}>*/}
+                                              {/*<Text style={Style.text_styles.titleText}>*/}
+                                                  {/*AR*/}
+                                              {/*</Text>*/}
+                                    {/*</TouchableOpacity>*/}
                                 </View>
                             :
                             this.props.tabLabel === 'VR' ?
@@ -126,7 +171,7 @@ class CollectionDetailTabScreen extends React.Component {
                             :
                                  <View style={Style.styles.carousel}>
                                      {
-                                         <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch', height: height/3}]} source={this.props.data[0].image_path.includes('assets') ? Def.allData[this.props.data[0].image_path] : {uri:this.props.data[0].image_path}} />
+                                         <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch', height: height/2}]} source={this.props.data[0].image_path.includes('assets') ? Def.allData[this.props.data[0].image_path] : {uri:this.props.data[0].image_path}} />
                                      }
                                      {/*<Carousel*/}
                                          {/*ref={(c) => { this._carousel = c; }}*/}
@@ -157,7 +202,7 @@ class CollectionDetailTabScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        height : height/3,
+        height : height/2,
         // paddingLeft: 15,
         // justifyContent: 'flex-start',
         // marginVertical : 5,
