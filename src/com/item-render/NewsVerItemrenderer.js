@@ -50,7 +50,7 @@ class NewsVerItemrenderer extends PureComponent{
                     <View style={styles.info}>
                         <Text style={styles.titleInfo}>{model.title}</Text>
                         <View style={styles.listenView}>
-                            <Text style={{fontSize:Style.MIDLE_SIZE, color:Style.GREY_TEXT_COLOR , paddingTop:5, paddingRight:5}}>{model.created_at}
+                            <Text style={{fontSize:Style.MIDLE_SIZE, color:Style.GREY_TEXT_COLOR , paddingTop:5, paddingRight:5}}>{model.created_at+""}
                             </Text>
                             {/*<TouchableOpacity style={[styles.listenButton, { backgroundColor: model.reader_link ? 'red' : '#cccccc'}]} onPress={this.onClickNews}>*/}
                                 {/*<SpeakerIcon style={styles.favoriteIcon}  />*/}
