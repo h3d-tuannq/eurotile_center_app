@@ -292,7 +292,7 @@ class UserProfileScreen extends React.Component {
                     <View style={{flexDirection : 'row', alignItems : 'center'}}>
 
                         <Text style={[Style.text_styles.middleText, {marginRight :10}]}>
-                            {user['userProfile']['address']}
+                            {user['userProfile']['address'] ? Def.user_info['userProfile']['address']['detail_address'] : ""}
                         </Text>
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                     </View>

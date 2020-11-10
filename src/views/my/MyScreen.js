@@ -43,6 +43,10 @@ class MyScreen extends React.Component {
             console.log('isset naviagtion');
         }
 
+        if(!Def.user_info){
+            AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
+        }
+
         this.state = {
             user: Def.user_info,
             stateCount: 0.0,
@@ -50,12 +54,14 @@ class MyScreen extends React.Component {
             slide_data : carouselItems,
             activeSlide : 0,
         };
+        Def.refreshDashBoard = this.refresh;
+
+    }
+
+    componentDicMount(){
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
-
-        Def.refreshDashBoard = this.refresh;
-
     }
 
     gotoProfile(){
@@ -79,16 +85,12 @@ class MyScreen extends React.Component {
             Def.user_info = JSON.parse(value);
             Def.username = Def.user_info['user_name'];
             Def.email = Def.user_info['email'];
-
             this.setState({user:Def.user_info});
         }
     }
 
     refresh()
     {
-        //NetChannel.listChannel(this.onChannelSuccess,this.onChannelFailed);
-        console.log('Refress affter login');
-
         this.setState( {
             user: Def.user_info,
             stateCount: 0.0,
@@ -120,8 +122,6 @@ class MyScreen extends React.Component {
     }
 
     createConfigData(data){
-
-
         if(data){
             let configData =  Object.entries(data).map((prop, key) => {
                 // console.log("Props : " + JSON.stringify(prop));

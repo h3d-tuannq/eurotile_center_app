@@ -246,15 +246,23 @@ class NewsScreen extends React.Component {
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
 
-        Def.mainNavigate = this.props.navigation;
-
         if(!Def.news_data) {
             NetNews.listNews(this.onNewsSuccess, this.onNewsFailed);
         }
         else if (!Def.config_news_menu) {
             Def.config_news_menu = this.createConfigData(Def.news_data);
-            this.setState({configMenu: Def.config_news_menu});
+            // this.setState({configMenu: Def.config_news_menu});
         }
+
+        this.state = {
+            news_data: null,
+            stateCount: 0.0,
+            configMenu: Def.config_news_menu
+        };
+
+        Def.mainNavigate = this.props.navigation;
+
+
 
     }
 

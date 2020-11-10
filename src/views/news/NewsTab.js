@@ -33,7 +33,7 @@ class NewsTab extends React.Component {
                     <FlatList
                         data={this.props.data}
                         renderItem={renderItem}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.id + ""}
                         showsHorizontalScrollIndicator={false}
                         ItemSeparatorComponent={
 

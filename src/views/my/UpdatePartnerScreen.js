@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Modal} from 'react-native'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
@@ -22,6 +22,7 @@ import UserController from "../../controller/UserController";
 import Autocomplete from 'react-native-autocomplete-input';
 import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
+import moment from 'moment'
 
 
 class UpdatePartnerScreen extends React.Component {
@@ -405,6 +406,7 @@ class UpdatePartnerScreen extends React.Component {
         console.log("A date has been picked: ", date);
         this.hideDateTimePicker();
         this.setState({  selectedDate : date, [dateAttr] : date })
+        this.hideDateTimePicker();
 
     };
 

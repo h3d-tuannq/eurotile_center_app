@@ -34,14 +34,6 @@ class ProductScreen extends React.Component {
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
 
-        this.state = {
-        collection_data: null,
-        stateCount: 0.0,
-        configMenu: Def.config_collection_menu,
-        slide_data : carouselItems,
-        activeSlide : 0,
-    };
-
         Def.mainNavigate = this.props.navigation;
 
         if(!Def.collection_data) {
@@ -49,9 +41,16 @@ class ProductScreen extends React.Component {
         }
         else if (!Def.config_collection_menu) {
             Def.config_collection_menu = this.createConfigData(Def.collection_data);
-            this.setState({configMenu: Def.config_news_menu});
+            // this.setState({configMenu: Def.config_news_menu});
         }
 
+        this.state = {
+            collection_data: null,
+            stateCount: 0.0,
+            configMenu: Def.config_collection_menu,
+            slide_data : carouselItems,
+            activeSlide : 0,
+        };
     }
 
     refresh()
