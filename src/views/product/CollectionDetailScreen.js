@@ -185,7 +185,7 @@ class CollectionDetailScreen extends React.Component {
         const configMenu = Def.collection_detail_menu;
         return (
             <View style={{flex:1}}>
-                <View style={{height:height/2+30}}>
+                <View style={{height:height/2+40}}>
                     {/*{*/}
                         {/*! (this.state.item.model === 'SIG.P-01' || this.props.route.params.item.model === 'SIG.P-02') ?*/}
 
@@ -228,7 +228,7 @@ class CollectionDetailScreen extends React.Component {
                         }
                     </ScrollableTabView>
                 </View>
-                <View style={{flex:1, justifyContent: 'space-between', marginTop :10}}>
+                <View style={{flex:1, justifyContent: 'space-between', marginTop :8}}>
                     <View style={{alignItems:'center', paddingVertical:8,marginBottom:2, backgroundColor:'#fff', borderColor:Style.DEFAUT_RED_COLOR, justifyContent :'center', borderBottomWidth : 2}}>
                         <Text style={Style.text_styles.titleTextNotBold}>Thông số sản phẩm</Text>
                     </View>

@@ -17,6 +17,8 @@ import Carousel from 'react-native-snap-carousel';
 import Pagination from 'react-native-snap-carousel/src/pagination/Pagination';
 import SendIntentAndroid from 'react-native-send-intent'
 
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 
 const {width, height} = Dimensions.get('window');
 
@@ -36,6 +38,7 @@ const carouselItems = [
 ];
 
 class CollectionDetailTabScreen extends React.Component {
+    webview = null;
     constructor(props){
         super(props);
         // this.itemClick = this.itemClick.bind(this);
@@ -46,7 +49,9 @@ class CollectionDetailTabScreen extends React.Component {
             activeSlide : 0,
         };
         this.goToAr = this.goToAr.bind(this);
+        this.goToVR = this.goToVR.bind(this);
         this.handleWebViewNavigationStateChange = this.handleWebViewNavigationStateChange.bind(this);
+        this.onShouldStartLoadWithRequestHandle = this.onShouldStartLoadWithRequestHandle.bind(this);
     }
 
     // itemClick(item){
@@ -59,6 +64,12 @@ class CollectionDetailTabScreen extends React.Component {
     goToAr(){
         this.setState({ar_3d_uri:this.props.data['url_ar']});
         console.log("Uri : "  + this.props.data['url_ar']);
+    }
+
+    goToVR(){
+        // this.setState({ar_3d_uri:this.props.data['url_ar']});
+        // console.log("Uri : "  + this.props.data['url_ar']);
+        Linking.openURL(this.props.data);
     }
 
     get pagination () {
@@ -107,33 +118,46 @@ class CollectionDetailTabScreen extends React.Component {
         //   canGoForward?: boolean;
         // }
         const { url } = newNavState;
-        if (!url) return;
-
-        // handle certain doctypes
-        if (url.includes('.pdf')) {
-            this.webview.stopLoading();
-            // open a modal with the PDF viewer
-        }
-
-        // one way to handle a successful form submit is via query strings
-        if (url.includes('?message=success')) {
-            this.webview.stopLoading();
-            // maybe close this view?
-        }
-
-        // one way to handle errors is via query string
-        if (url.includes('?errors=true')) {
-            this.webview.stopLoading();
-        }
-
-        // redirect somewhere else
-        if (url.includes('google.com')) {
-            const newURL = 'https://reactnative.dev/';
-            console.log("Url : " + url);
-            // const redirectTo = 'window.location = "' + newURL + '"';
-            // this.webview.injectJavaScript(redirectTo);
-        }
+        // if (!url) return;
+        //
+        // // handle certain doctypes
+        // if (url.includes('.pdf')) {
+        //     this.webview.stopLoading();
+        //     // open a modal with the PDF viewer
+        // }
+        //
+        // // one way to handle a successful form submit is via query strings
+        // if (url.includes('?message=success')) {
+        //     this.webview.stopLoading();
+        //     // maybe close this view?
+        // }
+        //
+        // // one way to handle errors is via query string
+        // if (url.includes('?errors=true')) {
+        //     this.webview.stopLoading();
+        // }
+        //
+        // // redirect somewhere else
+        // if (url.includes('google.com')) {
+        //     const newURL = 'https://reactnative.dev/';
+        //     console.log("Url : " + url);
+        //     // const redirectTo = 'window.location = "' + newURL + '"';
+        //     // this.webview.injectJavaScript(redirectTo);
+        // }
     };
+
+    onShouldStartLoadWithRequestHandle = (event) => {
+        console.log(event.url);
+        if (event.url.includes('intent://arvr.google.com/scene-viewer')) {
+            SendIntentAndroid.openChromeIntent((event.url));
+            this.webview.stopLoading();
+            return false
+        } else {
+            console.log('return true')
+            // this.webview.stopLoading();
+            return true
+        }
+    }
 
 
 
@@ -152,17 +176,10 @@ class CollectionDetailTabScreen extends React.Component {
                         this.props.tabLabel === '3D' ?
                                 <View style={{flex:1}}>
                                     <WebView
+                                        ref={(ref) => (this.webview = ref)}
                                         source={{ uri: this.state.ar_3d_uri}}
                                         originWhitelist={['intent://*']}
-                                        onShouldStartLoadWithRequest={event => {
-                                            if (event.url.includes('arvr.google.com')) {
-                                                SendIntentAndroid.openChromeIntent((event.url));
-                                                return false
-                                            } else {
-                                                console.log('return true')
-                                                return true
-                                            }
-                                        }}
+                                        onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequestHandle}
 
                                     />
                                     {/*<TouchableOpacity style={{position:'absolute', right: 20, bottom : 60, zIndex : 5}} onPress={this.goToAr}>*/}
@@ -173,9 +190,20 @@ class CollectionDetailTabScreen extends React.Component {
                                 </View>
                             :
                             this.props.tabLabel === 'VR' ?
-                                <WebView
-                                    source={{ uri: this.props.data }}
-                                />
+                                <View style={{flex:1}}>
+                                    <WebView
+                                        ref={(ref) => (this.webview = ref)}
+                                        originWhitelist={['intent://*']}
+                                        onShouldStartLoadWithRequest={this.handleWebViewNavigationStateChange}
+                                        source={{ uri: this.props.data }}
+                                    />
+                                    <TouchableOpacity style={{position:'absolute', right: 20, bottom : 60, zIndex : 5}} onPress={this.goToVR}>
+                                        {/*<Text style={[Style.text_styles.titleText, {color:Style.DEFAUT_BLUE_COLOR}]}>*/}
+                                            {/*VR*/}
+                                        {/*</Text>*/}
+                                        <Icon name="vr-cardboard" size={30} color={Style.DEFAUT_RED_COLOR} />
+                                    </TouchableOpacity>
+                                </View>
                             :
                                  <View style={Style.styles.carousel}>
                                      {

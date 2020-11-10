@@ -3,8 +3,8 @@ export default class Def {
     static URL_BASE = "https://eurotiledev.house3d.net";
     static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
     static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com/uploads/2019/07/02/5d1aa12048236.jpg";
-    static URL_DEFAULT_VR = "https://vr.house3d.com/web/panorama-player/H00171609";
-    static URL_DEFAULT_3D = "https://3dplayer.house3d.net/rangdong/?file=41712000";
+    static URL_DEFAULT_VR = "https://vr.house3d.com/web/panorama-player/H00238469";
+    static URL_DEFAULT_3D = "";
 
 
     // token nhận được sau khi đăng nhập để gửi lên server lấy token user
@@ -59,7 +59,12 @@ export default class Def {
         '../../../assets/data/6071.jpg': require('../../assets/data/6071.jpg'),
         '../../../assets/data/6073.jpg': require('../../assets/data/6073.jpg'),
         '../../../assets/data/8063.jpg': require('../../assets/data/8063.jpg'),
-        '../../../assets/data/8064.jpg': require('../../assets/data/8064.jpg')
+        '../../../assets/data/8064.jpg': require('../../assets/data/8064.jpg'),
+        '../../../assets/data/8065.jpg': require('../../assets/data/8065.jpg'),
+        '../../../assets/data/8066.jpg': require('../../assets/data/8066.jpg'),
+        '../../../assets/data/8070.jpg': require('../../assets/data/8070.jpg'),
+        '../../../assets/data/8071.jpg': require('../../assets/data/8071.jpg'),
+        '../../../assets/data/8071.jpg': require('../../assets/data/8071.jpg'),
     };
 
     static showScanQrCode = null;
@@ -80,7 +85,7 @@ export default class Def {
                     "version": null,
                     "sort": 1,
                     "category": "Gạch Ốp Lát",
-                    'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
+                    'url_3d':this.URL_DEFAULT_3D,
                     'url_vr':this.URL_DEFAULT_VR,
                     'url_ar':this.URL_DEFAULT_3D,
                     'price' : 1000000
@@ -93,7 +98,7 @@ export default class Def {
                     "status": 1,
                     "image_path": "../../../assets/data/6073.jpg",
                     "sub_images": "",
-                    'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
+                    'url_3d':this.URL_DEFAULT_3D,
                     'url_vr':this.URL_DEFAULT_VR,
                     'url_ar':this.URL_DEFAULT_3D,
                     "description": "Gạch Ốp Lát 6073",
@@ -110,7 +115,7 @@ export default class Def {
                     "status": 1,
                     "image_path": "../../../assets/data/8063.jpg",
                     "sub_images": "",
-                    'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
+                    'url_3d':this.URL_DEFAULT_3D,
                     'url_vr':this.URL_DEFAULT_VR,
                     'url_ar':this.URL_DEFAULT_3D,
                     "description": "Gạch Ốp Lát 8063",
@@ -127,10 +132,78 @@ export default class Def {
                     "status": 1,
                     "image_path": "../../../assets/data/8064.jpg",
                     "sub_images": "",
-                    'url_3d':"https://3dplayer.house3d.net/rangdong/?file=27223000",
+                    'url_3d':this.URL_DEFAULT_3D,
                     'url_vr': this.URL_DEFAULT_VR,
                     'url_ar':this.URL_DEFAULT_3D,
                     "description": "Gạch Ốp Lát 8064",
+                    "version": null,
+                    "sort": 1,
+                    "category": "Gạch Ốp Lát",
+                    'price' : 1000000
+
+                },
+                {
+                    "id": 5,
+                    "name": "8065",
+                    "model": "8065",
+                    "status": 1,
+                    "image_path": "../../../assets/data/8065.jpg",
+                    "sub_images": "",
+                    'url_3d':this.URL_DEFAULT_3D,
+                    'url_vr': this.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
+                    "description": "Gạch Ốp Lát 8065",
+                    "version": null,
+                    "sort": 1,
+                    "category": "Gạch Ốp Lát",
+                    'price' : 1000000
+
+                },
+                {
+                    "id": 6,
+                    "name": "8066",
+                    "model": "8066",
+                    "status": 1,
+                    "image_path": "../../../assets/data/8066.jpg",
+                    "sub_images": "",
+                    'url_3d':this.URL_DEFAULT_3D,
+                    'url_vr': this.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
+                    "description": "Gạch Ốp Lát 8066",
+                    "version": null,
+                    "sort": 1,
+                    "category": "Gạch Ốp Lát",
+                    'price' : 1000000
+
+                },
+                {
+                    "id": 7,
+                    "name": "8070",
+                    "model": "8070",
+                    "status": 1,
+                    "image_path": "../../../assets/data/8070.jpg",
+                    "sub_images": "",
+                    'url_3d':this.URL_DEFAULT_3D,
+                    'url_vr': this.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
+                    "description": "Gạch Ốp Lát 8070",
+                    "version": null,
+                    "sort": 1,
+                    "category": "Gạch Ốp Lát",
+                    'price' : 1000000
+
+                },
+                {
+                    "id": 8,
+                    "name": "8071",
+                    "model": "8071",
+                    "status": 1,
+                    "image_path": "../../../assets/data/8071.jpg",
+                    "sub_images": "",
+                    'url_3d':this.URL_DEFAULT_3D,
+                    'url_vr': this.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
+                    "description": "Gạch Ốp Lát 8071",
                     "version": null,
                     "sort": 1,
                     "category": "Gạch Ốp Lát",
@@ -198,12 +271,12 @@ export default class Def {
                     "name": "WF-4955",
                     "model": "WF-4955",
                     "status": 1,
-                    "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/1-3.jpg?v=1561348745447",
+                    "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/soh-product-easyset-exposed-rain-shower-kit.jpg?v=1566353709613",
                     "sub_images": "",
-                    'url_3d':"https://3dplayer.house3d.net/model-viewer/WF-4955",
+                    'url_3d':"https://3dplayer.house3d.net/model-viewer/WF-4955/",
                     'url_vr':Def.URL_DEFAULT_VR,
                     'url_ar':this.URL_DEFAULT_3D,
-                    "description": "Thiết bị VS",
+                    "description": "SEN CÂY AMERICAN STANDARD WF-4955",
                     "version": null,
                     "sort": 1,
                     "category": "TBVS",
@@ -217,7 +290,7 @@ export default class Def {
                     "status": 1,
                     "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/1-3.jpg?v=1561348745447",
                     "sub_images": "",
-                    'url_3d':"https://3dplayer.house3d.net/model-viewer/WP-F525.1H",
+                    'url_3d':"https://3dplayer.house3d.net/model-viewer/WP-F525.1H/",
                     'url_vr':Def.URL_DEFAULT_VR,
                     'url_ar':this.URL_DEFAULT_3D,
                     "description": "Thiết bị VS",
