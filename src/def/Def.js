@@ -194,7 +194,24 @@ export default class Def {
 
                 },
                 {
-                    "id": 4,
+                    "id": 14,
+                    "name": "WF-4955",
+                    "model": "WF-4955",
+                    "status": 1,
+                    "image_path": "https://bizweb.dktcdn.net/thumb/1024x1024/100/125/230/products/1-3.jpg?v=1561348745447",
+                    "sub_images": "",
+                    'url_3d':"https://3dplayer.house3d.net/model-viewer/WF-4955",
+                    'url_vr':Def.URL_DEFAULT_VR,
+                    'url_ar':this.URL_DEFAULT_3D,
+                    "description": "Thiết bị VS",
+                    "version": null,
+                    "sort": 1,
+                    "category": "TBVS",
+                    'price' : 2000000
+
+                },
+                {
+                    "id": 15,
                     "name": "WP-F525.1H",
                     "model": "WP-F525.1H",
                     "status": 1,
@@ -210,6 +227,7 @@ export default class Def {
                     'price' : 2000000
 
                 },
+
             ]
         },
         'Grohe' : {
