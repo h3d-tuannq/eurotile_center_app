@@ -159,9 +159,9 @@ class CollectionDetailTabScreen extends React.Component {
                                                 SendIntentAndroid.openChromeIntent((event.url));
                                                 return false
                                             } else {
+                                                console.log('return true')
                                                 return true
                                             }
-
                                         }}
 
                                     />
