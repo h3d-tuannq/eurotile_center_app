@@ -24,7 +24,6 @@ import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
 import moment from 'moment'
 
-
 class UpdatePartnerScreen extends React.Component {
     constructor(props){
         super(props);
@@ -406,7 +405,7 @@ class UpdatePartnerScreen extends React.Component {
         console.log("A date has been picked: ", date);
         this.hideDateTimePicker();
         this.setState({  selectedDate : date, [dateAttr] : date })
-        this.hideDateTimePicker();
+        // this.hideDateTimePicker();
 
     };
 
@@ -541,6 +540,7 @@ class UpdatePartnerScreen extends React.Component {
                                 onConfirm={this.handleDatePicked}
                                 onCancel={this.hideDateTimePicker}
                                 date={this.state.selectedDate}
+                                onHide={()=>null}
                                 mode={'date'}
                                 display='spinner'
                                 style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
