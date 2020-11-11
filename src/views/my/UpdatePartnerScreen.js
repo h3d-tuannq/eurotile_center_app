@@ -42,7 +42,7 @@ class UpdatePartnerScreen extends React.Component {
         this.choseWardClick = this.choseWardClick.bind(this);
         this.showAutocompleteModal = this.showAutocompleteModal.bind(this);
         this.parseDataToView = this.parseDataToView.bind(this);
-
+        this.setDate = this.setDate.bind(this);
         let projectImg = this.getProjectImage();
         this.state = {
             focus : 0,
@@ -396,17 +396,20 @@ class UpdatePartnerScreen extends React.Component {
     };
 
     hideDateTimePicker = () => {
-        console.log('hide date picker');
         this.setState({ isDateTimePickerVisible: false });
     };
+
+    setDate(){
+        let dateAttr = this.state.dateAttribute;
+        this.setState({  selectedDate : this.state[dateAttr], isDateTimePickerVisible: false})
+    }
+
 
     handleDatePicked = date => {
         let dateAttr = this.state.dateAttribute;
         console.log("A date has been picked: ", date);
         this.hideDateTimePicker();
-        this.setState({  selectedDate : date, [dateAttr] : date })
-        // this.hideDateTimePicker();
-
+        this.setState({  selectedDate : date, [dateAttr] : date });
     };
 
     refresh()
@@ -537,10 +540,13 @@ class UpdatePartnerScreen extends React.Component {
                             </TouchableOpacity>
                             <DateTimePickerModal
                                 isVisible={this.state.isDateTimePickerVisible}
-                                onConfirm={this.handleDatePicked}
+                                onConfirm={(date) => {
+                                    // setChosenDate(date);
+                                    this.handleDatePicked(date);
+                                    this.hideDateTimePicker();
+                                }}
                                 onCancel={this.hideDateTimePicker}
                                 date={this.state.selectedDate}
-                                onHide={()=>null}
                                 mode={'date'}
                                 display='spinner'
                                 style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
