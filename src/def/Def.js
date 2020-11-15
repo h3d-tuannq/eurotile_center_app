@@ -40,6 +40,10 @@ export default class Def{
 
     static WEB_CLIENT_ID = "491520516021-1no68o939c9s80mbc87albgin4h20teb.apps.googleusercontent.com";
 
+    static REFESH_SCREEN = [];
+
+
+
     static TYPE_RADIO      = 1;
     static TYPE_MUSIC      = 2;
     static TYPE_PROGRAM    = 3;

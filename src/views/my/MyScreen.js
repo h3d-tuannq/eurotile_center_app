@@ -33,17 +33,12 @@ class MyScreen extends React.Component {
         this.onGetUserInfoFun = this.onGetUserInfoFun.bind(this);
 
         Def.mainNavigate = this.props.navigation;
-        this.gotoProfile = this.gotoProfile.bind(this);
-        this.gotoPartnerInfo = this.gotoPartnerInfo.bind(this);
-        this.gotoChangePass = this.gotoChangePass.bind(this);
-        this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
-        this.refresh = this.refresh.bind(this);
-
         if(this.props.navigation){
             console.log('isset naviagtion');
         }
 
         if(!Def.user_info){
+            console.log("User info not exits");
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
 
@@ -54,12 +49,18 @@ class MyScreen extends React.Component {
             slide_data : carouselItems,
             activeSlide : 0,
         };
+        this.gotoProfile = this.gotoProfile.bind(this);
+        this.gotoPartnerInfo = this.gotoPartnerInfo.bind(this);
+        this.gotoChangePass = this.gotoChangePass.bind(this);
+        this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
+        this.refresh = this.refresh.bind(this);
         Def.refreshDashBoard = this.refresh;
 
     }
 
     componentDicMount(){
         if(!Def.user_info){
+            console.log('User info is null');
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
     }
@@ -82,15 +83,18 @@ class MyScreen extends React.Component {
 
     onGetUserInfoFun(value){
         if(value){
+            console.log("Value: " + JSON.stringify(value));
             Def.user_info = JSON.parse(value);
             Def.username = Def.user_info['user_name'];
             Def.email = Def.user_info['email'];
-            this.setState({user:Def.user_info});
+            // this.setState({user:Def.user_info});
+            this.refresh();
         }
     }
 
     refresh()
     {
+        console.log("Refresh");
         this.setState( {
             user: Def.user_info,
             stateCount: 0.0,
@@ -156,6 +160,9 @@ class MyScreen extends React.Component {
     shouldComponentUpdate(){
         // this.setState({ configMenu: Def.config_news_menu});
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
+        if(Def.REFESH_SCREEN.includes("my-screen")){
+            this.refresh();
+        }
         return true;
     }
 
@@ -222,110 +229,110 @@ class MyScreen extends React.Component {
                     </Text>
 
                 </View> :
-            <View style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
+                <View style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
 
-                <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginBottom: 10}}>
+                    <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginBottom: 10}}>
 
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <Image  style={styles.imageStyle}  source={{uri: Def.getAvatarUrlFromUserInfo() }}  />
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <Image  style={styles.imageStyle}  source={{uri: Def.getAvatarUrlFromUserInfo() }}  />
 
-                    </View>
-                    <View style={{marginTop: 10, justifyContent:'space-between'}}>
-                        <Text style={Style.text_styles.titleTextNotBold}>
-                            {user['email']}
-                        </Text>
-                        {/*<Text style={Style.text_styles.middleText}>*/}
-                        {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
-                        {/*</Text>*/}
-                    </View>
-                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                </View>
-
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}
-                    onPress={this.gotoProfile}
-                    >
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                    <Image  style={styles.imageStyleInfo}  source={{uri:Def.getAvatarUrlFromUserInfo() }}  />
-                    <View style={{marginLeft: 10, justifyContent:'space-between'}}>
-                        <Text style={Style.text_styles.middleText}>
-                            {user['email']}
-                        </Text>
-                        {/*<Text style={Style.text_styles.middleText}>*/}
+                        </View>
+                        <View style={{marginTop: 10, justifyContent:'space-between'}}>
+                            <Text style={Style.text_styles.titleTextNotBold}>
+                                {user['email']}
+                            </Text>
+                            {/*<Text style={Style.text_styles.middleText}>*/}
                             {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
-                        {/*</Text>*/}
-                    </View>
-                    </View>
-                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                </TouchableOpacity>
-
-
-
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                  onPress={this.gotoChangePass}>
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <View style={{width :30}}>
-                        <Icon name="user-cog" size={25} color={Style.GREY_TEXT_COLOR} />
+                            {/*</Text>*/}
                         </View>
-                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                            Thiết lập tài khoản
-                        </Text>
+                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                     </View>
-                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                </TouchableOpacity>
 
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
-                    onPress={this.gotoPartnerInfo}
-                >
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <View style={{width :30}}>
-                        <Icon name="id-card" size={25} color={Style.GREY_TEXT_COLOR} />
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}
+                        onPress={this.gotoProfile}
+                        >
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                        <Image  style={styles.imageStyleInfo}  source={{uri:Def.getAvatarUrlFromUserInfo() }}  />
+                        <View style={{marginLeft: 10, justifyContent:'space-between'}}>
+                            <Text style={Style.text_styles.middleText}>
+                                {user['email']}
+                            </Text>
+                            {/*<Text style={Style.text_styles.middleText}>*/}
+                                {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
+                            {/*</Text>*/}
                         </View>
-                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                            Hồ sơ Partner
-                        </Text>
-                    </View>
-                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <View style={{width :30}}>
-                        <Icon name="credit-card" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
-                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                            Cài đặt thanh toán
-                        </Text>
-                    </View>
-                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                </TouchableOpacity>
+                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}>
-                    <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <View style={{width :30}}>
-                            <Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />
+
+
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
+                                      onPress={this.gotoChangePass}>
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <View style={{width :30}}>
+                            <Icon name="user-cog" size={25} color={Style.GREY_TEXT_COLOR} />
+                            </View>
+                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                                Thiết lập tài khoản
+                            </Text>
                         </View>
-                        <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                            Danh sách đơn hàng
-                        </Text>
-                    </View>
-                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                </TouchableOpacity>
+                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                    </TouchableOpacity>
 
-                {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}*/}
-                                  {/*onPress={this.updatePartnerInfo}*/}
-                {/*>*/}
-                    {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
-                        {/*<View style={{width :30}}>*/}
-                            {/*<Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
+                        onPress={this.gotoPartnerInfo}
+                    >
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <View style={{width :30}}>
+                            <Icon name="id-card" size={25} color={Style.GREY_TEXT_COLOR} />
+                            </View>
+                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                                Hồ sơ Partner
+                            </Text>
+                        </View>
+                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <View style={{width :30}}>
+                            <Icon name="credit-card" size={25} color={Style.GREY_TEXT_COLOR} />
+                            </View>
+                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                                Cài đặt thanh toán
+                            </Text>
+                        </View>
+                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}>
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <View style={{width :30}}>
+                                <Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />
+                            </View>
+                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                                Danh sách đơn hàng
+                            </Text>
+                        </View>
+                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                    </TouchableOpacity>
+
+                    {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}*/}
+                                      {/*onPress={this.updatePartnerInfo}*/}
+                    {/*>*/}
+                        {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
+                            {/*<View style={{width :30}}>*/}
+                                {/*<Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                            {/*</View>*/}
+                            {/*<Text style={[Style.text_styles.middleText, {marginLeft :10}]}>*/}
+                                {/*Cập nhật Hồ sơ Partner*/}
+                            {/*</Text>*/}
                         {/*</View>*/}
-                        {/*<Text style={[Style.text_styles.middleText, {marginLeft :10}]}>*/}
-                            {/*Cập nhật Hồ sơ Partner*/}
-                        {/*</Text>*/}
-                    {/*</View>*/}
-                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                {/*</TouchableOpacity>*/}
+                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                    {/*</TouchableOpacity>*/}
 
-            </View>
+                </View>
         )
     }
 }

@@ -32,13 +32,15 @@ export default class UserController{
     static onUpdateSuccess(data){
         console.log('Update success');
         UserController.updateData(data);
-        if(Def.setLoader)
-            Def.setLoader(false);
 
-        if(Def.refreshDashBoard)
-            Def.refreshDashBoard();
-
+        // if(Def.setLoader)
+        //     Def.setLoader(false);
         Def.mainNavigate.navigate('My');
+        Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+
+        // if(Def.refreshDashBoard)
+        //     Def.refreshDashBoard();
+
 
     }
 
@@ -252,8 +254,8 @@ export default class UserController{
 
     static async  updatePartnerInfo(updateInfo, navigation = null, successCallback, falseCallback) {
         Net.uploadImage(this.onUpdateSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/update-partner' , Def.POST_METHOD , updateInfo, 'multipart/form-data');
-        if(Def.setLoader)
-            Def.setLoader(false);
+        // if(Def.setLoader)
+        //     Def.setLoader(false);
         navigation.navigate('My', {'screen':'my-screen'});
         // if(navigation)
         //     navigation.navigate('Home');

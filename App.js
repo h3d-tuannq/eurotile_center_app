@@ -558,6 +558,7 @@ export default class App extends Component {
 
         AsyncStorage.getItem('user_info').then((value) => {
              if(value){
+                 Def.user_info = value;
                  Def.username = Def.user_info['user_name'];
                  Def.email = Def.user_info['email'];
              }

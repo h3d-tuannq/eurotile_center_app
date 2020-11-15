@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Modal} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Modal, Keyboard} from 'react-native'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -43,6 +43,8 @@ class UpdatePartnerScreen extends React.Component {
         this.showAutocompleteModal = this.showAutocompleteModal.bind(this);
         this.parseDataToView = this.parseDataToView.bind(this);
         this.setDate = this.setDate.bind(this);
+        this.showAddressModal = this.showAddressModal.bind(this);
+
         let projectImg = this.getProjectImage();
         this.state = {
             focus : 0,
@@ -64,6 +66,7 @@ class UpdatePartnerScreen extends React.Component {
             issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
             address : Def.getAddressFromUserInfo() ? Def.getAddressFromUserInfo()['address_detail'] : '',
             isDateTimePickerVisible :false,
+            isDateTimePickerVisibleIssueOn:false,
             selectedDate : new Date(),
             dateAttribute : 'birth_day',
             cities : [],
@@ -78,9 +81,12 @@ class UpdatePartnerScreen extends React.Component {
             nextAddress : 1, // 1 select city, 2 select district, 3 select ward
             filterAttr: 'city_name',
             filterData: [],
+            showKeyboard : false,
+
         };
 
-        console.log("Front-end" + Def.getInfrontOfImg());
+        this._keyboardDidHide = this._keyboardDidHide.bind(this);
+        this._keyboardDidShow = this._keyboardDidShow.bind(this);
         this.refresh = this.refresh.bind(this);
         Def.mainNavigate = this.props.navigation;
         Def.setLoader = this.refresh;
@@ -88,11 +94,30 @@ class UpdatePartnerScreen extends React.Component {
     }
 
     componentDidMount(){
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
         Net.sendRequest(this.onGetCites,this.onGetCitesFalse,'https://eurotiledev.house3d.net/api/user/city' , Def.POST_METHOD);
+
+    }
+    componentWillUnmount () {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+    }
+    _keyboardDidShow() {
+        console.log('Keyboard show');
+        this.setState({showKeyboard : true});
+    }
+
+    _keyboardDidHide() {
+        console.log('Keyboard hide');
+        this.setState({showKeyboard : false});
     }
 
     onGetCites(res){
+        console.log('Load Cities Return');
         this.setState({cities: res});
+        console.log('After Error' +
+            '');
     }
 
     getAdministrativeUnit(url, params = null, callBack = null){
@@ -116,6 +141,7 @@ class UpdatePartnerScreen extends React.Component {
     }
 
     showAutocompleteModal(res){
+        console.log("Get Res Data : " + JSON.stringify(res));
         let unit = this.state.currentAddress == 1 ? 'city_item' : this.state.currentAddress == 2 ? 'district_item' : 'ward_item';
         if(this.state.currentAddress == 1){
             this.setState({ filterData: res, cites: res, filterAttr: 'city_name'});
@@ -132,36 +158,40 @@ class UpdatePartnerScreen extends React.Component {
 
     choseCityClick(){
         this.setState({currentAddress:1});
-        if(!this.state.cities){
+        if(!this.state.cities || this.state.cities.length == 0 ){
             this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/city', null, this.showAutocompleteModal);
         } else {
             this.setState({filterData: this.state.cities, filterAttr: 'city_name'});
         }
+        setTimeout(this.showAddressModal, 300);
 
+    }
+
+    showAddressModal(){
         this.setState({choseAddress: true});
-
-
     }
 
     choseDistrictClick(){
         this.setState({currentAddress:2});
-        if(!this.state.district){
+        if(!this.state.district || this.state.district.length == 0){
+            console.log('Chưa tồn tại District : ');
             this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/district', {city_code: this.state.city_item.city_code}, this.showAutocompleteModal);
         }else {
+            console.log('Isset District: ' + JSON.stringify(this.state.district));
             this.setState({ filterData: this.state.district, filterAttr: 'district_name'});
         }
 
-        this.setState({choseAddress: true});
+        setTimeout(this.showAddressModal, 300);
     }
 
     choseWardClick(){
         this.setState({currentAddress:3});
-        if(!this.state.ward){
+        if(!this.state.ward || this.state.ward.length == 0){
             this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/ward', {district_code: this.state.district_item.district_code}, this.showAutocompleteModal);
         }else {
             this.setState({filterData: this.state.ward, filterAttr: 'ward_name'});
         }
-        this.setState({choseAddress: true})
+        setTimeout(this.showAddressModal, 300);
     }
 
 
@@ -209,6 +239,7 @@ class UpdatePartnerScreen extends React.Component {
             city_item: Def.getCityItemFromUserInfo(),
             district_item: Def.getDistrictItemFromUserInfo(),
             ward_item: Def.getWardItemFromUserInfo(),
+            stateCount: Math.random(),
         });
     }
 
@@ -331,7 +362,7 @@ class UpdatePartnerScreen extends React.Component {
             address: JSON.stringify(this.buildAddress()),
             issue_on: this.state.issue_on ? Def.getDateString(this.state.issue_on , "yyyy-MM-dd") : "",
             issue_at: this.state.issue_at,
-            gender: this.state.gender ? 1 :0,
+            gender: this.state.gender == "1" ? 1 :0,
             full_name: this.state.full_name,
         };
 
@@ -392,11 +423,14 @@ class UpdatePartnerScreen extends React.Component {
 
 
     showDateTimePicker = (attr = null) => {
-        this.setState({ isDateTimePickerVisible: true , selectedDate : this.state[attr] ? this.state[attr] : new Date() , dateAttribute : attr });
+        let showDateVisible =     attr == 'birth_day' ? 'isDateTimePickerVisible' : 'isDateTimePickerVisibleIssueOn';
+
+        this.setState({ [showDateVisible]: true , selectedDate : this.state[attr] ? this.state[attr] : new Date() , dateAttribute : attr });
     };
 
     hideDateTimePicker = () => {
-        this.setState({ isDateTimePickerVisible: false });
+        let showDateVisible =     this.state.dateAttribute == 'birth_day' ? 'isDateTimePickerVisible' : 'isDateTimePickerVisibleIssueOn';
+        this.setState({  [showDateVisible] : false });
     };
 
     setDate(){
@@ -409,16 +443,24 @@ class UpdatePartnerScreen extends React.Component {
         let dateAttr = this.state.dateAttribute;
         console.log("A date has been picked: ", date);
         this.hideDateTimePicker();
-        this.setState({  selectedDate : date, [dateAttr] : date });
+        this.setState({  [dateAttr] : date });
     };
 
     refresh()
     {
         this.parseDataToView();
-        this.setState({ stateCount: Math.random() });
+        // this.setState({ stateCount: Math.random() });
     }
 
     shouldComponentUpdate(){
+        if(Def.REFESH_SCREEN.includes("update-partner-screen")){
+            console.log('Refresh Update Partner');
+            const index = Def.REFESH_SCREEN.indexOf('update-partner-screen');
+            if (index > -1) {
+                Def.REFESH_SCREEN.splice(index, 1);
+            }
+            this.refresh();
+        }
         return true;
     }
 
@@ -476,108 +518,168 @@ class UpdatePartnerScreen extends React.Component {
         // const data = this.filterData(this.state.query);
         return (
             <View style={{flex:1}}>
-                <ScrollView style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}>
-                    <TouchableOpacity onPress={() => this.handleChoosePhoto('avatarSource')} style={{ alignItems: 'center', justifyContent: 'center' , marginBottom: 5 }}>
-                        {this.state.avatarSource && this.state.avatarSource.uri ?
-                            <Image
-                                source={{ uri: this.state.avatarSource.uri }}
-                                style={{ width: width/3, height: width/3 , marginTop: 5 , borderRadius : width / 6 }}
-                            /> :
-                            <View style={{ width: width/3, height: width/3 , marginTop: 5 , borderRadius : width / 6, borderWidth: 2 , borderColor:Style.DEFAUT_RED_COLOR,
-                                alignItems: 'center', justifyContent: 'center'
-                            }}>
-                                <Icon size={30} name="camera" color={Style.DEFAUT_RED_COLOR}/>
-                                <Text style={Style.text_styles.normalText}>
-                                    Ảnh đại diện
-                                </Text>
-                            </View>
-                        }
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:1}}>
-                        <Text style={[Style.text_styles.middleText,{}]}>
-                            Họ & Tên
-                        </Text>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-
-                            <TextInput
-                                onFocus={() => this.setState({focus:1})}
-                                onBlur={()=> this.setState({focus:0})}
-                                style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
-                                value={this.state.full_name}
-                                onChangeText={text => this.setState({full_name:text})}
-                            />
-                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:1}}>
-                        <Text style={[Style.text_styles.middleText,{}]}>
-                            Điện thoại
-                        </Text>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-
-                            <TextInput
-                                onFocus={() => this.setState({focus:1})}
-                                onBlur={()=> this.setState({focus:0})}
-                                style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
-                                value={this.state.mobile}
-                                onChangeText={text => this.setState({mobile:text})}
-                            />
-                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:1}}>
-                        <Text style={[Style.text_styles.middleText,{}]}>
-                            Ngày sinh
-                        </Text>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <TouchableOpacity style={{ marginRight: 5, height :ITEM_HEIGHT, justifyContent : 'center', borderColor:Style.GREY_TEXT_COLOR}} onPress={() => this.showDateTimePicker('birth_day')} >
-                                <Text style={[Style.text_styles.titleTextNotBold, {justifyContent : 'center', paddingLeft: 5, color:Style.GREY_TEXT_COLOR} ]}>
-                                    {this.state.birth_day ? Def.getDateString(this.state.birth_day , "yyyy-MM-dd")  : "Chọn ngày sinh"}
-                                </Text>
+                <ScrollView keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}>
+                    {!this.state.showKeyboard ?
+                        <View>
+                            <TouchableOpacity onPress={() => this.handleChoosePhoto('avatarSource')}
+                                              style={{alignItems: 'center', justifyContent: 'center', marginBottom: 5}}>
+                                {this.state.avatarSource && this.state.avatarSource.uri ?
+                                    <Image
+                                        source={{uri: this.state.avatarSource.uri}}
+                                        style={{
+                                            width: width / 3,
+                                            height: width / 3,
+                                            marginTop: 5,
+                                            borderRadius: width / 6
+                                        }}
+                                    /> :
+                                    <View style={{
+                                        width: width / 3,
+                                        height: width / 3,
+                                        marginTop: 5,
+                                        borderRadius: width / 6,
+                                        borderWidth: 2,
+                                        borderColor: Style.DEFAUT_RED_COLOR,
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <Icon size={30} name="camera" color={Style.DEFAUT_RED_COLOR}/>
+                                        <Text style={Style.text_styles.normalText}>
+                                            Ảnh đại diện
+                                        </Text>
+                                    </View>
+                                }
                             </TouchableOpacity>
-                            <DateTimePickerModal
-                                isVisible={this.state.isDateTimePickerVisible}
-                                onConfirm={(date) => {
-                                    // setChosenDate(date);
-                                    this.handleDatePicked(date);
-                                    this.hideDateTimePicker();
-                                }}
-                                onCancel={this.hideDateTimePicker}
-                                date={this.state.selectedDate}
-                                mode={'date'}
-                                display='spinner'
-                                style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
-                                datePickerModeAndroid='spinner'
-                                timePickerModeAndroid='spinner'
-                            />
-                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                    </TouchableOpacity>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingLeft:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:1}}>
-                        <Text style={[Style.text_styles.middleText,{}]}>
-                            Giới Tính
-                        </Text>
-                        <View style={{flexDirection : 'row', alignItems : 'flex-end'}}>
-                            <View style={{ marginRight: -5, height: ITEM_HEIGHT, backgroundColor:'#fff', borderRadius:5 }}>
-                                <Picker
-                                    selectedValue={this.state.gender}
-                                    style={{height: ITEM_HEIGHT, width: width /3.5 }}
-                                    mode="dropdown"
-                                    onValueChange={(itemValue, itemIndex) =>
-                                        this.setState({gender: itemValue})
-                                    }>
-                                    <Picker.Item label="Nam" value="0" />
-                                    <Picker.Item label="Nữ" value="1" />
-                                </Picker>
-                            </View>
-                            {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                        </View>
-                    </TouchableOpacity>
+                            <TouchableOpacity style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingHorizontal: 10,
+                                paddingVertical: 5,
+                                backgroundColor: '#fff',
+                                marginTop: 1
+                            }}>
+                                <Text style={[Style.text_styles.middleText, {}]}>
+                                    Họ & Tên
+                                </Text>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
 
+                                    <TextInput
+                                        onFocus={() => this.setState({focus: 1})}
+                                        onBlur={() => this.setState({focus: 0})}
+                                        style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
+                                        value={this.state.full_name}
+                                        onChangeText={text => this.setState({full_name: text})}
+                                    />
+                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingHorizontal: 10,
+                                paddingVertical: 5,
+                                backgroundColor: '#fff',
+                                marginTop: 1
+                            }}>
+                                <Text style={[Style.text_styles.middleText, {}]}>
+                                    Điện thoại
+                                </Text>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+
+                                    <TextInput
+                                        onFocus={() => this.setState({focus: 1})}
+                                        onBlur={() => this.setState({focus: 0})}
+                                        style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
+                                        value={this.state.mobile}
+                                        onChangeText={text => this.setState({mobile: text})}
+                                    />
+                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingHorizontal: 10,
+                                paddingVertical: 5,
+                                backgroundColor: '#fff',
+                                marginTop: 1
+                            }}>
+                                <Text style={[Style.text_styles.middleText, {}]}>
+                                    Ngày sinh
+                                </Text>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                    <TouchableOpacity style={{
+                                        marginRight: 5,
+                                        height: ITEM_HEIGHT,
+                                        justifyContent: 'center',
+                                        borderColor: Style.GREY_TEXT_COLOR
+                                    }} onPress={() => this.showDateTimePicker('birth_day')}>
+                                        <Text style={[Style.text_styles.titleTextNotBold, {
+                                            justifyContent: 'center',
+                                            paddingLeft: 5,
+                                            color: Style.GREY_TEXT_COLOR
+                                        }]}>
+                                            {this.state.birth_day ? Def.getDateString(this.state.birth_day, "yyyy-MM-dd") : "Chọn ngày sinh"}
+                                        </Text>
+                                    </TouchableOpacity>
+                                    <DateTimePickerModal
+                                        isVisible={this.state.isDateTimePickerVisible}
+                                        onConfirm={(date) => {
+                                            this.handleDatePicked(date);
+                                            // this.hideDateTimePicker();
+                                        }}
+                                        onCancel={this.hideDateTimePicker}
+                                        date={this.state.birth_day}
+                                        mode={'date'}
+                                        display='spinner'
+                                        style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
+                                        datePickerModeAndroid='spinner'
+                                        timePickerModeAndroid='spinner'
+                                    />
+                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingLeft: 10,
+                                paddingVertical: 5,
+                                backgroundColor: '#fff',
+                                marginTop: 1
+                            }}>
+                                <Text style={[Style.text_styles.middleText, {}]}>
+                                    Giới Tính
+                                </Text>
+                                <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                                    <View style={{
+                                        marginRight: -5,
+                                        height: ITEM_HEIGHT,
+                                        backgroundColor: '#fff',
+                                        borderRadius: 5
+                                    }}>
+                                        <Picker
+                                            selectedValue={this.state.gender + ''}
+                                            style={{height: ITEM_HEIGHT, width: width / 3.5}}
+                                            mode="dropdown"
+                                            onValueChange={(itemValue, itemIndex) => {
+                                                console.log("Gender change: " + itemValue);
+                                                this.setState({gender: itemValue})
+                                            }
+                                            }>
+                                            <Picker.Item label="Nam" value="0"/>
+                                            <Picker.Item label="Nữ" value="1"/>
+                                        </Picker>
+                                    </View>
+                                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                                </View>
+                            </TouchableOpacity>
+                        </View> : <View/>
+                    }
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:5}}
                         onPress={this.choseCityClick}
                     >
@@ -633,7 +735,12 @@ class UpdatePartnerScreen extends React.Component {
                                 onBlur={()=> this.setState({focus:0})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                 value={this.state.address.toString()}
-                                onChangeText={text => this.setState({address:text})}
+                                onChangeText={text => {
+                                    this.setState({address:text})
+                                }}
+
+                                onSubmitEditing={Keyboard.dismiss}
+
                                 placeholder={'Số nhà, tên đường'}
                             />
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
@@ -669,10 +776,10 @@ class UpdatePartnerScreen extends React.Component {
                                 </Text>
                             </TouchableOpacity>
                             <DateTimePickerModal
-                                isVisible={this.state.isDateTimePickerVisible}
+                                isVisible={this.state.isDateTimePickerVisibleIssueOn}
                                 onConfirm={this.handleDatePicked}
                                 onCancel={this.hideDateTimePicker}
-                                date={this.state.selectedDate}
+                                date={this.state.issue_on}
                                 mode={'date'}
                                 display='spinner'
                                 style={{width: 400, opacity: 1, height: 100, marginTop: 540}}

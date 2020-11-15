@@ -8,7 +8,7 @@ import {
     Dimensions,
     TouchableOpacity,
     ActivityIndicator,
-    Modal,PixelRatio
+    Modal,PixelRatio, Keyboard
 } from 'react-native'
 import Style from "../../../src/def/Style";
 import FacebookIcon from '../../../assets/icon/icon-facebook.svg'
@@ -16,6 +16,7 @@ import GoogleIcon from '../../../assets/icon/icon-google.svg'
 import ZaloIcon from '../../../assets/icon/icon-zalo.svg'
 import Def from "../../../src/def/Def";
 import UserController from  "../../../src/controller/UserController"
+import Net from "../../net/Net";
 
 const {width,height} = Dimensions.get('window');
 
@@ -58,6 +59,25 @@ export default class SignIn extends Component {
             console.log('signIn');
              UserController.login(this.state.email,this.state.password,navigation, this.loginSuccessCallback, this.loginFalseCallback);
         }
+    }
+
+    componentDidMount(){
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+
+    }
+    componentWillUnmount () {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+    }
+    _keyboardDidShow() {
+        console.log('Keyboard show');
+        // this.setState({showKeyboard : true});
+    }
+
+    _keyboardDidHide() {
+        console.log('Keyboard hide');
+        // this.setState({showKeyboard : false});
     }
 
     loginSuccessCallback(data){

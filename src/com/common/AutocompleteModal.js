@@ -14,7 +14,7 @@ class AutocompleteModal extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            data : this.props.data.length > 0 ? this.props.data : initData,
+            data : this.props.data.length > 0 ? this.props.data : [],
             query : ""
         };
     }
@@ -38,21 +38,19 @@ class AutocompleteModal extends React.Component {
         const filterData = this.filterData(this.state.query);
         return (
                 <View style={{height: height}}>
-                        <Autocomplete data={filterData}
-                                      defaultValue={this.state.query}
-                                      onChangeText={text => this.setState({ query : text })}
-                                      renderItem={({ item, i }) => (
-                                          <TouchableOpacity style={styles.itemStyle} onPress={() => {
-                                              this.item_click(item)
-
-                                          }}>
-                                              {
-
-                                              }
-                                              <Text>{item[this.props.filterAttr]}</Text>
-                                          </TouchableOpacity>
-                                      )}
-                                      keyboardShouldPersistTaps='always'
+                        <Autocomplete
+                            data={filterData}
+                              defaultValue={this.state.query}
+                              onChangeText={text => this.setState({ query : text })}
+                              keyExtractor={(item,index) => "hoz" + index}
+                              renderItem={({ item, i }) => (
+                                  <TouchableOpacity style={styles.itemStyle} onPress={() => {
+                                      this.item_click(item)
+                                  }}>
+                                      <Text>{item[this.props.filterAttr] + ""}</Text>
+                                  </TouchableOpacity>
+                              )}
+                              keyboardShouldPersistTaps='always'
                         />
                 </View>
         );
