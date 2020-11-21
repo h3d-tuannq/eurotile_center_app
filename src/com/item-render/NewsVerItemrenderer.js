@@ -1,7 +1,5 @@
 import {PureComponent} from "react";
 import {View, Button, StyleSheet, Image, Dimensions, Text, TouchableOpacity, Alert} from "react-native";
-import DefaultProgramImage from "../../../assets/icon/logo-vov.svg";
-import SpeakerIcon from "../../../assets/icon/icon-speaker.svg";
 import React from "react";
 import Def from '../../def/Def'
 import Style from "../../def/Style";

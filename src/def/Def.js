@@ -4,6 +4,8 @@ export default class Def{
     static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
     static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com/uploads/2019/07/02/5d1aa12048236.jpg";
 
+
+
     // token nhận được sau khi đăng nhập để gửi lên server lấy token user
     static firebase_token = '';
     // token để nhận notification
@@ -13,6 +15,8 @@ export default class Def{
     static email = '';
     static username = '';
     static user_info = null;
+
+    static order_number = 12;
 
     static os = 'android';
 
@@ -54,10 +58,10 @@ export default class Def{
 
     static news_data = null;
     static collection_data = null;
-
     static config_collection_menu = null;
-
-
+    static product_data = [];
+    static cart_data = [];
+    static customer = [];
     static collection_detail_data = null;
     static collection_detail_menu = null;
 
@@ -101,8 +105,6 @@ export default class Def{
                 rsUrl = Def.user_info['userProfile']['avatar_path'];
             }
         }
-
-        console.log('rs : ' +rsUrl);
         return rsUrl;
     }
 
@@ -112,9 +114,6 @@ export default class Def{
             rsUrl = Def.URL_CONTENT_BASE + Def.user_info['userProfile']['infront_cmt_img'];
             console.log('' + Def.user_info['userProfile']['infront_cmt_img']);
         }
-
-
-
         return rsUrl;
     }
 
@@ -165,6 +164,23 @@ export default class Def{
             rs = Def.user_info['userProfile']['address'];
         }
         return rs;
+    }
+    static getThumnailImg(img_path){
+        rs = img_path.split(".");
+        lastItem = rs.pop();
+        rs = rs.join('.') + '_200x200.' + lastItem;
+        // console.log(rs);
+        return rs;
+    }
+
+    static getTypeAccount(){
+        if(Def.user_info  && Def.user_info['partnerInfo']){
+            return 'partner'
+        } else if (Def.user_info){
+            return 'normal'
+        }
+        return 'guest'
+
     }
 
 

@@ -7,10 +7,10 @@ export default class Net{
   // jsonData là string json đã được stringify
     static sendRequest(callback,errCallback,url,method,dataObject = null, contentType = 'application/json; charset=utf-8' )
     {
-        console.log(`SENDING: ${JSON.stringify(dataObject)}`);
-        console.log(`TO: ${url}`);
-        console.log(`METHOD: ${method}`);
-        console.log(`{ 'Authorization': ${Def.login_token} }`)
+        // console.log(`SENDING: ${JSON.stringify(dataObject)}`);
+        // console.log(`TO: ${url}`);
+        // console.log(`METHOD: ${method}`);
+        // console.log(`{ 'Authorization': ${Def.login_token} }`)
 
         if(method == Def.GET_METHOD)
         {
@@ -22,7 +22,7 @@ export default class Net{
                 }
             })
                 .then(response => {
-                    console.log(response);
+                    // console.log(response);
                     response.text()
                 })
                 .then(text => {
@@ -64,7 +64,7 @@ export default class Net{
           }
       }
 
-            console.log('SendingData: ' + JSON.stringify(sendObj));
+            // console.log('SendingData: ' + JSON.stringify(sendObj));
 
 
       fetch(url, sendObj)

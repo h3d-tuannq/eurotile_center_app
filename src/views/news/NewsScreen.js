@@ -294,15 +294,15 @@ class NewsScreen extends React.Component {
                 // console.log("Props : " + JSON.stringify(prop));
                 return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
             });
-            Object.entries(configData).map((prop, key) => {
-                console.log("start" + key);
-                console.log("prop[0]" + prop[0]);
-                console.log("prop[1]" + prop[1]["name_vi"]);
-
-                console.log("data" + prop[1]["data"]);
-
-                console.log("end");
-            });
+            // Object.entries(configData).map((prop, key) => {
+            //     console.log("start" + key);
+            //     console.log("prop[0]" + prop[0]);
+            //     console.log("prop[1]" + prop[1]["name_vi"]);
+            //
+            //     console.log("data" + prop[1]["data"]);
+            //
+            //     console.log("end");
+            // });
             return configData;
         }
 

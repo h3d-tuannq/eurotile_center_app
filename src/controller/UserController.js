@@ -60,6 +60,8 @@ export default class UserController{
         } catch (err){
             console.log('Error : ' + err);
         }
+
+        Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
         // if(Def.setLoader)
         //     Def.setLoader(false);
         //
@@ -78,19 +80,18 @@ export default class UserController{
 
     static async  googleLogin(navigation=null) {
         try {
-            console.log("hasPlayServices");
             await GoogleSignin.hasPlayServices();
-            console.log("hasPlayServices");
+            // console.log("hasPlayServices");
             const data = await GoogleSignin.signIn();
-            console.log("Data :" + JSON.stringify(data));
+            // console.log("Data :" + JSON.stringify(data));
             const {accessToken, idToken} = data;
             const credential = auth.GoogleAuthProvider.credential( idToken, accessToken,);
             const googleUserCredential = await auth().signInWithCredential(credential);
 
             auth().currentUser.getIdToken( true).then(function(idToken) {
-                console.log(`TOKEN: ${idToken}`);
-                if(navigation)
-                    navigation.navigate('Home');
+                // console.log(`TOKEN: ${idToken}`);
+                // if(navigation)
+                //     navigation.navigate('Product');
                 AsyncStorage.setItem('firebase_token', idToken);
 
                 const result = {};
@@ -134,8 +135,8 @@ export default class UserController{
                 alert('test' + JSON.stringify(error));
 
             }
-            if(  Def.setLoader)
-                Def.setLoader(false);
+            // if(  Def.setLoader)
+            //     Def.setLoader(false);
         }
     };
 
@@ -229,9 +230,11 @@ export default class UserController{
 
         // let param = {'email' : params.email, 'name' : params.name};
 
+        console.log('Login with firebase');
+
         Net.sendRequest(this.onLoginFirebaseSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/firebase-login' , Def.POST_METHOD , param);
-        if(Def.setLoader)
-            Def.setLoader(false);
+        // if(Def.setLoader)
+        //     Def.setLoader(false);
 
         // navigation.navigate('Home');
     };
@@ -263,7 +266,9 @@ export default class UserController{
 
 
     static onLoginFirebaseSuccess(data){
-        console.log("onLoginFirebaseSuccess: " + JSON.stringify(data));
+
+        console.log('Login Success');
+        // console.log("onLoginFirebaseSuccess: " + JSON.stringify(data));
         var is_new = false;
         try {
             if(data){
@@ -284,16 +289,22 @@ export default class UserController{
         } catch (err){
             console.log('Error : ' + err);
         }
-        if(Def.setLoader)
-            Def.setLoader(false);
 
-        if(Def.refreshDashBoard)
-            Def.refreshDashBoard();
+        Def.REFESH_SCREEN = ['my-screen', 'update-partner-screen'];
+
+        // if(Def.setLoader)
+        //     Def.setLoader(false);
+        //
+        // if(Def.refreshDashBoard)
+        //     Def.refreshDashBoard();
 
         if(is_new){
+            console.log('Goto update Partner');
             Def.mainNavigate.navigate('My', {'screen':'update-partner'});
+        } else {
+            console.log('Goto My-Screen');
+            Def.mainNavigate.navigate('My', {'screen':'my-screen', params: { userInfo: Def.user_info}});
         }
-        Def.mainNavigate.navigate('My');
     }
 
     static updateData(userData){
@@ -358,7 +369,7 @@ export default class UserController{
     }
 
     static async requestUserPermission () {
-        console.log("request token");
+        // console.log("request token");
         const authStatus = await messaging().requestPermission();
         const enabled =
             authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -368,7 +379,7 @@ export default class UserController{
             const fcmToken = await messaging().getToken();
             if (fcmToken) {
                 console.log(fcmToken);
-                console.log("Your Firebase Token is:", fcmToken);
+                // console.log("Your Firebase Token is:", fcmToken);
 
                 Def.notification_token = fcmToken;
                 AsyncStorage.setItem('notification_token', fcmToken);
@@ -383,12 +394,12 @@ export default class UserController{
 
 
             } else {
-                console.log("Failed", "No token received");
+                // console.log("Failed", "No token received");
             }
 
             console.log('Authorization status:', authStatus);
         } else {
-            console.log("Firebase not enable");
+            // console.log("Firebase not enable");
         }
     }
 

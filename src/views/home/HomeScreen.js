@@ -25,16 +25,6 @@ const carouselItems = [
 ];
 
 class HomeScreen extends React.Component {
-
-
-    state = {
-        collection_data: null,
-        stateCount: 0.0,
-        configMenu: Def.config_collection_menu,
-        slide_data : carouselItems,
-        activeSlide : 0
-    };
-
     constructor(props){
         super(props);
         this.onGetCollectionSuccess     = this.onGetCollectionSuccess.bind(this);
@@ -49,8 +39,14 @@ class HomeScreen extends React.Component {
         }
         else if (!Def.config_collection_menu) {
             Def.config_collection_menu = this.createConfigData(Def.collection_data);
-            this.setState({configMenu: Def.config_news_menu});
         }
+        this.state = {
+            collection_data: null,
+            stateCount: 0.0,
+            configMenu: Def.config_collection_menu,
+            slide_data : carouselItems,
+            activeSlide : 0
+        };
 
     }
 

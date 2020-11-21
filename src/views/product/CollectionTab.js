@@ -20,7 +20,6 @@ class CollectionTab extends React.Component {
         console.log(item.id);
         let screen = this.props.type == 'product' ? 'product-detail' : 'collection-detail-screen' ;
         this.props.navigation.navigate(screen, { item:item});
-
     }
 
     render() {

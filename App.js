@@ -175,7 +175,9 @@ function MainTab() {
     return (
         <Tab.Navigator
             style={{height: 120, paddingVertical: 20 , backgroundColor : 'red'}}
+
             tabBar={(props) => <MyTabBar {...props} item={null} />}
+            initialRouteName={'Product'}
             tabBarOptions={{
                 activeTintColor: Style.DEFAUT_RED_COLOR,
                 inactiveTintColor: '#b3b3b3',
@@ -191,33 +193,13 @@ function MainTab() {
             }}>
 
             <Tab.Screen
-                name="My"
-                component={MyStack}
+                name="scheme"
+                component={SchemeStack}
                 options={(route) => {
                     return false
                         ? {tabBarVisible: false}
                         : {
-                            tabBarLabel: 'Cá nhân',
-                            tabBarIcon: ({focused, color, size}) => {
-                                if (focused) {
-                                    // return <Icon name="user-circle" size={25} color={Style.DEFAUT_RED_COLOR} />
-                                    return <UserProfileSelectedIcon style={styles.tabBarIconStyle} />;
-                                }
-                                // return <Icon name="user-circle" size={25} color={Style.GREY_TEXT_COLOR} />
-                                return <UserProfileIcon style={styles.tabBarIconStyle} />;
-                            },
-                        };
-                }}
-            />
-
-            <Tab.Screen
-                name="Home"
-                component={HomeStack}
-                options={(route) => {
-                    return false
-                        ? {tabBarVisible: false}
-                        : {
-                            tabBarLabel: 'Trang chủ',
+                            tabBarLabel: 'Thiết kế',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
                                     return <GallerySelectedIcon style={styles.tabBarIconStyle} />;
@@ -266,6 +248,28 @@ function MainTab() {
                         };
                 }}
             />
+
+            <Tab.Screen
+                name="My"
+                component={MyStack}
+                options={(route) => {
+                    return false
+                        ? {tabBarVisible: false}
+                        : {
+                            tabBarLabel: 'Cá nhân',
+                            tabBarIcon: ({focused, color, size}) => {
+                                if (focused) {
+                                    // return <Icon name="user-circle" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    return <UserProfileSelectedIcon style={styles.tabBarIconStyle} />;
+                                }
+                                // return <Icon name="user-circle" size={25} color={Style.GREY_TEXT_COLOR} />
+                                return <UserProfileIcon style={styles.tabBarIconStyle} />;
+                            },
+                        };
+                }}
+            />
+
+
 
         </Tab.Navigator>
     );
@@ -418,6 +422,7 @@ import ProductStack from "./src/views/ProductStack";
 import NewsStack from "./src/views/NewsStack";
 import MyStack from "./src/views/MyStack";
 import HomeStack from "./src/views/HomeStack"
+import SchemeStack from "./src/views/SchemeStack"
 
 
 
@@ -544,8 +549,13 @@ export default class App extends Component {
             }
         });
 
+        this.onGetProductSuccess = this.onGetProductSuccess.bind(this);
+        this.onGetProductFalse = this.onGetProductFalse.bind(this);
+
         NetCollection.listCollection(this.onCollectionSuccess, this.onNewFailed);
         NetNews.listNews(this.onNewSuccess, this.onNewFailed);
+
+
 
         // AsyncStorage.getItem('access_token').then((value) => {
         //     if (value) {
@@ -558,7 +568,7 @@ export default class App extends Component {
 
         AsyncStorage.getItem('user_info').then((value) => {
              if(value){
-                 Def.user_info = value;
+                 Def.user_info = JSON.parse(value);
                  Def.username = Def.user_info['user_name'];
                  Def.email = Def.user_info['email'];
              }
@@ -570,13 +580,23 @@ export default class App extends Component {
 
     }
 
+    onGetProductSuccess(data){
+        console.log('Return Product Data');
+        Def.product_data = data["data"];
+    }
+
+
+    onGetProductFalse(data){
+        console.log(" False data : " + data);
+    }
+
     onNewSuccess(data){
-        // console.log('onNewSuccess : ' + JSON.stringify(data));
         Def.news_data = data['data'];
     }
 
     onCollectionSuccess(data){
-        // console.log('onCollectionSuccess : ' + JSON.stringify(data));
+
+        console.log('onCollectionSuccess : ');
         Def.collection_data = data['data'];
     }
 
@@ -586,6 +606,8 @@ export default class App extends Component {
 
     componentDidMount() {
         SplashScreen.hide();
+        console.log('Get Product Info From Scratch');
+        NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
     }
 
 

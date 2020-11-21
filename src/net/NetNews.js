@@ -6,6 +6,7 @@ import Net from './Net';
 export default class NetNews{
 
     static listNews(callback,errCallback ) {
+        console.log("List News");
         Net.sendRequest(callback,errCallback,"https://eurotiledev.house3d.net/api/article/news" ,Def.POST_METHOD, {'slug': 'xu-huong-thiet-ke,tin-chuyen-mon,su-kien'});
     }
 

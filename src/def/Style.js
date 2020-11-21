@@ -20,6 +20,8 @@ export default class Style{
 
     static DRAWER_MENU_ICON_SIZE = PixelRatio.get() < 2 ? 25 :27;
 
+    static CART_ICON_SIZE = PixelRatio.get() < 2 ? 25 :27;
+
     static LOGO_WIDTH = PixelRatio.get() < 2 ? 118 :120;
 
     static LOGO_HEIGHT = PixelRatio.get() < 2 ? 30 :31;

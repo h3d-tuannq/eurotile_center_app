@@ -45,6 +45,8 @@ class UpdatePartnerScreen extends React.Component {
         this.setDate = this.setDate.bind(this);
         this.showAddressModal = this.showAddressModal.bind(this);
 
+        console.log("Constructor recall");
+
         let projectImg = this.getProjectImage();
         this.state = {
             focus : 0,
@@ -82,11 +84,10 @@ class UpdatePartnerScreen extends React.Component {
             filterAttr: 'city_name',
             filterData: [],
             showKeyboard : false,
+            addressTitle: 'Tỉnh/Thành phố'
 
         };
 
-        this._keyboardDidHide = this._keyboardDidHide.bind(this);
-        this._keyboardDidShow = this._keyboardDidShow.bind(this);
         this.refresh = this.refresh.bind(this);
         Def.mainNavigate = this.props.navigation;
         Def.setLoader = this.refresh;
@@ -94,24 +95,13 @@ class UpdatePartnerScreen extends React.Component {
     }
 
     componentDidMount(){
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+        console.log('component did mount recall');
+
         Net.sendRequest(this.onGetCites,this.onGetCitesFalse,'https://eurotiledev.house3d.net/api/user/city' , Def.POST_METHOD);
 
     }
-    componentWillUnmount () {
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
-    }
-    _keyboardDidShow() {
-        console.log('Keyboard show');
-        this.setState({showKeyboard : true});
-    }
 
-    _keyboardDidHide() {
-        console.log('Keyboard hide');
-        this.setState({showKeyboard : false});
-    }
+
 
     onGetCites(res){
         console.log('Load Cities Return');
@@ -153,6 +143,8 @@ class UpdatePartnerScreen extends React.Component {
         if(this.state.currentAddress == 3){
             this.setState({filterData: res, ward: res, filterAttr: 'ward_name'});
         }
+        this.showAddressModal();
+        // setTimeout(this.showAddressModal, 5);
     }
 
 
@@ -162,13 +154,17 @@ class UpdatePartnerScreen extends React.Component {
             this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/city', null, this.showAutocompleteModal);
         } else {
             this.setState({filterData: this.state.cities, filterAttr: 'city_name'});
+            this.showAddressModal();
         }
-        setTimeout(this.showAddressModal, 300);
+
+        // setTimeout(this.showAddressModal, 500);
 
     }
 
     showAddressModal(){
-        this.setState({choseAddress: true});
+        let title = this.state.currentAddress == 1 ? "Tỉnh/Thành phố" : this.state.currentAddress == 2 ? "Quận/huyện" : "Phường/Thị trấn";
+
+        this.setState({choseAddress: true, addressTitle : title});
     }
 
     choseDistrictClick(){
@@ -179,9 +175,10 @@ class UpdatePartnerScreen extends React.Component {
         }else {
             console.log('Isset District: ' + JSON.stringify(this.state.district));
             this.setState({ filterData: this.state.district, filterAttr: 'district_name'});
+            this.showAddressModal();
         }
 
-        setTimeout(this.showAddressModal, 300);
+        // setTimeout(this.showAddressModal, 500);
     }
 
     choseWardClick(){
@@ -190,8 +187,9 @@ class UpdatePartnerScreen extends React.Component {
             this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/ward', {district_code: this.state.district_item.district_code}, this.showAutocompleteModal);
         }else {
             this.setState({filterData: this.state.ward, filterAttr: 'ward_name'});
+            this.showAddressModal();
         }
-        setTimeout(this.showAddressModal, 300);
+        // setTimeout(this.showAddressModal, 500);
     }
 
 
@@ -453,14 +451,14 @@ class UpdatePartnerScreen extends React.Component {
     }
 
     shouldComponentUpdate(){
-        if(Def.REFESH_SCREEN.includes("update-partner-screen")){
-            console.log('Refresh Update Partner');
-            const index = Def.REFESH_SCREEN.indexOf('update-partner-screen');
-            if (index > -1) {
-                Def.REFESH_SCREEN.splice(index, 1);
-            }
+        console.log('should update');
+        console.log('Refresh Update Partner');
+        const index = Def.REFESH_SCREEN.indexOf('update-partner-screen');
+        if (index > -1) {
+            Def.REFESH_SCREEN.splice(index, 1);
             this.refresh();
         }
+
         return true;
     }
 
@@ -731,8 +729,8 @@ class UpdatePartnerScreen extends React.Component {
                         </Text>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <TextInput
-                                onFocus={() => this.setState({focus:1})}
-                                onBlur={()=> this.setState({focus:0})}
+                                onFocus={() => this.setState({focus:1, showKeyboard: true})}
+                                onBlur={()=> this.setState({focus:0, showKeyboard: false})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                 value={this.state.address.toString()}
                                 onChangeText={text => {
@@ -755,8 +753,8 @@ class UpdatePartnerScreen extends React.Component {
                         </Text>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <TextInput
-                                onFocus={() => this.setState({focus:1})}
-                                onBlur={()=> this.setState({focus:0})}
+                                onFocus={() => this.setState({focus:1, showKeyboard: true})}
+                                onBlur={()=> this.setState({focus:0, showKeyboard: false})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                 value={this.state.card_no}
                                 onChangeText={text => this.setState({card_no:text})}
@@ -797,8 +795,8 @@ class UpdatePartnerScreen extends React.Component {
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
 
                             <TextInput
-                                onFocus={() => this.setState({focus:1})}
-                                onBlur={()=> this.setState({focus:0})}
+                                onFocus={() => this.setState({focus:1, showKeyboard: true})}
+                                onBlur={()=> this.setState({focus:0, showKeyboard: false})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                 value={this.state.issue_at}
                                 onChangeText={text => this.setState({issue_at:text})}
@@ -931,6 +929,7 @@ class UpdatePartnerScreen extends React.Component {
                         data={this.state.filterData}
                         filterAttr={this.state.filterAttr}
                         closeFunction={this.closeFunction}
+                        addressTitle={this.state.addressTitle}
 
                     />
                 </Modal>
@@ -998,8 +997,8 @@ const styles = StyleSheet.create({
     textInputNormal : {height: 45, backgroundColor : '#fff', borderColor: "#9e9e9e", borderWidth : 1 ,color:'black', fontSize : 18, borderRadius: 5, marginVertical:3, paddingHorizontal: 10  },
     textInputHover : {height: 45, backgroundColor : '#fff', borderColor: "#48a5ea", borderWidth : 1 , color:'black', fontSize : 18,borderRadius: 5, marginVertical:3, paddingHorizontal: 10 },
 
-    textEditableNormal : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black', fontSize : Style.MIDLE_SIZE , marginRight : 5 },
-    textEditableForcus : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black', fontSize : Style.MIDLE_SIZE  , marginRight : 5},
+    textEditableNormal : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black', fontSize : Style.MIDLE_SIZE , marginRight : 5, textAlign: 'right'},
+    textEditableForcus : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black', fontSize : Style.MIDLE_SIZE  , marginRight : 5, textAlign: 'right'},
 
     buttonText : { color:'#fff', fontSize : 18, paddingVertical: 2},
     autocompleteContainer: {

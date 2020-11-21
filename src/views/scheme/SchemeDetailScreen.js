@@ -1,11 +1,6 @@
 import React from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
-import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
-import CollectionTab from './CollectionTab'
-import MyCustomizeTabBar from  '../../com/common/tabar/MyCustomizeTabBar'
-import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
-import { WebView } from 'react-native-webview';
 const {width, height} = Dimensions.get('window');
 
 import Carousel from 'react-native-snap-carousel';
@@ -25,22 +20,15 @@ const carouselItems = [
     }
 ];
 
-let uri = "";
-
-class CollectionDetailScreen extends React.Component {
-
-
+class SchemeDetailScreen extends React.Component {
     state = {
         // collection_data: null,
         stateCount: 0.0,
         configMenu: Def.config_collection_menu,
-        slide_data : this.props.route.params.item ? this.getImageForCollection(this.props.route.params.item) : carouselItems,
-        item: this.props.route.params.item,
-        collection_detail_data : this.props.route.params.item["brickBox"],
-        activeSlide : 0,
+        slide_data : carouselItems,
+        item:this.props.route.params.item,
+        activeSlide:0,
     };
-
-
 
     constructor(props){
         super(props);
@@ -49,48 +37,29 @@ class CollectionDetailScreen extends React.Component {
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
 
-        let item = this.props.route.params.item;
-
-        if(this.props.route.params.item.model === 'SIG.P-01') {
-            uri = "https://3dplayer.house3d.net/rangdong/?file=27223000";
-        } else {
-            uri = "https://3dplayer.house3d.net/rangdong/?file=41712000";
-        }
-
-
-
-        console.log("Item data"+JSON.stringify(item));
-        // let collectionImages = [this.props.route.params.item.image_path];
-        // if(item.sub_images){
-        //     let subImgs = item.sub_images.split(',');
-        //     subImgs = subImgs.map(x => Def.URL_CONTENT_BASE + x);
-        //     collectionImages = collectionImages.concat(subImgs);
-        // }
-
-
-
+        this.state = {
+            stateCount: 0.0,
+            configMenu: Def.config_collection_menu,
+            slide_data : this.getImageForCollection(this.props.route.params.item),
+            item:this.props.route.params.item,
+            activeSlide:0,
+        };
         Def.mainNavigate = this.props.navigation;
-        Def.collection_detail_data = item['brickBox'];
-        Def.collection_detail_menu = this.createConfigData(Def.collection_detail_data);
-        // this.setState({configMenu: Def.collection_detail_menu});
     }
-
     getImageForCollection(item){
-        let collectionImages = [{image_path:item.image_path}];
-        if(item.sub_images){
-            let subImgs = item.sub_images.split(',');
+        let collectionImages;
+        if(item.faces){
+            let subImgs = item.faces.split(',');
             subImgs = subImgs.map(x => {
                 return {image_path:Def.URL_CONTENT_BASE + x}
             });
-            collectionImages = collectionImages.concat(subImgs);
+            collectionImages = subImgs;
         }
-        console.log("Collection-Slide", JSON.stringify(collectionImages));
         return collectionImages;
     }
 
     refresh()
     {
-        //NetChannel.listChannel(this.onChannelSuccess,this.onChannelFailed);
         this.setState({ stateCount: Math.random() });
     }
 
@@ -103,8 +72,8 @@ class CollectionDetailScreen extends React.Component {
             // console.log('Start');
         });
         this.setState({ collection_data: data["data"] });
-        Def.collection_detail_data = data["data"];
-        Def.collection_detail_menu = this.createConfigData(data["data"]) ;
+        Def.collection_data = data["data"];
+        Def.config_collection_menu = this.createConfigData(data["data"]) ;
         this.setState({ configMenu: Def.config_collection_menu});
     }
 
@@ -114,16 +83,16 @@ class CollectionDetailScreen extends React.Component {
         if(data){
             let configData =  Object.entries(data).map((prop, key) => {
                 // console.log("Props : " + JSON.stringify(prop));
-                // let reObj = {key: prop[0],name_vi:prop[1]["name"], hidden:0, data:prop[1]["product"]};
-                // console.log(JSON.stringify("return-Obj" + JSON.stringify(reObj)));
-                return {key: prop[0],name_vi:prop[1]["name"], hidden:0, data:prop[1]["product"]};
+                return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
             });
             Object.entries(configData).map((prop, key) => {
-                console.log("start" + key);
-                console.log("prop[0]" + prop[0]);
-                console.log("prop[1]" + prop[1]["name_vi"]);
-                console.log("data" + prop[1]["data"]);
-                console.log("end");
+                // console.log("start" + key);
+                // console.log("prop[0]" + prop[0]);
+                // console.log("prop[1]" + prop[1]["name_vi"]);
+                //
+                // console.log("data" + prop[1]["data"]);
+                //
+                // console.log("end");
             });
             return configData;
         }
@@ -143,7 +112,7 @@ class CollectionDetailScreen extends React.Component {
     }
 
     shouldComponentUpdate(){
-        // this.setState({ configMenu: Def.config_news_menu});
+        // this.setState({ activeSlide: 0});
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
         return true;
     }
@@ -179,9 +148,15 @@ class CollectionDetailScreen extends React.Component {
     renderItem = ({item, index}) => {
 
         return (
-            <View key={index} style={Style.styles.cardStyle}>
+            <View key={index} style={[styles.cardStyle, {paddingHorizontal : 5 , backgroundColor:Style.DEFAUT_BLUE_COLOR}]}>
                 <TouchableOpacity >
-                    <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
+                    <Image  style = {[styles.cardImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
+                    <View style = {{justifyContent:'center'}}>
+
+                        <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:2,bottom:0, backgroundColor: Style.DEFAUT_RED_COLOR, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>
+                            {"face " + index}
+                        </Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         );
@@ -191,23 +166,23 @@ class CollectionDetailScreen extends React.Component {
 
     render() {
         const {navigation} = this.props;
-        const configMenu = Def.collection_detail_menu;
+        // const configMenu = Def.config_collection_menu;
+
+        // console.log("Slide Product data : " + JSON.stringify(this.state.slide_data) );
         return (
             <View style={{flex:1}}>
-                {
-
                 <View style={Style.styles.carousel}>
                     <Carousel
                         ref={(c) => { this._carousel = c; }}
                         // keyExtractor={(item, index) => `${item.id}--${item.index}`}
                         data={this.state.slide_data}
                         renderItem={this.renderItem}
-                        itemWidth={width}
+                        itemWidth={width/2}
                         sliderWidth={width}
                         inactiveSlideOpacity={1}
                         inactiveSlideScale={1}
                         activeSlideAlignment={'start'}
-                        loop={true}
+                        // loop={true}
                         autoplay={true}
                         autoplayInterval={5000}
                         onSnapToItem={(index) => this.setState({ activeSlide: index }) }
@@ -215,19 +190,51 @@ class CollectionDetailScreen extends React.Component {
                     { this.pagination }
                 </View>
 
-                }
+                <View style={{flex:1, justifyContent: 'space-between', marginTop :10}}>
+                <View style={styles.productInfo}>
+                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
+                        {"Danh mục sản phẩm"}
+                    </Text>
+                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
+                        {"Mã sản phẩm " + this.state.item.model }
+                    </Text>
+                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
+                        {"Kích thước: 600*600"}
+                    </Text>
+                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
+                        {"Đóng hộp: 6 viên"}
+                    </Text>
 
-                <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >
-                    {
-                        configMenu && Object.entries(configMenu).map((prop, key) => {
-                            if((prop[1]["hidden"]) == 0){
-                                return (
-                                    <CollectionTab key ={prop[0] + "acv"} displayTitle={'Sản phẩm'} type={"product"} navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />
-                                );
-                            }
-                        })
-                    }
-                </ScrollableTabView>
+                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
+                        {"Trọng lượng: 36 kg"}
+                    </Text>
+
+                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
+                        {"Bề mặt: Matt, in kỹ thuật số"}
+                    </Text>
+                    {/*<Text style={Style.text_styles.normalText}>*/}
+                        {/*{"Mô tả"}*/}
+                    {/*</Text>*/}
+                </View>
+
+                {/*<TouchableOpacity style={styles.bookingBtn}>*/}
+                    {/*<Text style={Style.text_styles.whiteTitleText}>*/}
+                        {/*Đặt hàng*/}
+                    {/*</Text>*/}
+                {/*</TouchableOpacity>*/}
+                </View>
+
+                {/*<ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >*/}
+                    {/*{*/}
+                        {/*configMenu && Object.entries(configMenu).map((prop, key) => {*/}
+                            {/*if((prop[1]["hidden"]) == 0){*/}
+                                {/*return (*/}
+                                    {/*<CollectionTab key ={prop[0] + "acv"}  navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />*/}
+                                {/*);*/}
+                            {/*}*/}
+                        {/*})*/}
+                    {/*}*/}
+                {/*</ScrollableTabView>*/}
             </View>
         )
     }
@@ -242,11 +249,6 @@ const styles = StyleSheet.create({
         marginBottom : 125,
         backgroundColor: '#fff'
     },
-
-    webView : {
-        height : height * 0.4,
-        backgroundColor: '#e6e6e6',
-    },
     slider: {
         justifyContent: 'center',
         paddingTop: 5,
@@ -259,18 +261,41 @@ const styles = StyleSheet.create({
     cardStyle: {
         justifyContent: 'center',
         alignItems: 'center',
-        width: width-20,
-        height: width/2,
+        width: width,
+        height: width * 0.8,
+
 
     },
     programListStyle : {
 
     },
+    productInfo : {
+        paddingHorizontal : 10,
+        paddingVertical:5,
+    },
+
+    cardImg: {
+        width: width,
+        paddingVertical :5,
+        height: width * 0.8,
+        borderRadius : 5,
+        paddingHorizontal:2,
+        borderWidth: 1,
+        borderColor : Style.DEFAUT_BLUE_COLOR
+    },
+
     itemImage: {
         width: PROGRAM_IMAGE_WIDTH -5,
         height : PROGRAM_IMAGE_HEIGHT -5,
         borderRadius: 5,
     },
+    bookingBtn : {
+        backgroundColor: Style.DEFAUT_RED_COLOR,
+        height: 60,
+        justifyContent : 'center',
+        alignItems: 'center',
+    }
+
 });
 
-export default CollectionDetailScreen
+export default SchemeDetailScreen;

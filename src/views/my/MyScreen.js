@@ -31,6 +31,7 @@ class MyScreen extends React.Component {
         super(props);
         this.formatText    = this.formatText.bind(this);
         this.onGetUserInfoFun = this.onGetUserInfoFun.bind(this);
+        console.log('MyScreen init');
 
         Def.mainNavigate = this.props.navigation;
         if(this.props.navigation){
@@ -38,7 +39,6 @@ class MyScreen extends React.Component {
         }
 
         if(!Def.user_info){
-            console.log("User info not exits");
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
 
@@ -53,6 +53,7 @@ class MyScreen extends React.Component {
         this.gotoPartnerInfo = this.gotoPartnerInfo.bind(this);
         this.gotoChangePass = this.gotoChangePass.bind(this);
         this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
+        this.signInBtnClick = this.signInBtnClick.bind(this);
         this.refresh = this.refresh.bind(this);
         Def.refreshDashBoard = this.refresh;
 
@@ -60,9 +61,19 @@ class MyScreen extends React.Component {
 
     componentDicMount(){
         if(!Def.user_info){
-            console.log('User info is null');
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
+        const index = Def.REFESH_SCREEN.indexOf('my-screen');
+        console.log("Index in refresh : " + index);
+        if (index > -1) {
+            Def.REFESH_SCREEN.splice(index, 1);
+            this.refresh();
+        }
+
+    }
+
+    signInBtnClick(){
+        this.props.navigation.navigate('Login', {'screen': 'signIn'});
     }
 
     gotoProfile(){
@@ -83,7 +94,6 @@ class MyScreen extends React.Component {
 
     onGetUserInfoFun(value){
         if(value){
-            console.log("Value: " + JSON.stringify(value));
             Def.user_info = JSON.parse(value);
             Def.username = Def.user_info['user_name'];
             Def.email = Def.user_info['email'];
@@ -156,13 +166,16 @@ class MyScreen extends React.Component {
         }
         return rs;
     }
-
     shouldComponentUpdate(){
         // this.setState({ configMenu: Def.config_news_menu});
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
-        if(Def.REFESH_SCREEN.includes("my-screen")){
+        const index = Def.REFESH_SCREEN.indexOf('my-screen');
+        console.log("Index in refresh : " + index);
+        if (index > -1) {
+            Def.REFESH_SCREEN.splice(index, 1);
             this.refresh();
         }
+
         return true;
     }
 
