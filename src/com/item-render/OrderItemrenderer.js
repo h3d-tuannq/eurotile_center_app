@@ -82,12 +82,18 @@ class OrderItemrenderer extends PureComponent{
         return (
             <View style={{flexDirection:'row', paddingVertical:5, marginHorizontal:10, borderBottomWidth : 1, borderBottomColor: Style.GREY_TEXT_COLOR}}>
 
-                <CheckBox
-                    style={styles.checkBoxStyle}
-                    disabled={false}
-                    value={this.state.selectValue}
-                    onValueChange={(newValue) => this.checkBoxChange(newValue)}
-                />
+                {/*<CheckBox*/}
+                    {/*style={styles.checkBoxStyle}*/}
+                    {/*disabled={false}*/}
+                    {/*value={this.state.selectValue}*/}
+                    {/*onValueChange={(newValue) => this.checkBoxChange(newValue)}*/}
+                {/*/>*/}
+
+                <Text style={styles.checkIndex}>
+                    {
+                        this.props.index + 1
+                    }
+                </Text>
 
                 <TouchableOpacity style={styles.item} onPress={
                     () => {
@@ -166,6 +172,12 @@ const  styles = StyleSheet.create({
 
     checkBoxStyle: {
         marginTop: width/15
+    },
+
+    checkIndex: {
+        marginTop: width/15,
+        paddingLeft: 5,
+        paddingRight: 10
     },
 
     imageContainer:{

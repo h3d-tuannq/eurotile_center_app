@@ -56,6 +56,7 @@ class SelectCustomerScreen extends React.Component {
     itemClick(item){
         console.log("Customer Selected: "+ JSON.stringify(item));
         if(Def.order){
+            console.log("Isset Customer");
             Def.order['customer'] = item;
             // Def.order['cityItem'] = item.address.city;
             // Def.order['districtItem'] = item.address.city;
@@ -63,7 +64,9 @@ class SelectCustomerScreen extends React.Component {
             // Def.order['detail_address'] = item.address.address_detail ? item.address.address_detail :'';
             Def.order.address = item.address;
         }
-        this.props.navigation.navigate('Product', {screen: 'booking'});
+        let order = Def.order;
+        this.props.navigation.navigate('Product', {screen: 'booking', order:order});
+        console.log("Navigate to Booking");
     }
 
     onEndReached(){

@@ -90,6 +90,11 @@ export default class Style{
         middleText: {
             fontSize : Style.MIDLE_SIZE,
         },
+        priceText : {
+            fontSize : Style.NORMAL_SIZE,
+            color: Style.DEFAUT_RED_COLOR,
+            fontWeight: 'bold'
+        },
 
         redTitleText: {
             fontSize : Style.TITLE_SIZE,

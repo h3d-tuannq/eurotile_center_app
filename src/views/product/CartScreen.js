@@ -204,8 +204,8 @@ class CartScreen extends React.Component {
             <ProductItemrenderer click={this.itemClick} type={"product"} item={item} favorite={true} styleImage={{width:PROGRAM_IMAGE_WIDTH -2, height:PROGRAM_IMAGE_HEIGHT-5, marginRight:6, marginBottom : 5 }} />
         );
 
-        const renderOrderItem = ({item}) => (
-            <OrderItemrenderer type={"order-item"} item={item} itemChange={this.orderItemChange} click={this.orderItemClick}  styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
+        const renderOrderItem = ({item, index}) => (
+            <OrderItemrenderer type={"order-item"} item={item} index={index} itemChange={this.orderItemChange} click={this.orderItemClick}  styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
         );
 
         return (
@@ -229,22 +229,25 @@ class CartScreen extends React.Component {
 
                 }
                 <View style={{alignItems:'center', justifyContent: 'space-around', marginBottom :10, flexDirection:'row', }}>
+
+                    <TouchableOpacity onPress={() => {
+                        this.setState({choseProduct:true});
+                    }} style={{width: width/2.5, height:40, borderRadius:20, borderWidth:1,borderColor:Style.DEFAUT_BLUE_COLOR, justifyContent : 'center', alignItems: 'center'}}>
+                        <Text style={{fontSize: Style.TITLE_SIZE, color: Style.DEFAUT_BLUE_COLOR}}>
+                            Thêm sản phẩm
+                        </Text>
+                    </TouchableOpacity>
+
                     <TouchableOpacity enabled={true} onPress={() => {
                         this.booking();
                     }}
-                        style={{width: width / 2.5, height:50, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent : 'center', alignItems: 'center'}}>
+                        style={{width: width / 2.5, height:40, borderRadius:20, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent : 'center', alignItems: 'center'}}>
                         <Text style={{fontSize: Style.TITLE_SIZE, color: '#fff'}}>
                             Đặt hàng
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => {
-                        this.setState({choseProduct:true});
-                    }} style={{width: width/2.5, height:50, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent : 'center', alignItems: 'center'}}>
-                        <Text style={{fontSize: Style.TITLE_SIZE, color: '#fff'}}>
-                            Chọn sản phẩm
-                        </Text>
-                    </TouchableOpacity>
+
                 </View>
                 <Modal  onBackButtonPress={this.closeFunction} isVisible={this.state.choseProduct} avoidKeyboard={false}    style={styles.modalView}
                         keyboardShouldPersistTaps={true}

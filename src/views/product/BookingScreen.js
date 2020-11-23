@@ -6,6 +6,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Style from '../../def/Style';
 import LocationIcon from '../../../assets/icons/Location.svg';
 
+import CalendarIcon from '../../../assets/icons/calendar.svg';
+
+
 import ImagePicker  from 'react-native-image-picker'
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -18,6 +21,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
 import OrderItemrenderer from "../../com/item-render/OrderItemrenderer";
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 class BookingScreen extends React.Component {
     constructor(props){
@@ -34,6 +38,7 @@ class BookingScreen extends React.Component {
         this.showAutocompleteModal = this.showAutocompleteModal.bind(this);
         this.parseDataToView = this.parseDataToView.bind(this);
         this.showAddressModal = this.showAddressModal.bind(this);
+        this.showDateTimePicker = this.showDateTimePicker.bind(this);
 
         this.state = {
             focus : 0,
@@ -263,14 +268,18 @@ class BookingScreen extends React.Component {
         UserController.updatePartnerInfo(userInfo, navigation);
     }
     hideDateTimePicker = () => {
-        let showDateVisible =     this.state.dateAttribute == 'birth_day' ? 'isDateTimePickerVisible' : 'isDateTimePickerVisibleIssueOn';
+        let showDateVisible =      'isDateTimePickerVisible' ;
         this.setState({  [showDateVisible] : false });
     };
     handleDatePicked = date => {
-        let dateAttr = this.state.dateAttribute;
-        console.log("A date has been picked: ", date);
         this.hideDateTimePicker();
-        this.setState({  [dateAttr] : date });
+        this.setState({  deliverDate : date });
+    };
+
+    showDateTimePicker = (attr = null) => {
+        let showDateVisible = 'isDateTimePickerVisible';
+
+        this.setState({ [showDateVisible]: true });
     };
 
 
@@ -282,6 +291,26 @@ class BookingScreen extends React.Component {
         const renderOrderItem = ({item}) => (
             <OrderItemrenderer type={"order-item"} item={item} itemChange={this.orderItemChange} click={this.orderItemClick}  styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
         );
+
+        const footerComponent = () => (
+            <View style={{paddingBottom: 20, borderBottomWidth:1, borderColor:Style.GREY_TEXT_COLOR, marginHorizontal:10}}>
+                <View style={{marginTop:10}}>
+                    <Text style={[Style.text_styles.titleTextNotBold, {fontSize: Style.MIDLE_SIZE}]}>
+                        {"Tổng đơn hàng"}
+                    </Text>
+                    <View style={styles.orderInfo}>
+                        <View style={{flexDirection: 'row', justifyContent:'space-between' }}>
+                            <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR}]}>
+                                {"Giá trị"}
+                            </Text>
+                            <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR, marginTop:3}]}>
+                                {10000000 + " đ"}
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+        )
 
         const bookingHeader = () => (
             <View>
@@ -343,7 +372,7 @@ class BookingScreen extends React.Component {
                 </TouchableOpacity>
 
 
-                <TouchableOpacity style={{
+                <View style={{
                     // alignItems: 'center',
                     // justifyContent: 'space-between',
                     borderBottomWidth:1, borderColor:Style.GREY_TEXT_COLOR, marginHorizontal:10,
@@ -356,17 +385,41 @@ class BookingScreen extends React.Component {
                     <Text style={[Style.text_styles.titleTextNotBold, {fontSize: Style.MIDLE_SIZE}]}>
                         Ngày yêu cầu nhận hàng
                     </Text>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
-                        <View style={{ marginTop:15,height: ITEM_HEIGHT, alignItems:'center'}}>
-                            <Text style={[{color:Style.GREY_TEXT_COLOR }, Style.text_styles.middleText]}>
-                                {
-                                    this.state.paymentMethod == 0 ? "Ví điện tử VNPAY" : "Thanh toán khi nhận hàng"
-                                }
+                        <TouchableOpacity style={{
+                            marginRight: 5,
+                            marginTop:10,
+                            height: ITEM_HEIGHT,
+                            flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                            borderColor: Style.GREY_TEXT_COLOR
+                        }} onPress={() => this.showDateTimePicker('deliverDate')}>
+                            <Text style={[Style.text_styles.titleTextNotBold, {
+                                justifyContent: 'center',
+                                paddingLeft: 5,
+                                color: Style.GREY_TEXT_COLOR
+                            }]}>
+                                {this.state.deliverDate ? Def.getDateString(this.state.deliverDate, "yyyy-MM-dd") : "YYYY-MM-DD"}
                             </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </View>
-                </TouchableOpacity>
+                            <CalendarIcon width={24} height={24} color={Style.GREY_TEXT_COLOR}/>
+
+                        </TouchableOpacity>
+
+
+                    <DateTimePickerModal
+                        isVisible={this.state.isDateTimePickerVisible}
+                        onConfirm={(date) => {
+                            this.handleDatePicked(date);
+                            // this.hideDateTimePicker();
+                        }}
+                        onCancel={this.hideDateTimePicker}
+                        date={this.state.birth_day}
+                        mode={'date'}
+                        display='spinner'
+                        style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
+                        datePickerModeAndroid='spinner'
+                        timePickerModeAndroid='spinner'
+                    />
+
+                </View>
 
 
 
@@ -376,7 +429,7 @@ class BookingScreen extends React.Component {
 
 
         return (
-            <View style={{flex:1}}>
+            <View style={{flex:1, backgroundColor:'#ffffff'}}>
                 { Def.order ?
                 <View keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: '#fff', paddingLeft : 10, paddingRight: 5, paddingTop:10}}>
                     <View>
@@ -386,14 +439,13 @@ class BookingScreen extends React.Component {
                         keyExtractor={item => item.product.id +"-" + item.quantity}
                         showsHorizontalScrollIndicator={false}
                         ListHeaderComponent={bookingHeader}
+                        // ListFooterComponent={footerComponent}
                         />
                     </View>
-
-
-
-
                 </View>:<View/>}
+                <View>
 
+                </View>
 
                 <Modal onRequestClose={() => {this.closeFunction(null)}} visible={this.state.choseAddress}  transparent={false} styles={{backgroundColor : 'green'}} >
                     <AutocompleteModal
@@ -404,9 +456,22 @@ class BookingScreen extends React.Component {
 
                     />
                 </Modal>
+
+                <View style={{marginTop:10,  borderBottomWidth:1, borderColor:Style.GREY_TEXT_COLOR, marginHorizontal:20, paddingVertical:5}}>
+                    <View style={styles.orderInfo}>
+                        <View style={{flexDirection: 'row', justifyContent:'space-between' }}>
+                            <Text style={[Style.text_styles.middleText]}>
+                                {"Thanh toán"}
+                            </Text>
+                            <Text style={[Style.text_styles.priceText, { marginTop:3, fontWeight:'bold'}]}>
+                                {10000000 + " đ"}
+                            </Text>
+                        </View>
+                    </View>
+                </View>
                 <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.updatePartnerInfo}>
                     <Text style={styles.buttonText}>
-                        Thêm mới và chọn
+                        Đặt hàng
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -462,8 +527,8 @@ const styles = StyleSheet.create({
     },
 
     button : {
-        paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 5, marginTop : 5, borderWidth : 1, borderColor:'#b3b3b3',
-        flexDirection : 'row', alignItems: 'center', paddingHorizontal : 5
+        paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 20, marginTop : 15, borderWidth : 1, borderColor:'#b3b3b3',
+        flexDirection : 'row', alignItems: 'center', paddingHorizontal : 5, marginHorizontal:10
     },
     textInputNormal : {height: 45, backgroundColor : '#fff', borderColor: "#9e9e9e", borderWidth : 1 ,color:'black', fontSize : 18, borderRadius: 5, marginVertical:3, paddingHorizontal: 10  },
     textInputHover : {height: 45, backgroundColor : '#fff', borderColor: "#48a5ea", borderWidth : 1 , color:'black', fontSize : 18,borderRadius: 5, marginVertical:3, paddingHorizontal: 10 },
