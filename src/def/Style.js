@@ -79,6 +79,7 @@ export default class Style{
           fontSize : Style.BIG_SIZE
         },
         titleText: {
+            marginLeft: 5,
             fontSize : Style.TITLE_SIZE,
             fontWeight: 'bold',
         },

@@ -51,6 +51,23 @@ class CartScreen extends React.Component {
 
     booking(){
         // console.log("Booking Data : " + JSON.stringify(Def.cart_data));
+        var order = {
+          orderItems: Def.cart_data,
+          customer: null,
+          partner_id:Def.user_info['id'],
+          booker_id: Def.user_info['id'] ,
+          // cityItem:'',
+          // districtItem:'',
+          // wardItem:'',
+          // detailAddress:'',
+          address:{},
+
+          deliverDate: new Date(),
+          referralCode:'',
+        };
+
+        Def.order = order;
+
         console.log("Goto booking")
         this.props.navigation.navigate('Product', {screen:'select-customer'});
 

@@ -53,10 +53,17 @@ class CustomerItemrenderer extends PureComponent{
                     }
                 }>
                     <View style={styles.info}>
-                            <Text style={styles.titleInfo}>{model.name}</Text>
+                            <Text style={styles.titleInfo}>{'(+84) ' + model.phone}</Text>
                             <View style={styles.groupInfo}>
-                                <Text style={styles.priceText}>{model['phone'] }</Text>
+                                <Text style={styles.addressText}>{ model['name'] }</Text>
                             </View>
+                        {
+                            model['address'] ?
+                            <View style={styles.address}>
+                                <Text style={styles.addressText}>{Def.getAddressStr(model['address'])}</Text>
+                            </View>
+                            : <View/>
+                        }
                     </View>
                 </TouchableOpacity>
             </View>
@@ -68,7 +75,8 @@ class CustomerItemrenderer extends PureComponent{
 const  styles = StyleSheet.create({
     item: {
         flexDirection:'row', paddingVertical:5, marginHorizontal:10, borderBottomWidth : 1, borderBottomColor: Style.GREY_TEXT_COLOR, width: width -20,
-        marginHorizontal:10
+        marginHorizontal:10,
+        paddingVertical: 5,
     },
 
     checkBoxStyle: {
@@ -132,6 +140,12 @@ const  styles = StyleSheet.create({
     favoriteIcon : {
         width : 20,
         height : 20,
+    },
+    addressText: {
+        fontSize : Style.NORMAL_SIZE,
+    },
+    address: {
+        marginTop :5
     }
 });
 

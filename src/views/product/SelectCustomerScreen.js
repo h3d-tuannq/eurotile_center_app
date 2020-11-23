@@ -24,7 +24,7 @@ class SelectCustomerScreen extends React.Component {
             data : Def.customer > 0 ? Def.customer : [],
             query : ""
         };
-        // this.itemClick = this.itemClick.bind(this);
+        this.itemClick = this.itemClick.bind(this);
         this.onEndReached = this.onEndReached.bind(this);
         this.onCustomerGetSuccess = this.onCustomerGetSuccess.bind(this);
         this.onGetFalse = this.onGetFalse.bind(this);
@@ -53,11 +53,18 @@ class SelectCustomerScreen extends React.Component {
     //     this.props.closeFunction(item);
     // }
 
-    // itemClick(item){
-    //     let screen = 'product-detail';
-    //     this.props.itemClick(item);
-    //
-    // }
+    itemClick(item){
+        console.log("Customer Selected: "+ JSON.stringify(item));
+        if(Def.order){
+            Def.order['customer'] = item;
+            // Def.order['cityItem'] = item.address.city;
+            // Def.order['districtItem'] = item.address.city;
+            // Def.order['wardItem'] = item.address.city;
+            // Def.order['detail_address'] = item.address.address_detail ? item.address.address_detail :'';
+            Def.order.address = item.address;
+        }
+        this.props.navigation.navigate('Product', {screen: 'booking'});
+    }
 
     onEndReached(){
         console.log('End Flatlist : ');
@@ -72,14 +79,13 @@ class SelectCustomerScreen extends React.Component {
 
     render() {
 
-        const click = this.props.itemClick;
         const filterData = this.filterData(this.state.query);
         const renderItem = ({ item }) => (
-            <CustomerItemRenderer click={()=> {click(item)}}  item={item} favorite={true}  />
+            <CustomerItemRenderer click={(item)=> {this.itemClick(item)}}  item={item} favorite={true}  />
         );
 
         return (
-            <View style={{height: height-Style.HEADER_HEIGHT, width: width,marginTop: 10, borderTopLeftRadius :20, borderTopRightRadius :20 , backgroundColor:'#fff', alignItems:'center', paddingBottom:20}}>
+            <View style={{height: height-Style.HEADER_HEIGHT, width: width,paddingTop: 5, borderTopLeftRadius :0, borderTopRightRadius :0 , backgroundColor:'#fff', alignItems:'center', paddingBottom:20}}>
                 <Autocomplete
                     data={filterData}
                     defaultValue={this.state.query}
@@ -97,14 +103,13 @@ class SelectCustomerScreen extends React.Component {
                     flatListProps = {{
                         alignItems : 'center',
                         onEndReached : this.onEndReached,
-                        marginBottom:10,
                         keyboardShouldPersistTaps:"handled",
 
                     }}
 
                     // keyboardShouldPersistTaps='handled'
                     inputContainerStyle={{borderWidth:0}}
-                    listStyle={{borderWidth:0, marginBottom:50}}
+                    listStyle={{borderWidth:0, marginBottom:80}}
 
                 />
             </View>

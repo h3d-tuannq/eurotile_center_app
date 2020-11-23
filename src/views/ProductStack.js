@@ -6,6 +6,8 @@ import ProductScreen from './product/ProductScreen'
 import CollectionDetailScreen from  './product/CollectionDetailScreen'
 import ProductDetailScreen from  './product/ProductDetailScreen'
 import SelectCustomerScreen from  './product/SelectCustomerScreen'
+import CreateCustomerScreen from  './product/CreateCustomerScreen'
+import BookingScreen from './product/BookingScreen'
 
 
 
@@ -37,12 +39,19 @@ class ProductStack extends React.Component {
           number_order: Def.order_number
         };
         this.goProductList = this.goProductList.bind(this);
+        this.goToCreateCustomer = this.goToCreateCustomer.bind(this);
     }
 
     goProductList() {
         console.log("Go to Product List");
         if(this.props.navigation){
             this.props.navigation.navigate('Product', {screen:'product-list-screen'});
+        }
+    }
+
+    goToCreateCustomer() {
+        if(this.props.navigation){
+            this.props.navigation.navigate('Product', {screen:'create-customer'});
         }
     }
 
@@ -171,7 +180,7 @@ class ProductStack extends React.Component {
 
                 <RootStack.Screen name="product-list-screen" component={CartScreen} options=
                     {({route}) => ({
-                        title: 'Sản phẩm',
+                        title: 'Tạo đơn hàng',
                         headerStyle: {
                             backgroundColor: Style.DEFAUT_BLUE_COLOR,
                             height: Style.HEADER_HEIGHT,
@@ -282,7 +291,7 @@ class ProductStack extends React.Component {
                                             alignItems : 'center'
                                         }
                                     }
-                                    onPress={this.goProductList}>
+                                    onPress={this.goToCreateCustomer}>
                                     {/*{ this.state.number_order ?*/}
                                         {/*<View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>*/}
                                             {/*<Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>*/}
@@ -305,6 +314,41 @@ class ProductStack extends React.Component {
                             }}
                     )
                     } />
+
+                <RootStack.Screen name="create-customer" component={CreateCustomerScreen} options=
+                    {({route}) => ({
+                            title: 'Khách hàng mới',
+                            headerStyle: {
+                                backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                                height: Style.HEADER_HEIGHT,
+                            },
+                            headerTintColor: '#fff',
+                            headerTitleStyle: {
+                                fontWeight: 'bold',
+                            },
+                            headerBackImage: ()=> {
+                                return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                            }}
+                    )
+                    } />
+
+                <RootStack.Screen name="booking" component={BookingScreen} options=
+                    {({route}) => ({
+                            title: 'Đặt hàng',
+                            headerStyle: {
+                                backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                                height: Style.HEADER_HEIGHT,
+                            },
+                            headerTintColor: '#fff',
+                            headerTitleStyle: {
+                                fontWeight: 'bold',
+                            },
+                            headerBackImage: ()=> {
+                                return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                            }}
+                    )
+                    } />
+
 
             </RootStack.Navigator>
         )

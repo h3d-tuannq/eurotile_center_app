@@ -183,6 +183,26 @@ export default class Def{
 
     }
 
+    static getAddressStr(address){
+        let strAddress = "";
+        if(!address){
+            return strAddress;
+        }
+        if(address['ward']){
+            strAddress += address['ward']['ward_name'] + ', ';
+        }
+
+        if(address['district']){
+            strAddress += address['district']['district_name'] + ', ';
+        }
+
+        if(address['city']){
+            strAddress += address['city']['city_name'];
+        }
+        return strAddress;
+
+    }
+
 
 
 }
