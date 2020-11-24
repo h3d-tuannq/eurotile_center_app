@@ -65,7 +65,7 @@ class SelectCustomerScreen extends React.Component {
             Def.order.address = item.address;
         }
         let order = Def.order;
-        this.props.navigation.navigate('Product', {screen: 'booking', order:order});
+        this.props.navigation.navigate('Product', {screen: 'booking'});
         console.log("Navigate to Booking");
     }
 

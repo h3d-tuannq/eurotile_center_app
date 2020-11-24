@@ -8,6 +8,7 @@ import ProductDetailScreen from  './product/ProductDetailScreen'
 import SelectCustomerScreen from  './product/SelectCustomerScreen'
 import CreateCustomerScreen from  './product/CreateCustomerScreen'
 import BookingScreen from './product/BookingScreen'
+import ChangeOrderAddressScreen from './product/ChangeOrderAddressScreen'
 
 
 
@@ -335,6 +336,23 @@ class ProductStack extends React.Component {
                 <RootStack.Screen name="booking" component={BookingScreen} options=
                     {({route}) => ({
                             title: 'Đặt hàng',
+                            headerStyle: {
+                                backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                                height: Style.HEADER_HEIGHT,
+                            },
+                            headerTintColor: '#fff',
+                            headerTitleStyle: {
+                                fontWeight: 'bold',
+                            },
+                            headerBackImage: ()=> {
+                                return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                            }}
+                    )
+                    } />
+
+                <RootStack.Screen name="change-order-address" component={ChangeOrderAddressScreen} options=
+                    {({route}) => ({
+                            title: 'Cập nhật địa chỉ',
                             headerStyle: {
                                 backgroundColor: Style.DEFAUT_BLUE_COLOR,
                                 height: Style.HEADER_HEIGHT,

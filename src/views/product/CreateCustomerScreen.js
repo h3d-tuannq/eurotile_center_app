@@ -98,7 +98,6 @@ class CreateCustomerScreen extends React.Component {
     }
 
     showAutocompleteModal(res){
-        console.log("Get Res Data : " + JSON.stringify(res));
         let unit = this.state.currentAddress == 1 ? 'city_item' : this.state.currentAddress == 2 ? 'district_item' : 'ward_item';
         if(this.state.currentAddress == 1){
             this.setState({ filterData: res, cites: res, filterAttr: 'city_name'});
