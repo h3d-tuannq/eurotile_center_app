@@ -4,9 +4,6 @@ import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Style from '../../def/Style';
-import LocationIcon from '../../../assets/icons/Location.svg';
-
-import CalendarIcon from '../../../assets/icons/calendar.svg';
 
 
 import ImagePicker  from 'react-native-image-picker'
@@ -15,13 +12,8 @@ const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 
 const ITEM_HEIGHT = 40;
 
-import {Picker} from '@react-native-community/picker';
-import UserController from "../../controller/UserController";
-import Autocomplete from 'react-native-autocomplete-input';
 import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
-import OrderItemrenderer from "../../com/item-render/OrderItemrenderer";
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 class ChangeOrderAddressScreen extends React.Component {
     constructor(props){
@@ -60,9 +52,11 @@ class ChangeOrderAddressScreen extends React.Component {
     }
 
     componentDidMount(){
+        if(this.state.cities.length > 0){
         Net.sendRequest(this.onGetCites,this.onGetCitesFalse,'https://eurotiledev.house3d.net/api/user/city' , Def.POST_METHOD);
-    }
 
+        }
+    }
 
 
     onGetCites(res){
@@ -231,6 +225,9 @@ class ChangeOrderAddressScreen extends React.Component {
 
        // this.props.navigation.navigate('Product', {screen:'booking'});
        this.props.navigation.navigate('Product', {screen: 'booking'});
+       if(Def.updateAddress){
+            Def.updateAddress();
+       }
     }
 
     render() {

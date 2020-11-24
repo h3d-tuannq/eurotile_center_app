@@ -85,25 +85,11 @@ class CartScreen extends React.Component {
 
 
     itemClick(item){
+        this.setState({choseProduct:false});
         const found = Def.cart_data.findIndex(element => element.product.id == item.id);
         if(found !== -1){
-            // let foundObj = Def.cart_data[found];
-            // let newOrderItem = {
-            //     product:foundObj.product,
-            //     selectValue: foundObj.selectValue,
-            //     quantity:foundObj.quantity + 1,
-            //     area:item['brickBoxInfo']['total_area'],
-            //     saleArea:item['brickBoxInfo']['total_area']
-            // }
-            // // Def.cart_data[found] = newOrderItem;
-            // Def.cart_data.splice(found, 1);
-            // Def.cart_data.push(newOrderItem);
             Def.cart_data[found].quantity++;
             Def.cart_data[found].selectValue = true;
-
-            // console.log("Quantity item found : " + Def.cart_data[found].quantity);
-            // this.forceUpdate();
-
         } else {
             let orderItem = {
                 product:item,
@@ -115,20 +101,8 @@ class CartScreen extends React.Component {
 
             Def.cart_data.push(orderItem);
         }
-
         let newCartData = [];
-
-        // Def.cart_data.forEach(function(item){
-        //     newCartData.push(item)
-        // });
-
-        this.setState({cart_data: Def.cart_data, choseProduct:false, canOrder: this.checkCanOrder()});
-        this.forceUpdate();
-
-        // console.log("CartData : " + JSON.stringify(this.state.cart_data))
-
-        // this.closeFunction(null);
-
+        this.setState({cart_data: Def.cart_data, canOrder: this.checkCanOrder()});
     }
 
     addItemToCart(item){

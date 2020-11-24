@@ -67,6 +67,8 @@ export default class Def{
 
     static refreshDashBoard = null;
 
+    static updateAddress = null;
+
 
 
     static getDateString(date, format) {

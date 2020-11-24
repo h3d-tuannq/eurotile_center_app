@@ -42,7 +42,16 @@ class BookingScreen extends React.Component {
             paymentMethod:0,
 
         };
+
+
+
         Def.mainNavigate = this.props.navigation;
+        this.refresh = this.refresh.bind(this);
+        Def.updateAddress = this.refresh;
+    }
+
+    refresh(){
+        this.setState({address:Def.order.address});
     }
 
     changeAddress(){
