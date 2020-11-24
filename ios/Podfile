@@ -18,9 +18,7 @@ target 'eurotile_center_app' do
 
 
 
-  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
-  pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
 
   target 'eurotile_center_appTests' do
     inherit! :complete
