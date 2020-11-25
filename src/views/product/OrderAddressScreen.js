@@ -66,7 +66,7 @@ class OrderAddressScreen extends React.Component {
 
     componentDidMount(){
         console.log('component did mount recall');
-        Net.sendRequest(this.onGetCites,this.onGetCitesFalse,'https://eurotiledev.house3d.net/api/user/city' , Def.POST_METHOD);
+        Net.sendRequest(this.onGetCites,this.onGetCitesFalse,Def.URL_BASE + '/api/user/city' , Def.POST_METHOD);
     }
 
 
@@ -116,7 +116,7 @@ class OrderAddressScreen extends React.Component {
     choseCityClick(){
         this.setState({currentAddress:1});
         if(!this.state.cities || this.state.cities.length == 0 ){
-            this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/city', null, this.showAutocompleteModal);
+            this.getAdministrativeUnit(Def.URL_BASE + '/api/user/city', null, this.showAutocompleteModal);
         } else {
             this.setState({filterData: this.state.cities, filterAttr: 'city_name'});
             this.showAddressModal();
@@ -132,7 +132,7 @@ class OrderAddressScreen extends React.Component {
         this.setState({currentAddress:2});
         if(!this.state.district || this.state.district.length == 0){
             console.log('Chưa tồn tại District : ');
-            this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/district', {city_code: this.state.city_item.city_code}, this.showAutocompleteModal);
+            this.getAdministrativeUnit(Def.URL_BASE + '/api/user/district', {city_code: this.state.city_item.city_code}, this.showAutocompleteModal);
         }else {
             console.log('Isset District: ' + JSON.stringify(this.state.district));
             this.setState({ filterData: this.state.district, filterAttr: 'district_name'});
@@ -144,7 +144,7 @@ class OrderAddressScreen extends React.Component {
     choseWardClick(){
         this.setState({currentAddress:3});
         if(!this.state.ward || this.state.ward.length == 0){
-            this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/ward', {district_code: this.state.district_item.district_code}, this.showAutocompleteModal);
+            this.getAdministrativeUnit(Def.URL_BASE + '/api/user/ward', {district_code: this.state.district_item.district_code}, this.showAutocompleteModal);
         }else {
             this.setState({filterData: this.state.ward, filterAttr: 'ward_name'});
             this.showAddressModal();
@@ -157,14 +157,14 @@ class OrderAddressScreen extends React.Component {
             if(this.state.currentAddress == 1){
                if (!this.state.city_item || (this.state.city_item.city_code !== item.city_code)){
                    this.setState({nextAddress:2, district_item : null, ward_item : null });
-                   this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/district', {city_code: item.city_code});
+                   this.getAdministrativeUnit(Def.URL_BASE + '/api/user/district', {city_code: item.city_code});
                }
             }
 
             if(this.state.currentAddress == 2){
                 if (!this.state.district_item || this.state.district_item.district_code !== item.district_code){
                     this.setState({nextAddress:3 , ward_item : null});
-                    this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/ward', {district_code: item.district_code});
+                    this.getAdministrativeUnit(Def.URL_BASE + '/api/user/ward', {district_code: item.district_code});
                 }
             }
 

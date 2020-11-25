@@ -17,11 +17,11 @@ const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 const carouselItems = [
     {
         id:1,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/24/1/main_img.jpg',
+        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/24/1/main_img.jpg',
     },
     {
         id:2,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/30/2/main_img.jpg',
+        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/30/2/main_img.jpg',
     }
 ];
 

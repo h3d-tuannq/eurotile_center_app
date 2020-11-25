@@ -11,6 +11,8 @@ import Def from '../../def/Def'
 import Style from "../../def/Style";
 import CheckBox from '@react-native-community/checkbox';
 import InputSpinner from "react-native-input-spinner";
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 
 class OrderItemrenderer extends PureComponent{
 
@@ -29,7 +31,13 @@ class OrderItemrenderer extends PureComponent{
         this.updateOrder = this.updateOrder.bind(this);
         this.checkBoxChange = this.checkBoxChange.bind(this);
         this.quantityChange = this.quantityChange.bind(this);
+        this.deleteHandleClick = this.deleteHandleClick.bind(this);
     }
+
+    deleteHandleClick = (item) => {
+        this.props.itemChange(item, true);
+    }
+
     formatText(text, maxCharacter = 20){
         let rs = text;
         // if(this.props.type == "product"){
@@ -107,11 +115,17 @@ class OrderItemrenderer extends PureComponent{
 
                     <View style={styles.info}>
                         <View>
-                            <Text style={styles.titleInfo}>{model.name}</Text>
+                            <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+                                <Text style={styles.titleInfo}>{model.name}</Text>
+                                <TouchableOpacity style={{marginTop:-3 , paddingHorizontal:5, paddingVertical:3}} onPress={() => {this.deleteHandleClick(this.props.item)}}>
+                                    <Icon name="trash-alt"  size={17} color={Style.GREY_TEXT_COLOR} />
+                                </TouchableOpacity>
+                            </View>
+
+
                             <View style={styles.groupInfo}>
                                 <Text style={styles.infoText}>{model['brickBoxInfo']['width'] + "x"+ model['brickBoxInfo']['height'] + "  -  " +model['brickBoxInfo']['brick_number'] + " viên/hộp" }</Text>
                                 <Text style={styles.priceText}>{model['sale_price'] + " đ" }</Text>
-
                             </View>
                         </View>
 

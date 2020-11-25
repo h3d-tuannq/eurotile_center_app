@@ -608,6 +608,18 @@ export default class App extends Component {
         SplashScreen.hide();
         console.log('Get Product Info From Scratch');
         NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
+        AsyncStorage.getItem('cart_data').then((value) => {
+            if(value){
+                Def.cart_data = JSON.parse(value);
+            }
+        });
+
+        AsyncStorage.getItem('order').then((value) => {
+            if(value){
+                Def.order = JSON.parse(value);
+            }
+        });
+
     }
 
 

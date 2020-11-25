@@ -219,7 +219,7 @@ export default class UserController{
 
         let param = {'username' : email, 'password' : password};
 
-        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/login' , Def.POST_METHOD , param);
+        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/login' , Def.POST_METHOD , param);
         if(Def.setLoader)
             Def.setLoader(false);
 
@@ -232,7 +232,7 @@ export default class UserController{
 
         console.log('Login with firebase');
 
-        Net.sendRequest(this.onLoginFirebaseSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/firebase-login' , Def.POST_METHOD , param);
+        Net.sendRequest(this.onLoginFirebaseSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/firebase-login' , Def.POST_METHOD , param);
         // if(Def.setLoader)
         //     Def.setLoader(false);
 
@@ -240,7 +240,7 @@ export default class UserController{
     };
 
     static async getCities ( ){
-        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/city' , Def.POST_METHOD);
+        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/city' , Def.POST_METHOD);
     }
 
 
@@ -248,7 +248,7 @@ export default class UserController{
 
         let param = {'display_name' : displayName, 'email' : email ,'password' : password, 'password_confirm' : password};
 
-        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/sign-up' , Def.POST_METHOD , param);
+        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + 'api/user/sign-up' , Def.POST_METHOD , param);
         if(Def.setLoader)
             Def.setLoader(false);
 

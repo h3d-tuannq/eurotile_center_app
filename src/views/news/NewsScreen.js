@@ -23,7 +23,7 @@ const news_data =  {
                 "link": "https://vov.vn/chinh-tri/lam-tuyen-giao-chua-bao-gio-la-cong-viec-de-dang-1075124.vov",
                 "title": "Làm tuyên giáo chưa bao giờ là công việc dễ dàng",
                 "reader_link": "",
-                "thumbnail": "https://eurotiledev.house3d.net/data/eurotileData/1/euHYKYXEj7WPpwH_7eaAv_4QglT5iwe1.png",
+                "thumbnail": Def.URL_BASE + "/data/eurotileData/1/euHYKYXEj7WPpwH_7eaAv_4QglT5iwe1.png",
                 "date": "2020-08-01 22:20:49"
 
             },
@@ -33,7 +33,7 @@ const news_data =  {
                 "link": "https://vov.vn/chinh-tri/ong-tong-the-anh-trung-cu-bi-thu-huyen-uy-yen-chau-son-la-1076661.vov",
                 "title": "Ông Tòng Thế Anh trúng cử Bí thư Huyện ủy Yên Châu, Sơn La",
                 "reader_link": "",
-                "thumbnail": "https://eurotiledev.house3d.net/data/eurotileData/1/euHYKYXEj7WPpwH_7eaAv_4QglT5iwe1.png",
+                "thumbnail": Def.URL_BASE + "/data/eurotileData/1/euHYKYXEj7WPpwH_7eaAv_4QglT5iwe1.png",
                 "date": "2020-08-01 22:20:49"
             },
             {

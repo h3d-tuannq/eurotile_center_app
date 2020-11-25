@@ -4,6 +4,8 @@ import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 
+import AsyncStorage from '@react-native-community/async-storage'
+
 import ProductItemrenderer from "../../com/item-render/ProductItemrenderer";
 import OrderItemrenderer from "../../com/item-render/OrderItemrenderer";
 
@@ -69,17 +71,24 @@ class CartScreen extends React.Component {
         Def.order = order;
 
         console.log("Goto booking")
-        this.props.navigation.navigate('Product', {screen:'select-customer'});
 
+        this.props.navigation.navigate('Product', {screen:'select-customer'});
+        AsyncStorage.setItem('order', JSON.stringify(Def.cart_data));
     }
     // callback when item change
-    orderItemChange = (item) => {
+    orderItemChange = (item, isRemove = false) => {
         const found = Def.cart_data.findIndex(element => element.product.id == item.product.id);
         if(found !== -1){
+            if(isRemove){
+                Def.cart_data.splice(found, 1);
+                this.setState({canOrder:this.updateCartOrder(), cart_data:Def.cart_data});
+            }else {
             Def.cart_data[found].quantity = item.quantity;
             Def.cart_data[found].selectValue = item.selectValue;
+                this.setState({canOrder:this.updateCartOrder()});
+            }
+            AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
         }
-        this.setState({canOrder:this.updateCartOrder()});
     }
 
 
@@ -103,6 +112,7 @@ class CartScreen extends React.Component {
         }
         let newCartData = [];
         this.setState({cart_data: Def.cart_data, canOrder: this.checkCanOrder()});
+        AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
     }
 
     addItemToCart(item){
@@ -223,19 +233,19 @@ class CartScreen extends React.Component {
 
 
                 </View>
-                <Modal  onBackButtonPress={this.closeFunction} isVisible={this.state.choseProduct} avoidKeyboard={false}    style={styles.modalView}
-                        keyboardShouldPersistTaps={true}
+                <Modal  onBackButtonPress={this.closeFunction} isVisible={this.state.choseProduct}     style={styles.modalView}
+                        // keyboardShouldPersistTaps={true}
                 >
-                    <KeyboardAvoidingView enabled  behavior={Platform.OS === "android" ? undefined : "position"}>
-                        <View  style={{flex:1}} scrollEnabled={false} keyboardShouldPersistTaps="handled">
+                    {/*<KeyboardAvoidingView enabled  behavior={Platform.OS === "android" ? undefined : "position"}>*/}
+                        {/*<View  style={{flex:1}} scrollEnabled={false} keyboardShouldPersistTaps="handled">*/}
                     <ProductAutocomplete
                         data={this.state.productData}
                         filterAttr={'model'}
                         itemClick={this.itemClick}
                         title={"Sản phẩm"}
                     />
-                        </View>
-                    </KeyboardAvoidingView>
+                        {/*</View>*/}
+                    {/*</KeyboardAvoidingView>*/}
                     {/*<Text>*/}
                         {/*this is Modal*/}
                     {/*</Text>*/}

@@ -25,7 +25,7 @@ export default class CustomerController{
 
     static async getCustomerByCondition( successCallback, falseCallback, partnerId = null, cskh_id = null, customer_type = null, phone= "", customer_name= null   ){
         let params={partnerId:partnerId, cskh_id:cskh_id , customer_type: customer_type, phone: phone, customer_name:customer_name}
-        Net.sendRequest(successCallback,falseCallback,'https://eurotiledev.house3d.net/api/customer/get-customer' , Def.POST_METHOD, params );
+        Net.sendRequest(successCallback,falseCallback,Def.URL_BASE + '/api/customer/get-customer' , Def.POST_METHOD, params );
     }
 
 

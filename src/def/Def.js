@@ -205,6 +205,9 @@ export default class Def{
 
     }
 
-
+    static calOrderValue(order){
+       let total = order.orderItems.reduce(function(acc, val) { return acc.sale_price + val.sale_price; }, 0);
+       return total;
+    }
 
 }

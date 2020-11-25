@@ -148,7 +148,7 @@ class BookingScreen extends React.Component {
                                 {"Giá trị"}
                             </Text>
                             <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR, marginTop:3}]}>
-                                {10000000 + " đ"}
+                                {Def.calOrderValue(this.state.order) + " đ"}
                             </Text>
                         </View>
                     </View>
@@ -276,7 +276,7 @@ class BookingScreen extends React.Component {
 
         return (
             <View style={{flex:1, backgroundColor:'#ffffff'}}>
-                { Def.order ?
+                { this.state.order ?
                 <View keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: '#fff', paddingLeft : 10, paddingRight: 5, paddingTop:10}}>
                     <View>
                         <FlatList
@@ -299,7 +299,7 @@ class BookingScreen extends React.Component {
                                 {"Thanh toán"}
                             </Text>
                             <Text style={[Style.text_styles.priceText, { marginTop:3, fontWeight:'bold'}]}>
-                                {10000000 + " đ"}
+                                {Def.calOrderValue(this.state.order) + " đ"}
                             </Text>
                         </View>
                     </View>
