@@ -22,6 +22,9 @@ const RootStack = createStackNavigator();
 
 import NewsScreen from './news/NewsScreen';
 import NewsDetail from './news/NewsDetailScreen';
+import EurotileLogo from '../../assets/icons/Logo w.svg';
+import CartIcon from '../../assets/icons/cart.svg';
+import Def from '../def/Def';
 
 // function NewsDetailScreen({navigation} ) {
 //     return (
@@ -38,6 +41,17 @@ import NewsDetail from './news/NewsDetailScreen';
 class NewsStack extends React.Component {
     constructor(props){
         super(props);
+        this.state = {
+            number_order: Def.order_number
+        };
+    }
+
+    formatText(text){
+        let rs = text;
+        if(text && text.length > 10){
+            rs = text.substring(0, 20) ;
+        }
+        return rs;
     }
 
     render() {
@@ -45,12 +59,12 @@ class NewsStack extends React.Component {
             <RootStack.Navigator>
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="news-list" component={NewsScreen} options={{
-                    title: 'Tin Tức',
+                    title: null,
                     headerLeft: () => (
                         <TouchableOpacity
                             style=  {
                                 {
-                                    width: Style.DRAWER_MENU_SIZE,
+                                    width: Style.LOGO_WIDTH + 20,
                                     height:Style.DRAWER_MENU_SIZE,
                                     justifyContent: 'center',
                                     paddingLeft:15 ,
@@ -58,13 +72,15 @@ class NewsStack extends React.Component {
                                 }
                             }
                             onPress={() => this.props.navigation.toggleDrawer()}>
-                            <MenuIcon
-                                width={Style.DRAWER_MENU_ICON_SIZE}
-                                height={Style.DRAWER_MENU_ICON_SIZE}
+                            <EurotileLogo
+                                width={Style.LOGO_WIDTH}
+                                height={Style.LOGO_HEIGHT}
                             />
                         </TouchableOpacity>
 
                     ),
+
+
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,

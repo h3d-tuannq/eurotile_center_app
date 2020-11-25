@@ -48,6 +48,7 @@ const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 import NetNews from './src/net/NetNews'
 import NetCollection from './src/net/NetCollection'
+import NetScheme from './src/net/NetScheme'
 
 const styles = StyleSheet.create({
     baseText: {
@@ -177,7 +178,7 @@ function MainTab() {
             style={{height: 120, paddingVertical: 20 , backgroundColor : 'red'}}
 
             tabBar={(props) => <MyTabBar {...props} item={null} />}
-            initialRouteName={'Product'}
+            initialRouteName={'scheme'}
             tabBarOptions={{
                 activeTintColor: Style.DEFAUT_RED_COLOR,
                 inactiveTintColor: '#b3b3b3',
@@ -535,13 +536,8 @@ messaging().onMessage(async (remoteMessage) => {
 export default class App extends Component {
     state = {
     };
-
-
-
     constructor(props) {
         super(props);
-
-
         AsyncStorage.getItem('access_token').then((value) => {
             if (value) {
                 Def.login_token = value;
@@ -551,6 +547,9 @@ export default class App extends Component {
 
         this.onGetProductSuccess = this.onGetProductSuccess.bind(this);
         this.onGetProductFalse = this.onGetProductFalse.bind(this);
+        this.onDesignSuccess = this.onDesignSuccess.bind(this);
+        this.onDesignFalse = this.onDesignFalse.bind(this);
+
 
         NetCollection.listCollection(this.onCollectionSuccess, this.onNewFailed);
         NetNews.listNews(this.onNewSuccess, this.onNewFailed);
@@ -595,10 +594,19 @@ export default class App extends Component {
     }
 
     onCollectionSuccess(data){
-
         console.log('onCollectionSuccess : ');
         Def.collection_data = data['data'];
     }
+
+    onDesignSuccess(data){
+        console.log('onDesignSuccess : ');
+        Def.design_data = data['data'];
+    }
+
+    onDesignFalse(data){
+        console.log('Get Design False');
+    }
+
 
     onNewFailed(data){
         console.log('onNewFailed d: ' + JSON.stringify(data));
@@ -608,6 +616,11 @@ export default class App extends Component {
         SplashScreen.hide();
         console.log('Get Product Info From Scratch');
         NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
+        NetScheme.getAllDesign(this.onDesignSuccess, this.onDesignFalse);
+
+
+
+
         AsyncStorage.getItem('cart_data').then((value) => {
             if(value){
                 Def.cart_data = JSON.parse(value);

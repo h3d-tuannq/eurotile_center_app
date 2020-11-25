@@ -1,12 +1,13 @@
 import React from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
-import NetCollection from '../../net/NetCollection'
+import NetScheme from '../../net/NetScheme'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 
 import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
+import ProgramHozList from '../../com/common/ProgramHozList';
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -24,23 +25,23 @@ const carouselItems = [
 class SchemeScreen extends React.Component {
     constructor(props){
         super(props);
-        this.onGetCollectionSuccess     = this.onGetCollectionSuccess.bind(this);
-        this.onGetCollectionFalse     = this.onGetCollectionFalse.bind(this);
+        this.onGetDesignSuccess     = this.onGetDesignSuccess.bind(this);
+        this.onGetDesignFalse     = this.onGetDesignFalse.bind(this);
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
 
         Def.mainNavigate = this.props.navigation;
 
-        if(!Def.collection_data) {
-            NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
+        if(!Def.design_data) {
+            NetScheme.getAllDesign(this.onGetDesignSuccess, this.onGetDesignFalse);
+        } else {
+            Def.config_design_menu = this.createConfigData(Def.design_data);
         }
-        else if (!Def.config_collection_menu) {
-            Def.config_collection_menu = this.createConfigData(Def.collection_data);
-        }
+
         this.state = {
-            collection_data: null,
+            design_data: null,
             stateCount: 0.0,
-            configMenu: Def.config_collection_menu,
+            configMenu: Def.config_design_menu,
             slide_data : carouselItems,
             activeSlide : 0
         };
@@ -49,27 +50,19 @@ class SchemeScreen extends React.Component {
 
     refresh()
     {
-        //NetChannel.listChannel(this.onChannelSuccess,this.onChannelFailed);
         this.setState({ stateCount: Math.random() });
     }
 
-    onGetCollectionSuccess(data){
-        // console.log(Object.entries(data["data"]));
+    onGetDesignSuccess(data){
         Object.entries(data["data"]).map((prop, key) => {
-            // console.log('Start');
-            // console.log(prop[0]);
-            // console.log(prop[1]["data"]);
-            // console.log('Start');
         });
-        this.setState({ collection_data: data["data"] });
-        Def.collection_data = data["data"];
-        Def.config_collection_menu = this.createConfigData(data["data"]) ;
-        this.setState({ configMenu: Def.config_collection_menu});
+        this.setState({ design_data: data["data"] });
+        Def.design_data = data["data"];
+        Def.config_design_menu = this.createConfigData(data["data"]) ;
+        this.setState({ configMenu: Def.config_design_menu});
     }
 
     createConfigData(data){
-
-
         if(data){
             let configData =  Object.entries(data).map((prop, key) => {
                 // console.log("Props : " + JSON.stringify(prop));
@@ -77,11 +70,10 @@ class SchemeScreen extends React.Component {
             });
             return configData;
         }
-
     }
 
 
-    onGetCollectionFalse(data){
+    onGetDesignFalse(data){
         console.log("false data : " + data);
     }
 
@@ -142,7 +134,7 @@ class SchemeScreen extends React.Component {
 
     render() {
         const {navigation} = this.props;
-        const configMenu = Def.config_collection_menu;
+        const configMenu = Def.config_design_menu;
         Def.order_number = 20;
         return (
             <View style={{flex:1}}>
@@ -164,6 +156,24 @@ class SchemeScreen extends React.Component {
                     />
                     { this.pagination }
                 </View>
+                <ScrollView style={{flex:1, paddingLeft:5}}>
+                    {
+                        configMenu && Object.entries(configMenu).map((prop, key) => {
+                                prop[0] = (prop[0] == "" ? "Khác" : prop[0]);
+                                return (
+
+                                    <View key={key} style={[styles.programListStyle, {marginTop: key == 0 ? 5 : 10}]}>
+                                        <ProgramHozList refresh={this.refresh} stack={'Scheme'} type={'design'}
+                                                        screen={'design-detail-screen'} favorite={true}
+                                                        navigation={this.props.navigation} name={prop[0]}
+                                                        style={styles.programListStyle} data={prop[1]["data"]} title={this.formatText(prop[1]["name_vi"])}/>
+                                    </View>
+                                )
+                            }
+                        )
+
+                    }
+                </ScrollView>
             </View>
         )
     }

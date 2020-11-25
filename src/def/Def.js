@@ -58,12 +58,15 @@ export default class Def{
 
     static news_data = null;
     static collection_data = null;
+    static design_data = null;
     static config_collection_menu = null;
     static product_data = [];
     static cart_data = [];
     static customer = [];
     static collection_detail_data = null;
     static collection_detail_menu = null;
+
+    static config_design_menu = null;
 
     static refreshDashBoard = null;
 

@@ -1,22 +1,18 @@
 import React, {PureComponent} from 'react'
 import {Text, View , FlatList , Button , StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
-
 import IconArrow from '../../../assets/icon/icon_arrow.svg'
-
-
 import LogoIconSmall from '../../../assets/icon/icon-vov-small.svg'
 import WishlistIcon from '../../../assets/icon/icon-wishlist.svg'
 import MusicWishlistIcon from '../../../assets/icon/icon-catalog-music.svg'
 
 import DefaultProgramImage from '../../../assets/icon/logo-vov.svg'
 import CollectionItemrenderer from '../item-render/CollectionItemrenderer'
+import DesignItemrenderer from '../item-render/DesignItemrenderer'
 import Style from "../../../src/def/Style";
 
 const {width, height} = Dimensions.get('window');
 const PROGRAM_IMAGE_WIDTH = (width - 15) /2.5;
 const PROGRAM_IMAGE_HEIGHT = (width - 15) /2.5;
-
-
 
 class ProgramHozList extends React.Component {
     constructor(props){
@@ -66,16 +62,30 @@ class ProgramHozList extends React.Component {
         const {iconStyleHome, titleStyle,titleView, } = styles;
         const favorite = this.props.favorite;
         const minusSize = this.props.programType == 'music' ? 12 : 5;
+        const type = this.props.type;
         const renderItem = ({ item }) => (
+               <View>
+                   {type == 'design' ?
+                   <DesignItemrenderer
+                       click={this.itemClick}
+                       refresh={this.refresh}
+                       item={item}
+                       favorite={favorite}
+                       styleImage={{width: PROGRAM_IMAGE_WIDTH - minusSize, height: PROGRAM_IMAGE_HEIGHT - minusSize}}
+                       type={this.props.programType}
+                   /> :
+                   <CollectionItemrenderer
+                           click={this.itemClick}
+                           refresh={this.refresh}
+                           item={item}
+                           favorite={favorite}
+                           styleImage={{width: PROGRAM_IMAGE_WIDTH - minusSize, height: PROGRAM_IMAGE_HEIGHT - minusSize}}
+                           type={this.props.programType}
+                   />
 
-            <CollectionItemrenderer
-                click={this.itemClick}
-                refresh={this.refresh}
-                item={item}
-                favorite={favorite}
-                styleImage={{width:PROGRAM_IMAGE_WIDTH-minusSize, height:PROGRAM_IMAGE_HEIGHT-minusSize }}
-                type={this.props.programType}
-            />
+               }
+                </View>
+
 
         );
         return (
