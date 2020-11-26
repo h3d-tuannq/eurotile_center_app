@@ -20,7 +20,7 @@ const carouselItems = [
     }
 ];
 
-class SchemeDetailScreen extends React.Component {
+class DetailDesignScreen extends React.Component {
     state = {
         // collection_data: null,
         stateCount: 0.0,
@@ -298,4 +298,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default SchemeDetailScreen;
+export default DetailDesignScreen;

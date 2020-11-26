@@ -61,6 +61,7 @@ export default class Def{
     static design_data = null;
     static popular_design = null;
     static config_collection_menu = null;
+    static design_cate = null;
     static product_data = [];
     static cart_data = [];
     static customer = [];

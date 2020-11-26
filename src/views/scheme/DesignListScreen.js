@@ -7,12 +7,8 @@ const {width, height} = Dimensions.get('window');
 import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
-import ProgramHozList from '../../com/common/ProgramHozList';
-import DesignCateHozList from '../../com/common/DesignCateHozList';
 
 import ProgramVerList from '../../com/common/ProgramVerList';
-
-
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -27,48 +23,45 @@ const carouselItems = [
     }
 ];
 
-class SchemeScreen extends React.Component {
+class DesignListScreen extends React.Component {
+
     constructor(props){
         super(props);
         this.onGetDesignSuccess     = this.onGetDesignSuccess.bind(this);
         this.onGetDesignFalse     = this.onGetDesignFalse.bind(this);
 
-
-        this.onGetPopularDesignSuccess     = this.onGetPopularDesignSuccess.bind(this);
-        this.onGetPopularDesignFalse     = this.onGetPopularDesignFalse.bind(this);
-
-        this.onDesignCateSuccess = this.onDesignCateSuccess.bind(this);
-        this.onDesignCateFalse = this.onDesignCateFalse.bind(this);
-
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
 
         Def.mainNavigate = this.props.navigation;
-
         if(!Def.design_data) {
             NetScheme.getAllDesign(this.onGetDesignSuccess, this.onGetDesignFalse);
         } else {
             Def.config_design_menu = this.createConfigData(Def.design_data);
         }
 
-        if(!Def.popular_design) {
-            NetScheme.getPopularDesign(this.onGetPopularDesignSuccess, this.onPopularGetDesignFalse);
+        let design_list = [];
+        let title = "Danh sách thiết kế";
+
+        console.log("Params: " + JSON.stringify(this.props.route.params));
+
+        if(this.props.route.params.item){
+
+            let cate = this.props.route.params.item;
+            design_list = Def.design_data[cate['id']].data;
+            title = this.props.route.params.item.category_name_vi;
         }
 
-        if(!Def.design_cate) {
-            NetScheme.getDesignCategory(this.onDesignCateSuccess, this.onGetDesignFalse);
-        }
+
         this.state = {
-            design_data: Def.design_data ? Def.design_data: null,
-            popular_design: Def.popular_design ? Def.popular_design: null,
-            design_cate:  Def.design_cate ? Def.design_cate: null,
+            cate: this.props.route.params.item,
+            design_list: design_list,
+            title: title,
             stateCount: 0.0,
-            configMenu: Def.config_design_menu,
             slide_data : carouselItems,
             activeSlide : 0
         };
 
-        this.categoryClick_handle = this.categoryClick_handle.bind(this);
     }
 
     refresh()
@@ -76,28 +69,18 @@ class SchemeScreen extends React.Component {
         this.setState({ stateCount: Math.random() });
     }
 
-
-    categoryClick_handle = (item) => {
-        this.props.navigation.navigate('sheme', {screen:'design-list', params : {item:item}});
-
-    };
-
     onGetDesignSuccess(data){
         Object.entries(data["data"]).map((prop, key) => {
         });
-        this.setState({ design_data: data["data"] });
         Def.design_data = data["data"];
+        let design_list = [];
+        let title = "Danh sách thiết kế";
+        if(this.state.cate){
+            design_list = Def.design_cate[this.state.cate['id']]['data'];
+            title = Def.design_cate[this.state.cate['id']]['name_vi']
+            this.setState({design_list:design_list, title:title});
+        }
         Def.config_design_menu = this.createConfigData(data["data"]) ;
-        this.setState({ configMenu: Def.config_design_menu});
-    }
-
-    onGetPopularDesignSuccess(data){
-        this.setState({ popular_design: data["data"] });
-        Def.design_data = data["data"];
-    }
-
-    onGetPopularDesignFalse(data){
-        console.log("false data : " + data);
     }
 
 
@@ -124,16 +107,6 @@ class SchemeScreen extends React.Component {
         return rs;
     }
 
-    onDesignCateSuccess(data){
-        console.log("Design Cate : " + JSON.stringify(data["data"]));
-
-        this.setState({ design_cate: data["data"] });
-        Def.design_cate = data['data'];
-    }
-
-    onDesignCateFalse(data){
-        console.log('Get Design Cate False');
-    }
 
     shouldComponentUpdate(){
         // this.setState({ configMenu: Def.config_news_menu});
@@ -141,9 +114,6 @@ class SchemeScreen extends React.Component {
         return true;
     }
 
-    getNewDataByConfigKey(key){
-
-    }
 
     get pagination () {
         const { slide_data, activeSlide } = this.state;
@@ -186,39 +156,11 @@ class SchemeScreen extends React.Component {
         const {navigation} = this.props;
         const configMenu = Def.config_design_menu;
         Def.order_number = 20;
-
         const ListHeader = () => (
             <View>
-                <View style={Style.styles.carousel}>
-                    <Carousel
-                        ref={(c) => { this._carousel = c; }}
-                        // keyExtractor={(item, index) => `${item.id}--${item.index}`}
-                        data={this.state.slide_data}
-                        renderItem={this.renderItem}
-                        itemWidth={width}
-                        sliderWidth={width}
-                        inactiveSlideOpacity={1}
-                        inactiveSlideScale={1}
-                        activeSlideAlignment={'start'}
-                        loop={true}
-                        autoplay={true}
-                        autoplayInterval={5000}
-                        onSnapToItem={(index) => this.setState({ activeSlide: index }) }
-                    />
-                    { this.pagination }
-                </View>
-                <View style={[styles.programListStyle, {marginTop: 5, marginLeft:15}]}>
-                    <DesignCateHozList refresh={this.refresh} stack={'scheme'} type={'cate'}
-                                    screen={'design-list'} favorite={true}
-                                    navigation={this.props.navigation} name={'Danh mục'}
-                                    style={styles.programListStyle} data={this.state.design_cate} title={"Danh mục"}/>
-                </View>
-
-                <View style={{flexDirection: 'row', justifyContent: 'space-between' , alignItems: 'flex-start'}}
-                >
-
+                <View style={{flexDirection: 'row', justifyContent: 'space-between' , alignItems: 'flex-start'}}>
                     <View style={{marginLeft:15, paddingBottom:8}}>
-                        <Text style={styles.titleStyle}>{"Nổi bật"}</Text>
+                        <Text style={styles.titleStyle}>{this.state.design_list.length + " Phối cảnh"}</Text>
                     </View>
                 </View>
             </View>
@@ -226,9 +168,9 @@ class SchemeScreen extends React.Component {
 
 
         return (
-            <View style={{flex:1}}>
+            <View style={{flex:1, paddingTop:5}}>
                 <ProgramVerList
-                    data={this.state.popular_design}
+                    data={this.state.design_list}
                     header={ListHeader}
                     type={'design'}
                     stack={'scheme'}
@@ -277,4 +219,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SchemeScreen;
+export default DesignListScreen;

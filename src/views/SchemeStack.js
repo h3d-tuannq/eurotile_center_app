@@ -3,7 +3,8 @@ import {Text, View, Button, TouchableOpacity} from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack';
 
 import SchemeScreen from './scheme/SchemeScreen'
-import SchemeDetailScreen from  './scheme/SchemeDetailScreen'
+import DesignListScreen from  './scheme/DesignListScreen'
+import DetailDesignScreen from  './scheme/DetailDesignScreen'
 
 import MenuIcon from '../../assets/icon/menu.svg';
 import BackIconSvg from '../../assets/icon/icon-back.svg'
@@ -106,6 +107,44 @@ class SchemeStack extends React.Component {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
                 }} />
+
+
+                <RootStack.Screen name="design-list" component={DesignListScreen} options=
+                {({route}) => ({
+                        title: route.params && route.params.item ? route.params.item.category_name_vi :  null,
+                        headerStyle: {
+                            backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                            height: Style.HEADER_HEIGHT,
+                        },
+                        headerTintColor: '#fff',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                        },
+                        headerBackImage: ()=> {
+                            return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                        }}
+                )
+                } />
+
+
+                <RootStack.Screen name="detail-design" component={DetailDesignScreen} options=
+                    {({route}) => ({
+                            title: null,
+                            headerStyle: {
+                                backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                                height: Style.HEADER_HEIGHT,
+                            },
+                            headerTintColor: '#fff',
+                            headerTitleStyle: {
+                                fontWeight: 'bold',
+                            },
+                            headerBackImage: ()=> {
+                                return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                            }}
+                    )
+                    } />
+
+
             </RootStack.Navigator>
         )
     }

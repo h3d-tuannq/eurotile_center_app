@@ -10,7 +10,7 @@ import FavoriteIconSelect from "../../../assets/icon/icon-like.svg";
 import Def from '../../def/Def'
 import Style from "../../def/Style";
 
-class DesignItemrenderer extends PureComponent{
+class CategoryItemrenderer extends PureComponent{
     state = {
         stateCount: 0.0,
     };
@@ -20,7 +20,7 @@ class DesignItemrenderer extends PureComponent{
     }
     formatText(text, maxCharacter = 20){
         let rs = text;
-        if(text.length > maxCharacter -2){
+        if(text && text.length > maxCharacter -2){
             rs = text.substring(0, maxCharacter -2) + " ...";
         }
         return rs;
@@ -28,36 +28,23 @@ class DesignItemrenderer extends PureComponent{
     render(){
         const model = this.props.item;
         const click = this.props.click;
-        const FavoriteItem = ()=> {
-            if(this.props.favorite ){
-                if(model.favorite!=null){
-                    return (
-                        <FavoriteIconSelect style={styles.favoriteIcon}
-                        />)
-                } else {
-                    return ( <FavoriteIcon style={styles.favoriteIcon}/> )
-                }
-            }
-            return null;
-        };
-
         return (
-            <View style={{marginTop : 8}}>
+            <View>
 
-            <TouchableOpacity style={[styles.itemStyle, this.props.styleImage]} onPress={
+            <TouchableOpacity style={[styles.itemStyle]} onPress={
                 () => {
                     click(model);
                 }
             } >
-                {model.image_path ?
-                    <Image  style={[this.props.styleImage, styles.imageStyle ]}  source={{uri: Def.URL_CONTENT_BASE +  model.image_path}}  />
+                {model.ImagePath ?
+                    <Image  style={[this.props.styleImage, styles.imageStyle ]}  source={{uri: Def.URL_CONTENT_BASE +  model.ImagePath}}  />
                     :
                     <DefaultProgramImage style={styles.imageStyle} width={this.props.styleImage.width} height={this.props.styleImage.height}/>
                 }
                 </TouchableOpacity>
-                <View style = {{width:this.props.styleImage.width, marginTop: 5 , justifyContent : 'center',  alignItems: 'flex-start'}}>
+                <View style = {{width:this.props.styleImage.width, marginTop: 5 , justifyContent : 'center',  alignItems: (this.props.type == 'cate' ? 'flex-start' :'center')}}>
                     <Text style={[{paddingVertical:5 , borderRadius : 10 ,bottom:5, fontSize:Style.MIDLE_SIZE}]}>
-                        {this.formatText(this.props.type == 'design' ? model.name : model.model, 50)}
+                        {this.formatText(this.props.type == 'cate' ? model.category_name_vi : model.name, 20)}
                     </Text>
 
                 </View>
@@ -90,4 +77,4 @@ const  styles = StyleSheet.create({
     }
 });
 
-export default DesignItemrenderer;
+export default CategoryItemrenderer;

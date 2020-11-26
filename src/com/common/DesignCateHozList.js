@@ -21,7 +21,7 @@ const CATE_IMAGE_HEIGHT = width * 0.6;
 
 
 
-class ProgramHozList extends React.Component {
+class DesignCateHozList extends React.Component {
     constructor(props){
         super(props);
         this.sectionClick = this.sectionClick.bind(this);
@@ -43,23 +43,20 @@ class ProgramHozList extends React.Component {
     }
 
     itemClick(item){
-        console.log("itemClick(item))))))))))))))))))))))))))))))))))))))))))))))))");
+        console.log("itemClick(item)))))))))))))))))))))))))))))))))))))))))))))))) : " + JSON.stringify(item));
 
         ////console.log(item);
         //console.log(this.props.data);
 
         let stack = this.props.stack ? this.props.stack :false;
-        let screen = this.props.screen ? this.props.screen :'player';
+        console.log("Screen" + this.props.screen);
+        let screen = this.props.screen ? this.props.screen :'design-list';
         if(stack){
-            console.log("itemClick(item)STACKKKKKKKKKKKKKKKKKKKK");
-            ////console.log(item);
-            //console.log(this.props.data);
             console.log(`${stack}, {screen:${screen}, params: { item: ${item}, data : this.props.data }`);
-            this.props.navigation.navigate(stack, {screen:screen, params: { item: item, data : this.props.data }});
+            this.props.navigation.navigate(stack, {screen:screen, params: { item: item }});
         } else {
-            console.log("itemClick(item)NOT STACKKKKKKKKKKKKKKKKKKKK");
             console.log(`this.props.navigation.navigate(${screen}, { item: item, data : this.props.data })`);
-            this.props.navigation.navigate(screen, { item: item, data : this.props.data });
+            this.props.navigation.navigate(screen, { item: item});
         }
 
     }
@@ -108,22 +105,14 @@ class ProgramHozList extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <TouchableOpacity style={{flexDirection: 'row', justifyContent: 'space-between' , alignItems: 'center'}}
+                    <TouchableOpacity style={{flexDirection: 'row', justifyContent: 'space-between' , alignItems: 'flex-start'}}
                                       onPress={this.sectionClick}
                     >
-                     {this.props.programType == 'music' ? <MusicWishlistIcon style={styles.icon}/>: (this.props.group == "Favorite" ? <WishlistIcon style={styles.icon}/>  : <LogoIconSmall style={styles.icon}/> )}
-
 
                     <View style={titleView} onPress={this.sectionClick} >
                         <Text style={titleStyle}>{this.props.title}</Text>
-                        {/*<IconArrow  style={iconStyleHome}  />*/}
                     </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={titleView} onPress={this.sectionClick} >
-                        <Text style={{fontSize : Style.NORMAL_SIZE ,marginRight : 10 , color : Style.DEFAUT_RED_COLOR , borderWidth : 1 ,padding : 2, paddingHorizontal : 5,  borderRadius: 5, borderColor : Style.DEFAUT_RED_COLOR}}>{"Xem tất cả"}</Text>
-
-                    </TouchableOpacity>
-
                 </View>
 
 
@@ -164,16 +153,17 @@ const styles = StyleSheet.create ({
       height : 20
     },
       titleStyle: {
-          fontSize : Style.BIG_SIZE,
-        color: Style.DEFAUT_RED_COLOR,
-        fontWeight: 'bold',
+        fontSize : Style.BIG_SIZE,
+        color: Style.GREY_TEXT_COLOR,
+        // fontWeight: 'bold',
         marginRight : 10
       },
       titleView: {
-        paddingVertical : 10,
+        paddingTop : 10,
+        paddingBottom : 3,
         flexDirection : 'row',
-        alignItems: 'center',
-        marginLeft : 5,
+        // alignItems: 'center',
+        marginLeft : 0,
 
       }
       ,
@@ -189,4 +179,4 @@ const styles = StyleSheet.create ({
 
 })
 
-export default ProgramHozList;
+export default DesignCateHozList;

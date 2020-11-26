@@ -135,9 +135,9 @@ class ProductScreen extends React.Component {
     renderItem = ({item, index}) => {
 
         return (
-            <View key={index} style={Style.styles.cardStyle}>
+            <View key={index} style={Style.styles.schemeCardStyle}>
                 <TouchableOpacity >
-                    <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
+                    <Image  style = {[Style.styles.schemeSlideImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
                 </TouchableOpacity>
             </View>
         );

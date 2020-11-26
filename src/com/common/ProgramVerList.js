@@ -7,7 +7,7 @@ import Def from "../../../src/def/Def";
 
 const {width, height} = Dimensions.get('window');
 
-const PROGRAM_IMAGE_WIDTH = (width * 0.9) ;
+const PROGRAM_IMAGE_WIDTH = (width - 30) ;
 const PROGRAM_IMAGE_HEIGHT = (width * 0.6);
 
 
@@ -52,10 +52,11 @@ class ProgramVerList extends React.Component{
         const {iconStyleHome, titleStyle,titleView, } = styles;
         const renderItem = ({item}) => {
             return (
-                <View style={{paddingLeft : 15}}>
+                <View style={{paddingHorizontal : 15}}>
                     <DesignItemrenderer
                         item ={item} click={this.itemClick} canPlayBack={this.props.canPlayBack}
                         styleImage={{width: PROGRAM_IMAGE_WIDTH , height: PROGRAM_IMAGE_HEIGHT}}
+                        type={this.props.type}
                     />
                 </View>
             )
@@ -81,7 +82,7 @@ class ProgramVerList extends React.Component{
 
 const styles = StyleSheet.create ({
     container: {
-        marginTop : 5,
+        // marginTop : 5,
         backgroundColor : '#fff'
     },
     titleStyle: {

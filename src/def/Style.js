@@ -53,11 +53,12 @@ export default class Style{
 
         },
 
+
         programListStyle : {
 
         },
         carousel: {
-            paddingVertical: 2,
+            // paddingVertical: 2,
             // maxHeight : width*0.95,
             borderRadius: 5,
             // marginHorizontal : 10,
@@ -71,6 +72,20 @@ export default class Style{
             height: width * 0.5,
             borderRadius : 5,
         },
+        schemeSlideImg: {
+            width: width,
+            paddingVertical :5,
+            height: width ,
+            borderRadius : 5,
+        },
+        schemeCardStyle:{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: width,
+            height: width,
+        },
+
+
 
     });
 
