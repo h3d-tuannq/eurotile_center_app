@@ -78,7 +78,6 @@ const  styles = StyleSheet.create({
 
     },
     imageStyle : {
-
         borderRadius: 5,
     },
 

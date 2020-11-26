@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, FlatList} from 'react-native'
 import NetScheme from '../../net/NetScheme'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
@@ -8,6 +8,9 @@ import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
 import ProgramHozList from '../../com/common/ProgramHozList';
+import ProgramVerList from '../../com/common/ProgramVerList';
+
+
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -27,6 +30,10 @@ class SchemeScreen extends React.Component {
         super(props);
         this.onGetDesignSuccess     = this.onGetDesignSuccess.bind(this);
         this.onGetDesignFalse     = this.onGetDesignFalse.bind(this);
+
+        this.onGetPopularDesignSuccess     = this.onGetPopularDesignSuccess.bind(this);
+        this.onGetPopularDesignFalse     = this.onGetPopularDesignFalse.bind(this);
+
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
 
@@ -38,8 +45,15 @@ class SchemeScreen extends React.Component {
             Def.config_design_menu = this.createConfigData(Def.design_data);
         }
 
+        if(!Def.popular_design) {
+            NetScheme.getPopularDesign(this.onGetPopularDesignSuccess, this.onPopularGetDesignFalse);
+        }
+
+
+
         this.state = {
-            design_data: null,
+            design_data: Def.design_data ? Def.design_data: null,
+            popular_design: Def.popular_design ? Def.popular_design: null,
             stateCount: 0.0,
             configMenu: Def.config_design_menu,
             slide_data : carouselItems,
@@ -61,6 +75,16 @@ class SchemeScreen extends React.Component {
         Def.config_design_menu = this.createConfigData(data["data"]) ;
         this.setState({ configMenu: Def.config_design_menu});
     }
+
+    onGetPopularDesignSuccess(data){
+        this.setState({ popular_design: data["data"] });
+        Def.design_data = data["data"];
+    }
+
+    onGetPopularDesignFalse(data){
+        console.log("false data : " + data);
+    }
+
 
     createConfigData(data){
         if(data){
@@ -136,8 +160,9 @@ class SchemeScreen extends React.Component {
         const {navigation} = this.props;
         const configMenu = Def.config_design_menu;
         Def.order_number = 20;
-        return (
-            <View style={{flex:1}}>
+
+        const ListHeader = () => (
+            <View>
                 <View style={Style.styles.carousel}>
                     <Carousel
                         ref={(c) => { this._carousel = c; }}
@@ -156,24 +181,39 @@ class SchemeScreen extends React.Component {
                     />
                     { this.pagination }
                 </View>
-                <ScrollView style={{flex:1, paddingLeft:5}}>
-                    {
-                        configMenu && Object.entries(configMenu).map((prop, key) => {
-                                prop[0] = (prop[0] == "" ? "Khác" : prop[0]);
-                                return (
 
-                                    <View key={key} style={[styles.programListStyle, {marginTop: key == 0 ? 5 : 10}]}>
-                                        <ProgramHozList refresh={this.refresh} stack={'Scheme'} type={'design'}
-                                                        screen={'design-detail-screen'} favorite={true}
-                                                        navigation={this.props.navigation} name={prop[0]}
-                                                        style={styles.programListStyle} data={prop[1]["data"]} title={this.formatText(prop[1]["name_vi"])}/>
-                                    </View>
-                                )
+                {
+                    configMenu && Object.entries(configMenu).map((prop, key) => {
+                            prop[0] = (prop[0] == "" ? "Khác" : prop[0]);
+                            if(key==0){
+                            return (
+
+                                <View key={key} style={[styles.programListStyle, {marginTop: key == 0 ? 5 : 10}]}>
+                                    <ProgramHozList refresh={this.refresh} stack={'Scheme'} type={'design'}
+                                                    screen={'design-detail-screen'} favorite={true}
+                                                    navigation={this.props.navigation} name={prop[0]}
+                                                    style={styles.programListStyle} data={prop[1]["data"]} title={this.formatText(prop[1]["name_vi"])}/>
+                                </View>
+                            )
                             }
-                        )
+                        }
+                    )
 
-                    }
-                </ScrollView>
+                }
+
+
+            </View>
+        );
+
+
+        return (
+            <View style={{flex:1}}>
+                <ProgramVerList
+                    data={this.state.popular_design}
+                    header={ListHeader}
+                    type={'design'}
+                    stack={'scheme'}
+                />
             </View>
         )
     }

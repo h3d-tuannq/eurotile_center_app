@@ -550,6 +550,9 @@ export default class App extends Component {
         this.onDesignSuccess = this.onDesignSuccess.bind(this);
         this.onDesignFalse = this.onDesignFalse.bind(this);
 
+        this.onPopularDesignSuccess = this.onPopularDesignSuccess.bind(this);
+        this.onPopularDesignFalse = this.onPopularDesignFalse.bind(this);
+
 
         NetCollection.listCollection(this.onCollectionSuccess, this.onNewFailed);
         NetNews.listNews(this.onNewSuccess, this.onNewFailed);
@@ -607,6 +610,16 @@ export default class App extends Component {
         console.log('Get Design False');
     }
 
+    onPopularDesignSuccess(data){
+        console.log('onPopularDesignSuccess : ');
+
+        Def.popular_design = data['data'];
+    }
+
+    onPopularDesignFalse(data){
+        console.log('Get Popular Design False');
+    }
+
 
     onNewFailed(data){
         console.log('onNewFailed d: ' + JSON.stringify(data));
@@ -617,6 +630,7 @@ export default class App extends Component {
         console.log('Get Product Info From Scratch');
         NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
         NetScheme.getAllDesign(this.onDesignSuccess, this.onDesignFalse);
+        NetScheme.getPopularDesign(this.onPopularDesignSuccess, this.onPopularDesignFalse);
 
 
 

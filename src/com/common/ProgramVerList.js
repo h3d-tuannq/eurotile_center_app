@@ -1,10 +1,14 @@
 import React from 'react'
-import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native'
+import {View, Text, TouchableOpacity, FlatList, StyleSheet, Dimensions} from 'react-native';
 
-import  ProgramVerItemrenderer from '../item-render/ProgramVerItemrenderer'
-import IconArrow from "../../../assets/icon/icon_arrow.svg";
-import Style from "../../../Def/Style";
-import Def from "../../../Def/Def";
+import DesignItemrenderer from '../item-render/DesignItemrenderer'
+import Style from "../../../src/def/Style";
+import Def from "../../../src/def/Def";
+
+const {width, height} = Dimensions.get('window');
+
+const PROGRAM_IMAGE_WIDTH = (width * 0.9) ;
+const PROGRAM_IMAGE_HEIGHT = (width * 0.6);
 
 
 
@@ -40,11 +44,6 @@ class ProgramVerList extends React.Component{
             console.log(`this.props.navigation.navigate(${screen}, { item: item, data : this.props.data })`);
             this.props.navigation.navigate(screen, { item: item, data : this.props.data });
         }
-
-
-
-
-
     }
 
 
@@ -54,7 +53,10 @@ class ProgramVerList extends React.Component{
         const renderItem = ({item}) => {
             return (
                 <View style={{paddingLeft : 15}}>
-                    <ProgramVerItemrenderer item ={item} click={this.itemClick} canPlayBack={this.props.canPlayBack} />
+                    <DesignItemrenderer
+                        item ={item} click={this.itemClick} canPlayBack={this.props.canPlayBack}
+                        styleImage={{width: PROGRAM_IMAGE_WIDTH , height: PROGRAM_IMAGE_HEIGHT}}
+                    />
                 </View>
             )
         }
