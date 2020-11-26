@@ -81,17 +81,17 @@ export default class UserController{
     static async  googleLogin(navigation=null) {
         try {
             await GoogleSignin.hasPlayServices();
-            // console.log("hasPlayServices");
+            console.log("hasPlayServices");
             const data = await GoogleSignin.signIn();
-            // console.log("Data :" + JSON.stringify(data));
+            console.log("Data :" + JSON.stringify(data));
             const {accessToken, idToken} = data;
             const credential = auth.GoogleAuthProvider.credential( idToken, accessToken,);
             const googleUserCredential = await auth().signInWithCredential(credential);
 
             auth().currentUser.getIdToken( true).then(function(idToken) {
-                // console.log(`TOKEN: ${idToken}`);
-                // if(navigation)
-                //     navigation.navigate('Product');
+                console.log(`TOKEN: ${idToken}`);
+                if(navigation)
+                    navigation.navigate('Product');
                 AsyncStorage.setItem('firebase_token', idToken);
 
                 const result = {};
@@ -143,9 +143,10 @@ export default class UserController{
 
 
     static async facebookLogin(navigation=null) {
-        if (Platform.OS === "android") {
-            LoginManager.setLoginBehavior("web_only")
-        }
+        // if (Platform.OS === "android") {
+        //     LoginManager.setLoginBehavior("web_only")
+        // }
+        LoginManager.setLoginBehavior("web_only")
         console.log('Start login facebook : ');
             const result = await LoginManager.logInWithPermissions([ 'email', 'public_profile']);
 
@@ -230,7 +231,7 @@ export default class UserController{
 
         // let param = {'email' : params.email, 'name' : params.name};
 
-        console.log('Login with firebase');
+        console.log('Login with firebase' + JSON.stringify(param));
 
         Net.sendRequest(this.onLoginFirebaseSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/firebase-login' , Def.POST_METHOD , param);
         // if(Def.setLoader)
