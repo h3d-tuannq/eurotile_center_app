@@ -119,10 +119,10 @@ class ProgramHozList extends React.Component {
                         {/*<IconArrow  style={iconStyleHome}  />*/}
                     </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={titleView} onPress={this.sectionClick} >
-                        <Text style={{fontSize : Style.NORMAL_SIZE ,marginRight : 10 , color : Style.DEFAUT_RED_COLOR , borderWidth : 1 ,padding : 2, paddingHorizontal : 5,  borderRadius: 5, borderColor : Style.DEFAUT_RED_COLOR}}>{"Xem tất cả"}</Text>
+                    {/*<TouchableOpacity style={titleView} onPress={this.sectionClick} >*/}
+                        {/*<Text style={{fontSize : Style.NORMAL_SIZE ,marginRight : 10 , color : Style.DEFAUT_RED_COLOR , borderWidth : 1 ,padding : 2, paddingHorizontal : 5,  borderRadius: 5, borderColor : Style.DEFAUT_RED_COLOR}}>{"Xem tất cả"}</Text>*/}
 
-                    </TouchableOpacity>
+                    {/*</TouchableOpacity>*/}
 
                 </View>
 

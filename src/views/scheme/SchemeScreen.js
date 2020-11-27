@@ -229,6 +229,7 @@ class SchemeScreen extends React.Component {
             <View style={{flex:1}}>
                 <ProgramVerList
                     data={this.state.popular_design}
+                    navigation={this.props.navigation}
                     header={ListHeader}
                     type={'design'}
                     stack={'scheme'}

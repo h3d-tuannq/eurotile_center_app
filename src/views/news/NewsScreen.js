@@ -255,15 +255,11 @@ class NewsScreen extends React.Component {
         }
 
         this.state = {
-            news_data: null,
+            news_data: Def.news_data,
             stateCount: 0.0,
             configMenu: Def.config_news_menu
         };
-
         Def.mainNavigate = this.props.navigation;
-
-
-
     }
 
     refresh()
@@ -273,12 +269,7 @@ class NewsScreen extends React.Component {
     }
 
     onNewsSuccess(data){
-        // console.log(Object.entries(data["data"]));
         Object.entries(data["data"]).map((prop, key) => {
-            // console.log('Start');
-            // console.log(prop[0]);
-            // console.log(prop[1]["data"]);
-            // console.log('Start');
         });
         this.setState({ news_data: data["data"] });
         Def.news_data = data["data"];
@@ -288,21 +279,11 @@ class NewsScreen extends React.Component {
 
     createConfigData(data){
 
-
         if(data){
             let configData =  Object.entries(data).map((prop, key) => {
                 // console.log("Props : " + JSON.stringify(prop));
                 return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
             });
-            // Object.entries(configData).map((prop, key) => {
-            //     console.log("start" + key);
-            //     console.log("prop[0]" + prop[0]);
-            //     console.log("prop[1]" + prop[1]["name_vi"]);
-            //
-            //     console.log("data" + prop[1]["data"]);
-            //
-            //     console.log("end");
-            // });
             return configData;
         }
 
@@ -334,22 +315,9 @@ class NewsScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const configMenu = Def.config_news_menu;
-        // Object.entries(configMenu).map((prop, key) => {
-        //     console.log("start" + key);
-        //     console.log("prop" + JSON.stringify(prop));
-        //
-        //     console.log("prop[0]" + prop[0]);
-        //     console.log("prop[1]" + prop[1]["name_vi"]);
-        //
-        //     console.log("data" + prop[1]["data"]);
-        //
-        //     console.log("end");
-        // });
         return (
-
             <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >
                 {
-
                      configMenu && Object.entries(configMenu).map((prop, key) => {
                         if((prop[1]["hidden"]) == 0){
                             return (

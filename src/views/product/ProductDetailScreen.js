@@ -240,11 +240,11 @@ class ProductDetailScreen extends React.Component {
                     {/*</Text>*/}
                 </View>
 
-                <TouchableOpacity style={styles.bookingBtn}>
-                    <Text style={Style.text_styles.whiteTitleText}>
-                        Đặt hàng
-                    </Text>
-                </TouchableOpacity>
+                {/*<TouchableOpacity style={styles.bookingBtn}>*/}
+                    {/*<Text style={Style.text_styles.whiteTitleText}>*/}
+                        {/*Đặt hàng*/}
+                    {/*</Text>*/}
+                {/*</TouchableOpacity>*/}
                 </View>
 
                 {/*<ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >*/}

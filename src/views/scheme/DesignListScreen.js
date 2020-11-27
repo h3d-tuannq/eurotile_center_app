@@ -45,7 +45,7 @@ class DesignListScreen extends React.Component {
 
         console.log("Params: " + JSON.stringify(this.props.route.params));
 
-        if(this.props.route.params.item){
+        if(this.props.route.params.item && Def.design_data){
 
             let cate = this.props.route.params.item;
             design_list = Def.design_data[cate['id']].data;
@@ -171,9 +171,11 @@ class DesignListScreen extends React.Component {
             <View style={{flex:1, paddingTop:5}}>
                 <ProgramVerList
                     data={this.state.design_list}
+                    navigation={this.props.navigation}
                     header={ListHeader}
                     type={'design'}
                     stack={'scheme'}
+                    screen={'detail-design'}
                 />
             </View>
         )

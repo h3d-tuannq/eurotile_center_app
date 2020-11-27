@@ -13,7 +13,7 @@ import CategoryItemrenderer from '../item-render/CategoryItemrenderer'
 import Style from "../../../src/def/Style";
 
 const {width, height} = Dimensions.get('window');
-const PROGRAM_IMAGE_WIDTH = (width - 15) /2.5;
+const PROGRAM_IMAGE_WIDTH = (width - 15) /1.5;
 const PROGRAM_IMAGE_HEIGHT = (width - 15) /2.5;
 
 const CATE_IMAGE_WIDTH = width * 0.7;
@@ -44,10 +44,6 @@ class DesignCateHozList extends React.Component {
 
     itemClick(item){
         console.log("itemClick(item)))))))))))))))))))))))))))))))))))))))))))))))) : " + JSON.stringify(item));
-
-        ////console.log(item);
-        //console.log(this.props.data);
-
         let stack = this.props.stack ? this.props.stack :false;
         console.log("Screen" + this.props.screen);
         let screen = this.props.screen ? this.props.screen :'design-list';

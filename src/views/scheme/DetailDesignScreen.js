@@ -6,101 +6,57 @@ const {width, height} = Dimensions.get('window');
 import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
+import DesignCateHozList from '../../com/common/DesignCateHozList';
+
+
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
-const carouselItems = [
-    {
-        id:1,
-        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/24/1/main_img.jpg',
-    },
-    {
-        id:2,
-        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/30/2/main_img.jpg',
-    }
-];
-
 class DetailDesignScreen extends React.Component {
-    state = {
-        // collection_data: null,
-        stateCount: 0.0,
-        configMenu: Def.config_collection_menu,
-        slide_data : carouselItems,
-        item:this.props.route.params.item,
-        activeSlide:0,
-    };
-
     constructor(props){
         super(props);
-        this.onGetCollectionSuccess     = this.onGetCollectionSuccess.bind(this);
-        this.onGetCollectionFalse     = this.onGetCollectionFalse.bind(this);
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
+        let design_list = [];
+        let title = '';
+
+
+        if(this.props.route.params.item && Def.design_data){
+            let item = this.props.route.params.item;
+            design_list = Def.design_data[item['category_id']].data;
+            title = Def.design_data[item['category_id']].name_vi;
+        }
 
         this.state = {
             stateCount: 0.0,
-            configMenu: Def.config_collection_menu,
-            slide_data : this.getImageForCollection(this.props.route.params.item),
             item:this.props.route.params.item,
+            slide_data : this.getImageForCollection(this.props.route.params.item),
             activeSlide:0,
+            design_list: design_list,
+            title : title
+
+
         };
         Def.mainNavigate = this.props.navigation;
     }
     getImageForCollection(item){
-        let collectionImages;
-        if(item.faces){
-            let subImgs = item.faces.split(',');
+        let images = [{image_path:Def.URL_CONTENT_BASE +item.image_path}];
+        if(item.sub_images){
+            let subImgs = item.sub_images.split(',');
             subImgs = subImgs.map(x => {
                 return {image_path:Def.URL_CONTENT_BASE + x}
             });
-            collectionImages = subImgs;
+            images = images.concat(subImgs);
         }
-        return collectionImages;
+
+        console.log("Images : "+ JSON.stringify(images));
+
+        return images;
     }
 
     refresh()
     {
         this.setState({ stateCount: Math.random() });
-    }
-
-    onGetCollectionSuccess(data){
-        // console.log(Object.entries(data["data"]));
-        Object.entries(data["data"]).map((prop, key) => {
-            // console.log('Start');
-            // console.log(prop[0]);
-            // console.log(prop[1]["data"]);
-            // console.log('Start');
-        });
-        this.setState({ collection_data: data["data"] });
-        Def.collection_data = data["data"];
-        Def.config_collection_menu = this.createConfigData(data["data"]) ;
-        this.setState({ configMenu: Def.config_collection_menu});
-    }
-
-    createConfigData(data){
-
-
-        if(data){
-            let configData =  Object.entries(data).map((prop, key) => {
-                // console.log("Props : " + JSON.stringify(prop));
-                return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
-            });
-            Object.entries(configData).map((prop, key) => {
-                // console.log("start" + key);
-                // console.log("prop[0]" + prop[0]);
-                // console.log("prop[1]" + prop[1]["name_vi"]);
-                //
-                // console.log("data" + prop[1]["data"]);
-                //
-                // console.log("end");
-            });
-            return configData;
-        }
-
-    }
-
-    onGetCollectionFalse(data){
-        console.log("false data : " + data);
     }
 
     formatText(text){
@@ -112,14 +68,9 @@ class DetailDesignScreen extends React.Component {
     }
 
     shouldComponentUpdate(){
-        // this.setState({ activeSlide: 0});
-        // console.log('SortData ddd:' + JSON.stringify(this.props.route));
         return true;
     }
 
-    getNewDataByConfigKey(key){
-
-    }
 
     get pagination () {
         const { slide_data, activeSlide } = this.state;
@@ -148,15 +99,15 @@ class DetailDesignScreen extends React.Component {
     renderItem = ({item, index}) => {
 
         return (
-            <View key={index} style={[styles.cardStyle, {paddingHorizontal : 5 , backgroundColor:Style.DEFAUT_BLUE_COLOR}]}>
+            <View key={index} style={[styles.cardStyle, {paddingHorizontal : 5 , backgroundColor:Style.GREY_BACKGROUND_COLOR}]}>
                 <TouchableOpacity >
                     <Image  style = {[styles.cardImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
-                    <View style = {{justifyContent:'center'}}>
+                    {/*<View style = {{justifyContent:'center'}}>*/}
 
-                        <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:2,bottom:0, backgroundColor: Style.DEFAUT_RED_COLOR, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>
-                            {"face " + index}
-                        </Text>
-                    </View>
+                        {/*<Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:2,bottom:0, backgroundColor: Style.DEFAUT_RED_COLOR, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>*/}
+                            {/*{"face " + index}*/}
+                        {/*</Text>*/}
+                    {/*</View>*/}
                 </TouchableOpacity>
             </View>
         );
@@ -166,18 +117,16 @@ class DetailDesignScreen extends React.Component {
 
     render() {
         const {navigation} = this.props;
-        // const configMenu = Def.config_collection_menu;
-
-        // console.log("Slide Product data : " + JSON.stringify(this.state.slide_data) );
+        const {item} = this.state;
         return (
-            <View style={{flex:1}}>
+            <ScrollView style={{flex:1, backgroundColor: '#fff'}}>
                 <View style={Style.styles.carousel}>
                     <Carousel
                         ref={(c) => { this._carousel = c; }}
                         // keyExtractor={(item, index) => `${item.id}--${item.index}`}
                         data={this.state.slide_data}
                         renderItem={this.renderItem}
-                        itemWidth={width/2}
+                        itemWidth={width}
                         sliderWidth={width}
                         inactiveSlideOpacity={1}
                         inactiveSlideScale={1}
@@ -193,49 +142,31 @@ class DetailDesignScreen extends React.Component {
                 <View style={{flex:1, justifyContent: 'space-between', marginTop :10}}>
                 <View style={styles.productInfo}>
                     <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Danh mục sản phẩm"}
+                        {item.name_vi }
                     </Text>
                     <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Mã sản phẩm " + this.state.item.model }
+                        {"Model " + item.model }
                     </Text>
                     <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Kích thước: 600*600"}
-                    </Text>
-                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Đóng hộp: 6 viên"}
+                        {"Số phòng: "+ item.room_number}
                     </Text>
 
-                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Trọng lượng: 36 kg"}
-                    </Text>
 
                     <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Bề mặt: Matt, in kỹ thuật số"}
+                        {"Diện tích: " + (item.area ? item.area + " m2" : "Không xác định") }
                     </Text>
-                    {/*<Text style={Style.text_styles.normalText}>*/}
-                        {/*{"Mô tả"}*/}
-                    {/*</Text>*/}
                 </View>
 
-                {/*<TouchableOpacity style={styles.bookingBtn}>*/}
-                    {/*<Text style={Style.text_styles.whiteTitleText}>*/}
-                        {/*Đặt hàng*/}
-                    {/*</Text>*/}
-                {/*</TouchableOpacity>*/}
+                <View style={[{ paddingLeft:15}]}>
+                    <DesignCateHozList refresh={this.refresh} stack={'scheme'} type={'design'}
+                                       screen={'detail-design'} favorite={true}
+                                       navigation={this.props.navigation} name={this.state.title}
+                                       data={this.state.design_list} title={this.state.title}/>
                 </View>
 
-                {/*<ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >*/}
-                    {/*{*/}
-                        {/*configMenu && Object.entries(configMenu).map((prop, key) => {*/}
-                            {/*if((prop[1]["hidden"]) == 0){*/}
-                                {/*return (*/}
-                                    {/*<CollectionTab key ={prop[0] + "acv"}  navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />*/}
-                                {/*);*/}
-                            {/*}*/}
-                        {/*})*/}
-                    {/*}*/}
-                {/*</ScrollableTabView>*/}
-            </View>
+                </View>
+
+            </ScrollView>
         )
     }
 }
@@ -243,7 +174,7 @@ class DetailDesignScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex : 1,
-        paddingLeft: 15,
+        // paddingLeft: 15,
         // justifyContent: 'flex-start',
         // marginVertical : 5,
         marginBottom : 125,
@@ -270,7 +201,7 @@ const styles = StyleSheet.create({
 
     },
     productInfo : {
-        paddingHorizontal : 10,
+        paddingLeft : 15,
         paddingVertical:5,
     },
 

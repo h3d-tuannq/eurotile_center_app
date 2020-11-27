@@ -5,8 +5,10 @@ const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Style from '../../def/Style';
 import LocationIcon from '../../../assets/icons/Location.svg';
-
 import CalendarIcon from '../../../assets/icons/calendar.svg';
+
+
+import OrderController from  '../../controller/OrderController'
 
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
@@ -20,7 +22,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 class BookingScreen extends React.Component {
     constructor(props){
         super(props);
-        this.updateOrder = this.updateOrder.bind(this);
+        this.saveOrder = this.saveOrder.bind(this);
         this.parseDataToView = this.parseDataToView.bind(this);
         this.showDateTimePicker = this.showDateTimePicker.bind(this);
         this.changeAddress = this.changeAddress.bind(this);
@@ -88,23 +90,30 @@ class BookingScreen extends React.Component {
     }
 
 
-    updateOrder() {
+    saveOrder() {
         const {navigation} = this.props;
-        console.log('Update user info');
-        if (!this.state.full_name) {
-            alert("Vui lòng cập nhật ảnh Avatar");
-        } else if (!this.state.mobile) {
-            alert("Vui lòng điền số điện thoại");
-        } else if (!this.state.gender) {
-            alert("Vui lòng nhập thông tin giới tính");
-        }
-        // this.validateAddress();
-        let userInfo = {
-            user_id : Def.user_info ? Def.user_info['id'] : 14,
+        console.log('Save Order');
+
+
+        let orderInfo = {
+            customer_id : Def.order.customer ? Def.order.customer['id'] : "",
+            id: Def.order.id,
+            partner_id:Def.order.partner_id,
+            booker_id:  Def.user_info ? Def.user_info['id'] : null,
+            deliver_date:this.state.deliverDate ?  Def.getDateString(this.state.deliverDate , "yyyy-MM-dd") : "",
+            referral_code:'',
             birth_day: this.state.birth_day ?  Def.getDateString(this.state.birth_day , "yyyy-MM-dd") : "",
             mobile: this.state.mobile,
-            address: JSON.stringify(this.buildAddress()),
+            address: Def.order.address,
+            order_item: Def.order.orderItems,
+
         };
+
+        if(orderInfo){
+            OrderController.saveOrder(orderInfo, this.props.navigation);
+        }
+
+
 
     }
     hideDateTimePicker = () => {
@@ -304,7 +313,8 @@ class BookingScreen extends React.Component {
                         </View>
                     </View>
                 </View>
-                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.updatePartnerInfo}>
+                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}
+                                  onPress={this.saveOrder}>
                     <Text style={styles.buttonText}>
                         Đặt hàng
                     </Text>

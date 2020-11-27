@@ -26,23 +26,12 @@ class ProgramVerList extends React.Component{
 
     itemClick(item){
         console.log("itemClick(item))))))))))))))))))))))))))))))))))))))))))))))))");
-
         let stack = this.props.stack ? this.props.stack :false;
-        let screen = this.props.screen ? this.props.screen :'player';
-        // Def.setItemMusic(item);
-
-        // item.program_name = item.name;
-        Def.setItemProgram(item);
+        let screen = this.props.screen ? this.props.screen :'detail-design';
         if(stack){
-            console.log("itemClick(item)STACKKKKKKKKKKKKKKKKKKKK");
-            ////console.log(item);
-            //console.log(this.props.data);
-            console.log(`${stack}, {screen:${screen}, params: { item: ${item}, data : this.props.data }`);
-            this.props.navigation.navigate(stack, {screen:screen, params: { item: item, data : this.props.data }});
+            this.props.navigation.navigate(stack, {screen:screen, params: { item: item }});
         } else {
-            console.log("itemClick(item)NOT STACKKKKKKKKKKKKKKKKKKKK");
-            console.log(`this.props.navigation.navigate(${screen}, { item: item, data : this.props.data })`);
-            this.props.navigation.navigate(screen, { item: item, data : this.props.data });
+            this.props.navigation.navigate(screen, { item: item });
         }
     }
 

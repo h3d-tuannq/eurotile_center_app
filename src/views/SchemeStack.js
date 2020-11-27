@@ -21,7 +21,7 @@ class SchemeStack extends React.Component {
         super(props);
         this.getOrderNumber = this.getOrderNumber.bind(this);
         this.state = {
-            number_order: Def.order_number
+            number_order: Def.cart_data.length
         };
         this.goProductList = this.goProductList.bind(this);
     }
@@ -33,7 +33,7 @@ class SchemeStack extends React.Component {
         }
     }
     getOrderNumber(){
-        return Def.order_number;
+        return Def.cart_data.length;
     }
 
     formatOrderNumber(order_number){
@@ -127,20 +127,22 @@ class SchemeStack extends React.Component {
                 } />
 
 
-                <RootStack.Screen name="detail-design" component={DetailDesignScreen} options=
+                <RootStack.Screen name="detail-design" component={DetailDesignScreen} headerMode='none' options=
                     {({route}) => ({
-                            title: null,
+                            title: route.params && route.params.item ? route.params.item.name :  'Chi tiết thiết kế',
                             headerStyle: {
                                 backgroundColor: Style.DEFAUT_BLUE_COLOR,
                                 height: Style.HEADER_HEIGHT,
                             },
+                            headerMode:'none',
                             headerTintColor: '#fff',
                             headerTitleStyle: {
                                 fontWeight: 'bold',
                             },
                             headerBackImage: ()=> {
                                 return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
-                            }}
+                            }
+                    }
                     )
                     } />
 

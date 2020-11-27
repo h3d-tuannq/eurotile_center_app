@@ -12,7 +12,7 @@ export default class ChangePassword extends Component {
         super(props);
         this.state = {
             focus : 0,
-            display_name : "",
+            display_name : Def.user_info && Def.user_info.userProfile ?Def.user_info.userProfile.display_name :"",
             email:"",
             password:"",
             re_password:""
@@ -21,8 +21,8 @@ export default class ChangePassword extends Component {
     }
 
     signUp(){
-        if(!this.state.email.includes("@", 0) && !this.state.email.includes(".", 0)){
-            alert("Email không đúng định dạng");
+        if(!this.state.display_name){
+            alert("Vui nhập tên hiển thị");
         }else if(this.state.password != this.state.re_password){
             alert("Mật khẩu và mật khẩu xác nhận phải giống nhau");
         } else if(this.state.password.length < 6){

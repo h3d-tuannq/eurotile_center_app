@@ -261,22 +261,22 @@ class MyScreen extends React.Component {
                         {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                     </View>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}
-                        onPress={this.gotoProfile}
-                        >
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                        <Image  style={styles.imageStyleInfo}  source={{uri:Def.getAvatarUrlFromUserInfo() }}  />
-                        <View style={{marginLeft: 10, justifyContent:'space-between'}}>
-                            <Text style={Style.text_styles.middleText}>
-                                {user['email']}
-                            </Text>
+                    {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}*/}
+                        {/*onPress={this.gotoProfile}*/}
+                        {/*>*/}
+                        {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
+                        {/*<Image  style={styles.imageStyleInfo}  source={{uri:Def.getAvatarUrlFromUserInfo() }}  />*/}
+                        {/*<View style={{marginLeft: 10, justifyContent:'space-between'}}>*/}
                             {/*<Text style={Style.text_styles.middleText}>*/}
-                                {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
+                                {/*{user['email']}*/}
                             {/*</Text>*/}
-                        </View>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
+                            {/*/!*<Text style={Style.text_styles.middleText}>*!/*/}
+                                {/*/!*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*!/*/}
+                            {/*/!*</Text>*!/*/}
+                        {/*</View>*/}
+                        {/*</View>*/}
+                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                    {/*</TouchableOpacity>*/}
 
 
 

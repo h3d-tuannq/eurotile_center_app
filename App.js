@@ -178,7 +178,7 @@ function MainTab() {
             style={{height: 120, paddingVertical: 20 , backgroundColor : 'red'}}
 
             tabBar={(props) => <MyTabBar {...props} item={null} />}
-            initialRouteName={'scheme'}
+            initialRouteName={'Product'}
             tabBarOptions={{
                 activeTintColor: Style.DEFAUT_RED_COLOR,
                 inactiveTintColor: '#b3b3b3',
@@ -647,9 +647,6 @@ export default class App extends Component {
         NetScheme.getAllDesign(this.onDesignSuccess, this.onDesignFalse);
         NetScheme.getPopularDesign(this.onPopularDesignSuccess, this.onPopularDesignFalse);
         NetScheme.getDesignCategory(this.onDesignCateSuccess, this.onDesignCateFalse);
-
-
-
 
         AsyncStorage.getItem('cart_data').then((value) => {
             if(value){

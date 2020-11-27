@@ -37,7 +37,7 @@ class ProductStack extends React.Component {
         super(props);
         this.getOrderNumber = this.getOrderNumber.bind(this);
         this.state = {
-          number_order: Def.order_number
+          number_order: Def.cart_data.length
         };
         this.goProductList = this.goProductList.bind(this);
         this.goToCreateCustomer = this.goToCreateCustomer.bind(this);
@@ -57,7 +57,7 @@ class ProductStack extends React.Component {
     }
 
     getOrderNumber(){
-        return Def.order_number;
+        return Def.cart_data.length;
     }
 
     formatOrderNumber(order_number){

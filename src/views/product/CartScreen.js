@@ -52,26 +52,31 @@ class CartScreen extends React.Component {
     }
 
     booking(){
-        // console.log("Booking Data : " + JSON.stringify(Def.cart_data));
+
         var order = {
-          orderItems: Def.cart_data,
-          customer: null,
-          partner_id:Def.user_info['id'],
-          booker_id: Def.user_info['id'] ,
-          // cityItem:'',
-          // districtItem:'',
-          // wardItem:'',
-          // detailAddress:'',
-          address:{},
+            orderItems: Def.cart_data,
+            customer: null,
+            partner_id:Def.user_info && Def.user_info['partnerInfo'] ? Def.user_info['id'] : null,
+            booker_id: Def.user_info ? Def.user_info['id'] : null ,
+            // cityItem:'',
+            // districtItem:'',
+            // wardItem:'',
+            // detailAddress:'',
+            address:{},
 
-          deliverDate: new Date(),
-          referralCode:'',
+            deliverDate: new Date(),
+            referralCode:'',
         };
-
         Def.order = order;
 
-        console.log("Goto booking")
-
+        if(Def.user_info){
+        } else  {
+            Def.redirectScreen = {
+              stack:'Product',
+              screen: 'select-customer'
+            };
+            this.props.navigation.navigate('Login', {screen:'signIn'});
+        }
         this.props.navigation.navigate('Product', {screen:'select-customer'});
         AsyncStorage.setItem('order', JSON.stringify(Def.cart_data));
     }

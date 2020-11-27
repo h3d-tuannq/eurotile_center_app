@@ -42,7 +42,7 @@ class DesignItemrenderer extends PureComponent{
         };
 
         return (
-            <View style={{marginTop : 8}}>
+            <View style={{marginTop : 8, marginRight:5}}>
 
             <TouchableOpacity style={[styles.itemStyle, this.props.styleImage]} onPress={
                 () => {

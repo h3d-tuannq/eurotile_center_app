@@ -74,6 +74,8 @@ export default class Def{
 
     static updateAddress = null;
 
+    static redirectScreen = null;
+
 
 
     static getDateString(date, format) {
@@ -211,8 +213,12 @@ export default class Def{
     }
 
     static calOrderValue(order){
-       let total = order.orderItems.reduce(function(acc, val) { return acc.sale_price + val.sale_price; }, 0);
-       return total;
+        console.log("Order Items: " + JSON.stringify(order.orderItems));
+        var total = 0;
+        if(order.orderItems && Array.isArray(order.orderItems)) {
+            total = order.orderItems.reduce(function(acc, val) { return acc.product.sale_price * acc.quantity * acc.product.brickBoxInfo['total_area']/1000000 + val.product.sale_price * val.quantity * val.product.brickBoxInfo['total_area']/1000000  ; });
+        }
+        return total;
     }
 
 }
