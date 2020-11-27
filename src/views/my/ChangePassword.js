@@ -29,7 +29,7 @@ export default class ChangePassword extends Component {
             alert("Mật khẩu phải dài hơn 8 ký tự");
         }else{
             const {navigation} = this.props;
-            UserController.signup(this.state.email,this.state.password, this.state.disableNextPrev,navigation);
+            // UserController.signup(this.state.email,this.state.password, this.state.disableNextPrev,navigation);
         }
     }
     render() {

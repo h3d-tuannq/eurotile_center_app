@@ -6,6 +6,7 @@ import MyCustomizeTabBar from  './tabbar/MyCustomizeTabBar'
 
 import NetNews from '../../net/NetNews'
 import Def from '../../def/Def'
+import Style from "../../def/Style";
 
 const {width, height} = Dimensions.get('window');
 
@@ -311,22 +312,50 @@ class NewsScreen extends React.Component {
 
     }
 
+    componentDidMount(){
+        if(!Def.news_data) {
+            NetNews.listNews(this.onNewsSuccess, this.onNewsFailed);
+        }
+        else if (!Def.config_news_menu) {
+            Def.config_news_menu = this.createConfigData(Def.news_data);
+            this.setState({configMenu: Def.config_news_menu});
+        }
+
+    }
+
 
     render() {
         const {navigation} = this.props;
         const configMenu = Def.config_news_menu;
         return (
-            <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >
+            <View style={{flex:1}}>
                 {
-                     configMenu && Object.entries(configMenu).map((prop, key) => {
-                        if((prop[1]["hidden"]) == 0){
-                            return (
-                                <NewsTab key ={prop[0] + "acv"}  navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />
-                            );
+                    configMenu ?
+                    <ScrollableTabView  style={{flex:1}} renderTabBar={() => <MyCustomizeTabBar navigation={navigation}/>}>
+                        {
+                            configMenu && Object.entries(configMenu).map((prop, key) => {
+                                if ((prop[1]["hidden"]) == 0) {
+                                    return (
+                                        <NewsTab key={prop[0] + "acv"} navigation={navigation} refresh={this.refresh}
+                                                 tabLabel={this.formatText(prop[1]["name_vi"])}
+                                                 title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}/>
+                                    );
+                                }
+                            })
                         }
-                    })
+                    </ScrollableTabView>
+                        :
+                            <View style={{justifyContent :'center', alignItems : 'center', width: width, height: height}}>
+                                <Text style={{fontSize:Style.TITLE_SIZE, color:'#b3b3b3'}}>
+                                    Ứng dụng đang tải dữ liệu
+                                </Text>
+                            </View>
                 }
-            </ScrollableTabView>
+
+
+
+            </View>
+
         )
     }
 }
