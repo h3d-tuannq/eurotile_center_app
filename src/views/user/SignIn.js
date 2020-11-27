@@ -56,7 +56,6 @@ export default class SignIn extends Component {
         }else{
             const {navigation} = this.props;
             this.setState({isLoging:true});
-            console.log('signIn');
              UserController.login(this.state.email,this.state.password,navigation, this.loginSuccessCallback, this.loginFalseCallback);
         }
     }

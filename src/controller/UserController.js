@@ -61,7 +61,11 @@ export default class UserController{
             console.log('Error : ' + err);
         }
 
-        Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+         Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+         Def.mainNavigate.navigate('My');
+
+         console.log("Go to MyScreen");
+
         // if(Def.setLoader)
         //     Def.setLoader(false);
         //
@@ -218,12 +222,16 @@ export default class UserController{
     static async  login(email, password ,navigation=null, successCallback, falseCallback) {
 
         let param = {'username' : email, 'password' : password};
-
+        if(navigation){
+            Def.mainNavigate = navigation;
+        }
         Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/login' , Def.POST_METHOD , param);
-        if(Def.setLoader)
-            Def.setLoader(false);
+        // if(Def.setLoader)
+        //     Def.setLoader(false);
 
-        navigation.navigate('Home');
+        // Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+
+
     };
 
     static async  loginFirebase(param ,navigation=null, successCallback, falseCallback) {

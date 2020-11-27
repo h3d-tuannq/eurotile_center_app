@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Text, Image, StyleSheet, View, TextInput, Dimensions, TouchableOpacity} from 'react-native'
 import Style from "../../../src/def/Style";
+import Def from "../../../src/def/Def";
 import FacebookIcon from "../../../assets/icon/icon-facebook.svg";
 import GoogleIcon from "../../../assets/icon/icon-google.svg";
 import UserController from "../../controller/UserController";
