@@ -26,7 +26,6 @@ class BookingScreen extends React.Component {
         this.parseDataToView = this.parseDataToView.bind(this);
         this.showDateTimePicker = this.showDateTimePicker.bind(this);
         this.changeAddress = this.changeAddress.bind(this);
-        console.log('Constructor Booking Screen');
         let address = this.props.route.params && this.props.route.params.address ? this.props.route.params.address : Def.order ? Def.order.address : null;
 
         this.state = {
@@ -39,7 +38,7 @@ class BookingScreen extends React.Component {
             address : address,
             addressStr : this.props.route.params && this.props.route.params.addressStr ? this.props.route.params.addressStr : Def.getAddressStr(address),
             showKeyboard : false,
-            deliverDate: new Date(),
+            receipt_date: new Date(),
             orderItems: Def.order.orderItems,
             paymentMethod:0,
 
@@ -78,51 +77,54 @@ class BookingScreen extends React.Component {
         });
     }
 
-    buildAddress(){
-        let address = Def.getAddressFromUserInfo();
+    buildAddress(address){
         let submitAddress = {};
             submitAddress.id = address ? address['id'] : null;
-            submitAddress.address_detail = this.state.address;
-            submitAddress.city_code = this.state.city_item.city_code;
-            submitAddress.district_code = this.state.district_item.district_code;
-            submitAddress.ward_code = this.state.ward_item.ward_code;
+            submitAddress.address_detail = address.address_detail;
+            submitAddress.city_code = address.city_code;
+            submitAddress.district_code = address.district_code;
+            submitAddress.ward_code = address.ward_code;
         return submitAddress;
     }
 
 
     saveOrder() {
         const {navigation} = this.props;
-        console.log('Save Order');
-
-
         let orderInfo = {
             customer_id : Def.order.customer ? Def.order.customer['id'] : "",
-            id: Def.order.id,
+            id: Def.order.id ? Def.order.id : "",
             partner_id:Def.order.partner_id,
             booker_id:  Def.user_info ? Def.user_info['id'] : null,
-            deliver_date:this.state.deliverDate ?  Def.getDateString(this.state.deliverDate , "yyyy-MM-dd") : "",
+            receipt_date:this.state.receipt_date ?  Def.getDateString(this.state.receipt_date , "yyyy-MM-dd") : "",
             referral_code:'',
-            birth_day: this.state.birth_day ?  Def.getDateString(this.state.birth_day , "yyyy-MM-dd") : "",
-            mobile: this.state.mobile,
-            address: Def.order.address,
-            order_item: Def.order.orderItems,
+            address: JSON.stringify(this.buildAddress(Def.order.address)),
+            order_item: JSON.stringify(this.createOrderItemInfo()),
 
         };
+
+        console.log('Sava Order Info: ' + JSON.stringify(orderInfo));
 
         if(orderInfo){
             OrderController.saveOrder(orderInfo, this.props.navigation);
         }
+    }
 
-
+    createOrderItemInfo(){
+        var orderItemInfo = Def.order.orderItems.map((item) => {
+            return {product_id: item.product.id, amount: item.quantity, price: item.product.sale_price};
+        });
+        return orderItemInfo;
 
     }
+
+
     hideDateTimePicker = () => {
         let showDateVisible = 'isDateTimePickerVisible';
         this.setState({  [showDateVisible] : false });
     };
     handleDatePicked = date => {
         this.hideDateTimePicker();
-        this.setState({  deliverDate : date });
+        this.setState({  receipt_date : date });
     };
 
     showDateTimePicker = (attr = null) => {
@@ -142,7 +144,7 @@ class BookingScreen extends React.Component {
         const {navigation} = this.props;
         const {address} = this.state;
         const renderOrderItem = ({item, index}) => (
-            <OrderItemrenderer type={"order-item"} item={item} index={index} itemChange={this.orderItemChange} click={this.orderItemClick}  styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
+            <OrderItemrenderer type={"order-item"} item={item} index={index} disabled={true} itemChange={this.orderItemChange} click={this.orderItemClick}  styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
         );
 
         const footerComponent = () => (
@@ -246,13 +248,13 @@ class BookingScreen extends React.Component {
                             height: ITEM_HEIGHT,
                             flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                             borderColor: Style.GREY_TEXT_COLOR
-                        }} onPress={() => this.showDateTimePicker('deliverDate')}>
+                        }} onPress={() => this.showDateTimePicker('receipt_date')}>
                             <Text style={[Style.text_styles.titleTextNotBold, {
                                 justifyContent: 'center',
                                 paddingLeft: 5,
                                 color: Style.GREY_TEXT_COLOR
                             }]}>
-                                {this.state.deliverDate ? Def.getDateString(this.state.deliverDate, "yyyy-MM-dd") : "YYYY-MM-DD"}
+                                {this.state.receipt_date ? Def.getDateString(this.state.receipt_date, "yyyy-MM-dd") : "YYYY-MM-DD"}
                             </Text>
                             <CalendarIcon width={24} height={24} color={Style.GREY_TEXT_COLOR}/>
 
@@ -275,10 +277,6 @@ class BookingScreen extends React.Component {
                     />
 
                 </View>
-
-
-
-
             </View>
         );
 

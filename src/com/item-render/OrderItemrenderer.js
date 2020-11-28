@@ -25,7 +25,7 @@ class OrderItemrenderer extends PureComponent{
             selectValue: this.props.item.selectValue,
             quantity: this.props.item.quantity,
             area: this.props.item.area,
-            saleArea: this.props.item.saleArea
+            saleArea: this.props.item.saleArea,
         };
 
         this.updateOrder = this.updateOrder.bind(this);
@@ -102,8 +102,7 @@ class OrderItemrenderer extends PureComponent{
                         this.props.index + 1
                     }
                 </Text>
-
-                <TouchableOpacity style={styles.item} onPress={
+                <TouchableOpacity  disabled = {this.props.disabled}  style={styles.item} onPress={
                     () => {
                         this.props.click(model);
                     }
@@ -138,6 +137,7 @@ class OrderItemrenderer extends PureComponent{
                                     min={1}
                                     rounded={false}
                                     showBorder={false}
+                                    disabled = {this.props.disabled}
                                     // colorMin={Style.DEFAUT_BLUE_COLOR}
                                     // colorMax={Style.DEFAUT_BLUE_COLOR}
                                     color={'#fff'}

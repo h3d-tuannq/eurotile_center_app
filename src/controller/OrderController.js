@@ -21,7 +21,8 @@ export default class OrderController{
 
 
     static onUpdateSuccess(data){
-        console.log('Update success');
+        console.log('Update Order success: '+ JSON.stringify(data));
+
         OrderController.updateData(data);
         // Def.mainNavigate.navigate('My');
         // Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
