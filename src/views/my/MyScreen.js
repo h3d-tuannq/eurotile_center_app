@@ -54,6 +54,7 @@ class MyScreen extends React.Component {
         this.gotoChangePass = this.gotoChangePass.bind(this);
         this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
         this.signInBtnClick = this.signInBtnClick.bind(this);
+        this.gotoOrderList = this.gotoOrderList.bind(this);
         this.refresh = this.refresh.bind(this);
         Def.refreshDashBoard = this.refresh;
 
@@ -92,6 +93,11 @@ class MyScreen extends React.Component {
     gotoChangePass() {
         this.props.navigation.navigate('My', {'screen':'change-password'});
     }
+
+    gotoOrderList() {
+        this.props.navigation.navigate('Booking', {'screen':'order-list'});
+    }
+
 
     onGetUserInfoFun(value){
         if(value){
@@ -328,7 +334,9 @@ class MyScreen extends React.Component {
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}>
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
+                                      onPress={this.gotoOrderList}
+                    >
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <View style={{width :30}}>
                                 <Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />

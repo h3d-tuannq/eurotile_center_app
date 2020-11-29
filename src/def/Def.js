@@ -56,6 +56,8 @@ export default class Def{
 
     static PLAYBACK_SUB_TYPE      = 1;
 
+    static OrderStatus = {0: "Chưa tiếp nhận",1 : "Xác nhận",2 : "Thanh toán",3:"Giao hàng",4: "Hoàn thành"}; // DRAFT, CONFIRM, PAID, DELIVERING, ACCOMPLISHED
+
     static news_data = null;
     static collection_data = null;
     static design_data = null;
@@ -65,6 +67,11 @@ export default class Def{
     static product_data = [];
     static cart_data = [];
     static customer = [];
+
+    static orderList = [];
+    static config_order_menu = [];
+    static OrderListForStatus = [];
+
     static collection_detail_data = null;
     static collection_detail_menu = null;
 
@@ -175,8 +182,8 @@ export default class Def{
         return rs;
     }
     static getThumnailImg(img_path){
-        rs = img_path.split(".");
-        lastItem = rs.pop();
+        let rs = img_path.split(".");
+        let lastItem = rs.pop();
         rs = rs.join('.') + '_200x200.' + lastItem;
         // console.log(rs);
         return rs;
@@ -219,6 +226,17 @@ export default class Def{
             total = order.orderItems.reduce(function(acc, val) { return (typeof acc == 'number' ? acc :acc.product.sale_price * acc.quantity * acc.product.brickBoxInfo['total_area']/1000000) + val.product.sale_price * val.quantity * val.product.brickBoxInfo['total_area']/1000000  ; });
         }
         return total;
+    }
+
+    static getOrderByStatus(orderList, status){
+        let filterData = [];
+        // console.log("Status : "  + status);
+        if(orderList&& Array.isArray(orderList)){
+            filterData = orderList.filter((item) =>
+                 item.status == status
+            );
+        }
+        return filterData;
     }
 
 }

@@ -73,7 +73,7 @@ class CartScreen extends React.Component {
             };
             this.props.navigation.navigate('Login', {screen:'signIn'});
         } else {
-            this.props.navigation.navigate('Product', {screen:'select-customer'});
+            this.props.navigation.navigate('Booking', {screen:'select-customer'});
         }
         AsyncStorage.setItem('order', JSON.stringify(Def.cart_data));
     }

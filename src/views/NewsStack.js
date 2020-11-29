@@ -26,7 +26,7 @@ import EurotileLogo from '../../assets/icons/Logo w.svg';
 import CartIcon from '../../assets/icons/cart.svg';
 import Def from '../def/Def';
 
-// function NewsDetailScreen({navigation} ) {
+// function OrderDetailScreen({navigation} ) {
 //     return (
 //         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 //             <Text>News Detail</Text>

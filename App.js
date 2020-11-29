@@ -20,6 +20,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import BackIcon from './assets/icon/icon-back.svg';
+import OrderController from './src/controller/OrderController'
 
 
 import PolicyIcon from './assets/icon/icon-policy.svg';
@@ -281,6 +282,7 @@ function AppStack() {
         <RootStack.Navigator headerMode="none">
             <Stack.Screen name="MainTab" component={MainTab} />
             <Stack.Screen name="Login" component={LoginStack} />
+            <Stack.Screen name="Booking" component={BookingStack} />
         </RootStack.Navigator>
     );
 }
@@ -424,6 +426,7 @@ import NewsStack from "./src/views/NewsStack";
 import MyStack from "./src/views/MyStack";
 import HomeStack from "./src/views/HomeStack"
 import SchemeStack from "./src/views/SchemeStack"
+import BookingStack from "./src/views/BookingStack"
 
 
 
@@ -588,7 +591,6 @@ export default class App extends Component {
     }
 
     onGetProductSuccess(data){
-        console.log('Return Product Data');
         Def.product_data = data["data"];
     }
 
@@ -607,7 +609,6 @@ export default class App extends Component {
     }
 
     onDesignSuccess(data){
-        console.log('onDesignSuccess : ');
         Def.design_data = data['data'];
     }
 
@@ -627,7 +628,6 @@ export default class App extends Component {
     }
 
     onDesignCateSuccess(data){
-        console.log("On Get Design Cate Success : " + JSON.stringify(data['data']));
         Def.design_cate = data['data'];
     }
 
@@ -647,6 +647,9 @@ export default class App extends Component {
         NetScheme.getAllDesign(this.onDesignSuccess, this.onDesignFalse);
         NetScheme.getPopularDesign(this.onPopularDesignSuccess, this.onPopularDesignFalse);
         NetScheme.getDesignCategory(this.onDesignCateSuccess, this.onDesignCateFalse);
+
+        OrderController.getOrder();
+
 
         AsyncStorage.getItem('cart_data').then((value) => {
             if(value){

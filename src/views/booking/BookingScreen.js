@@ -56,7 +56,7 @@ class BookingScreen extends React.Component {
     }
 
     changeAddress(){
-        this.props.navigation.navigate('Product', {screen:'change-order-address'});
+        this.props.navigation.navigate('Booking', {screen:'change-order-address'});
     }
 
     componentDidMount(){

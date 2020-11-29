@@ -14,7 +14,7 @@ export default class OrderController{
         supper(props);
     }
     static async  saveOrder(orderInfo, navigation = null, successCallback, falseCallback) {
-        console.log("Order Info: "+ orderInfo);
+        // console.log("Order Info: "+ orderInfo);
         Net.sendRequest(this.onUpdateSuccess,this.onSaveFalse,'https://eurotiledev.house3d.net/api/order/create-order' , Def.POST_METHOD , orderInfo, 'multipart/form-data');
 
     };
@@ -24,6 +24,7 @@ export default class OrderController{
         console.log('Update Order success: '+ JSON.stringify(data));
 
         OrderController.updateData(data);
+        Def.mainNavigate.navigate('Booking', {screen:'order-detail-screen', params:{item:data}});
         // Def.mainNavigate.navigate('My');
         // Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
     }
@@ -31,6 +32,24 @@ export default class OrderController{
     static onSaveFalse(data){
         console.log("Update Error : " + JSON.stringify(data));
     }
+
+
+    static getOrder(callback,errCallback ) {
+        if(Def.user_info){
+            Net.sendRequest(callback ? callback : this.getOrderSuccess,errCallback? errCallback: this.getOrderFalse ,Def.URL_BASE + "/api/order/get-order" ,Def.POST_METHOD, {booker_id:Def.user_info['id']});
+        }
+    }
+
+
+    static getOrderSuccess(data){
+        console.log("Get Order Info : " + JSON.stringify(data));
+        Def.orderList = data;
+    }
+
+    static getOrderFalse(data){
+        console.log("Get Order : " + JSON.stringify(data));
+    }
+
 
     static updateData(userData){
         return true;

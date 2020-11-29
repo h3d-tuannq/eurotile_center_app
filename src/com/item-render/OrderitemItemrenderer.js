@@ -14,14 +14,18 @@ import InputSpinner from "react-native-input-spinner";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 
-class OrderItemrenderer extends PureComponent{
+class OrderitemItemrenderer extends PureComponent{
 
+    callbackIndex = 0;
     constructor(props) {
         super(props);
         this.state = {
             item: this.props.item,
             stateCount: 0.0,
             selectValue: this.props.item.selectValue,
+            quantity: this.props.item.quantity,
+            area: this.props.item.area,
+            saleArea: this.props.item.saleArea,
         };
 
         this.updateOrder = this.updateOrder.bind(this);
@@ -78,10 +82,13 @@ class OrderItemrenderer extends PureComponent{
 
 
     render(){
-        const model = this.state.item;
+        const model = this.state.item.product;
+
+        // console.log('Order Item : ' + JSON.stringify(this.state.item.quantity) );
+
         const click = this.props.click;
         return (
-            <View style={{flexDirection:'row', paddingVertical:5, marginHorizontal:10, borderBottomWidth : 0, borderBottomColor: Style.GREY_TEXT_COLOR}}>
+            <View style={{flexDirection:'row', paddingVertical:5, marginHorizontal:10, borderBottomWidth : 1, borderBottomColor: Style.GREY_TEXT_COLOR}}>
 
                 {/*<CheckBox*/}
                     {/*style={styles.checkBoxStyle}*/}
@@ -100,52 +107,60 @@ class OrderItemrenderer extends PureComponent{
                         this.props.click(model);
                     }
                 }>
-                    {/*<View style={styles.imageContainer} >*/}
-                        {/*{model.image_path ? <Image style={styles.itemImage} source={{uri:model.image_path}} /> :*/}
-                            {/*<Image  style={styles.itemImage}  source={require('../../../assets/icon/logo_vov_16_9.png')}  />}*/}
-                    {/*</View>*/}
+                    <View style={styles.imageContainer} >
+                        {model.image_path ? <Image style={styles.itemImage} source={{uri: model.image_path.includes('http') ? model.image_path: Def.URL_CONTENT_BASE + model.image_path}} /> :
+                            <Image  style={styles.itemImage}  source={require('../../../assets/icon/logo_vov_16_9.png')}  />}
+                    </View>
 
                     <View style={styles.info}>
                         <View>
                             <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
-                                <Text style={styles.titleInfo}>{model.code}</Text>
-                                {/*<TouchableOpacity style={{marginTop:-3 , paddingHorizontal:5, paddingVertical:3}} onPress={() => {this.deleteHandleClick(this.props.item)}}>*/}
-                                    {/*<Icon name="trash-alt"  size={17} color={Style.GREY_TEXT_COLOR} />*/}
-                                {/*</TouchableOpacity>*/}
-                                <Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>
+                                <Text style={styles.titleInfo}>{model.name}</Text>
+                                <TouchableOpacity style={{marginTop:-3 , paddingHorizontal:5, paddingVertical:3}} onPress={() => {this.deleteHandleClick(this.props.item)}}>
+                                    <Icon name="trash-alt"  size={17} color={Style.GREY_TEXT_COLOR} />
+                                </TouchableOpacity>
                             </View>
 
 
                             <View style={styles.groupInfo}>
-                                <Text style={styles.infoText}>{"Khách hàng"  }</Text>
-                                <Text style={styles.valueText}>{model['customer']['name']  }</Text>
-                                {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
-                            </View>
-
-                            <View style={styles.groupInfo}>
-                                <Text style={styles.infoText}>{"Điện thoại"  }</Text>
-                                <Text style={styles.valueText}>{model['customer']['phone']  }</Text>
-                                {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
-                            </View>
-                            <View style={styles.groupInfo}>
-                                <Text style={styles.infoText}>{"Ngày giao hàng"  }</Text>
-                                <Text style={styles.valueText}>{model['deliver_date'] ? Def.getDateString(new Date(model['deliver_date'] * 1000) , "yyyy-MM-dd") : ""}</Text>
-                                {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
-                            </View>
-
-                            <View style={styles.groupInfo}>
-                                <Text style={styles.infoText}>{"Ngày tạo"  }</Text>
-                                <Text style={styles.valueText}>{model['created_at'] ? Def.getDateString(new Date(model['created_at'] * 1000) , "yyyy-MM-dd") : ""}</Text>
-                                {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
+                                {/*<Text style={styles.infoText}>{model['brickBoxInfo']['width'] + "x"+ model['brickBoxInfo']['height'] + "  -  " +model['brickBoxInfo']['brick_number'] + " viên/hộp" }</Text>*/}
+                                <Text style={styles.priceText}>{model['sale_price'] + " đ" }</Text>
                             </View>
                         </View>
 
                         <View style={styles.listenView}>
                             <View style={styles.groupInfo}>
-                                {/*<Text style={styles.infoText}>{"Ngày giao hàng" }</Text>*/}
-                                <Text style={styles.valueText}>{Def.getAddressStr(model.address)}</Text>
-                                {/*<Text style={styles.priceText}>{Def.getAddressStr(model.address) }</Text>*/}
+                                <Text style={styles.infoText}>{"Số hộp"}</Text>
+                                <InputSpinner
+                                    width={100}
+                                    height={28}
+                                    min={1}
+                                    rounded={false}
+                                    showBorder={false}
+                                    disabled = {this.props.disabled}
+                                    // colorMin={Style.DEFAUT_BLUE_COLOR}
+                                    // colorMax={Style.DEFAUT_BLUE_COLOR}
+                                    color={'#fff'}
+                                    style={{borderRadius:3, borderWidth:2}}
+                                    buttonTextColor={Style.DEFAUT_RED_COLOR}
+
+                                    inputStyle={{width:80, height:35}}
+                                    buttonStyle={{borderWidth : 2,borderRadius:1,borderColor:'#000' }}
+                                    max={10000} onChange={(newValue) => {this.quantityChange(newValue)}}
+                                    value={this.state.quantity}/>
+
                             </View>
+                            <View style={styles.groupInfo}>
+                                <Text style={styles.infoText}>{"Diện tích" }</Text>
+                                {/*<Text style={styles.priceText}>{model['brickBoxInfo']['total_area']/1000000  * this.state.quantity+ " m" }</Text>*/}
+
+                            </View>
+                            {/*<TouchableOpacity style={[styles.listenButton, { backgroundColor: model.reader_link ? 'red' : '#cccccc'}]} onPress={this.onClickNews}>*/}
+                            {/*<SpeakerIcon style={styles.favoriteIcon}  />*/}
+                            {/*<Text style={[styles.infoText,{ marginLeft:5}]}>*/}
+                            {/*Nghe tin tức*/}
+                            {/*</Text>*/}
+                            {/*</TouchableOpacity>*/}
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -174,9 +189,7 @@ const  styles = StyleSheet.create({
     },
 
     checkIndex: {
-        // marginTop: width/15,
-        paddingVertical :5,
-        paddingTop:10,
+        marginTop: width/15,
         paddingLeft: 5,
         paddingRight: 10
     },
@@ -216,7 +229,6 @@ const  styles = StyleSheet.create({
     },
     groupInfo: {
       flexDirection : 'row',
-        marginTop :2,
       justifyContent: 'space-between',
       alignItems:'center'
     },
@@ -231,12 +243,6 @@ const  styles = StyleSheet.create({
         fontSize : Style.NORMAL_SIZE,
         color: Style.GREY_TEXT_COLOR
     },
-    valueText : {
-        fontSize : Style.NORMAL_SIZE,
-        // color: Style.GREY_TEXT_COLOR
-    },
-
-
     priceText : {
         fontSize : Style.NORMAL_SIZE,
         color: Style.DEFAUT_RED_COLOR,
@@ -248,4 +254,4 @@ const  styles = StyleSheet.create({
     }
 });
 
-export default OrderItemrenderer;
+export default OrderitemItemrenderer;

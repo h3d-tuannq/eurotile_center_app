@@ -1,10 +1,9 @@
 import React, {useState} from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Modal, Keyboard, FlatList} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Modal, Keyboard} from 'react-native'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Style from '../../def/Style';
-import LocationIcon from '../../../assets/icons/Location.svg';
 
 import ImagePicker  from 'react-native-image-picker'
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
@@ -17,9 +16,9 @@ import UserController from "../../controller/UserController";
 import Autocomplete from 'react-native-autocomplete-input';
 import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
-import OrderitemItemrenderer from "../../com/item-render/OrderitemItemrenderer";
+import moment from 'moment'
 
-class OrderAddressScreen extends React.Component {
+class CreateCustomerScreen extends React.Component {
     constructor(props){
         super(props);
         this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
@@ -33,6 +32,7 @@ class OrderAddressScreen extends React.Component {
         this.choseWardClick = this.choseWardClick.bind(this);
         this.showAutocompleteModal = this.showAutocompleteModal.bind(this);
         this.parseDataToView = this.parseDataToView.bind(this);
+        this.setDate = this.setDate.bind(this);
         this.showAddressModal = this.showAddressModal.bind(this);
 
         this.state = {
@@ -56,12 +56,13 @@ class OrderAddressScreen extends React.Component {
             filterAttr: 'city_name',
             filterData: [],
             showKeyboard : false,
-            addressTitle: 'Tỉnh/Thành phố',
-            deliverDate: new Date(),
-            orderItems: Def.order.orderItems,
+            addressTitle: 'Tỉnh/Thành phố'
 
         };
+
+        this.refresh = this.refresh.bind(this);
         Def.mainNavigate = this.props.navigation;
+        Def.setLoader = this.refresh;
     }
 
     componentDidMount(){
@@ -121,10 +122,14 @@ class OrderAddressScreen extends React.Component {
             this.setState({filterData: this.state.cities, filterAttr: 'city_name'});
             this.showAddressModal();
         }
+
+        // setTimeout(this.showAddressModal, 500);
+
     }
 
     showAddressModal(){
         let title = this.state.currentAddress == 1 ? "Tỉnh/Thành phố" : this.state.currentAddress == 2 ? "Quận/huyện" : "Phường/Thị trấn";
+
         this.setState({choseAddress: true, addressTitle : title});
     }
 
@@ -139,6 +144,7 @@ class OrderAddressScreen extends React.Component {
             this.showAddressModal();
         }
 
+        // setTimeout(this.showAddressModal, 500);
     }
 
     choseWardClick(){
@@ -149,6 +155,7 @@ class OrderAddressScreen extends React.Component {
             this.setState({filterData: this.state.ward, filterAttr: 'ward_name'});
             this.showAddressModal();
         }
+        // setTimeout(this.showAddressModal, 500);
     }
 
 
@@ -189,6 +196,19 @@ class OrderAddressScreen extends React.Component {
         });
     }
 
+    getProjectImage(item){
+        var partnerInfo = Def.user_info['partnerInfo'];
+        var result = [];
+        if(partnerInfo && partnerInfo['project_img']){
+            let projectImg = partnerInfo['project_img'].split(',');
+            result = projectImg.map(x => {
+                return {uri:Def.URL_CONTENT_BASE +'partnerInfo/'+ x}
+            });
+
+
+        }
+        return result;
+    }
 
     validate(is_create = true){
         if (is_create) {
@@ -257,13 +277,79 @@ class OrderAddressScreen extends React.Component {
             full_name: this.state.full_name,
         };
 
+        if(this.state.avatarSource && this.state.avatarSource.fileName ) {
+            userInfo.avatar =   {
+                name: this.state.avatarSource.fileName,
+                type: this.state.avatarSource.type,
+                uri: Platform.OS === "android" ? this.state.avatarSource.uri : this.state.avatarSource.uri.replace("file://", "")
+            };
+        }
+
+        if(this.state.infront_cmt_img && this.state.infront_cmt_img.fileName ) {
+            userInfo.infront_cmt_img =   {
+                name: this.state.infront_cmt_img.fileName,
+                type: this.state.infront_cmt_img.type,
+                uri: Platform.OS === "android" ? this.state.infront_cmt_img.uri : this.state.infront_cmt_img.uri.replace("file://", "")
+            };
+        }
+
+        if(this.state.behind_cmt_img && this.state.behind_cmt_img.fileName ) {
+            userInfo.behind_cmt_img =   {
+                name: this.state.behind_cmt_img.fileName,
+                type: this.state.behind_cmt_img.type,
+                uri: Platform.OS === "android" ? this.state.behind_cmt_img.uri : this.state.behind_cmt_img.uri.replace("file://", "")
+            };
+        }
+
+        if(this.state.project_img1 && this.state.project_img1.fileName ) {
+            userInfo.project_img1 =   {
+                name: this.state.project_img1.fileName,
+                type: this.state.project_img1.type,
+                uri: Platform.OS === "android" ? this.state.project_img1.uri : this.state.project_img1.uri.replace("file://", "")
+            };
+        }
+
+        if(this.state.project_img2 && this.state.project_img2.fileName ) {
+            userInfo.project_img2 =   {
+                name: this.state.project_img2.fileName,
+                type: this.state.project_img2.type,
+                uri: Platform.OS === "android" ? this.state.project_img2.uri : this.state.project_img2.uri.replace("file://", "")
+            };
+        }
+
+        if(this.state.project_img3 && this.state.project_img3.fileName ) {
+            userInfo.project_img3 =   {
+                name: this.state.project_img3.fileName,
+                type: this.state.project_img3.type,
+                uri: Platform.OS === "android" ? this.state.project_img3.uri : this.state.project_img3.uri.replace("file://", "")
+            };
+        }
         console.log('UserInfo: ' + JSON.stringify(userInfo));
         UserController.updatePartnerInfo(userInfo, navigation);
+        Def.setLoader = this.refresh.bind(this);
+        // }
     }
+
+
+
+
+    showDateTimePicker = (attr = null) => {
+        let showDateVisible =     attr == 'birth_day' ? 'isDateTimePickerVisible' : 'isDateTimePickerVisibleIssueOn';
+
+        this.setState({ [showDateVisible]: true , selectedDate : this.state[attr] ? this.state[attr] : new Date() , dateAttribute : attr });
+    };
+
     hideDateTimePicker = () => {
         let showDateVisible =     this.state.dateAttribute == 'birth_day' ? 'isDateTimePickerVisible' : 'isDateTimePickerVisibleIssueOn';
         this.setState({  [showDateVisible] : false });
     };
+
+    setDate(){
+        let dateAttr = this.state.dateAttribute;
+        this.setState({  selectedDate : this.state[dateAttr], isDateTimePickerVisible: false})
+    }
+
+
     handleDatePicked = date => {
         let dateAttr = this.state.dateAttribute;
         console.log("A date has been picked: ", date);
@@ -271,60 +357,119 @@ class OrderAddressScreen extends React.Component {
         this.setState({  [dateAttr] : date });
     };
 
+    refresh()
+    {
+        this.parseDataToView();
+        // this.setState({ stateCount: Math.random() });
+    }
 
+    shouldComponentUpdate(){
+        console.log('should update');
+        console.log('Refresh Update Partner');
+        const index = Def.REFESH_SCREEN.indexOf('update-partner-screen');
+        if (index > -1) {
+            Def.REFESH_SCREEN.splice(index, 1);
+            this.refresh();
+        }
 
+        return true;
+    }
 
     render() {
         const {navigation} = this.props;
-
-        const renderOrderItem = ({item}) => (
-            <OrderitemItemrenderer type={"order-item"} item={item} itemChange={this.orderItemChange} click={this.orderItemClick} styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
-        );
-
+        const {user} = this.state;
+        // const data = this.filterData(this.state.query);
         return (
             <View style={{flex:1}}>
-                { Def.order ?
-                <ScrollView keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: '#fff', paddingLeft : 10, paddingRight: 5, paddingTop:10}}>
-                    <View>
-                        <View style={{flexDirection:'row', marginLeft:5}}>
-                            <LocationIcon style={{width: 30, height:30}}/>
-                            <Text style={Style.text_styles.titleText}>
-                                Thông tin nhận hàng
-                            </Text>
-                        </View>
-                        <View style={{marginLeft:10}}>
-                            <View style={{marginTop:10}}>
-                                <Text style={[Style.text_styles.titleTextNotBold, {fontSize: Style.MIDLE_SIZE}]}>
-                                    {Def.order.customer.name}
+                <ScrollView keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}>
+                        <View>
+                            <TouchableOpacity style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingHorizontal: 10,
+                                paddingVertical: 5,
+                                backgroundColor: '#fff',
+                                marginTop: 1
+                            }}>
+                                <Text style={[Style.text_styles.middleText, {}]}>
+                                    Tên
                                 </Text>
-                                <View style={{flexDirection:'row', justifyContent:'space-between', paddingRight:10, alignItems:'center'}}>
-                                    <View style={styles.orderInfo}>
-                                        <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR}]}>
-                                            {'(+84) '+ Def.order.customer.phone}
-                                        </Text>
-                                        <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR}]}>
-                                            {Def.getAddressStr(Def.order['address'])}
-                                        </Text>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
 
-                                        <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR}]}>
-                                            {Def.order.address.address_detail}
-                                        </Text>
-                                    </View>
-                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                                    <TextInput
+                                        onFocus={() => this.setState({focus: 1})}
+                                        onBlur={() => this.setState({focus: 0})}
+                                        style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
+                                        value={this.state.full_name}
+                                        onChangeText={text => this.setState({full_name: text})}
+                                    />
+                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
                                 </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingHorizontal: 10,
+                                paddingVertical: 5,
+                                backgroundColor: '#fff',
+                                marginTop: 1
+                            }}>
+                                <Text style={[Style.text_styles.middleText, {}]}>
+                                    Điện thoại
+                                </Text>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
 
-
-
-                            </View>
-
-
+                                    <TextInput
+                                        onFocus={() => this.setState({focus: 1})}
+                                        onBlur={() => this.setState({focus: 0})}
+                                        style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
+                                        value={this.state.mobile}
+                                        onChangeText={text => this.setState({mobile: text})}
+                                    />
+                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingLeft: 10,
+                                paddingVertical: 5,
+                                backgroundColor: '#fff',
+                                marginTop: 1
+                            }}>
+                                <Text style={[Style.text_styles.middleText, {}]}>
+                                    Giới Tính
+                                </Text>
+                                <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                                    <View style={{
+                                        marginRight: -5,
+                                        height: ITEM_HEIGHT,
+                                        backgroundColor: '#fff',
+                                        borderRadius: 5
+                                    }}>
+                                        <Picker
+                                            selectedValue={this.state.gender + ''}
+                                            style={{height: ITEM_HEIGHT, width: width / 3.5}}
+                                            mode="dropdown"
+                                            onValueChange={(itemValue, itemIndex) => {
+                                                console.log("Gender change: " + itemValue);
+                                                this.setState({gender: itemValue})
+                                            }
+                                            }>
+                                            <Picker.Item label="Nam" value="0"/>
+                                            <Picker.Item label="Nữ" value="1"/>
+                                        </Picker>
+                                    </View>
+                                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                                </View>
+                            </TouchableOpacity>
                         </View>
-
-                    </View>
-
 
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:5}}
-                                      onPress={this.choseCityClick}
+                        onPress={this.choseCityClick}
                     >
                         <Text style={[Style.text_styles.middleText,{}]}>
                             Tỉnh/Thành phố
@@ -389,23 +534,9 @@ class OrderAddressScreen extends React.Component {
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
                     </TouchableOpacity>
-
-                    <View>
-                        <FlatList
-                        data={this.state.orderItems}
-                        renderItem={renderOrderItem}
-                        keyExtractor={item => item.product.id +"-" + item.quantity}
-                        showsHorizontalScrollIndicator={false}
-                        />
-                    </View>
-
-
-
-
-                </ScrollView>:<View/>}
-
-
+                </ScrollView>
                 <Modal onRequestClose={() => {this.closeFunction(null)}} visible={this.state.choseAddress}  transparent={false} styles={{backgroundColor : 'green'}} >
+                    {/*{this.state.choseAddress ?*/}
                     <AutocompleteModal
                         data={this.state.filterData}
                         filterAttr={this.state.filterAttr}
@@ -415,6 +546,7 @@ class OrderAddressScreen extends React.Component {
                     />
                 </Modal>
                 <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.updatePartnerInfo}>
+
                     <Text style={styles.buttonText}>
                         Thêm mới và chọn
                     </Text>
@@ -424,7 +556,6 @@ class OrderAddressScreen extends React.Component {
         )
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -489,13 +620,8 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         zIndex: 1
-    },
-
-    orderInfo: {
-        marginTop:10,
-    },
-
+    }
 
 });
 
-export default OrderAddressScreen;
+export default CreateCustomerScreen;
