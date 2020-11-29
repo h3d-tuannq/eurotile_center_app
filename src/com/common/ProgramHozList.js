@@ -111,7 +111,7 @@ class ProgramHozList extends React.Component {
                     <TouchableOpacity style={{flexDirection: 'row', justifyContent: 'space-between' , alignItems: 'center'}}
                                       onPress={this.sectionClick}
                     >
-                     {this.props.programType == 'music' ? <MusicWishlistIcon style={styles.icon}/>: (this.props.group == "Favorite" ? <WishlistIcon style={styles.icon}/>  : <LogoIconSmall style={styles.icon}/> )}
+                     {/*{this.props.programType == 'music' ? <MusicWishlistIcon style={styles.icon}/>: (this.props.group == "Favorite" ? <WishlistIcon style={styles.icon}/>  : <LogoIconSmall style={styles.icon}/> )}*/}
 
 
                     <View style={titleView} onPress={this.sectionClick} >
@@ -165,8 +165,8 @@ const styles = StyleSheet.create ({
     },
       titleStyle: {
           fontSize : Style.BIG_SIZE,
-        color: Style.DEFAUT_RED_COLOR,
-        fontWeight: 'bold',
+          color: Style.GREY_TEXT_COLOR,
+        // fontWeight: 'bold',
         marginRight : 10
       },
       titleView: {
