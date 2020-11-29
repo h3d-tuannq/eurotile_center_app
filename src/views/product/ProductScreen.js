@@ -149,7 +149,7 @@ class ProductScreen extends React.Component {
         const {navigation} = this.props;
         const configMenu = Def.config_collection_menu;
         return (
-            <ScrollView style={{flex:1}}>
+            <ScrollView style={{flex:1, backgroundColor: '#fff'}}>
                 <View style={Style.styles.carousel}>
                     <Carousel
                         ref={(c) => { this._carousel = c; }}
@@ -169,7 +169,7 @@ class ProductScreen extends React.Component {
                     { this.pagination }
                 </View>
 
-                <View style={{flex:1, paddingLeft:5}}>
+                <View style={{flex:1, paddingLeft:15}}>
 
                 {
                     configMenu && Object.entries(configMenu).map((prop, key) => {
