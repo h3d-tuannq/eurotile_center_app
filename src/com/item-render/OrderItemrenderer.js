@@ -112,7 +112,7 @@ class OrderItemrenderer extends PureComponent{
                                 {/*<TouchableOpacity style={{marginTop:-3 , paddingHorizontal:5, paddingVertical:3}} onPress={() => {this.deleteHandleClick(this.props.item)}}>*/}
                                     {/*<Icon name="trash-alt"  size={17} color={Style.GREY_TEXT_COLOR} />*/}
                                 {/*</TouchableOpacity>*/}
-                                <Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>
+                                <Text style={styles.priceText}>{Def.numberWithCommas(model['total_value']) + " đ" }</Text>
                             </View>
 
 

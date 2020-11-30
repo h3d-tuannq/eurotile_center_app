@@ -39,7 +39,7 @@ class BookingScreen extends React.Component {
             addressStr : this.props.route.params && this.props.route.params.addressStr ? this.props.route.params.addressStr : Def.getAddressStr(address),
             showKeyboard : false,
             receipt_date: new Date(),
-            orderItems: Def.order.orderItems,
+            orderItems: Def.order ? Def.order.orderItems : [],
             paymentMethod:0,
 
         };
@@ -306,7 +306,7 @@ class BookingScreen extends React.Component {
                                 {"Thanh toán"}
                             </Text>
                             <Text style={[Style.text_styles.priceText, { marginTop:3, fontWeight:'bold'}]}>
-                                {Def.calOrderValue(this.state.order) + " đ"}
+                                {Def.numberWithCommas(Def.calOrderValue(this.state.order)) + " đ"}
                             </Text>
                         </View>
                     </View>

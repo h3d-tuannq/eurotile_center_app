@@ -239,4 +239,12 @@ export default class Def{
         return filterData;
     }
 
+    static numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    static clearCartData(){
+        Def.cart_data = null;
+    }
+
 }

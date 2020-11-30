@@ -54,7 +54,7 @@ class DesignCateHozList extends React.Component {
             console.log(`this.props.navigation.navigate(${screen}, { item: item, data : this.props.data })`);
             this.props.navigation.navigate(screen, { item: item});
         }
-
+        // this.props.refresh();
     }
 
 

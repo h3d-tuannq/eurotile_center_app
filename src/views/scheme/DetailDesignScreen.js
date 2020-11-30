@@ -20,6 +20,8 @@ class DetailDesignScreen extends React.Component {
         let design_list = [];
         let title = '';
 
+        console.log("Detail Design Screen : " + this.props.route.params.item.id );
+
 
         if(this.props.route.params.item && Def.design_data){
             let item = this.props.route.params.item;
@@ -56,7 +58,24 @@ class DetailDesignScreen extends React.Component {
 
     refresh()
     {
-        this.setState({ stateCount: Math.random() });
+        // this.setState({ stateCount: Math.random(),  });
+        let design_list = [];
+        let title = '';
+        let item= null;
+        if(this.props.route.params.item && Def.design_data){
+            item = this.props.route.params.item;
+            design_list = Def.design_data[item['category_id']].data;
+            title = Def.design_data[item['category_id']].name_vi;
+        }
+        console.log("Scheme Name : " + item.name);
+        this.setState({
+            stateCount: 0.0,
+            item:this.props.route.params.item,
+            slide_data : this.getImageForCollection(this.props.route.params.item),
+            activeSlide:0,
+            design_list: design_list,
+            title : title
+        });
     }
 
     formatText(text){
@@ -68,6 +87,10 @@ class DetailDesignScreen extends React.Component {
     }
 
     shouldComponentUpdate(){
+        console.log("Detail Design Screen : " + this.props.route.params.item.id );
+        if(this.props.route.params.item.id !== this.state.item.id){
+            this.refresh();
+        }
         return true;
     }
 

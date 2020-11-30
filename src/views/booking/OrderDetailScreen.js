@@ -25,9 +25,19 @@ class OrderDetailScreen extends React.Component {
             order:item,
             editable: false,
             receipt_date: item.receipt_date ? new Date(item.receipt_date*1000) : new Date() ,
-            orderItems: item.orderItems ? item.orderItems : []
+            orderItems: item.orderItems ? item.orderItems : [],
+            isDateTimePickerVisible : false,
         };
+
+        this.hideDateTimePicker = this.hideDateTimePicker.bind(this);
     }
+
+    hideDateTimePicker = () => {
+        let showDateVisible =      'isDateTimePickerVisible';
+        this.setState({  [showDateVisible] : false });
+    };
+
+
 
     render() {
         const {navigation} = this.props;
@@ -157,7 +167,7 @@ class OrderDetailScreen extends React.Component {
                             // this.hideDateTimePicker();
                         }}
                         onCancel={this.hideDateTimePicker}
-                        date={this.state.birth_day}
+                        date={this.state.receipt_date}
                         mode={'date'}
                         display='spinner'
                         style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
@@ -200,7 +210,7 @@ class OrderDetailScreen extends React.Component {
                         </View>
                     </View>
                 </View>
-                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}
+                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45, marginBottom:5}]}
                                   onPress={this.saveOrder}>
                     <Text style={styles.buttonText}>
                         Cập nhật

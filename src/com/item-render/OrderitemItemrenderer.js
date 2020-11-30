@@ -124,7 +124,7 @@ class OrderitemItemrenderer extends PureComponent{
 
                             <View style={styles.groupInfo}>
                                 {/*<Text style={styles.infoText}>{model['brickBoxInfo']['width'] + "x"+ model['brickBoxInfo']['height'] + "  -  " +model['brickBoxInfo']['brick_number'] + " viên/hộp" }</Text>*/}
-                                <Text style={styles.priceText}>{model['sale_price'] + " đ" }</Text>
+                                <Text style={styles.priceText}>{Def.numberWithCommas(model['sale_price']) + " đ" }</Text>
                             </View>
                         </View>
 
@@ -152,7 +152,7 @@ class OrderitemItemrenderer extends PureComponent{
                             </View>
                             <View style={styles.groupInfo}>
                                 <Text style={styles.infoText}>{"Diện tích" }</Text>
-                                {/*<Text style={styles.priceText}>{model['brickBoxInfo']['total_area']/1000000  * this.state.quantity+ " m" }</Text>*/}
+                                <Text style={styles.priceText}>{model['brickBoxInfo']['total_area']/1000000  * this.state.quantity+ " m²" }</Text>
 
                             </View>
                             {/*<TouchableOpacity style={[styles.listenButton, { backgroundColor: model.reader_link ? 'red' : '#cccccc'}]} onPress={this.onClickNews}>*/}

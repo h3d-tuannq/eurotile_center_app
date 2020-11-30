@@ -34,6 +34,8 @@ class OrderAddressScreen extends React.Component {
         this.showAutocompleteModal = this.showAutocompleteModal.bind(this);
         this.parseDataToView = this.parseDataToView.bind(this);
         this.showAddressModal = this.showAddressModal.bind(this);
+        this.hideDateTimePicker = this.hideDateTimePicker.bind(this);
+        this.handleDatePicked = this.handleDatePicked.bind(this);
 
         this.state = {
             focus : 0,
