@@ -45,8 +45,24 @@ export default class UserController{
     }
 
     static onLoginSuccess(data){
+
         try {
             if(data){
+                if(data['err_code']) {
+                    Alert.alert(
+                        'Cảnh báo',
+                        JSON.stringify(data),
+                        [
+                            {
+                                text: data['msg'],
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                            }
+                        ],
+                        {cancelable: false},
+                    );
+                    return ;
+                }
                 console.log('data login success' + JSON.stringify(data));
                 let acess_token = data['access_token'];
                 AsyncStorage.setItem('access_token', `Bearer ${acess_token}`);
@@ -233,6 +249,22 @@ export default class UserController{
 
 
     };
+
+    static async  changePassword(email, displayName, oldPassword , newPass,navigation=null, successCallback, falseCallback) {
+
+        let param = {'email' : email, 'password' : password, 'old_password': oldPassword, 'display_name':displayName};
+        if(navigation){
+            Def.mainNavigate = navigation;
+        }
+        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/change-account-info' , Def.POST_METHOD , param);
+        // if(Def.setLoader)
+        //     Def.setLoader(false);
+
+        // Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+    };
+
+
+
 
     static async  loginFirebase(param ,navigation=null, successCallback, falseCallback) {
 

@@ -223,7 +223,15 @@ export default class Def{
         console.log("Order Items: " + JSON.stringify(order.orderItems));
         var total = 0;
         if(order.orderItems && Array.isArray(order.orderItems)) {
-            total = order.orderItems.reduce(function(acc, val) { return (typeof acc == 'number' ? acc :acc.product.sale_price * acc.quantity * acc.product.brickBoxInfo['total_area']/1000000) + val.product.sale_price * val.quantity * val.product.brickBoxInfo['total_area']/1000000  ; });
+            if( order.orderItems.length > 1) {
+                total = order.orderItems.reduce(
+                    function (acc, val) {
+                        return (typeof acc == 'number' ?
+                            acc : acc.product.sale_price * acc.quantity * acc.product.brickBoxInfo['total_area'] / 1000000) + val ? val.product.sale_price * val.quantity * val.product.brickBoxInfo['total_area'] / 1000000 : 0;
+                    });
+            } else {
+                total = order.orderItems[0].product.sale_price * order.orderItems[0].quantity * order.orderItems[0].product.brickBoxInfo['total_area'] / 1000000;
+            }
         }
         return total;
     }

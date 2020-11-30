@@ -14,23 +14,27 @@ export default class ChangePassword extends Component {
         this.state = {
             focus : 0,
             display_name : Def.user_info && Def.user_info.userProfile ?Def.user_info.userProfile.display_name :"",
-            email:"",
+            email: Def.user_info ? Def.user_info.email : "",
+            oldpass:"",
             password:"",
             re_password:""
         }
-        this.signUp = this.signUp.bind(this);
+        this.updatePass = this.updatePass.bind(this);
     }
 
-    signUp(){
+    updatePass(){
         if(!this.state.display_name){
             alert("Vui nhập tên hiển thị");
-        }else if(this.state.password != this.state.re_password){
+        }else if(!this.state.oldpass){
+            alert("Vui nhập mật khẩu hiện tại");
+        }
+        else if(this.state.password != this.state.re_password){
             alert("Mật khẩu và mật khẩu xác nhận phải giống nhau");
         } else if(this.state.password.length < 6){
             alert("Mật khẩu phải dài hơn 8 ký tự");
         }else{
             const {navigation} = this.props;
-            // UserController.signup(this.state.email,this.state.password, this.state.disableNextPrev,navigation);
+            UserController.changePassword(this.state.email, this.state.display_name, this.oldpass , this.state.password, this.state.disableNextPrev,navigation);
         }
     }
     render() {
@@ -59,40 +63,47 @@ export default class ChangePassword extends Component {
                         autoCapitalize = 'none'
                         // underlineColorAndroid = "transparent"
                     />
-                    <TextInput
-                        onFocus={() => this.setState({focus:1})}
-                        onBlur={()=> this.setState({focus:0})}
-                        style={this.state.focus == 1 ? textInputHover : textInputNormal}
-                        value={this.state.email}
-                        onChangeText={text => this.setState({email:text})}
-                        placeholder='Mật khẩu hiện tại'
-                        placeholderTextColor="#b3b3b3"
-                        autoCapitalize = 'none'
-                        // underlineColorAndroid = "transparent"
-                    />
-                    <TextInput
-                        onFocus={() => this.setState({focus:2})}
-                        onBlur={()=> this.setState({focus:0})}
-                        style={this.state.focus == 2 ? textInputHover : textInputNormal}
-                        value={this.state.password}
-                        onChangeText={text => this.setState({password:text})}
-                        secureTextEntry={true}
-                        placeholder='Nhập mật khẩu'
-                        autoCapitalize = 'none'
-                        placeholderTextColor="#b3b3b3"
-                    />
-                    <TextInput
-                        onFocus={() => this.setState({focus:2})}
-                        onBlur={()=> this.setState({focus:0})}
-                        style={this.state.focus == 2 ? textInputHover : textInputNormal}
-                        value={this.state.re_password}
-                        onChangeText={text => this.setState({re_password:text})}
-                        secureTextEntry={true}
-                        placeholder='Nhập lại mật khẩu'
-                        autoCapitalize = 'none'
-                        placeholderTextColor="#b3b3b3"
-                    />
-                    <TouchableOpacity style={[loginButton, {marginTop:10}]} onPress={()=>this.signUp()}>
+                    {
+                        Def.user_info && Def.user_info.oauth_client ?
+                        <View/> :
+                            <View>
+                                <TextInput
+                                    onFocus={() => this.setState({focus:1})}
+                                    onBlur={()=> this.setState({focus:0})}
+                                    style={this.state.focus == 1 ? textInputHover : textInputNormal}
+                                    value={this.state.oldpass}
+                                    onChangeText={text => this.setState({oldpass:text})}
+                                    placeholder='Mật khẩu hiện tại'
+                                    placeholderTextColor="#b3b3b3"
+                                    autoCapitalize = 'none'
+                                    // underlineColorAndroid = "transparent"
+                                />
+                                <TextInput
+                                    onFocus={() => this.setState({focus:2})}
+                                    onBlur={()=> this.setState({focus:0})}
+                                    style={this.state.focus == 2 ? textInputHover : textInputNormal}
+                                    value={this.state.password}
+                                    onChangeText={text => this.setState({password:text})}
+                                    secureTextEntry={true}
+                                    placeholder='Nhập mật khẩu mới'
+                                    autoCapitalize = 'none'
+                                    placeholderTextColor="#b3b3b3"
+                                />
+                                <TextInput
+                                    onFocus={() => this.setState({focus:2})}
+                                    onBlur={()=> this.setState({focus:0})}
+                                    style={this.state.focus == 2 ? textInputHover : textInputNormal}
+                                    value={this.state.re_password}
+                                    onChangeText={text => this.setState({re_password:text})}
+                                    secureTextEntry={true}
+                                    placeholder='Nhập lại mật khẩu mới'
+                                    autoCapitalize = 'none'
+                                    placeholderTextColor="#b3b3b3"
+                                />
+                            </View>
+                    }
+
+                    <TouchableOpacity style={[loginButton, {marginTop:10}]} onPress={()=>this.updatePass()}>
                         <Text style={loginText}>
                             Cập nhật
                         </Text>

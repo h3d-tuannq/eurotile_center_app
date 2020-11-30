@@ -120,7 +120,7 @@ class MyStack extends React.Component {
                 }} />
 
                 <RootStack.Screen name="change-password" component={ChangePassword} options={{
-                    title: 'Thay đổi mật khẩu',
+                    title: 'Thiết lập tài khoản',
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
