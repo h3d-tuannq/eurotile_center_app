@@ -246,6 +246,7 @@ class NewsScreen extends React.Component {
         this.onNewsFailed     = this.onNewsFailed.bind(this);
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
+        this.reloadData = this.reloadData.bind(this);
 
         if(!Def.news_data) {
             NetNews.listNews(this.onNewsSuccess, this.onNewsFailed);
@@ -323,6 +324,17 @@ class NewsScreen extends React.Component {
 
     }
 
+    reloadData(){
+        if(!Def.news_data) {
+            NetNews.listNews(this.onNewsSuccess, this.onNewsFailed);
+        }
+        else if (!Def.config_news_menu) {
+            Def.config_news_menu = this.createConfigData(Def.news_data);
+            this.setState({configMenu: Def.config_news_menu});
+        }
+    }
+
+
 
     render() {
         const {navigation} = this.props;
@@ -347,8 +359,13 @@ class NewsScreen extends React.Component {
                         :
                             <View style={{justifyContent :'center', alignItems : 'center', width: width, height: height}}>
                                 <Text style={{fontSize:Style.TITLE_SIZE, color:'#b3b3b3'}}>
-                                    Ứng dụng đang tải dữ liệu
+                                    Ứng dụng đang tải dữ liệu.
                                 </Text>
+                                <TouchableOpacity onPress={this.reloadData}>
+                                    <Text style={{fontSize:Style.TITLE_SIZE, marginLeft:5 , color:Style.DEFAUT_RED_COLOR}}>
+                                        Tải lại
+                                    </Text>
+                                </TouchableOpacity>
                             </View>
                 }
 

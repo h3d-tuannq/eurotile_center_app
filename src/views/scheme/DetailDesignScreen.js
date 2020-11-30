@@ -20,9 +20,6 @@ class DetailDesignScreen extends React.Component {
         let design_list = [];
         let title = '';
 
-        console.log("Detail Design Screen : " + this.props.route.params.item.id );
-
-
         if(this.props.route.params.item && Def.design_data){
             let item = this.props.route.params.item;
             design_list = Def.design_data[item['category_id']].data;
