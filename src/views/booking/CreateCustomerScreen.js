@@ -39,7 +39,7 @@ class CreateCustomerScreen extends React.Component {
             focus : 0,
             isUpdate: 0,
             stateCount: 0.0,
-            full_name : "",
+            name : "",
             gender : 0,
             mobile:'',
             address : '',
@@ -56,7 +56,8 @@ class CreateCustomerScreen extends React.Component {
             filterAttr: 'city_name',
             filterData: [],
             showKeyboard : false,
-            addressTitle: 'Tỉnh/Thành phố'
+            addressTitle: 'Tỉnh/Thành phố',
+            customer_type: 0,
 
         };
 
@@ -69,8 +70,6 @@ class CreateCustomerScreen extends React.Component {
         console.log('component did mount recall');
         Net.sendRequest(this.onGetCites,this.onGetCitesFalse,Def.URL_BASE + '/api/user/city' , Def.POST_METHOD);
     }
-
-
 
     onGetCites(res){
         console.log('Load Cities Return');
@@ -185,7 +184,7 @@ class CreateCustomerScreen extends React.Component {
     parseDataToView(){
         let projectImg = this.getProjectImage();
         this.setState({
-            full_name : "",
+            name : "",
             gender : 0,
             mobile:'',
             address : '',
@@ -193,22 +192,10 @@ class CreateCustomerScreen extends React.Component {
             district_item: null,
             ward_item: null,
             stateCount: Math.random(),
+            customer_type:0,
         });
     }
 
-    getProjectImage(item){
-        var partnerInfo = Def.user_info['partnerInfo'];
-        var result = [];
-        if(partnerInfo && partnerInfo['project_img']){
-            let projectImg = partnerInfo['project_img'].split(',');
-            result = projectImg.map(x => {
-                return {uri:Def.URL_CONTENT_BASE +'partnerInfo/'+ x}
-            });
-
-
-        }
-        return result;
-    }
 
     validate(is_create = true){
         if (is_create) {
@@ -277,53 +264,6 @@ class CreateCustomerScreen extends React.Component {
             full_name: this.state.full_name,
         };
 
-        if(this.state.avatarSource && this.state.avatarSource.fileName ) {
-            userInfo.avatar =   {
-                name: this.state.avatarSource.fileName,
-                type: this.state.avatarSource.type,
-                uri: Platform.OS === "android" ? this.state.avatarSource.uri : this.state.avatarSource.uri.replace("file://", "")
-            };
-        }
-
-        if(this.state.infront_cmt_img && this.state.infront_cmt_img.fileName ) {
-            userInfo.infront_cmt_img =   {
-                name: this.state.infront_cmt_img.fileName,
-                type: this.state.infront_cmt_img.type,
-                uri: Platform.OS === "android" ? this.state.infront_cmt_img.uri : this.state.infront_cmt_img.uri.replace("file://", "")
-            };
-        }
-
-        if(this.state.behind_cmt_img && this.state.behind_cmt_img.fileName ) {
-            userInfo.behind_cmt_img =   {
-                name: this.state.behind_cmt_img.fileName,
-                type: this.state.behind_cmt_img.type,
-                uri: Platform.OS === "android" ? this.state.behind_cmt_img.uri : this.state.behind_cmt_img.uri.replace("file://", "")
-            };
-        }
-
-        if(this.state.project_img1 && this.state.project_img1.fileName ) {
-            userInfo.project_img1 =   {
-                name: this.state.project_img1.fileName,
-                type: this.state.project_img1.type,
-                uri: Platform.OS === "android" ? this.state.project_img1.uri : this.state.project_img1.uri.replace("file://", "")
-            };
-        }
-
-        if(this.state.project_img2 && this.state.project_img2.fileName ) {
-            userInfo.project_img2 =   {
-                name: this.state.project_img2.fileName,
-                type: this.state.project_img2.type,
-                uri: Platform.OS === "android" ? this.state.project_img2.uri : this.state.project_img2.uri.replace("file://", "")
-            };
-        }
-
-        if(this.state.project_img3 && this.state.project_img3.fileName ) {
-            userInfo.project_img3 =   {
-                name: this.state.project_img3.fileName,
-                type: this.state.project_img3.type,
-                uri: Platform.OS === "android" ? this.state.project_img3.uri : this.state.project_img3.uri.replace("file://", "")
-            };
-        }
         console.log('UserInfo: ' + JSON.stringify(userInfo));
         UserController.updatePartnerInfo(userInfo, navigation);
         Def.setLoader = this.refresh.bind(this);
@@ -457,6 +397,41 @@ class CreateCustomerScreen extends React.Component {
                                             onValueChange={(itemValue, itemIndex) => {
                                                 console.log("Gender change: " + itemValue);
                                                 this.setState({gender: itemValue})
+                                            }
+                                            }>
+                                            <Picker.Item label="Nam" value="0"/>
+                                            <Picker.Item label="Nữ" value="1"/>
+                                        </Picker>
+                                    </View>
+                                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingLeft: 10,
+                                paddingVertical: 5,
+                                backgroundColor: '#fff',
+                                marginTop: 1
+                            }}>
+                                <Text style={[Style.text_styles.middleText, {}]}>
+                                    Loại khách hàng
+                                </Text>
+                                <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                                    <View style={{
+                                        marginRight: -5,
+                                        height: ITEM_HEIGHT,
+                                        backgroundColor: '#fff',
+                                        borderRadius: 5
+                                    }}>
+                                        <Picker
+                                            selectedValue={this.state.customer_type + ''}
+                                            style={{height: ITEM_HEIGHT, width: width / 3.5}}
+                                            mode="dropdown"
+                                            onValueChange={(itemValue, itemIndex) => {
+                                                console.log("Gender change: " + itemValue);
+                                                this.setState({customer_type: itemValue})
                                             }
                                             }>
                                             <Picker.Item label="Nam" value="0"/>

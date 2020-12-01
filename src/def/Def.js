@@ -83,7 +83,7 @@ export default class Def{
 
     static redirectScreen = null;
 
-
+    static customerTypes = {0: 'Chủ nhà', 1: 'Kiến trúc sư'};
 
     static getDateString(date, format) {
         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
