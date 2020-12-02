@@ -29,8 +29,16 @@ class OrderDetailScreen extends React.Component {
             isDateTimePickerVisible : false,
         };
 
+
+
+
         this.hideDateTimePicker = this.hideDateTimePicker.bind(this);
     }
+
+    goToPayment = () => {
+
+    };
+
 
     hideDateTimePicker = () => {
         let showDateVisible =      'isDateTimePickerVisible';
@@ -93,7 +101,7 @@ class OrderDetailScreen extends React.Component {
                                     </Text>
 
                                     <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR, marginTop:3}]}>
-                                        {this.state.order.address.address_detail}
+                                        {this.state.order.address ? this.state.order.address.address_detail : "Vui lòng cập nhật địa chỉ giao hàng"}
                                     </Text>
                                 </View>
                                 <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
@@ -188,7 +196,7 @@ class OrderDetailScreen extends React.Component {
                             <FlatList
                                 data={this.state.orderItems}
                                 renderItem={renderOrderItem}
-                                keyExtractor={item => item.product.id +"-" + item.quantity}
+                                keyExtractor={item => item.product.id +"-" + item.amount}
                                 showsHorizontalScrollIndicator={false}
                                 ListHeaderComponent={bookingHeader}
                                 // ListFooterComponent={footerComponent}
@@ -210,12 +218,22 @@ class OrderDetailScreen extends React.Component {
                         </View>
                     </View>
                 </View>
-                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45, marginBottom:5}]}
-                                  onPress={this.saveOrder}>
-                    <Text style={styles.buttonText}>
-                        Cập nhật
-                    </Text>
-                </TouchableOpacity>
+
+                {   this.state.order &&  (this.state.order.status == null || this.state.order.status == 0 || this.state.order.status == 1) ?
+                    <TouchableOpacity style={[styles.button, {
+                        backgroundColor: Style.DEFAUT_RED_COLOR,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: 45,
+                        marginBottom: 5
+                    }]}
+                                      onPress={this.saveOrder}>
+                        <Text style={styles.buttonText}>
+                            {this.state.order.status == 1 ? "Thanh toán" : "Cập nhật" }
+                        </Text>
+                    </TouchableOpacity>
+                    :<View/>
+                }
             </View>
 
         )

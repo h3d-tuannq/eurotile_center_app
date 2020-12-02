@@ -24,9 +24,23 @@ export default class CustomerController{
     }
 
     static async getCustomerByCondition( successCallback, falseCallback, partnerId = null, cskh_id = null, customer_type = null, phone= "", customer_name= null   ){
-        let params={partnerId:partnerId, cskh_id:cskh_id , customer_type: customer_type, phone: phone, customer_name:customer_name}
+        let params={partner_id:null, cskh_id:cskh_id , customer_type: customer_type, phone: phone, customer_name:customer_name}
         Net.sendRequest(successCallback,falseCallback,Def.URL_BASE + '/api/customer/get-customer' , Def.POST_METHOD, params );
     }
+
+    static async  saveCustomer(customerInfo, navigation = null, successCallback, falseCallback) {
+        Net.sendRequest(successCallback ? successCallback :this.saveSuccess, falseCallback? falseCallback : this.onSaveFalse,'https://eurotiledev.house3d.net/api/customer/save-customer' , Def.POST_METHOD , customerInfo, 'multipart/form-data');
+
+    };
+
+    static  onSaveFalse(data){
+        console.log('Save customer false : ' + JSON.stringify(data));
+    }
+
+    static saveSuccess(data){
+        console.log('Save customer success' + JSON.stringify(data));
+    }
+
 
 
 

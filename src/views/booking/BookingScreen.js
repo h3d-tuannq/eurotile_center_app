@@ -111,7 +111,7 @@ class BookingScreen extends React.Component {
 
     createOrderItemInfo(){
         var orderItemInfo = Def.order.orderItems.map((item) => {
-            return {product_id: item.product.id, amount: item.quantity, price: item.product.sale_price};
+            return {product_id: item.product.id, amount: item.amount, price: item.product.sale_price};
         });
         return orderItemInfo;
 
@@ -289,7 +289,7 @@ class BookingScreen extends React.Component {
                         <FlatList
                         data={this.state.orderItems}
                         renderItem={renderOrderItem}
-                        keyExtractor={item => item.product.id +"-" + item.quantity}
+                        keyExtractor={item => item.product.id +"-" + item.amount}
                         showsHorizontalScrollIndicator={false}
                         ListHeaderComponent={bookingHeader}
                         // ListFooterComponent={footerComponent}

@@ -55,7 +55,7 @@ class OrderItemrenderer extends PureComponent{
     }
 
     quantityChange = (newValue) => {
-        this.setState({quantity : newValue});
+        this.setState({amount : newValue});
         let item = this.state.item;
         item.selectValue = newValue;
         this.props.itemChange(item);

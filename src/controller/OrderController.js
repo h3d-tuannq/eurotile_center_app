@@ -15,6 +15,7 @@ export default class OrderController{
     }
     static async  saveOrder(orderInfo, navigation = null, successCallback, falseCallback) {
         // console.log("Order Info: "+ orderInfo);
+
         Net.sendRequest(this.onUpdateSuccess,this.onSaveFalse,'https://eurotiledev.house3d.net/api/order/create-order' , Def.POST_METHOD , orderInfo, 'multipart/form-data');
 
     };
@@ -22,9 +23,10 @@ export default class OrderController{
 
     static onUpdateSuccess(data){
         console.log('Update Order success: '+ JSON.stringify(data));
-
+        Def.ressetCart();
         OrderController.updateData(data);
         Def.mainNavigate.navigate('Booking', {screen:'order-detail-screen', params:{item:data}});
+        Def.orderList.push(data);
         // Def.mainNavigate.navigate('My');
         // Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
     }

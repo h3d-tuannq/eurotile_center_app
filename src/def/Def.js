@@ -1,10 +1,11 @@
+import AsyncStorage from "@react-native-community/async-storage";
 
-export default class Def{
+export default class Def {
     static URL_BASE = "https://eurotiledev.house3d.net";
     static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
     static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com/uploads/2019/07/02/5d1aa12048236.jpg";
 
-
+    static PARTNER_ACTIVE_STATUS = 1;
 
     // token nhận được sau khi đăng nhập để gửi lên server lấy token user
     static firebase_token = '';
@@ -21,42 +22,41 @@ export default class Def{
     static os = 'android';
 
     // Select
-    static GET_METHOD                       = "GET";
+    static GET_METHOD = "GET";
     // Insert
-    static POST_METHOD                      = "POST";
+    static POST_METHOD = "POST";
     //Delete
-    static DELETE_METHOD                    = "DELETE";
+    static DELETE_METHOD = "DELETE";
     //Update
-    static PUT_METHOD                       = "PUT";
+    static PUT_METHOD = "PUT";
 
-    static TOAST_DURATION                   = 3000; // 3 seconds
-    static TOAST_ERROR_COLOR                = 'orange';
-    static TOAST_SUCCESS_COLOR              = 'blue';
+    static TOAST_DURATION = 3000; // 3 seconds
+    static TOAST_ERROR_COLOR = 'orange';
+    static TOAST_SUCCESS_COLOR = 'blue';
 
 
-    static ERROR_EMAIL_MISSING                  = 'Vui lòng cung cấp email';
-    static ERROR_PASSWORD_MISSING               = 'Vui lòng cung cấp pasword';
-    static ERROR_PASSWORD_NOT_MATCH             = 'Password không giống nhau';
+    static ERROR_EMAIL_MISSING = 'Vui lòng cung cấp email';
+    static ERROR_PASSWORD_MISSING = 'Vui lòng cung cấp pasword';
+    static ERROR_PASSWORD_NOT_MATCH = 'Password không giống nhau';
 
-    static ERROR_LOGIN_MISSING                  = 'Vui lòng đăng nhập trước khi thực hiện hành động này';
-    static ERROR_LOADING_DATA                   = 'Đang tải dữ liệu, vui lòng chờ';
-    static ALERT_DISABLE_SELECTION              = "Lựa chọn này đã bị khóa, vui lòng chọn mục khác";
+    static ERROR_LOGIN_MISSING = 'Vui lòng đăng nhập trước khi thực hiện hành động này';
+    static ERROR_LOADING_DATA = 'Đang tải dữ liệu, vui lòng chờ';
+    static ALERT_DISABLE_SELECTION = "Lựa chọn này đã bị khóa, vui lòng chọn mục khác";
 
     static WEB_CLIENT_ID = "491520516021-1no68o939c9s80mbc87albgin4h20teb.apps.googleusercontent.com";
 
     static REFESH_SCREEN = [];
 
 
+    static TYPE_RADIO = 1;
+    static TYPE_MUSIC = 2;
+    static TYPE_PROGRAM = 3;
+    static TYPE_NEWS = 4;
+    static TYPE_DAILYCONTENT = 5;
 
-    static TYPE_RADIO      = 1;
-    static TYPE_MUSIC      = 2;
-    static TYPE_PROGRAM    = 3;
-    static TYPE_NEWS       = 4;
-    static TYPE_DAILYCONTENT       = 5;
+    static PLAYBACK_SUB_TYPE = 1;
 
-    static PLAYBACK_SUB_TYPE      = 1;
-
-    static OrderStatus = {0: "Chưa tiếp nhận",1 : "Xác nhận",2 : "Thanh toán",3:"Giao hàng",4: "Hoàn thành"}; // DRAFT, CONFIRM, PAID, DELIVERING, ACCOMPLISHED
+    static OrderStatus = {0: "Chưa tiếp nhận", 1: "Xác nhận", 2: "Thanh toán", 3: "Giao hàng", 4: "Hoàn thành"}; // DRAFT, CONFIRM, PAID, DELIVERING, ACCOMPLISHED
 
     static news_data = null;
     static collection_data = null;
@@ -67,6 +67,10 @@ export default class Def{
     static product_data = [];
     static cart_data = [];
     static customer = [];
+    static currentOrder = null; // Model đang thực hiện thao tác
+
+
+    static currentCustomer = null;
 
     static orderList = [];
     static config_order_menu = [];
@@ -87,21 +91,21 @@ export default class Def{
 
     static getDateString(date, format) {
         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        getPaddedComp = function(comp) {
-            return ((parseInt(comp) < 10) ? ('0' + comp) : comp)
-        },
-        formattedDate = format,
-        o = {
-            "y+": date.getFullYear(), // year
-            "M+": getPaddedComp(date.getMonth()+1), //month
-            "d+": getPaddedComp(date.getDate()), //day
-            "h+": getPaddedComp((date.getHours() > 12) ? date.getHours() % 12 : date.getHours()), //hour
-             "H+": getPaddedComp(date.getHours()), //hour
-            "m+": getPaddedComp(date.getMinutes()), //minute
-            "s+": getPaddedComp(date.getSeconds()), //second
-            "S+": getPaddedComp(date.getMilliseconds()), //millisecond,
-            "b+": (date.getHours() >= 12) ? 'PM' : 'AM'
-        };
+            getPaddedComp = function (comp) {
+                return ((parseInt(comp) < 10) ? ('0' + comp) : comp)
+            },
+            formattedDate = format,
+            o = {
+                "y+": date.getFullYear(), // year
+                "M+": getPaddedComp(date.getMonth() + 1), //month
+                "d+": getPaddedComp(date.getDate()), //day
+                "h+": getPaddedComp((date.getHours() > 12) ? date.getHours() % 12 : date.getHours()), //hour
+                "H+": getPaddedComp(date.getHours()), //hour
+                "m+": getPaddedComp(date.getMinutes()), //minute
+                "s+": getPaddedComp(date.getSeconds()), //second
+                "S+": getPaddedComp(date.getMilliseconds()), //millisecond,
+                "b+": (date.getHours() >= 12) ? 'PM' : 'AM'
+            };
 
         for (var k in o) {
             if (new RegExp("(" + k + ")").test(format)) {
@@ -111,77 +115,79 @@ export default class Def{
         return formattedDate;
     };
 
-    static getAvatarUrlFromUserInfo(){
+    static getAvatarUrlFromUserInfo() {
         let rsUrl = Def.URL_DEFAULT_AVATAR;
-        if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['avatar_path']){
-            if(Def.user_info['userProfile']['avatar_base_url'] && Def.user_info['userProfile']['avatar_base_url'].length > 0) {
+        if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['avatar_path']) {
+            if (Def.user_info['userProfile']['avatar_base_url'] && Def.user_info['userProfile']['avatar_base_url'].length > 0) {
                 console.log("Avatar Url" + Def.user_info['userProfile']['avatar_base_url'].length);
                 rsUrl = Def.user_info['userProfile']['avatar_base_url'] + '/' + Def.user_info['userProfile']['avatar_path'];
-            }else {
+            } else {
                 rsUrl = Def.user_info['userProfile']['avatar_path'];
             }
         }
         return rsUrl;
     }
 
-    static getInfrontOfImg(){
+    static getInfrontOfImg() {
         let rsUrl = '';
-        if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['infront_cmt_img']){
+        if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['infront_cmt_img']) {
             rsUrl = Def.URL_CONTENT_BASE + Def.user_info['userProfile']['infront_cmt_img'];
             console.log('' + Def.user_info['userProfile']['infront_cmt_img']);
         }
         return rsUrl;
     }
 
-    static getBehindImg(){
+    static getBehindImg() {
         let rsUrl = '';
-        if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['behind_cmt_img']){
+        if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['behind_cmt_img']) {
             rsUrl = Def.URL_CONTENT_BASE + Def.user_info['userProfile']['behind_cmt_img'];
         }
         return rsUrl;
     }
 
-    static getLinkOfNews(item){
+    static getLinkOfNews(item) {
         // return "https://gianglt.com/rangdong/?s=hopcom";
         console.log("link" + Def.URL_BASE + '/eurotile/news?slug=' + item.slug);
-        if(item && item.slug){
+        if (item && item.slug) {
             return Def.URL_BASE + '/eurotile/news?view=app&slug=' + item.slug;
         }
         return false;
     }
 
-    static getCityItemFromUserInfo(){
+    static getCityItemFromUserInfo() {
         let address = Def.getAddressFromUserInfo();
-        if (address && address['city']){
+        if (address && address['city']) {
             return address['city']
         }
         return null;
 
     }
 
-    static getDistrictItemFromUserInfo(){
+    static getDistrictItemFromUserInfo() {
         let address = Def.getAddressFromUserInfo();
-        if (address && address['district']){
+        if (address && address['district']) {
             return address['district']
         }
         return null;
     }
-    static getWardItemFromUserInfo(){
+
+    static getWardItemFromUserInfo() {
         let address = Def.getAddressFromUserInfo();
-        if (address && address['ward']){
+        if (address && address['ward']) {
             return address['ward']
         }
         return null;
     }
 
-    static getAddressFromUserInfo(){
+    static getAddressFromUserInfo() {
         let rs = null;
-        if(Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['address']){
+        if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['address']) {
             rs = Def.user_info['userProfile']['address'];
         }
         return rs;
     }
-    static getThumnailImg(img_path){
+
+    static getThumnailImg(img_path) {
         let rs = img_path.split(".");
         let lastItem = rs.pop();
         rs = rs.join('.') + '_200x200.' + lastItem;
@@ -189,59 +195,59 @@ export default class Def{
         return rs;
     }
 
-    static getTypeAccount(){
-        if(Def.user_info  && Def.user_info['partnerInfo']){
+    static getTypeAccount() {
+        if (Def.user_info && Def.user_info['partnerInfo']) {
             return 'partner'
-        } else if (Def.user_info){
+        } else if (Def.user_info) {
             return 'normal'
         }
         return 'guest'
 
     }
 
-    static getAddressStr(address){
+    static getAddressStr(address) {
         let strAddress = "";
-        if(!address){
+        if (!address) {
             return strAddress;
         }
-        if(address['ward']){
+        if (address['ward']) {
             strAddress += address['ward']['ward_name'] + ', ';
         }
 
-        if(address['district']){
+        if (address['district']) {
             strAddress += address['district']['district_name'] + ', ';
         }
 
-        if(address['city']){
+        if (address['city']) {
             strAddress += address['city']['city_name'];
         }
         return strAddress;
 
     }
 
-    static calOrderValue(order){
+    static calOrderValue(order) {
         console.log("Order Items: " + JSON.stringify(order.orderItems));
         var total = 0;
-        if(order.orderItems && Array.isArray(order.orderItems)) {
-            if( order.orderItems.length > 1) {
+        if (order.orderItems && Array.isArray(order.orderItems)) {
+            if (order.orderItems.length > 1) {
                 total = order.orderItems.reduce(
                     function (acc, val) {
                         return (typeof acc == 'number' ?
-                            acc : acc.product.sale_price * acc.quantity * acc.product.brickBoxInfo['total_area'] / 1000000) + val ? val.product.sale_price * val.quantity * val.product.brickBoxInfo['total_area'] / 1000000 : 0;
+                            acc : acc.product.sale_price * acc.amount * acc.product.brickBoxInfo['total_area'] / 1000000) + val ? val.product.sale_price * val.amount * val.product.brickBoxInfo['total_area'] / 1000000 : 0;
                     });
             } else {
-                total = order.orderItems[0].product.sale_price * order.orderItems[0].quantity * order.orderItems[0].product.brickBoxInfo['total_area'] / 1000000;
+                total = order.orderItems[0].product.sale_price * order.orderItems[0].amount * order.orderItems[0].product.brickBoxInfo['total_area'] / 1000000;
             }
         }
         return total;
     }
 
-    static getOrderByStatus(orderList, status){
+    static getOrderByStatus(orderList, status) {
         let filterData = [];
         // console.log("Status : "  + status);
-        if(orderList&& Array.isArray(orderList)){
+        if (orderList && Array.isArray(orderList)) {
             filterData = orderList.filter((item) =>
-                 item.status == status
+                item.status == status
             );
         }
         return filterData;
@@ -251,8 +257,27 @@ export default class Def{
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    static clearCartData(){
+    static clearCartData() {
         Def.cart_data = null;
     }
 
+    static checkPartnerPermission() {
+        if (Def.user_info && Def.user_info['partnerInfo'] && Def.user_info['partnerInfo']['status'] == Def.PARTNER_ACTIVE_STATUS) {
+            return 'partner'
+        }
+        return -1;
+    }
+
+    static formatArea(value) {
+        return Math.floor(value);
+
+    }
+
+
+    static ressetCart() {
+        Def.cart_data = [];
+        Def.order = null;
+        AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
+
+    }
 }

@@ -237,6 +237,23 @@ class BookingStack extends React.Component {
                     )
                     } />
 
+                <RootStack.Screen name="payment" component={OrderDetailScreen} options=
+                    {({route}) => ({
+                            title: 'Phương thức thanh toán',
+                            headerStyle: {
+                                backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                                height: Style.HEADER_HEIGHT,
+                            },
+                            headerTintColor: '#fff',
+                            headerTitleStyle: {
+                                fontWeight: 'bold',
+                            },
+                            headerBackImage: ()=> {
+                                return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                            }}
+                    )
+                    } />
+
 
 
 

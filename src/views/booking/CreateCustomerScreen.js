@@ -17,11 +17,15 @@ import Autocomplete from 'react-native-autocomplete-input';
 import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
 import moment from 'moment'
+import CustomerController from "../../controller/CustomerController";
 
 class CreateCustomerScreen extends React.Component {
     constructor(props){
         super(props);
-        this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
+        this.saveCustomer = this.saveCustomer.bind(this);
+        this.saveCustomerSuccess = this.saveCustomerSuccess.bind(this);
+        this.saveCustomerFalse = this.saveCustomerFalse.bind(this);
+
         this.onGetCites = this.onGetCites.bind(this);
         this.onGetCitesFalse = this.onGetCitesFalse.bind(this);
         this.onGetAddress = this.onGetAddress.bind(this);
@@ -230,9 +234,9 @@ class CreateCustomerScreen extends React.Component {
 
 
     buildAddress(){
-        let address = Def.getAddressFromUserInfo();
+        // let address = Def.getAddressFromUserInfo();
         let submitAddress = {};
-            submitAddress.id = address ? address['id'] : null;
+            submitAddress.id = null;
             submitAddress.address_detail = this.state.address;
             submitAddress.city_code = this.state.city_item.city_code;
             submitAddress.district_code = this.state.district_item.district_code;
@@ -241,37 +245,46 @@ class CreateCustomerScreen extends React.Component {
     }
 
 
-    updatePartnerInfo() {
+    saveCustomer() {
         const {navigation} = this.props;
         console.log('Update user info');
-        if (!this.state.full_name) {
+        if (!this.state.name) {
             alert("Vui lòng cập nhật ảnh Avatar");
         } else if (!this.state.mobile) {
             alert("Vui lòng điền số điện thoại");
-        } else if (!this.state.gender) {
-            alert("Vui lòng nhập thông tin giới tính");
         }
         // this.validateAddress();
-        let userInfo = {
-            user_id : Def.user_info ? Def.user_info['id'] : 14,
-            card_no: this.state.card_no,
-            birth_day: this.state.birth_day ?  Def.getDateString(this.state.birth_day , "yyyy-MM-dd") : "",
+        let customerInfo = {
+            id: "",
+            create_by : Def.user_info ? Def.user_info['id'] : 14,
+            name: this.state.name,
             mobile: this.state.mobile,
             address: JSON.stringify(this.buildAddress()),
-            issue_on: this.state.issue_on ? Def.getDateString(this.state.issue_on , "yyyy-MM-dd") : "",
-            issue_at: this.state.issue_at,
             gender: this.state.gender == "1" ? 1 :0,
-            full_name: this.state.full_name,
+            customer_type:this.state.customer_type == "1" ? 1: 0,
+            partner_id:  Def.user_info['id'],
         };
+        console.log('Customer Info: ' + JSON.stringify(customerInfo));
 
-        console.log('UserInfo: ' + JSON.stringify(userInfo));
-        UserController.updatePartnerInfo(userInfo, navigation);
+         CustomerController.saveCustomer(customerInfo, navigation, this.saveCustomerSuccess, this.saveCustomerFalse);
+
         Def.setLoader = this.refresh.bind(this);
         // }
     }
 
+    saveCustomerSuccess(customer){
+        if(Def.order){
+            Def.order['customer'] = customer;
+            Def.order.address = customer.address;
+        }
+        Def.currentCustomer = customer;
+        this.props.navigation.navigate('Booking', {screen: 'booking'});
+        console.log("Navigate to Booking");
+    }
 
-
+    saveCustomerFalse(data){
+        console.log("Customer save false: " + JSON.stringify(data));
+    }
 
     showDateTimePicker = (attr = null) => {
         let showDateVisible =     attr == 'birth_day' ? 'isDateTimePickerVisible' : 'isDateTimePickerVisibleIssueOn';
@@ -294,7 +307,7 @@ class CreateCustomerScreen extends React.Component {
         let dateAttr = this.state.dateAttribute;
         console.log("A date has been picked: ", date);
         this.hideDateTimePicker();
-        this.setState({  [dateAttr] : date });
+        this.setState({[dateAttr] : date });
     };
 
     refresh()
@@ -320,7 +333,7 @@ class CreateCustomerScreen extends React.Component {
         const {user} = this.state;
         // const data = this.filterData(this.state.query);
         return (
-            <View style={{flex:1}}>
+            <View style={{flex:1, marginBottom : 5, backgroundColor: '#fff'}}>
                 <ScrollView keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}>
                         <View>
                             <TouchableOpacity style={{
@@ -341,8 +354,9 @@ class CreateCustomerScreen extends React.Component {
                                         onFocus={() => this.setState({focus: 1})}
                                         onBlur={() => this.setState({focus: 0})}
                                         style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
-                                        value={this.state.full_name}
-                                        onChangeText={text => this.setState({full_name: text})}
+                                        value={this.state.name}
+                                        placeholder={'Tên khách hàng'}
+                                        onChangeText={text => this.setState({name: text})}
                                     />
                                     <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
                                 </View>
@@ -366,6 +380,7 @@ class CreateCustomerScreen extends React.Component {
                                         onBlur={() => this.setState({focus: 0})}
                                         style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                         value={this.state.mobile}
+                                        placeholder={'Nhập số điện thoại'}
                                         onChangeText={text => this.setState({mobile: text})}
                                     />
                                     <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
@@ -427,15 +442,16 @@ class CreateCustomerScreen extends React.Component {
                                     }}>
                                         <Picker
                                             selectedValue={this.state.customer_type + ''}
-                                            style={{height: ITEM_HEIGHT, width: width / 3.5}}
+                                            style={{height: ITEM_HEIGHT, width: width / 2.5}}
                                             mode="dropdown"
+                                            // itemStyle={{justifyContent: 'flex-end'}}
                                             onValueChange={(itemValue, itemIndex) => {
-                                                console.log("Gender change: " + itemValue);
+                                                console.log("Customer type change: " + itemValue);
                                                 this.setState({customer_type: itemValue})
                                             }
                                             }>
-                                            <Picker.Item label="Nam" value="0"/>
-                                            <Picker.Item label="Nữ" value="1"/>
+                                            <Picker.Item label="Chủ nhà" value="0"/>
+                                            <Picker.Item label="Kiến trúc sư" value="1"/>
                                         </Picker>
                                     </View>
                                     {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
@@ -520,7 +536,7 @@ class CreateCustomerScreen extends React.Component {
 
                     />
                 </Modal>
-                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.updatePartnerInfo}>
+                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.saveCustomer}>
 
                     <Text style={styles.buttonText}>
                         Thêm mới và chọn
@@ -595,7 +611,11 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         zIndex: 1
-    }
+    },
+    button : {
+        paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 20, marginTop : 15, borderWidth : 1, borderColor:'#b3b3b3',
+        flexDirection : 'row', alignItems: 'center', paddingHorizontal : 5, marginHorizontal:10
+    },
 
 });
 

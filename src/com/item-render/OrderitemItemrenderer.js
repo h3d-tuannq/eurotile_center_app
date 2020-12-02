@@ -8,6 +8,8 @@ const {width,  height} = Dimensions.get('window');
 
 
 import Def from '../../def/Def'
+import MathUtil from  '../../def/MathUtil'
+
 import Style from "../../def/Style";
 import CheckBox from '@react-native-community/checkbox';
 import InputSpinner from "react-native-input-spinner";
@@ -23,7 +25,7 @@ class OrderitemItemrenderer extends PureComponent{
             item: this.props.item,
             stateCount: 0.0,
             selectValue: this.props.item.selectValue,
-            quantity: this.props.item.quantity,
+            amount: this.props.item.amount,
             area: this.props.item.area,
             saleArea: this.props.item.saleArea,
         };
@@ -53,16 +55,20 @@ class OrderitemItemrenderer extends PureComponent{
     checkBoxChange = (newValue) => {
         this.setState({selectValue : newValue});
         let item = this.state.item;
+        item.amount = newValue;
         item.selectValue = newValue;
+        this.setState({amount : newValue, item: item});
         // console.log("Item : "+ JSON.stringify(item));
         this.props.itemChange(item);
     }
 
     quantityChange = (newValue) => {
-        this.setState({quantity : newValue});
+        console.log('Amount change : ' + newValue);
         let item = this.state.item;
+        item.amount = newValue;
         item.selectValue = newValue;
-        this.props.itemChange(item);
+        this.setState({amount : newValue, item: item});
+        this.props.itemChange(item, false);
     }
 
 
@@ -85,6 +91,7 @@ class OrderitemItemrenderer extends PureComponent{
         const model = this.state.item.product;
 
         // console.log('Order Item : ' + JSON.stringify(this.state.item.quantity) );
+        console.log("Order Item: " + JSON.stringify(this.props.item));
 
         const click = this.props.click;
         return (
@@ -131,6 +138,12 @@ class OrderitemItemrenderer extends PureComponent{
                         <View style={styles.listenView}>
                             <View style={styles.groupInfo}>
                                 <Text style={styles.infoText}>{"Số hộp"}</Text>
+
+                                {
+                                    this.props.disabled ?
+                                        <Text>
+                                            {this.state.amount + " hộp" }
+                                        </Text> :
                                 <InputSpinner
                                     width={100}
                                     height={28}
@@ -147,12 +160,14 @@ class OrderitemItemrenderer extends PureComponent{
                                     inputStyle={{width:80, height:35}}
                                     buttonStyle={{borderWidth : 2,borderRadius:1,borderColor:'#000' }}
                                     max={10000} onChange={(newValue) => {this.quantityChange(newValue)}}
-                                    value={this.state.quantity}/>
+                                    value={this.state.amount}/>
+                                }
+
 
                             </View>
                             <View style={styles.groupInfo}>
                                 <Text style={styles.infoText}>{"Diện tích" }</Text>
-                                <Text style={styles.priceText}>{model['brickBoxInfo']['total_area']/1000000  * this.state.quantity+ " m²" }</Text>
+                                <Text style={styles.priceText}>{MathUtil.fortmatArea(model['brickBoxInfo']['total_area']/1000000  * this.state.amount)+ " m²" }</Text>
 
                             </View>
                             {/*<TouchableOpacity style={[styles.listenButton, { backgroundColor: model.reader_link ? 'red' : '#cccccc'}]} onPress={this.onClickNews}>*/}

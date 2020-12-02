@@ -79,13 +79,15 @@ class CartScreen extends React.Component {
     }
     // callback when item change
     orderItemChange = (item, isRemove = false) => {
+        console.log("Item change: " + JSON.stringify(item.amount));
+
         const found = Def.cart_data.findIndex(element => element.product.id == item.product.id);
         if(found !== -1){
             if(isRemove){
                 Def.cart_data.splice(found, 1);
                 this.setState({canOrder:this.updateCartOrder(), cart_data:Def.cart_data});
             }else {
-            Def.cart_data[found].quantity = item.quantity;
+            Def.cart_data[found].amount = item.amount;
             Def.cart_data[found].selectValue = item.selectValue;
                 this.setState({canOrder:this.updateCartOrder()});
             }
@@ -99,13 +101,13 @@ class CartScreen extends React.Component {
         this.setState({choseProduct:false});
         const found = Def.cart_data.findIndex(element => element.product.id == item.id);
         if(found !== -1){
-            Def.cart_data[found].quantity++;
+            Def.cart_data[found].amount++;
             Def.cart_data[found].selectValue = true;
         } else {
             let orderItem = {
                 product:item,
                 selectValue: true,
-                quantity:1,
+                amount:1,
                 area:item['brickBoxInfo']['total_area'],
                 saleArea:item['brickBoxInfo']['total_area']
             }
@@ -200,7 +202,7 @@ class CartScreen extends React.Component {
                     (this.state.cart_data && this.state.cart_data.length > 0) ? <FlatList
                         data={this.state.cart_data}
                         renderItem={renderOrderItem}
-                        keyExtractor={item => item.product.id +"-" + item.quantity}
+                        keyExtractor={item => item.product.id +"-" + item.amount}
                         showsHorizontalScrollIndicator={false}
                     /> :
                     <View style={{height:300, justifyContent:'space-between', alignItems:'center'}}>

@@ -396,7 +396,7 @@ class OrderAddressScreen extends React.Component {
                         <FlatList
                         data={this.state.orderItems}
                         renderItem={renderOrderItem}
-                        keyExtractor={item => item.product.id +"-" + item.quantity}
+                        keyExtractor={item => item.product.id +"-" + item.amount}
                         showsHorizontalScrollIndicator={false}
                         />
                     </View>

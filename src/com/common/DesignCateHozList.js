@@ -150,7 +150,7 @@ const styles = StyleSheet.create ({
     },
       titleStyle: {
         fontSize : Style.BIG_SIZE,
-        color: Style.GREY_TEXT_COLOR,
+        // color: Style.GREY_TEXT_COLOR,
         // fontWeight: 'bold',
         marginRight : 10
       },

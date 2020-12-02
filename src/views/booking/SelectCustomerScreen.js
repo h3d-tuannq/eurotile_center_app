@@ -85,32 +85,50 @@ class SelectCustomerScreen extends React.Component {
 
         return (
             <View style={{height: height-Style.HEADER_HEIGHT, width: width,paddingTop: 5, borderTopLeftRadius :0, borderTopRightRadius :0 , backgroundColor:'#fff', alignItems:'center', paddingBottom:20}}>
-                <Autocomplete
-                    data={filterData}
-                    defaultValue={this.state.query}
-                    keyExtractor={(item,index) => "hoz" + index}
-                    renderItem={renderItem}
-                    renderTextInput={()=> (
-                        <View style={{ width : width -20, borderWidth : 0, borderBottomWidth:1 ,borderColor:Style.GREY_BACKGROUND_COLOR, flexDirection : 'row',alignItems : 'center', marginHorizontal : 10, marginBottom : 10}}>
-                            <Icon style={styles.searchIcon} name="search" size={24} color={Style.GREY_TEXT_COLOR}/>
-                            <TextInput onChangeText={text => this.setState({ query : text })} placeholder={"Nhập số điện thoại"} style={[styles.textInput, {marginTop:10}]}>
-                            </TextInput>
+                {
+                    this.state.data ?
+                    <Autocomplete
+                        data={filterData}
+                        defaultValue={this.state.query}
+                        keyExtractor={(item,index) => "hoz" + index}
+                        renderItem={renderItem}
+                        renderTextInput={()=> (
+                            <View style={{ width : width -20, borderWidth : 0, borderBottomWidth:1 ,borderColor:Style.GREY_BACKGROUND_COLOR, flexDirection : 'row',alignItems : 'center', marginHorizontal : 10, marginBottom : 10}}>
+                                <Icon style={styles.searchIcon} name="search" size={24} color={Style.GREY_TEXT_COLOR}/>
+                                <TextInput onChangeText={text => this.setState({ query : text })} placeholder={"Nhập số điện thoại"} style={[styles.textInput, {marginTop:10}]}>
+                                </TextInput>
+                            </View>
+                        )
+                        }
+
+                        flatListProps = {{
+                            alignItems : 'center',
+                            onEndReached : this.onEndReached,
+                            keyboardShouldPersistTaps:"handled",
+
+                        }}
+
+                        // keyboardShouldPersistTaps='handled'
+                        inputContainerStyle={{borderWidth:0}}
+                        listStyle={{borderWidth:0, marginBottom:80}}
+
+                    /> :
+                        <View style={{justifyContent :'center',flex: 1, alignItems : 'center', width: width}}>
+                            <View style={{flexDirection: 'row'}}>
+                                <Text style={{fontSize:Style.TITLE_SIZE, color:'#b3b3b3'}}>
+                                    Dữ liệu khách hàng trống.
+                                </Text>
+                                <TouchableOpacity onPress={this.signInBtnClick}>
+                                    <Text style={{fontSize:Style.TITLE_SIZE, marginLeft:5 , color:Style.DEFAUT_RED_COLOR}}>
+                                        Tạo mới
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+
                         </View>
-                    )
-                    }
+                }
 
-                    flatListProps = {{
-                        alignItems : 'center',
-                        onEndReached : this.onEndReached,
-                        keyboardShouldPersistTaps:"handled",
 
-                    }}
-
-                    // keyboardShouldPersistTaps='handled'
-                    inputContainerStyle={{borderWidth:0}}
-                    listStyle={{borderWidth:0, marginBottom:80}}
-
-                />
             </View>
         );
     }
