@@ -23,6 +23,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
 import moment from 'moment'
+import ImageResizer from 'react-native-image-resizer';
 
 class UpdatePartnerScreen extends React.Component {
     constructor(props){
@@ -477,12 +478,32 @@ class UpdatePartnerScreen extends React.Component {
 
 
         ImagePicker.showImagePicker(options, response => {
-            console.log('Attr res' + attr);
-            console.log(response);
-            if (response.uri) {
-                this.setState({ [attr]: response })
+                console.log('Attr res' + attr);
+                console.log("Response Image " + JSON.stringify(response));
+                if (response.uri) {
+                    let maxsize = response.width > response.height ? response.width : response.height;
+
+                    if (maxsize > Def.DEFAULT_MAX_SIZE) {
+
+                        let compressType = response.type == "image/jpeg" ? "JPEG" : "PNG";
+                        ImageResizer.createResizedImage(response.uri, Def.DEFAULT_MAX_SIZE, Def.DEFAULT_MAX_SIZE, compressType, 50, 0, undefined, false)
+                            .then(resizedImage => {
+                                this.setState({[attr]: resizedImage});
+                                console.log("Resize Image Info : " + JSON.stringify( resizedImage));
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                return Alert.alert(
+                                    'Unable to resize the photo',
+                                    'Check the console for full the error message',
+                                );
+                            });
+                    } else {
+                        this.setState({[attr]: response})
+                    }
+                }
             }
-        })
+        )
     }
 
 

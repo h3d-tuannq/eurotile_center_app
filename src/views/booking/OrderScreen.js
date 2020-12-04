@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList , RefreshControl} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native'
 import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
 import OrderTab from './OrderTab'
 import MyCustomizeTabBar from  './tabbar/MyCustomizeTabBar'
@@ -12,15 +12,6 @@ const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2
 
 class OrderScreen extends React.Component {
-
-
-    state = {
-        order_data: null,
-        stateCount: 0.0,
-        configMenu: Def.config_order_menu,
-        isRefresh:false,
-    };
-
     constructor(props){
         super(props);
         // console.log("Def.news", JSON.stringify(Def.news_data));
@@ -28,7 +19,6 @@ class OrderScreen extends React.Component {
         this.onGetOrderNewsFailed     = this.onGetOrderNewsFailed.bind(this);
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
-        this.onRefresh = this.onRefresh.bind(this);
 
         if(!Def.orderList || Def.orderList.length == 0) {
             OrderController.getOrder(this.onGetOrderSuccess, this.onGetOrderNewsFailed);
@@ -39,9 +29,6 @@ class OrderScreen extends React.Component {
             Def.config_order_menu = this.createConfigData(Def.orderList);
             // this.setState({configMenu: Def.config_news_menu});
         }
-
-
-
         this.state = {
             order_data: Def.orderList,
             stateCount: 0.0,
@@ -107,12 +94,6 @@ class OrderScreen extends React.Component {
 
     }
 
-    onRefresh = ()=> {
-        OrderController.getOrder(this.onGetOrderSuccess, this.onGetOrderNewsFailed);
-        this.setState({isRefresh:true});
-    }
-
-
     render() {
         const {navigation} = this.props;
         const configMenu = this.state.configMenu;
@@ -120,20 +101,21 @@ class OrderScreen extends React.Component {
         // console.log("Config : " + JSON.stringify(configMenu))
 
         return (
-            <View style={{flex:1}}>
+            <View style={{flex:1}}
+            >
                 {
                     configMenu ?
-                    <ScrollableTabView   renderTabBar={() => <MyCustomizeTabBar navigation={navigation}/>}
-                                         refreshControl={
-                                             <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
-                                         }
+                    <ScrollableTabView   renderTabBar={() => <MyCustomizeTabBar navigation={navigation}
+
+                    />}
+
                     >
                         {
                             configMenu && Object.entries(configMenu).map((prop, key) => {
                                 if ((prop[1]["hidden"]) == 0) {
                                     return (
                                         <OrderTab key={prop[0] + "acv"} navigation={navigation} refresh={this.refresh}
-                                                  tabLabel={this.formatText(prop[1]["name_vi"])}
+                                                  tabLabel={this.formatText(prop[1]["name_vi"])}  onLoadDataSuccess={this.onGetOrderSuccess}
                                                   title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}/>
                                     );
                                 }

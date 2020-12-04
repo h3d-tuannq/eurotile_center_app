@@ -1,7 +1,9 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList, Platform} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList, Platform, RefreshControl} from 'react-native'
 import OrderItemrenderer from '../../com/item-render/OrderItemrenderer'
 import Style from "../../../src/def/Style";
+import NetNews from "../../net/NetNews";
+import OrderController from "../../controller/OrderController";
 
 const {width, height} = Dimensions.get('window');
 
@@ -14,6 +16,13 @@ class OrderTab extends React.Component {
     constructor(props){
         super(props);
         this.itemClick = this.itemClick.bind(this);
+        this.state = {
+            isRefresh : false
+        };
+
+        this.onLoadFalse = this.onLoadFalse.bind(this);
+        this.onLoadSuccess = this.onLoadSuccess.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
     }
 
     itemClick(item){
@@ -21,6 +30,24 @@ class OrderTab extends React.Component {
         this.props.navigation.navigate('Booking', {screen:'order-detail-screen', params:{item:item}});
 
     }
+
+    onLoadSuccess = (data) => {
+        console.log('Onload data sucess !');
+        this.props.onLoadDataSuccess(data);
+        this.setState({isRefresh:false});
+    }
+
+    onLoadFalse = () => {
+        console.log('Onload datae false !');
+        this.setState({isRefresh:false});
+    }
+
+    onRefresh = () => {
+        console.log('Refresh News');
+        this.setState({isRefresh:true});
+        OrderController.getOrder(this.onLoadSuccess, this.onLoadFalse);
+    };
+
 
     render() {
         const {navigation} = this.props;
@@ -31,6 +58,9 @@ class OrderTab extends React.Component {
             <View style={styles.container}>
                 <View style={{}}>
                     <FlatList
+                        refreshControl={
+                            <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
+                        }
                         data={this.props.data}
                         renderItem={renderItem}
                         keyExtractor={item => item.id + ""}

@@ -8,6 +8,7 @@ import LocationIcon from '../../../assets/icons/Location.svg';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import CalendarIcon from '../../../assets/icons/calendar.svg';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import OrderController from "../../controller/OrderController";
 const {width, height} = Dimensions.get('window');
 
 
@@ -28,10 +29,7 @@ class OrderDetailScreen extends React.Component {
             orderItems: item.orderItems ? item.orderItems : [],
             isDateTimePickerVisible : false,
         };
-
-
-
-
+        this.saveOrder = this.saveOrder.bind(this);
         this.hideDateTimePicker = this.hideDateTimePicker.bind(this);
     }
 
@@ -40,10 +38,39 @@ class OrderDetailScreen extends React.Component {
     };
 
 
+
     hideDateTimePicker = () => {
         let showDateVisible =      'isDateTimePickerVisible';
         this.setState({  [showDateVisible] : false });
     };
+
+
+    saveOrder() {
+        const {navigation} = this.props;
+
+        if(this.state.order.status == 1){
+            navigation.navigate('Booking',{screen : 'payment'});
+            return true;
+        }
+
+        let orderInfo = {
+            customer_id : Def.order.customer ? Def.order.customer['id'] : "",
+            id: Def.order.id ? Def.order.id : "",
+            partner_id:Def.order.partner_id,
+            booker_id:  Def.user_info ? Def.user_info['id'] : null,
+            receipt_date:this.state.receipt_date ?  Def.getDateString(this.state.receipt_date , "yyyy-MM-dd") : "",
+            referral_code:'',
+            address: JSON.stringify(this.buildAddress(Def.order.address)),
+            order_item: JSON.stringify(this.createOrderItemInfo()),
+
+        };
+
+        console.log('Save Order Info: ' + JSON.stringify(orderInfo));
+
+        if(orderInfo){
+            OrderController.saveOrder(orderInfo, this.props.navigation);
+        }
+    }
 
 
 

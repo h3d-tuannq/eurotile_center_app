@@ -19,6 +19,7 @@ import Def from "../../src/def/Def";
 
 import AddIcon from '../../assets/icons/Plus circle.svg'
 import CartIcon from '../../assets/icons/cart.svg'
+import PaymentScreen from "./booking/PaymentScreen";
 
 
 const Stack = createStackNavigator();
@@ -237,7 +238,7 @@ class BookingStack extends React.Component {
                     )
                     } />
 
-                <RootStack.Screen name="payment" component={OrderDetailScreen} options=
+                <RootStack.Screen name="payment" component={PaymentScreen} options=
                     {({route}) => ({
                             title: 'Phương thức thanh toán',
                             headerStyle: {

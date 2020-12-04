@@ -22,6 +22,8 @@ target 'eurotile_center_app' do
 
   pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
 
+  pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
+
   target 'eurotile_center_appTests' do
     inherit! :complete
     # Pods for testing

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, RefreshControl} from 'react-native'
 import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
 import CollectionTab from './CollectionTab'
 import MyCustomizeTabBar from  '../../com/common/tabar/MyCustomizeTabBar'
@@ -33,6 +33,7 @@ class ProductScreen extends React.Component {
         this.onGetCollectionFalse     = this.onGetCollectionFalse.bind(this);
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
 
         Def.mainNavigate = this.props.navigation;
 
@@ -50,6 +51,7 @@ class ProductScreen extends React.Component {
             configMenu: Def.config_collection_menu,
             slide_data : carouselItems,
             activeSlide : 0,
+            isRefresh: false
         };
     }
 
@@ -59,15 +61,22 @@ class ProductScreen extends React.Component {
         this.setState({ stateCount: Math.random() });
     }
 
+    onRefresh = () => {
+        console.log("Refresh!");
+        this.setState({isRefresh:true});
+        NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
+    }
+
     onGetCollectionSuccess(data){
         // console.log(Object.entries(data["data"]));
+        console.log('Get Collection');
         Object.entries(data["data"]).map((prop, key) => {
             // console.log('Start');
             // console.log(prop[0]);
             // console.log(prop[1]["data"]);
             // console.log('Start');
         });
-        this.setState({ collection_data: data["data"] });
+        this.setState({ collection_data: data["data"] , isRefresh : false});
         Def.collection_data = data["data"];
         Def.config_collection_menu = this.createConfigData(data["data"]) ;
         this.setState({ configMenu: Def.config_collection_menu});
@@ -88,6 +97,7 @@ class ProductScreen extends React.Component {
 
     onGetCollectionFalse(data){
         console.log("false data : " + data);
+        this.setState({isRefresh: false});
     }
 
     formatText(text){
@@ -149,7 +159,11 @@ class ProductScreen extends React.Component {
         const {navigation} = this.props;
         const configMenu = Def.config_collection_menu;
         return (
-            <ScrollView style={{flex:1, backgroundColor: '#fff'}}>
+            <ScrollView style={{flex:1, backgroundColor: '#fff'}}
+                        refreshControl={
+                            <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
+                        }
+            >
                 <View style={Style.styles.carousel}>
                     <Carousel
                         ref={(c) => { this._carousel = c; }}

@@ -7,6 +7,8 @@ export default class Def {
 
     static PARTNER_ACTIVE_STATUS = 1;
 
+    static DEFAULT_MAX_SIZE = 1024;
+
     // token nhận được sau khi đăng nhập để gửi lên server lấy token user
     static firebase_token = '';
     // token để nhận notification
