@@ -372,41 +372,45 @@ class UpdatePartnerScreen extends React.Component {
             };
         }
 
-        if(this.state.infront_cmt_img && this.state.infront_cmt_img.fileName ) {
+        console.log("In front cmt : " + JSON.stringify(this.state.infront_cmt_img));
+
+        if(this.state.infront_cmt_img && (this.state.infront_cmt_img.fileName || this.state.infront_cmt_img.name ) ) {
+
+
             userInfo.infront_cmt_img =   {
-                name: this.state.infront_cmt_img.fileName,
+                name: this.state.infront_cmt_img.fileName ? this.state.infront_cmt_img.fileName : this.state.infront_cmt_img.name,
                 type: this.state.infront_cmt_img.type,
                 uri: Platform.OS === "android" ? this.state.infront_cmt_img.uri : this.state.infront_cmt_img.uri.replace("file://", "")
             };
         }
 
-        if(this.state.behind_cmt_img && this.state.behind_cmt_img.fileName ) {
+        if(this.state.behind_cmt_img && (this.state.behind_cmt_img.fileName || this.state.behind_cmt_img.name)) {
             userInfo.behind_cmt_img =   {
-                name: this.state.behind_cmt_img.fileName,
+                name: this.state.behind_cmt_img.fileName ? this.state.behind_cmt_img.fileName : this.state.behind_cmt_img.name ,
                 type: this.state.behind_cmt_img.type,
                 uri: Platform.OS === "android" ? this.state.behind_cmt_img.uri : this.state.behind_cmt_img.uri.replace("file://", "")
             };
         }
 
-        if(this.state.project_img1 && this.state.project_img1.fileName ) {
+        if(this.state.project_img1 && (this.state.project_img1.fileName || this.state.project_img1.name) ) {
             userInfo.project_img1 =   {
-                name: this.state.project_img1.fileName,
+                name: this.state.project_img1.fileName ? this.state.project_img1.fileName : this.state.project_img1.name ,
                 type: this.state.project_img1.type,
                 uri: Platform.OS === "android" ? this.state.project_img1.uri : this.state.project_img1.uri.replace("file://", "")
             };
         }
 
-        if(this.state.project_img2 && this.state.project_img2.fileName ) {
+        if(this.state.project_img2 && (this.state.project_img2.fileName || this.state.project_img2.name) ) {
             userInfo.project_img2 =   {
-                name: this.state.project_img2.fileName,
+                name: this.state.project_img2.fileName ? this.state.project_img2.fileName :  this.state.project_img2.name,
                 type: this.state.project_img2.type,
                 uri: Platform.OS === "android" ? this.state.project_img2.uri : this.state.project_img2.uri.replace("file://", "")
             };
         }
 
-        if(this.state.project_img3 && this.state.project_img3.fileName ) {
+        if(this.state.project_img3 && (this.state.project_img3.fileName || this.state.project_img3.name) ) {
             userInfo.project_img3 =   {
-                name: this.state.project_img3.fileName,
+                name: this.state.project_img3.fileName ? this.state.project_img3.fileName : this.state.project_img3.name,
                 type: this.state.project_img3.type,
                 uri: Platform.OS === "android" ? this.state.project_img3.uri : this.state.project_img3.uri.replace("file://", "")
             };
@@ -479,7 +483,6 @@ class UpdatePartnerScreen extends React.Component {
 
         ImagePicker.showImagePicker(options, response => {
                 console.log('Attr res' + attr);
-                console.log("Response Image " + JSON.stringify(response));
                 if (response.uri) {
                     let maxsize = response.width > response.height ? response.width : response.height;
 
@@ -488,8 +491,9 @@ class UpdatePartnerScreen extends React.Component {
                         let compressType = response.type == "image/jpeg" ? "JPEG" : "PNG";
                         ImageResizer.createResizedImage(response.uri, Def.DEFAULT_MAX_SIZE, Def.DEFAULT_MAX_SIZE, compressType, 50, 0, undefined, false)
                             .then(resizedImage => {
+                                console.log("Attr : " + attr);
+                                resizedImage['type'] = response.type;
                                 this.setState({[attr]: resizedImage});
-                                console.log("Resize Image Info : " + JSON.stringify( resizedImage));
                             })
                             .catch(err => {
                                 console.log(err);
