@@ -45,17 +45,17 @@ export default class UserController{
     }
 
     static onLoginSuccess(data){
-
+        console.log(data);
         try {
             if(data){
                 if(data['err_code']) {
                     Alert.alert(
-                        'Cảnh báo',
-                        JSON.stringify(data),
+                        "Cảnh báo",
+                        data['msg'],
                         [
                             {
-                                text: data['msg'],
-                                onPress: () => console.log('Cancel Pressed'),
+                                text: "Thử lại",
+                                onPress: () => {Def.setIsLogin(false)},
                                 style: 'cancel',
                             }
                         ],

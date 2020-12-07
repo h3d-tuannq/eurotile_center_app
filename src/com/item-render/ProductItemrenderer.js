@@ -47,7 +47,13 @@ class ProductItemrenderer extends PureComponent{
                 }
             } >
                 {this.props.favorite ?
-                    <TouchableOpacity style={[styles.favoriteIcon, {width:30, height:30, backgroundColor : Style.GREY_TEXT_COLOR, alignItems : 'center', justifyContent:'center', borderRadius: 15}]} onPress={this.favoriteClickHandle}>
+                    <TouchableOpacity style={[styles.favoriteIcon, {width:30, height:30, backgroundColor : Style.GREY_TEXT_COLOR, alignItems : 'center', justifyContent:'center', borderRadius: 15}]}
+                          onPress={
+                              () => {
+                                  click(model);
+                              }
+                          }
+                    >
                         <PlusCircleIcon />
                     </TouchableOpacity>
                     :

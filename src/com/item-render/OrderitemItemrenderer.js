@@ -123,9 +123,13 @@ class OrderitemItemrenderer extends PureComponent{
                         <View>
                             <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                                 <Text style={styles.titleInfo}>{model.name}</Text>
-                                <TouchableOpacity style={{marginTop:-3 , paddingHorizontal:5, paddingVertical:3}}  disabled = {this.props.disabled} onPress={() => {this.deleteHandleClick(this.props.item)}}>
-                                    <Icon name="trash-alt"  size={17} color={Style.GREY_TEXT_COLOR} />
-                                </TouchableOpacity>
+                                {
+                                    this.props.disabled ? null :
+                                        <TouchableOpacity style={{marginTop:-3 , paddingHorizontal:5, paddingVertical:3}}  disabled = {this.props.disabled} onPress={() => {this.deleteHandleClick(this.props.item)}}>
+                                            <Icon name="trash-alt"  size={17} color={Style.GREY_TEXT_COLOR} />
+                                        </TouchableOpacity>
+                                }
+
                             </View>
 
 

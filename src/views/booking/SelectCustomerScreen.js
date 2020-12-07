@@ -127,8 +127,6 @@ class SelectCustomerScreen extends React.Component {
 
                         </View>
                 }
-
-
             </View>
         );
     }

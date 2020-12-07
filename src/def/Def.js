@@ -78,6 +78,8 @@ export default class Def {
     static config_order_menu = [];
     static OrderListForStatus = [];
 
+    static setIsLogin = null;
+
     static collection_detail_data = null;
     static collection_detail_menu = null;
 
@@ -240,15 +242,9 @@ export default class Def {
         console.log("Order Items: " + JSON.stringify(order.orderItems));
         var total = 0;
         if (order.orderItems && Array.isArray(order.orderItems)) {
-            if (order.orderItems.length > 1) {
-                total = order.orderItems.reduce(
-                    function (acc, val) {
-                        return (typeof acc == 'number' ?
-                            acc : acc.product.sale_price * acc.amount * acc.product.brickBoxInfo['total_area'] / 1000000) + val ? val.product.sale_price * val.amount * val.product.brickBoxInfo['total_area'] / 1000000 : 0;
-                    });
-            } else {
-                total = order.orderItems[0].product.sale_price * order.orderItems[0].amount * order.orderItems[0].product.brickBoxInfo['total_area'] / 1000000;
-            }
+            order.orderItems.forEach(item =>  {
+                total += item.product.sale_price * item.amount *  item.product.brickBoxInfo['total_area'] / 1000000;
+            });
         }
         return total;
     }

@@ -42,6 +42,7 @@ export default class SignIn extends Component {
         this.loginFalseCallback = this.loginFalseCallback.bind(this);
         this.loginFalseCallback = this.loginFalseCallback.bind(this);
         Def.setLoader = this.setLoader;
+        Def.setIsLogin = this.setLoader;
     }
 
     setLoader(isLoging){
@@ -85,7 +86,7 @@ export default class SignIn extends Component {
     }
 
     loginFalseCallback(data){
-        console.log('Login false : ' + JSON.stringify(data));
+        alert("Login lỗi " + JSON.stringify(data));
 
     }
 

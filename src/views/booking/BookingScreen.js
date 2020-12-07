@@ -53,7 +53,8 @@ class BookingScreen extends React.Component {
     }
 
     refresh(){
-        this.setState({address:Def.order.address});
+        console.log('Refresh : ' + Def.getAddressStr(Def.order.address) );
+        this.setState({address:Def.order.address, addressStr: Def.getAddressStr(Def.order.address)});
     }
 
     changeAddress(){
