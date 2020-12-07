@@ -68,12 +68,12 @@ class CartScreen extends React.Component {
 
         if(!Def.user_info){
             Def.redirectScreen = {
-              stack:'Product',
+              stack:'Booking',
               screen: 'select-customer'
             };
             this.props.navigation.navigate('Login', {screen:'signIn'});
         } else {
-            this.props.navigation.navigate('Booking', {screen:'select-customer'});
+            this.props.navigation.navigate('Booking', {screen:'select-customer', params:{customers : Def.customer}});
         }
         AsyncStorage.setItem('order', JSON.stringify(Def.cart_data));
     }
@@ -128,7 +128,7 @@ class CartScreen extends React.Component {
     }
 
     checkCanOrder(){
-       return Def.cart_data.findIndex(element => element.selectValue === true) ;
+       return Def.cart_data && Def.cart_data.length > 0  ;
     }
 
     refresh()
@@ -226,7 +226,7 @@ class CartScreen extends React.Component {
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity enabled={true} onPress={() => {
+                    <TouchableOpacity disabled={!this.checkCanOrder()} onPress={() => {
                         this.booking();
                     }}
                         style={{width: width / 2.5, height:40, borderRadius:20, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent : 'center', alignItems: 'center'}}>

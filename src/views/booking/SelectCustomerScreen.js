@@ -17,7 +17,7 @@ class SelectCustomerScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            data : Def.customer > 0 ? Def.customer : [],
+            data : this.props.params && this.props.params.customers > 0 ? this.props.params && this.props.params.customers : Def.customer,
             query : ""
         };
         this.itemClick = this.itemClick.bind(this);

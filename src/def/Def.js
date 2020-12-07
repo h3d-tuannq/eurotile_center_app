@@ -165,6 +165,15 @@ export default class Def {
 
     }
 
+    static getDetailAddressFromUserInfo() {
+        let address = Def.getAddressFromUserInfo();
+        if (address && address['address_detail']) {
+            return address['address_detail'];
+        }
+        return null;
+
+    }
+
     static getDistrictItemFromUserInfo() {
         let address = Def.getAddressFromUserInfo();
         if (address && address['district']) {

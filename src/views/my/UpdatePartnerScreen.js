@@ -233,7 +233,7 @@ class UpdatePartnerScreen extends React.Component {
             card_no : Def.user_info['userProfile']['card_number'],
             issue_on : Def.user_info['userProfile']['issued_on'] ? new Date(Def.user_info['userProfile']['issued_on']) :new Date() , // Def.user_info['userProfile']['issued_on'], // Ngày cấp
             issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
-            address : Def.getAddressFromUserInfo() ? '26 Cự lộc' : '',
+            address : Def.getDetailAddressFromUserInfo(),
             city_item: Def.getCityItemFromUserInfo(),
             district_item: Def.getDistrictItemFromUserInfo(),
             ward_item: Def.getWardItemFromUserInfo(),
@@ -364,9 +364,9 @@ class UpdatePartnerScreen extends React.Component {
             full_name: this.state.full_name,
         };
 
-        if(this.state.avatarSource && this.state.avatarSource.fileName ) {
+        if(this.state.avatarSource && (this.state.avatarSource.fileName || this.state.avatarSource.name ) ) {
             userInfo.avatar =   {
-                name: this.state.avatarSource.fileName,
+                name: this.state.avatarSource.fileName ? this.state.avatarSource.fileName : this.state.avatarSource.name ,
                 type: this.state.avatarSource.type,
                 uri: Platform.OS === "android" ? this.state.avatarSource.uri : this.state.avatarSource.uri.replace("file://", "")
             };
@@ -842,9 +842,6 @@ class UpdatePartnerScreen extends React.Component {
                                     source={{ uri: this.state.infront_cmt_img.uri }}
                                     style={{ width: width, height:150, maxHeight: 200 , marginTop: 5 }}
                                 />
-                                <Text>
-                                    Test
-                                </Text>
                             </View>
                             :
                             <View style={{ width: width * 0.8, height: 150 , marginTop: 5 , borderWidth: 2 , borderColor:Style.DEFAUT_RED_COLOR,

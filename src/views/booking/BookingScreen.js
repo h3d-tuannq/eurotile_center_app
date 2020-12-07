@@ -23,6 +23,7 @@ class BookingScreen extends React.Component {
     constructor(props){
         super(props);
         this.saveOrder = this.saveOrder.bind(this);
+        this.orderItemChange = this.orderItemChange.bind(this);
         this.parseDataToView = this.parseDataToView.bind(this);
         this.showDateTimePicker = this.showDateTimePicker.bind(this);
         this.changeAddress = this.changeAddress.bind(this);
@@ -61,6 +62,10 @@ class BookingScreen extends React.Component {
 
     componentDidMount(){
         console.log("Component Did mount");
+    }
+
+    orderItemChange(){
+
     }
 
     parseDataToView(){

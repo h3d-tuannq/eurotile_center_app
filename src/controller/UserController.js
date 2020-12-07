@@ -35,8 +35,8 @@ export default class UserController{
 
         // if(Def.setLoader)
         //     Def.setLoader(false);
-        Def.mainNavigate.navigate('My');
         Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+        Def.mainNavigate.navigate('My',{screen:'my-screen', params: {'refresh' : true}});
 
         // if(Def.refreshDashBoard)
         //     Def.refreshDashBoard();
@@ -76,9 +76,10 @@ export default class UserController{
         } catch (err){
             console.log('Error : ' + err);
         }
+        Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+         Def.mainNavigate.navigate('My',{screen:'my-screen', params: {'refresh' : true}});
 
-         Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
-         Def.mainNavigate.navigate('My');
+
 
          console.log("Go to MyScreen");
 
@@ -246,13 +247,13 @@ export default class UserController{
         //     Def.setLoader(false);
 
         // Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
-
+        // navigation.navigate('My', {'screen':'my-screen'});
 
     };
 
     static async  changePassword(email, displayName, oldPassword , newPass,navigation=null, successCallback, falseCallback) {
 
-        let param = {'email' : email, 'password' : password, 'old_password': oldPassword, 'display_name':displayName};
+        let param = {'email' : email, 'password' : newPass, 'old_password': oldPassword, 'display_name':displayName};
         if(navigation){
             Def.mainNavigate = navigation;
         }

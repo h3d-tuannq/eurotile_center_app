@@ -224,7 +224,7 @@ class ChangeOrderAddressScreen extends React.Component {
        };
 
        // this.props.navigation.navigate('Product', {screen:'booking'});
-       this.props.navigation.navigate('Product', {screen: 'booking'});
+       this.props.navigation.navigate('booking', {screen: 'booking'});
        if(Def.updateAddress){
             Def.updateAddress();
        }

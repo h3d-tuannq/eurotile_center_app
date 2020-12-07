@@ -25,16 +25,16 @@ export default class ChangePassword extends Component {
     updatePass(){
         if(!this.state.display_name){
             alert("Vui nhập tên hiển thị");
-        }else if(!this.state.oldpass){
+        }else if(!this.state.oldpass &&  !Def.user_info.oauth_client){
             alert("Vui nhập mật khẩu hiện tại");
         }
-        else if(this.state.password != this.state.re_password){
+        else if(this.state.password != this.state.re_password && !Def.user_info.oauth_client){
             alert("Mật khẩu và mật khẩu xác nhận phải giống nhau");
-        } else if(this.state.password.length < 6){
+        } else if(this.state.password.length < 6 && !Def.user_info.oauth_client){
             alert("Mật khẩu phải dài hơn 8 ký tự");
         }else{
             const {navigation} = this.props;
-            UserController.changePassword(this.state.email, this.state.display_name, this.oldpass , this.state.password, this.state.disableNextPrev,navigation);
+            UserController.changePassword(this.state.email, this.state.display_name, this.state.oldpass , this.state.password, this.state.disableNextPrev,navigation);
         }
     }
     render() {

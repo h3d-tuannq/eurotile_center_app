@@ -278,6 +278,13 @@ class CreateCustomerScreen extends React.Component {
             Def.order.address = customer.address;
         }
         Def.currentCustomer = customer;
+
+        let findCus = Def.customer.findIndex(element => element.id == customer.id);
+        if(findCus){
+            Def.customer[findCus] = customer;
+        }else  {
+            Def.customer.push(customer);
+        }
         this.props.navigation.navigate('Booking', {screen: 'booking'});
         console.log("Navigate to Booking");
     }
