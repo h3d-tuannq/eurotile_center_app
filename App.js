@@ -512,6 +512,10 @@ function AppDrawer() {
 import messaging from '@react-native-firebase/messaging';
 import UserController from "./src/controller/UserController";
 
+messaging().getToken().then((token) => {
+    console.log("Token " +   JSON.stringify(token));
+} );
+
 messaging().onMessage(async (remoteMessage) => {
     //
     //alert(JSON.stringify(remoteMessage));

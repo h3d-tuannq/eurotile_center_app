@@ -16,10 +16,15 @@ class SelectCustomerScreen extends React.Component {
 
     constructor(props){
         super(props);
+        let order = this.props.route.params && this.props.route.params.order ? this.props.route.params.order : Def.currentOrder;
+        console.log("Select Customer Screen");
+        console.log("Orders : " + JSON.stringify(order));
         this.state = {
-            data : this.props.params && this.props.params.customers > 0 ? this.props.params && this.props.params.customers : Def.customer,
-            query : ""
+            data : this.props.params && this.props.params.customers.length > 0 ? this.props.params.customers : Def.customer,
+            query : "",
+            order: order,
         };
+
         this.itemClick = this.itemClick.bind(this);
         this.onEndReached = this.onEndReached.bind(this);
         this.onCustomerGetSuccess = this.onCustomerGetSuccess.bind(this);
@@ -51,19 +56,22 @@ class SelectCustomerScreen extends React.Component {
 
     itemClick(item){
         console.log("Customer Selected: "+ JSON.stringify(item));
-        if(Def.order){
-            console.log("Isset Customer");
-            Def.order['customer'] = item;
-            // Def.order['cityItem'] = item.address.city;
-            // Def.order['districtItem'] = item.address.city;
-            // Def.order['wardItem'] = item.address.city;
-            // Def.order['detail_address'] = item.address.address_detail ? item.address.address_detail :'';
-            Def.order.address = item.address;
+        let order = null;
+        if(this.state.order){
+           order = this.state.order;
+           Def.currentOrder = order;
+        }else {
+           order = Def.currentOrder;
         }
-        let order = Def.order;
-        this.props.navigation.navigate('Booking', {screen: 'booking'});
+        if(order){
+            order['customer'] = item;
+            order.address = item.address;
+        }
+        this.props.navigation.navigate('Booking', {screen: 'booking', params: {order:order}});
         console.log("Navigate to Booking");
     }
+
+
 
     onEndReached(){
         console.log('End Flatlist : ');

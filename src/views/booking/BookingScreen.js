@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Modal, Keyboard, FlatList} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Keyboard, FlatList} from 'react-native'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -7,8 +7,11 @@ import Style from '../../def/Style';
 import LocationIcon from '../../../assets/icons/Location.svg';
 import CalendarIcon from '../../../assets/icons/calendar.svg';
 
+import ProductAutocomplete from "../../com/common/ProductAutocomplete";
+
 
 import OrderController from  '../../controller/OrderController'
+import Modal from 'react-native-modal';
 
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
@@ -18,6 +21,7 @@ const ITEM_HEIGHT = 30;
 
 import OrderitemItemrenderer from "../../com/item-render/OrderitemItemrenderer";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import AsyncStorage from "@react-native-community/async-storage";
 
 class BookingScreen extends React.Component {
     constructor(props){
@@ -27,21 +31,25 @@ class BookingScreen extends React.Component {
         this.parseDataToView = this.parseDataToView.bind(this);
         this.showDateTimePicker = this.showDateTimePicker.bind(this);
         this.changeAddress = this.changeAddress.bind(this);
-        let address = this.props.route.params && this.props.route.params.address ? this.props.route.params.address : Def.order ? Def.order.address : null;
-
+        let order = this.props.route.params && this.props.route.params.order ? this.props.route.params.order : Def.currentOrder;
+        // console.log('Orders : ' + JSON.stringify(order));
+        let address = this.props.route.params && this.props.route.params.address ? this.props.route.params.address : order? order.address : null;
+        this.itemClick = this.itemClick.bind(this);
         this.state = {
             focus : 0,
             isUpdate: 0,
             stateCount: 0.0,
-            order:Def.order,
+            order:order,
             gender : 0,
             mobile:'',
             address : address,
             addressStr : this.props.route.params && this.props.route.params.addressStr ? this.props.route.params.addressStr : Def.getAddressStr(address),
             showKeyboard : false,
             receipt_date: new Date(),
-            orderItems: Def.order ? Def.order.orderItems : [],
+            orderItems: order ? order.orderItems : [],
             paymentMethod:0,
+            productData: Def.product_data,
+            choseProduct: false,
 
         };
 
@@ -50,23 +58,25 @@ class BookingScreen extends React.Component {
         Def.mainNavigate = this.props.navigation;
         this.refresh = this.refresh.bind(this);
         Def.updateAddress = this.refresh;
+        this.closeFunction = this.closeFunction.bind(this);
     }
 
-    refresh(){
-        console.log('Refresh : ' + Def.getAddressStr(Def.order.address) );
-        this.setState({address:Def.order.address, addressStr: Def.getAddressStr(Def.order.address)});
+    refresh(order = null){
+        if(!order) {
+            order = this.props.params && this.props.params.order ? this.props.params.order : Def.currentOrder;
+        }
+        // let address = this.props.route.params && this.props.route.params.address ? this.props.route.params.address : order? order.address : null;
+
+        this.setState({address:order.address, addressStr: Def.getAddressStr(order.address)});
     }
 
     changeAddress(){
-        this.props.navigation.navigate('Booking', {screen:'change-order-address'});
+        Def.currentOrder = this.state.order;
+        this.props.navigation.navigate('Booking', {screen:'change-order-address', params:{order:this.state.order}});
     }
 
     componentDidMount(){
         console.log("Component Did mount");
-    }
-
-    orderItemChange(){
-
     }
 
     parseDataToView(){
@@ -96,14 +106,15 @@ class BookingScreen extends React.Component {
 
     saveOrder() {
         const {navigation} = this.props;
+        let order = this.state.order;
         let orderInfo = {
-            customer_id : Def.order.customer ? Def.order.customer['id'] : "",
-            id: Def.order.id ? Def.order.id : "",
-            partner_id:Def.order.partner_id,
+            customer_id : order.customer ? order.customer['id'] : "",
+            id: order.id ? order.id : "",
+            partner_id:order.partner_id,
             booker_id:  Def.user_info ? Def.user_info['id'] : null,
             receipt_date:this.state.receipt_date ?  Def.getDateString(this.state.receipt_date , "yyyy-MM-dd") : "",
             referral_code:'',
-            address: JSON.stringify(this.buildAddress(Def.order.address)),
+            address: JSON.stringify(this.buildAddress(order.address)),
             order_item: JSON.stringify(this.createOrderItemInfo()),
 
         };
@@ -116,11 +127,41 @@ class BookingScreen extends React.Component {
     }
 
     createOrderItemInfo(){
-        var orderItemInfo = Def.order.orderItems.map((item) => {
+        let order = this.state.order;
+        var orderItemInfo = order.orderItems.map((item) => {
             return {product_id: item.product.id, amount: item.amount, price: item.product.sale_price};
         });
         return orderItemInfo;
 
+    }
+
+    itemClick(item){
+        this.setState({choseProduct:false});
+        let orderItems = this.state.orderItems;
+        let order = this.state.order;
+        const found = orderItems.findIndex(element => element.product.id == item.id);
+        if(found !== -1){
+            orderItems[found].amount++;
+            orderItems[found].selectValue = true;
+        } else {
+            let orderItem = {
+                product:item,
+                selectValue: true,
+                amount:1,
+                area:item['brickBoxInfo']['total_area'],
+                saleArea:item['brickBoxInfo']['total_area']
+            }
+
+            orderItems.push(orderItem);
+        }
+        let newCartData = [];
+        order.orderItems = orderItems;
+        this.setState({orderItems: orderItems, canOrder: this.checkCanOrder(), order:order});
+        // AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
+    }
+
+    checkCanOrder(orderItems){
+        return orderItems && orderItems.length > 0  ;
     }
 
 
@@ -146,11 +187,38 @@ class BookingScreen extends React.Component {
         return true;
     }
 
+    // callback when item change
+    orderItemChange = (item, isRemove = false) => {
+        console.log("Item change: " + JSON.stringify(item.amount));
+        let orderItems = this.state.orderItems;
+        let order = this.state.order;
+        const found = orderItems.findIndex(element => element.product.id == item.product.id);
+        if(found !== -1){
+            if(isRemove){
+                orderItems.splice(found, 1);
+                order.orderItems = orderItems;
+                this.setState({canOrder:this.checkCanOrder(), orderItems:orderItems, order:order});
+            }else {
+                orderItems[found].amount = item.amount;
+                orderItems[found].selectValue = item.selectValue;
+                order.orderItems = orderItems;
+                this.setState({canOrder:this.checkCanOrder()});
+            }
+
+            // AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
+        }
+    }
+
+    closeFunction = (item) => {
+        console.log("back button click!");
+        this.setState({choseProduct: false})
+    }
+
     render() {
         const {navigation} = this.props;
         const {address} = this.state;
         const renderOrderItem = ({item, index}) => (
-            <OrderitemItemrenderer type={"order-item"} item={item} index={index} disabled={true} itemChange={this.orderItemChange} click={this.orderItemClick} styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
+            <OrderitemItemrenderer type={"order-item"} item={item} index={index} disabled={false} itemChange={this.orderItemChange} click={this.orderItemClick} styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
         );
 
         const footerComponent = () => (
@@ -282,6 +350,8 @@ class BookingScreen extends React.Component {
                         timePickerModeAndroid='spinner'
                     />
 
+
+
                 </View>
             </View>
         );
@@ -300,11 +370,17 @@ class BookingScreen extends React.Component {
                         ListHeaderComponent={bookingHeader}
                         // ListFooterComponent={footerComponent}
                         />
+
                     </View>
                 </View>:<View/>}
-                <View>
-
-                </View>
+                <Modal  onBackButtonPress={this.closeFunction} isVisible={this.state.choseProduct}    style={styles.modalView}>
+                    <ProductAutocomplete
+                        data={this.state.productData}
+                        filterAttr={'model'}
+                        itemClick={this.itemClick}
+                        title={"Sản phẩm"}
+                    />
+                </Modal>
                 <View style={{marginTop:10,  borderBottomWidth:1, borderColor:Style.GREY_TEXT_COLOR, marginHorizontal:20, paddingVertical:5}}>
                     <View style={styles.orderInfo}>
                         <View style={{flexDirection: 'row', justifyContent:'space-between' }}>
@@ -317,12 +393,26 @@ class BookingScreen extends React.Component {
                         </View>
                     </View>
                 </View>
-                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}
-                                  onPress={this.saveOrder}>
-                    <Text style={styles.buttonText}>
-                        Đặt hàng
-                    </Text>
-                </TouchableOpacity>
+
+                <View style={{alignItems:'center', justifyContent: 'space-around', marginBottom :10, flexDirection:'row', }}>
+                    <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', width: width/2.5 , alignItems:'center', height:45}]}
+                                      onPress={() => {
+                                          this.setState({choseProduct:true});
+                                      }}>
+                        <Text style={styles.buttonText}>
+                            Thêm sản phẩm
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', width: width/2.5 ,alignItems:'center', height:45}]}
+                                      onPress={this.saveOrder}>
+                        <Text style={styles.buttonText}>
+                            { this.state.order.id ? "Cập nhật" :  "Đặt hàng"}
+                        </Text>
+                    </TouchableOpacity>
+
+
+                </View>
             </View>
 
         )
@@ -376,8 +466,8 @@ const styles = StyleSheet.create({
     },
 
     button : {
-        paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 20, marginTop : 15, borderWidth : 1, borderColor:'#b3b3b3',
-        flexDirection : 'row', alignItems: 'center', paddingHorizontal : 5, marginHorizontal:10
+        paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 10, marginTop : 15, borderWidth : 1, borderColor:'#b3b3b3',
+        flexDirection : 'row', alignItems: 'center', paddingHorizontal : 5
     },
     textInputNormal : {height: 45, backgroundColor : '#fff', borderColor: "#9e9e9e", borderWidth : 1 ,color:'black', fontSize : 18, borderRadius: 5, marginVertical:3, paddingHorizontal: 10  },
     textInputHover : {height: 45, backgroundColor : '#fff', borderColor: "#48a5ea", borderWidth : 1 , color:'black', fontSize : 18,borderRadius: 5, marginVertical:3, paddingHorizontal: 10 },
@@ -397,6 +487,19 @@ const styles = StyleSheet.create({
 
     orderInfo: {
         marginTop:10,
+    },
+    modalView: {
+        margin : 0,
+        borderRadius: 20,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 1,
+        shadowRadius: 3.84,
+        // zIndex:10,
     },
 
 

@@ -51,25 +51,28 @@ class OrderDetailScreen extends React.Component {
         if(this.state.order.status == 1){
             navigation.navigate('Booking',{screen : 'payment'});
             return true;
+        } else {
+            navigation.navigate('Booking', {screen: 'booking', params: {order:this.state.order}});
+            return true;
         }
 
-        let orderInfo = {
-            customer_id : Def.order.customer ? Def.order.customer['id'] : "",
-            id: Def.order.id ? Def.order.id : "",
-            partner_id:Def.order.partner_id,
-            booker_id:  Def.user_info ? Def.user_info['id'] : null,
-            receipt_date:this.state.receipt_date ?  Def.getDateString(this.state.receipt_date , "yyyy-MM-dd") : "",
-            referral_code:'',
-            address: JSON.stringify(this.buildAddress(Def.order.address)),
-            order_item: JSON.stringify(this.createOrderItemInfo()),
-
-        };
-
-        console.log('Save Order Info: ' + JSON.stringify(orderInfo));
-
-        if(orderInfo){
-            OrderController.saveOrder(orderInfo, this.props.navigation);
-        }
+        // let orderInfo = {
+        //     customer_id : Def.order.customer ? Def.order.customer['id'] : "",
+        //     id: Def.order.id ? Def.order.id : "",
+        //     partner_id:Def.order.partner_id,
+        //     booker_id:  Def.user_info ? Def.user_info['id'] : null,
+        //     receipt_date:this.state.receipt_date ?  Def.getDateString(this.state.receipt_date , "yyyy-MM-dd") : "",
+        //     referral_code:'',
+        //     address: JSON.stringify(this.buildAddress(Def.order.address)),
+        //     order_item: JSON.stringify(this.createOrderItemInfo()),
+        //
+        // };
+        //
+        // console.log('Save Order Info: ' + JSON.stringify(orderInfo));
+        //
+        // if(orderInfo){
+        //     OrderController.saveOrder(orderInfo, this.props.navigation);
+        // }
     }
 
 
@@ -93,7 +96,7 @@ class OrderDetailScreen extends React.Component {
                                 {"Giá trị"}
                             </Text>
                             <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR, marginTop:3}]}>
-                                {Def.calOrderValue(this.state.order) + " đ"}
+                                {Def.numberWithCommas(Def.calOrderValue(this.state.order)) + " đ"}
                             </Text>
                         </View>
                     </View>
@@ -131,7 +134,7 @@ class OrderDetailScreen extends React.Component {
                                         {this.state.order.address ? this.state.order.address.address_detail : "Vui lòng cập nhật địa chỉ giao hàng"}
                                     </Text>
                                 </View>
-                                <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                                {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -158,7 +161,7 @@ class OrderDetailScreen extends React.Component {
                                 }
                             </Text>
                         </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                     </View>
                 </TouchableOpacity>
 
@@ -240,7 +243,7 @@ class OrderDetailScreen extends React.Component {
                                 {"Thanh toán"}
                             </Text>
                             <Text style={[Style.text_styles.priceText, { marginTop:3, fontWeight:'bold'}]}>
-                                {/*{Def.calOrderValue(this.state.order) + " đ"}*/}
+                                {Def.numberWithCommas(Def.calOrderValue(this.state.order)) + " đ"}
                             </Text>
                         </View>
                     </View>

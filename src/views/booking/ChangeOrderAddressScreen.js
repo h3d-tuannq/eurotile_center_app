@@ -29,6 +29,7 @@ class ChangeOrderAddressScreen extends React.Component {
         this.choseWardClick = this.choseWardClick.bind(this);
         this.showAutocompleteModal = this.showAutocompleteModal.bind(this);
         this.showAddressModal = this.showAddressModal.bind(this);
+        let order = this.props.params && this.props.params.order ? this.props.params.order : Def.currentOrder;
         this.state = {
             focus : 0,
             isUpdate: 0,
@@ -36,10 +37,10 @@ class ChangeOrderAddressScreen extends React.Component {
             cities :  [],
             district :  [],
             ward: [],
-            city_item: Def.order && Def.order.address ? Def.order.address.city : [],
-            district_item: Def.order && Def.order.address ? Def.order.address.district : [],
-            ward_item: Def.order && Def.order.address ? Def.order.address.ward : [],
-            address : Def.order && Def.order.address ? Def.order.address.address_detail :"",
+            city_item: order && order.address ? order.address.city : [],
+            district_item: order && order.address ? order.address.district : [],
+            ward_item: order && order.address ? order.address.ward : [],
+            address : order && order.address ? order.address.address_detail :"",
             choseAddress : false,
             currentAddress : 1, // 1 select city, 2 select district, 3 select ward
             nextAddress : 1, // 1 select city, 2 select district, 3 select ward
@@ -47,6 +48,7 @@ class ChangeOrderAddressScreen extends React.Component {
             filterData: [],
             showKeyboard : false,
             addressTitle: 'Tỉnh/Thành phố',
+            order: order,
 
         };
     }
@@ -198,9 +200,9 @@ class ChangeOrderAddressScreen extends React.Component {
 
 
     buildAddress(){
-        let address = Def.getAddressFromUserInfo();
+        // let address = Def.getAddressFromUserInfo();
         let submitAddress = {};
-            submitAddress.id = address ? address['id'] : null;
+            submitAddress.id = null;
             submitAddress.address_detail = this.state.address;
             submitAddress.city_code = this.state.city_item ? this.state.city_item.city_code  : "";
             submitAddress.district_code = this.state.district_item ? this.state.district_item.district_code : "";
@@ -210,9 +212,8 @@ class ChangeOrderAddressScreen extends React.Component {
 
 
     updateOrderAddress() {
-       console.log('Order Address');
-
-       Def.order.address = {
+        let order = this.state.order;
+        order.address = {
            id: "",
            city_code: this.state.city_item ? this.state.city_item.city_code  : "",
            district_code: this.state.district_item ? this.state.district_item.district_code : "",
@@ -222,11 +223,12 @@ class ChangeOrderAddressScreen extends React.Component {
            district: this.state.district_item,
            ward: this.state.ward_item,
        };
+        this.setState({order:order});
 
        // this.props.navigation.navigate('Product', {screen:'booking'});
-       this.props.navigation.navigate('booking', {screen: 'booking'});
+       this.props.navigation.navigate('booking', {screen: 'booking' , params: {order:order}});
        if(Def.updateAddress){
-            Def.updateAddress();
+            Def.updateAddress(order);
        }
     }
 

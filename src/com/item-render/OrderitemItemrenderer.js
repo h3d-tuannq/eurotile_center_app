@@ -91,7 +91,7 @@ class OrderitemItemrenderer extends PureComponent{
         const model = this.state.item.product;
 
         // console.log('Order Item : ' + JSON.stringify(this.state.item.quantity) );
-        console.log("Order Item: " + JSON.stringify(this.props.item));
+        // console.log("Order Item: " + JSON.stringify(this.props.item));
 
         const click = this.props.click;
         return (

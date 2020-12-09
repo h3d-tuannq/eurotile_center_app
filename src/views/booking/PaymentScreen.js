@@ -58,7 +58,9 @@ class PaymentScreen extends React.Component {
                     </Text>
                 </TouchableOpacity>
             </View> :
-            <View/>
+                <View>
+
+                </View>
             }
             </View>
 

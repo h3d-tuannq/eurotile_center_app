@@ -239,8 +239,8 @@ export default class Def {
     }
 
     static calOrderValue(order) {
-        console.log("Order Items: " + JSON.stringify(order.orderItems));
         var total = 0;
+        // return total;
         if (order.orderItems && Array.isArray(order.orderItems)) {
             order.orderItems.forEach(item =>  {
                 total += item.product.sale_price * item.amount *  item.product.brickBoxInfo['total_area'] / 1000000;

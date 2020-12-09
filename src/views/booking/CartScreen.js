@@ -52,19 +52,16 @@ class CartScreen extends React.Component {
     }
 
     booking(){
-
-        console.log("User Info: " + JSON.stringify(Def.user_info));
-
         var order = {
             orderItems: Def.cart_data,
             customer: null,
             partner_id:Def.user_info && Def.user_info['partnerInfo'] ? Def.user_info['id'] : null,
             booker_id: Def.user_info ? Def.user_info['id'] : null ,
             address:{},
-            deliverDate: new Date(),
+            deliverDate: "",
             referralCode:'',
         };
-        Def.order = order;
+        // Def.order = order;
 
         if(!Def.user_info){
             Def.redirectScreen = {
@@ -73,9 +70,9 @@ class CartScreen extends React.Component {
             };
             this.props.navigation.navigate('Login', {screen:'signIn'});
         } else {
-            this.props.navigation.navigate('Booking', {screen:'select-customer', params:{customers : Def.customer}});
+            this.props.navigation.navigate('Booking', {screen:'select-customer', params:{customers : Def.customer, order: order}});
         }
-        AsyncStorage.setItem('order', JSON.stringify(Def.cart_data));
+        AsyncStorage.setItem('order', JSON.stringify(order));
     }
     // callback when item change
     orderItemChange = (item, isRemove = false) => {

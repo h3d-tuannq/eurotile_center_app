@@ -181,6 +181,36 @@ class BookingStack extends React.Component {
                             headerTitleStyle: {
                                 fontWeight: 'bold',
                             },
+
+                            headerRight: () => (
+                                <TouchableOpacity
+                                    style=  {
+                                        {
+                                            width: Style.DRAWER_MENU_SIZE,
+                                            height: Style.DRAWER_MENU_SIZE,
+                                            justifyContent: 'center',
+                                            paddingRight:15 ,
+                                            alignItems : 'center'
+                                        }
+                                    }
+                                    onPress={this.goToCreateCustomer}>
+                                    {/*{ this.state.number_order ?*/}
+                                    {/*<View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>*/}
+                                    {/*<Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>*/}
+                                    {/*{this.formatOrderNumber(this.state.number_order)}*/}
+                                    {/*</Text>*/}
+                                    {/*</View>*/}
+                                    {/*:<View/>*/}
+                                    {/*}*/}
+
+                                    <AddIcon
+                                        width={Style.CART_ICON_SIZE}
+                                        height={Style.CART_ICON_SIZE}
+                                    />
+                                </TouchableOpacity>
+
+                            ),
+
                             headerBackImage: ()=> {
                                 return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                             }}
