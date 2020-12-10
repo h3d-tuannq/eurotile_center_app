@@ -83,7 +83,11 @@ class MyScreen extends React.Component {
     }
 
     gotoPartnerInfo(){
-        this.props.navigation.navigate('My', {'screen':'update-partner'});
+        let screen = 'partner-info';
+        if(Def.checkPartnerPermission() <0){
+            screen = 'update-partner';
+        }
+        this.props.navigation.navigate('My', {'screen':screen});
     }
 
     updatePartnerInfo(){
@@ -316,7 +320,7 @@ class MyScreen extends React.Component {
                             <Icon name="id-card" size={25} color={Style.GREY_TEXT_COLOR} />
                             </View>
                             <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Hồ sơ Partner
+                                {Def.checkPartnerPermission() <0 ?'Đăng ký Partner' : 'Hồ sơ Partner'}
                             </Text>
                         </View>
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />

@@ -58,6 +58,9 @@ class SchemeScreen extends React.Component {
         if(!Def.design_cate) {
             NetScheme.getDesignCategory(this.onDesignCateSuccess, this.onGetDesignFalse);
         }
+
+
+
         this.state = {
             design_data: Def.design_data ? Def.design_data: null,
             popular_design: Def.popular_design ? Def.popular_design: null,

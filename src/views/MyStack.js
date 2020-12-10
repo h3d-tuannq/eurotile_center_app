@@ -18,6 +18,7 @@ import UserProfileScreen from  './my/UserProfileScreen'
 import PartnerInfoScreen from './my/PartnerInfoScreen'
 import ChangePassword from './my/ChangePassword';
 import UpdatePartnerInfoScreen from './my/UpdatePartnerScreen'
+import PartnerProfileScreen from './my/PartnerProfileScreen'
 
 
 const Stack = createStackNavigator();
@@ -104,7 +105,7 @@ class MyStack extends React.Component {
                 }} />
 
 
-                <RootStack.Screen name="partner-info" component={PartnerInfoScreen} options={{
+                <RootStack.Screen name="partner-info" component={PartnerProfileScreen} options={{
                     title: 'Hồ sơ Partner',
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
@@ -134,7 +135,7 @@ class MyStack extends React.Component {
                     }
                 }} />
                 <RootStack.Screen name="update-partner" component={UpdatePartnerInfoScreen} options={{
-                    title: 'Cập nhật Hồ sơ Partner',
+                    title: 'Đăng ký Partner',
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,

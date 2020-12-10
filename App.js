@@ -297,6 +297,23 @@ import {
 
 const Drawer = createDrawerNavigator();
 
+
+const logoutFunction = async () => {
+    try {
+        let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data'];
+        await AsyncStorage.multiRemove(keys);
+        // AsyncStorage.removeItem('email');
+        // AsyncStorage.removeItem('login_token');
+        // AsyncStorage.removeItem('user_info');
+        // AsyncStorage.removeItem('username');
+        // AsyncStorage.removeItem('firebase_token');
+        // AsyncStorage.removeItem('cart_data');
+    }catch (e){
+
+    }
+    RNRestart.Restart();
+}
+
 function CustomDrawerContent(props) {
     return (
         <View style={{flex: 1}}>
@@ -379,13 +396,14 @@ function CustomDrawerContent(props) {
                                     alignItems: 'center',
                                 }}
                                 onPress={() => {
-                                    AsyncStorage.removeItem('email');
-                                    AsyncStorage.removeItem('login_token');
-                                    AsyncStorage.removeItem('user_info');
-                                    AsyncStorage.removeItem('username');
-                                    AsyncStorage.removeItem('firebase_token');
-                                    AsyncStorage.removeItem('cart_data');
-                                    RNRestart.Restart();
+                                    // AsyncStorage.removeItem('email');
+                                    // AsyncStorage.removeItem('login_token');
+                                    // AsyncStorage.removeItem('user_info');
+                                    // AsyncStorage.removeItem('username');
+                                    // AsyncStorage.removeItem('firebase_token');
+                                    // AsyncStorage.removeItem('cart_data');
+                                    // RNRestart.Restart();
+                                    UserController.logoutLocal();
                                 }}>
                                 <Text style={{fontSize: Style.TITLE_SIZE, color: '#fff'}}> Đăng xuất </Text>
                             </TouchableOpacity>
@@ -513,9 +531,17 @@ function AppDrawer() {
 import messaging from '@react-native-firebase/messaging';
 import UserController from "./src/controller/UserController";
 
+// messaging().getToken().then((token) => {
+//     console.log("Token " +   JSON.stringify(token));
+// } );
+
+ messaging().unsubscribeFromTopic('all').then(() => console.log('Subscribed to topic!'));
+
 messaging().getToken().then((token) => {
     console.log("Token " +   JSON.stringify(token));
 } );
+
+
 
 messaging().onMessage(async (remoteMessage) => {
     //

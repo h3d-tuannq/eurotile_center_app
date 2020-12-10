@@ -269,10 +269,20 @@ export default class Def {
     }
 
     static checkPartnerPermission() {
-        if (Def.user_info && Def.user_info['partnerInfo'] && Def.user_info['partnerInfo']['status'] == Def.PARTNER_ACTIVE_STATUS) {
-            return 'partner'
+        if (Def.user_info && Def.user_info['partnerInfo']) {
+            if(Def.user_info['partnerInfo']['status'] == Def.PARTNER_ACTIVE_STATUS){
+                return Def.user_info['partnerInfo']['level_id'];
+            }else {
+                return -1; // Yêu cầu trở thành partner đang chờ phê duyệt
+            }
+
         }
-        return -1;
+
+        if (Def.user_info){
+            return -2; // trong trường hợp tk thường trả về -2
+        }
+
+        return -3;
     }
 
     static formatArea(value) {

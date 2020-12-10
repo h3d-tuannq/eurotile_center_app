@@ -45,6 +45,8 @@ class ProductScreen extends React.Component {
             // this.setState({configMenu: Def.config_news_menu});
         }
 
+        console.log("UserInfo Permission: " + Def.checkPartnerPermission());
+
         this.state = {
             collection_data: null,
             stateCount: 0.0,

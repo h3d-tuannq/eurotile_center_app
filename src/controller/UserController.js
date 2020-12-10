@@ -9,6 +9,7 @@ import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 
 import {Alert, Platform} from 'react-native'
+import RNRestart from 'react-native-restart';
 
 GoogleSignin.configure({
     webClientId: Def.WEB_CLIENT_ID,
@@ -44,7 +45,7 @@ export default class UserController{
 
     }
 
-    static onLoginSuccess(data){
+    static async onLoginSuccess(data){
         console.log(data);
         try {
             if(data){
@@ -72,6 +73,11 @@ export default class UserController{
                 Def.email = data['email'];
                 Def.username = data['username'];
                 Def.user_info = data;
+
+                let token = await messaging().getToken();
+                AsyncStorage.setItem('fcmId', token);
+                UserController.registerFcmId(token);
+
             }
         } catch (err){
             console.log('Error : ' + err);
@@ -90,10 +96,6 @@ export default class UserController{
         //     Def.refreshDashBoard();
         //
         // Def.mainNavigate.navigate('My');
-    }
-
-
-    static logout(){
     }
 
     static onLoginFailed(data){
@@ -251,6 +253,67 @@ export default class UserController{
 
     };
 
+
+    static async logout(successCallback, falseCallback){
+        let param = {'username': Def.user_info['email'], access_token: Def.user_info['access_token'], fcmId :Def.fcmId};
+        if(navigation){
+            Def.mainNavigate = navigation;
+        }
+        Net.sendRequest(this.logoutCallback,this.onLoginFalse,Def.URL_BASE + '/api/user/logout' , Def.POST_METHOD , param);
+    }
+
+    static async registerFcmId(fcmId, successCallback = null, falseCallback = null){
+        Def.fcmId = fcmId;
+        let param = {'username': Def.user_info['email'], access_token: Def.user_info['access_token'], fcmId :fcmId};
+        if(navigation){
+            Def.mainNavigate = navigation;
+        }
+        Net.sendRequest(this.setFcmCallback,this.setFcmCallback,Def.URL_BASE + '/api/user/setFcmId' , Def.POST_METHOD , param);
+    }
+
+    static setFcmCallback(data){
+        console.log('setFcmResult : ' + JSON.stringify(data));
+    }
+
+    static  logoutCallback = async (data) => {
+        if(data['err_code']){
+            Alert.alert(
+                "Cảnh báo",
+                data['msg'],
+                [
+                    {
+                        text: "Thử lại",
+                        onPress: () => {Def.setIsLogin(false)},
+                        style: 'cancel',
+                    }
+                ],
+                {cancelable: false},
+            );
+            return ;
+        }
+
+        try {
+            let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data'];
+            await AsyncStorage.multiRemove(keys);
+        }catch (e){
+
+        }
+        RNRestart.Restart();
+    }
+
+    static logoutLocal = async () => {
+        try {
+            let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data'];
+            await AsyncStorage.multiRemove(keys);
+        }catch (e){
+
+        }
+        RNRestart.Restart();
+    }
+
+
+
+
     static async  changePassword(email, displayName, oldPassword , newPass,navigation=null, successCallback, falseCallback) {
 
         let param = {'email' : email, 'password' : newPass, 'old_password': oldPassword, 'display_name':displayName};
@@ -306,7 +369,7 @@ export default class UserController{
     };
 
 
-    static onLoginFirebaseSuccess(data){
+    static async onLoginFirebaseSuccess(data){
 
         console.log('Login Success');
         // console.log("onLoginFirebaseSuccess: " + JSON.stringify(data));
@@ -325,6 +388,9 @@ export default class UserController{
                 Def.email = data['email'];
                 Def.username = data['username'];
                 Def.user_info = data;
+                let token = await messaging().getToken();
+                AsyncStorage.setItem('fcmId', token);
+                UserController.registerFcmId(token);
 
             }
         } catch (err){
@@ -350,7 +416,7 @@ export default class UserController{
 
     static updateData(userData){
         try {
-            if(userData){
+            if(userData && userData['id']){
                 let acess_token = userData['access_token'];
                 AsyncStorage.setItem('access_token', `Bearer ${acess_token}`);
                 AsyncStorage.setItem('user_info', JSON.stringify(userData));

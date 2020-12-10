@@ -54,24 +54,6 @@ class OrderDetailScreen extends React.Component {
             navigation.navigate('Booking', {screen: 'booking', params: {order:this.state.order}});
             return true;
         }
-
-        // let orderInfo = {
-        //     customer_id : Def.order.customer ? Def.order.customer['id'] : "",
-        //     id: Def.order.id ? Def.order.id : "",
-        //     partner_id:Def.order.partner_id,
-        //     booker_id:  Def.user_info ? Def.user_info['id'] : null,
-        //     receipt_date:this.state.receipt_date ?  Def.getDateString(this.state.receipt_date , "yyyy-MM-dd") : "",
-        //     referral_code:'',
-        //     address: JSON.stringify(this.buildAddress(Def.order.address)),
-        //     order_item: JSON.stringify(this.createOrderItemInfo()),
-        //
-        // };
-        //
-        // console.log('Save Order Info: ' + JSON.stringify(orderInfo));
-        //
-        // if(orderInfo){
-        //     OrderController.saveOrder(orderInfo, this.props.navigation);
-        // }
     }
 
 

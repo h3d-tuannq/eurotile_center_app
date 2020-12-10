@@ -30,16 +30,18 @@ class SelectCustomerScreen extends React.Component {
         this.onEndReached = this.onEndReached.bind(this);
         this.onCustomerGetSuccess = this.onCustomerGetSuccess.bind(this);
         this.onGetFalse = this.onGetFalse.bind(this);
+        this.filterData = this.filterData.bind(this);
     }
 
     filterData = (query) => {
         console.log("query" + query);
+        query += "";
         const { data } = this.state;
         if (query === '' || query === null) {
             return data.length < 50 ? data: data.slice(0,50);
         }
-        const regex = new RegExp(`${query.trim()}`, 'i');
-        return data.filter(item => (item['phone']+"").search(regex) >= 0);
+        // const regex = new RegExp(`${query.trim()}`, 'i');
+        return data.filter(item => (item['phone']+"").search(query ) >= 0);
     }
 
     onCustomerGetSuccess(data){
