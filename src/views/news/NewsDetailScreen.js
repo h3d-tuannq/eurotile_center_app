@@ -21,8 +21,6 @@ class NewsDetailScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={{marginTop : 5, paddingBottom : 5 }}>
-                    {
-                    }
                     <View style={styles.webView}>
                         <WebView
                             source={{ uri: Def.getLinkOfNews(this.state.item) }}

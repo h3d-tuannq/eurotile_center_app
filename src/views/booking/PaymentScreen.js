@@ -5,6 +5,8 @@ import Style from "../../def/Style";
 const {width, height} = Dimensions.get('window');
 
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+import Def from "../../def/Def";
+import { WebView } from 'react-native-webview';
 
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2
@@ -21,12 +23,14 @@ const radiogroup_options = [
 class PaymentScreen extends React.Component {
     constructor(props){
         super(props);
-        let item = this.props.route.params && this.props.route.params.item ? this.props.route.params.item : null;
+        let item = this.props.route.params && this.props.route.params.order ? this.props.route.params.order : null;
+        console.log("Item id " + item.id);
         this.state = {
             order:item,
             editable: false,
             paymentMethod : 0,
             isPayment:false,
+            paymentUrl: Def.createPaymentUrl(item.id),
         };
     }
     render() {
@@ -58,8 +62,12 @@ class PaymentScreen extends React.Component {
                     </Text>
                 </TouchableOpacity>
             </View> :
-                <View>
-
+                <View style={{flex:1}}>
+                    <View style={styles.webView}>
+                        <WebView
+                            source={{ uri: this.state.paymentUrl }}
+                        />
+                    </View>
                 </View>
             }
             </View>
@@ -104,7 +112,11 @@ const styles = StyleSheet.create({
         marginTop:10,
     }
     ,
-
+    webView : {
+        height : height -60,
+        backgroundColor: '#e6e6e6',
+        // marginRight: 15,
+    },
 
 });
 

@@ -19,6 +19,7 @@ class SelectCustomerScreen extends React.Component {
         let order = this.props.route.params && this.props.route.params.order ? this.props.route.params.order : Def.currentOrder;
         console.log("Select Customer Screen");
         console.log("Orders : " + JSON.stringify(order));
+        Def.currentOrder = order;
         this.state = {
             data : this.props.params && this.props.params.customers.length > 0 ? this.props.params.customers : Def.customer,
             query : "",
@@ -38,7 +39,7 @@ class SelectCustomerScreen extends React.Component {
             return data.length < 50 ? data: data.slice(0,50);
         }
         const regex = new RegExp(`${query.trim()}`, 'i');
-        return data.filter(item => item['phone'].search(regex) >= 0);
+        return data.filter(item => (item['phone']+"").search(regex) >= 0);
     }
 
     onCustomerGetSuccess(data){

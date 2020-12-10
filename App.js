@@ -384,6 +384,7 @@ function CustomDrawerContent(props) {
                                     AsyncStorage.removeItem('user_info');
                                     AsyncStorage.removeItem('username');
                                     AsyncStorage.removeItem('firebase_token');
+                                    AsyncStorage.removeItem('cart_data');
                                     RNRestart.Restart();
                                 }}>
                                 <Text style={{fontSize: Style.TITLE_SIZE, color: '#fff'}}> Đăng xuất </Text>

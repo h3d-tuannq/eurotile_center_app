@@ -304,6 +304,12 @@ class UpdatePartnerScreen extends React.Component {
             alert("Vui cập nhật dữ liệu phường/xã");
             err = 3;
         }
+
+        if(!this.state.address_detail){
+            alert("Vui lòng cập nhật địa chỉ cụ thể");
+            err = 3;
+        }
+
         return err;
     }
 
@@ -323,35 +329,51 @@ class UpdatePartnerScreen extends React.Component {
     updatePartnerInfo() {
         const {navigation} = this.props;
         console.log('Update user info');
-        // if(!this.state.avatarSource){
-        //     alert("Vui lòng cập nhật ảnh Avatar");
-        // }else if(!this.state.mobile){
-        //     alert("Vui lòng điền số điện thoại");
-        // }else if(!this.state.birth_day){
-        //     alert("Vui lòng nhập thông tin ngày sinh");
-        // }else if(!this.state.gender){
-        //     alert("Vui lòng nhập thông tin giới tính");
-        // }else if(!this.state.address){
-        //     alert("Vui lòng nhập địa chỉ");
-        // }else if(!this.state.card_no){
-        //     alert("Vui lòng nhập số CMND");
-        // } else if(!this.state.issue_on){
-        //     alert("Vui lòng nhập ngày cấp");
-        // }else if(!this.state.issue_at){
-        //     alert("Vui lòng nhập nơi cấp");
-        // }else if(!this.state.infront_cmt_img){
-        //     alert("Vui lòng chụp ảnh mặt trước CMND");
-        // }else if(!this.state.behind_cmt_img){
-        //     alert("Vui lòng chụp ảnh mặt sau CMND");
-        // }else if(!this.state.project_img1){
-        //     alert("Vui lòng tải lên ảnh dự án");
-        // }else if(!this.state.project_img2){
-        //     alert("Vui lòng tải lên ảnh dự án");
-        // }
-        // else if(!this.state.project_img3){
-        //     alert("Vui lòng tải lên ảnh dự án");
-        // } else {
-        // this.validateAddress();
+        if(!this.state.avatarSource){
+            alert("Vui lòng cập nhật ảnh Avatar");
+            return;
+        }else if(!this.state.mobile){
+            alert("Vui lòng điền số điện thoại");
+            return;
+        }else if(!this.state.birth_day){
+            alert("Vui lòng nhập thông tin ngày sinh");
+            return;
+        }else if(!this.state.gender){
+            alert("Vui lòng nhập thông tin giới tính");
+            return;
+        }else if(!this.state.address){
+            alert("Vui lòng nhập địa chỉ");
+            return;
+        }else if(!this.state.card_no){
+            alert("Vui lòng nhập số CMND");
+            return;
+        } else if(!this.state.issue_on){
+            alert("Vui lòng nhập ngày cấp");
+            return;
+        }else if(!this.state.issue_at){
+            alert("Vui lòng nhập nơi cấp");
+            return;
+        }else if(!this.state.infront_cmt_img){
+            alert("Vui lòng chụp ảnh mặt trước CMND");
+            return;
+        }else if(!this.state.behind_cmt_img){
+            alert("Vui lòng chụp ảnh mặt sau CMND");
+            return;
+        }else if(!this.state.project_img1){
+            alert("Vui lòng tải lên ảnh dự án");
+            return;
+        }else if(!this.state.project_img2){
+            alert("Vui lòng tải lên ảnh dự án");
+            return;
+        }
+        else if(!this.state.project_img3){
+            alert("Vui lòng tải lên ảnh dự án");
+            return;
+        } else {
+        if(this.validateAddress()){
+           return;
+        }
+        }
         let userInfo = {
             user_id : Def.user_info ? Def.user_info['id'] : 14,
             card_no: this.state.card_no,

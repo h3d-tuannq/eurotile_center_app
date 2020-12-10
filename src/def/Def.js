@@ -287,4 +287,11 @@ export default class Def {
         AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
 
     }
+
+    static createPaymentUrl(orderId){
+        console.log('UserInfo: ' + JSON.stringify(Def.user_info));
+        $rsUrl = Def.URL_BASE + '/user/sign-in/login-by-access-token?token=' + Def.user_info['access_token']+'&redirectUrl=' + Def.URL_BASE + '/payment?id=' + orderId;
+        console.log("Payment Url " + $rsUrl);
+        return $rsUrl;
+    }
 }

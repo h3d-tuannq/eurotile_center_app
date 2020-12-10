@@ -21,7 +21,6 @@ class OrderDetailScreen extends React.Component {
     constructor(props){
         super(props);
         let item = this.props.route.params && this.props.route.params.item ? this.props.route.params.item : null;
-        console.log("Item : "+ JSON.stringify(item));
         this.state = {
             order:item,
             editable: false,
@@ -49,7 +48,7 @@ class OrderDetailScreen extends React.Component {
         const {navigation} = this.props;
 
         if(this.state.order.status == 1){
-            navigation.navigate('Booking',{screen : 'payment'});
+            navigation.navigate('Booking',{screen : 'payment', params: {order:this.state.order}});
             return true;
         } else {
             navigation.navigate('Booking', {screen: 'booking', params: {order:this.state.order}});
@@ -185,7 +184,7 @@ class OrderDetailScreen extends React.Component {
                         height: ITEM_HEIGHT,
                         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                         borderColor: Style.GREY_TEXT_COLOR
-                    }} onPress={() => this.showDateTimePicker('receipt_date')}>
+                    }}>
                         <Text style={[Style.text_styles.titleTextNotBold, {
                             justifyContent: 'center',
                             paddingLeft: 5,

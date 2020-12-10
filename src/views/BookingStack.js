@@ -270,7 +270,7 @@ class BookingStack extends React.Component {
 
                 <RootStack.Screen name="payment" component={PaymentScreen} options=
                     {({route}) => ({
-                            title: 'Phương thức thanh toán',
+                            title: 'Thanh toán',
                             headerStyle: {
                                 backgroundColor: Style.DEFAUT_BLUE_COLOR,
                                 height: Style.HEADER_HEIGHT,

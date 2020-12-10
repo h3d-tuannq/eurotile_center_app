@@ -32,12 +32,13 @@ class BookingScreen extends React.Component {
         this.showDateTimePicker = this.showDateTimePicker.bind(this);
         this.changeAddress = this.changeAddress.bind(this);
         let order = this.props.route.params && this.props.route.params.order ? this.props.route.params.order : Def.currentOrder;
+
         // console.log('Orders : ' + JSON.stringify(order));
         let address = this.props.route.params && this.props.route.params.address ? this.props.route.params.address : order? order.address : null;
         this.itemClick = this.itemClick.bind(this);
         this.state = {
             focus : 0,
-            isUpdate: 0,
+            isUpdate: order.id ? true : false ,
             stateCount: 0.0,
             order:order,
             gender : 0,
@@ -45,7 +46,7 @@ class BookingScreen extends React.Component {
             address : address,
             addressStr : this.props.route.params && this.props.route.params.addressStr ? this.props.route.params.addressStr : Def.getAddressStr(address),
             showKeyboard : false,
-            receipt_date: new Date(),
+            receipt_date: order.receipt_date ? new Date(order.receipt_date * 1000) : new Date(),
             orderItems: order ? order.orderItems : [],
             paymentMethod:0,
             productData: Def.product_data,
@@ -94,13 +95,18 @@ class BookingScreen extends React.Component {
     }
 
     buildAddress(address){
-        let submitAddress = {};
+        if(address.address_detail || address.city_code){
+            let submitAddress = {};
             submitAddress.id = address ? address['id'] : null;
             submitAddress.address_detail = address.address_detail;
             submitAddress.city_code = address.city_code;
             submitAddress.district_code = address.district_code;
             submitAddress.ward_code = address.ward_code;
-        return submitAddress;
+            return submitAddress;
+        }
+        return "";
+
+
     }
 
 
@@ -116,10 +122,9 @@ class BookingScreen extends React.Component {
             referral_code:'',
             address: JSON.stringify(this.buildAddress(order.address)),
             order_item: JSON.stringify(this.createOrderItemInfo()),
-
         };
 
-        console.log('Sava Order Info: ' + JSON.stringify(orderInfo));
+        // console.log('Sava Order Info: ' + JSON.stringify(orderInfo));
 
         if(orderInfo){
             OrderController.saveOrder(orderInfo, this.props.navigation);
@@ -407,7 +412,7 @@ class BookingScreen extends React.Component {
                     <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', width: width/2.5 ,alignItems:'center', height:45}]}
                                       onPress={this.saveOrder}>
                         <Text style={styles.buttonText}>
-                            { this.state.order.id ? "Cập nhật" :  "Đặt hàng"}
+                            { this.state.isUpdate ? "Cập nhật" :  "Đặt hàng"}
                         </Text>
                     </TouchableOpacity>
 

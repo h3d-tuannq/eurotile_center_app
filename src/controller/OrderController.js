@@ -24,21 +24,16 @@ export default class OrderController{
     static onUpdateSuccess(data){
         console.log('Update Order success: '+ JSON.stringify(data));
 
-
-        // OrderController.updateData(data);
-        Def.mainNavigate.navigate('Booking', {screen:'order-detail-screen', params:{item:data}});
-        let orderIndex = Def.orderList.findIndex(order => order.id == data.id);
-        if(orderIndex === -1){
-            Def.orderList.push(data);
-            Def.ressetCart();
-        } else {
-            Def.orderList[orderIndex] = data;
+        if(data){
+            Def.mainNavigate.navigate('Booking', {screen:'order-detail-screen', params:{item:data}});
+            let orderIndex = Def.orderList.findIndex(order => order.id == data.id);
+            if(orderIndex === -1){
+                Def.orderList.push(data);
+                Def.ressetCart();
+            } else {
+                Def.orderList[orderIndex] = data;
+            }
         }
-
-
-
-        // Def.mainNavigate.navigate('My');
-        // Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
     }
 
     static onSaveFalse(data){
@@ -54,7 +49,7 @@ export default class OrderController{
 
 
     static getOrderSuccess(data){
-        console.log("Get Order Info : " + JSON.stringify(data));
+        // console.log("Get Order Info : " + JSON.stringify(data));
         Def.orderList = data;
     }
 

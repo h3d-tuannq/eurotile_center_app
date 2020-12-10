@@ -186,7 +186,6 @@ class CreateCustomerScreen extends React.Component {
         }
     }
     parseDataToView(){
-        let projectImg = this.getProjectImage();
         this.setState({
             name : "",
             gender : 0,
@@ -235,13 +234,16 @@ class CreateCustomerScreen extends React.Component {
 
     buildAddress(){
         // let address = Def.getAddressFromUserInfo();
-        let submitAddress = {};
-            submitAddress.id = null;
+        if (this.state.address || this.state.city_item){
+            let submitAddress = {};
+            submitAddress.id = "";
             submitAddress.address_detail = this.state.address;
-            submitAddress.city_code = this.state.city_item.city_code;
-            submitAddress.district_code = this.state.district_item.district_code;
-            submitAddress.ward_code = this.state.ward_item.ward_code;
-        return submitAddress;
+            submitAddress.city_code = this.state.city_item ? this.state.city_item.city_code : "";
+            submitAddress.district_code = this.state.district_item ? this.state.district_item.district_code : "";
+            submitAddress.ward_code = this.state.ward_item ? this.state.ward_item.ward_code : "";
+            return submitAddress;
+        }
+        return "";
     }
 
 
@@ -273,9 +275,12 @@ class CreateCustomerScreen extends React.Component {
     }
 
     saveCustomerSuccess(customer){
-        if(Def.order){
-            Def.order['customer'] = customer;
-            Def.order.address = customer.address;
+        console.log("Customer Info : " + JSON.stringify(customer));
+
+
+        if(Def.currentOrder){
+            Def.currentOrder['customer'] = customer;
+            Def.currentOrder.address = customer.address;
         }
         Def.currentCustomer = customer;
 
@@ -285,7 +290,7 @@ class CreateCustomerScreen extends React.Component {
         }else  {
             Def.customer.push(customer);
         }
-        this.props.navigation.navigate('Booking', {screen: 'booking'});
+        this.props.navigation.navigate('Booking', {screen: 'booking', params : {order:Def.currentOrder}});
         console.log("Navigate to Booking");
     }
 
