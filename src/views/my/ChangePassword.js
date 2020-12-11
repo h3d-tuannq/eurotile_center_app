@@ -76,6 +76,7 @@ export default class ChangePassword extends Component {
                                     placeholder='Mật khẩu hiện tại'
                                     placeholderTextColor="#b3b3b3"
                                     autoCapitalize = 'none'
+                                    secureTextEntry={true}
                                     // underlineColorAndroid = "transparent"
                                 />
                                 <TextInput

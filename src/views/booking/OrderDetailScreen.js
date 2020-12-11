@@ -9,6 +9,8 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import CalendarIcon from '../../../assets/icons/calendar.svg';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import OrderController from "../../controller/OrderController";
+import UserController from "../../controller/UserController";
+import messaging from '@react-native-firebase/messaging';
 const {width, height} = Dimensions.get('window');
 
 
@@ -44,9 +46,8 @@ class OrderDetailScreen extends React.Component {
     };
 
 
-    saveOrder() {
+    async saveOrder() {
         const {navigation} = this.props;
-
         if(this.state.order.status == 1){
             navigation.navigate('Booking',{screen : 'payment', params: {order:this.state.order}});
             return true;

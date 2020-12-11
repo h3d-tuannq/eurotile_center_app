@@ -17,8 +17,6 @@ class SelectCustomerScreen extends React.Component {
     constructor(props){
         super(props);
         let order = this.props.route.params && this.props.route.params.order ? this.props.route.params.order : Def.currentOrder;
-        console.log("Select Customer Screen");
-        console.log("Orders : " + JSON.stringify(order));
         Def.currentOrder = order;
         this.state = {
             data : this.props.params && this.props.params.customers.length > 0 ? this.props.params.customers : Def.customer,
@@ -34,23 +32,30 @@ class SelectCustomerScreen extends React.Component {
     }
 
     filterData = (query) => {
-        console.log("query" + query);
-        query += "";
         const { data } = this.state;
         if (query === '' || query === null) {
-            return data.length < 50 ? data: data.slice(0,50);
+            return data;
         }
-        // const regex = new RegExp(`${query.trim()}`, 'i');
-        return data.filter(item => (item['phone']+"").search(query ) >= 0);
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        let filterData = data.filter(item => item['phone'].search(regex)>= 0);
+        // console.log("Filter Data: " + JSON.stringify(filterData));
+        return filterData;
+
     }
 
     onCustomerGetSuccess(data){
+        console.log("Get customer success : "+ JSON.stringify(data));
         Def.customer = data;
         this.setState({ data: Def.customer});
     }
 
     onGetFalse(data){
         console.log('Get Customer False : ' + JSON.stringify(data));
+    }
+
+    shouldComponentUpdate(){
+        console.log('Should update select Customer');
+        return true;
     }
 
     // item_click = (item) => {
@@ -101,7 +106,7 @@ class SelectCustomerScreen extends React.Component {
                     <Autocomplete
                         data={filterData}
                         defaultValue={this.state.query}
-                        keyExtractor={(item,index) => "hoz" + index}
+                        keyExtractor={(item,index) => "hoz" + index + item.id}
                         renderItem={renderItem}
                         renderTextInput={()=> (
                             <View style={{ width : width -20, borderWidth : 0, borderBottomWidth:1 ,borderColor:Style.GREY_BACKGROUND_COLOR, flexDirection : 'row',alignItems : 'center', marginHorizontal : 10, marginBottom : 10}}>

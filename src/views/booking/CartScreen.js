@@ -237,16 +237,16 @@ class CartScreen extends React.Component {
                 <Modal  onBackButtonPress={this.closeFunction} isVisible={this.state.choseProduct}     style={styles.modalView}
                         // keyboardShouldPersistTaps={true}
                 >
-                    {/*<KeyboardAvoidingView enabled  behavior={Platform.OS === "android" ? undefined : "position"}>*/}
-                        {/*<View  style={{flex:1}} scrollEnabled={false} keyboardShouldPersistTaps="handled">*/}
+                    <KeyboardAvoidingView enabled  behavior={Platform.OS === "android" ? undefined : "position"}>
+                        <View  style={{flex:1}} scrollEnabled={false} keyboardShouldPersistTaps="handled">
                     <ProductAutocomplete
                         data={this.state.productData}
                         filterAttr={'model'}
                         itemClick={this.itemClick}
                         title={"Sản phẩm"}
                     />
-                        {/*</View>*/}
-                    {/*</KeyboardAvoidingView>*/}
+                        </View>
+                    </KeyboardAvoidingView>
                     {/*<Text>*/}
                         {/*this is Modal*/}
                     {/*</Text>*/}

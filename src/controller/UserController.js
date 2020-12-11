@@ -46,7 +46,6 @@ export default class UserController{
     }
 
     static async onLoginSuccess(data){
-        console.log(data);
         try {
             if(data){
                 if(data['err_code']) {
@@ -75,6 +74,8 @@ export default class UserController{
                 Def.user_info = data;
 
                 let token = await messaging().getToken();
+
+
                 AsyncStorage.setItem('fcmId', token);
                 UserController.registerFcmId(token);
 
@@ -84,9 +85,6 @@ export default class UserController{
         }
         Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
          Def.mainNavigate.navigate('My',{screen:'my-screen', params: {'refresh' : true}});
-
-
-
          console.log("Go to MyScreen");
 
         // if(Def.setLoader)
@@ -262,13 +260,22 @@ export default class UserController{
         Net.sendRequest(this.logoutCallback,this.onLoginFalse,Def.URL_BASE + '/api/user/logout' , Def.POST_METHOD , param);
     }
 
-    static async registerFcmId(fcmId, successCallback = null, falseCallback = null){
-        Def.fcmId = fcmId;
-        let param = {'username': Def.user_info['email'], access_token: Def.user_info['access_token'], fcmId :fcmId};
-        if(navigation){
-            Def.mainNavigate = navigation;
+    static async registerFcmId(fcmId = null, successCallback = null, falseCallback = null){
+
+        messaging().getToken().then((token) => {
+            console.log("Token " +   JSON.stringify(token));
+        } );
+
+        if(fcmId){
+            fcmId = await messaging().getToken();
         }
-        Net.sendRequest(this.setFcmCallback,this.setFcmCallback,Def.URL_BASE + '/api/user/setFcmId' , Def.POST_METHOD , param);
+        Def.fcmId = fcmId;
+
+        let param = { user_id:Def.user_info['id'], 'username': Def.user_info['email'], access_token: Def.user_info['access_token'], fcm_id :fcmId};
+
+        console.log('Register Fcm Params: ' + JSON.stringify(param));
+
+        Net.sendRequest(this.setFcmCallback,this.setFcmCallback,Def.URL_BASE + '/api/user/set-fcm' , Def.POST_METHOD , param);
     }
 
     static setFcmCallback(data){

@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Keyboard, FlatList} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Keyboard, FlatList, KeyboardAvoidingView} from 'react-native'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -379,12 +379,16 @@ class BookingScreen extends React.Component {
                     </View>
                 </View>:<View/>}
                 <Modal  onBackButtonPress={this.closeFunction} isVisible={this.state.choseProduct}    style={styles.modalView}>
+                    <KeyboardAvoidingView enabled  behavior={Platform.OS === "android" ? undefined : "position"}>
+                        <View  style={{flex:1}} scrollEnabled={false} keyboardShouldPersistTaps="handled">
                     <ProductAutocomplete
                         data={this.state.productData}
                         filterAttr={'model'}
                         itemClick={this.itemClick}
                         title={"Sản phẩm"}
                     />
+                        </View>
+                    </KeyboardAvoidingView>
                 </Modal>
                 <View style={{marginTop:10,  borderBottomWidth:1, borderColor:Style.GREY_TEXT_COLOR, marginHorizontal:20, paddingVertical:5}}>
                     <View style={styles.orderInfo}>

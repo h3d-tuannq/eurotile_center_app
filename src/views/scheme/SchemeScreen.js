@@ -96,7 +96,7 @@ class SchemeScreen extends React.Component {
 
     onGetPopularDesignSuccess(data){
         this.setState({ popular_design: data["data"] });
-        Def.design_data = data["data"];
+        // Def.design_data = data["data"];
     }
 
     onGetPopularDesignFalse(data){

@@ -115,7 +115,6 @@ class MyScreen extends React.Component {
 
     refresh()
     {
-        console.log("Refresh");
         this.setState( {
             user: Def.user_info,
             stateCount: 0.0,
@@ -181,13 +180,9 @@ class MyScreen extends React.Component {
         // this.setState({ configMenu: Def.config_news_menu});
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
 
-        console.log("User info: " + JSON.stringify(Def.user_info));
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
-
-        console.log("REFESH_SCREEN: " + JSON.stringify(Def.REFESH_SCREEN));
-
         const index = Def.REFESH_SCREEN.indexOf('my-screen');
         console.log("Index in refresh : " + index);
         if (index > -1) {

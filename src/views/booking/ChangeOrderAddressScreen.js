@@ -118,6 +118,11 @@ class ChangeOrderAddressScreen extends React.Component {
     }
 
     choseDistrictClick(){
+        if(!this.state.city_item){
+            this.choseCityClick();
+            return;
+        }
+
         this.setState({currentAddress:2});
         if(!this.state.district || this.state.district.length == 0){
             console.log('Chưa tồn tại District : ');
@@ -131,6 +136,16 @@ class ChangeOrderAddressScreen extends React.Component {
     }
 
     choseWardClick(){
+        if(!this.state.city_item){
+            this.choseCityClick();
+            return;
+        }
+
+        if(!this.state.district_item){
+            this.choseDistrictClick();
+            return;
+        }
+
         this.setState({currentAddress:3});
         if(!this.state.ward || this.state.ward.length == 0){
             this.getAdministrativeUnit(Def.URL_BASE + '/api/user/ward', {district_code: this.state.district_item.district_code}, this.showAutocompleteModal);
