@@ -18,6 +18,9 @@ import Style from "../../src/def/Style";
 import Def from "../../src/def/Def";
 
 import AddIcon from '../../assets/icons/Plus circle.svg'
+
+import TileIcon from '../../assets/icons/Tile.svg';
+
 import CartIcon from '../../assets/icons/cart.svg'
 import PaymentScreen from "./booking/PaymentScreen";
 
@@ -203,9 +206,9 @@ class BookingStack extends React.Component {
                                     {/*:<View/>*/}
                                     {/*}*/}
 
-                                    <AddIcon
+                                    <TileIcon
                                         width={Style.CART_ICON_SIZE}
-                                        height={Style.CART_ICON_SIZE}
+                                        height={22}
                                     />
                                 </TouchableOpacity>
 

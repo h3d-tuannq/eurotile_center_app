@@ -91,7 +91,7 @@ class OrderItemrenderer extends PureComponent{
                     {/*onValueChange={(newValue) => this.checkBoxChange(newValue)}*/}
                 {/*/>*/}
 
-                <Text style={styles.checkIndex}>
+                <Text style={this.state.isCancel ? styles.checkIndexCancel: styles.checkIndex}>
                     {
                         this.props.index + 1
                     }
@@ -113,7 +113,7 @@ class OrderItemrenderer extends PureComponent{
                                 {/*<TouchableOpacity style={{marginTop:-3 , paddingHorizontal:5, paddingVertical:3}} onPress={() => {this.deleteHandleClick(this.props.item)}}>*/}
                                     {/*<Icon name="trash-alt"  size={17} color={Style.GREY_TEXT_COLOR} />*/}
                                 {/*</TouchableOpacity>*/}
-                                <Text style={styles.priceText}>{Def.numberWithCommas(model['total_value']) + " đ" }</Text>
+                                <Text style={this.state.isCancel ? styles.priceTextCancel :styles.priceText}>{Def.numberWithCommas(model['total_value']) + " đ" }</Text>
                             </View>
 
 
@@ -180,6 +180,13 @@ const  styles = StyleSheet.create({
         paddingTop:10,
         paddingLeft: 5,
         paddingRight: 10
+    },
+    checkIndexCancel:{
+        paddingVertical :5,
+        paddingTop:10,
+        paddingLeft: 5,
+        paddingRight: 10,
+        color: Style.GREY_TEXT_COLOR
     },
 
     imageContainer:{
@@ -254,6 +261,12 @@ const  styles = StyleSheet.create({
         color: Style.DEFAUT_RED_COLOR,
         fontWeight: 'bold'
     },
+    priceTextCancel : {
+        fontSize : Style.NORMAL_SIZE,
+        color: Style.GREY_TEXT_COLOR,
+        fontWeight: 'bold'
+    },
+
     favoriteIcon : {
         width : 20,
         height : 20,
