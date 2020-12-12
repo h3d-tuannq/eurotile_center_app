@@ -17,7 +17,9 @@ class OrderTab extends React.Component {
         super(props);
         this.itemClick = this.itemClick.bind(this);
         this.state = {
-            isRefresh : false
+            isRefresh : false,
+            stateCount: 0,
+
         };
 
         this.onLoadFalse = this.onLoadFalse.bind(this);
@@ -44,7 +46,7 @@ class OrderTab extends React.Component {
 
     onRefresh = () => {
         console.log('Refresh News');
-        this.setState({isRefresh:true});
+        this.setState({isRefresh:true, stateCount: Math.random()});
         OrderController.getOrder(this.onLoadSuccess, this.onLoadFalse);
     };
 
@@ -63,7 +65,7 @@ class OrderTab extends React.Component {
                         }
                         data={this.props.data}
                         renderItem={renderItem}
-                        keyExtractor={item => item.id + ""}
+                        keyExtractor={item => item.id + "" + this.state.stateCount}
                         showsHorizontalScrollIndicator={false}
                         ItemSeparatorComponent={
 
