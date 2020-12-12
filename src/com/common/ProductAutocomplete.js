@@ -67,7 +67,7 @@ class ProductAutocomplete extends React.Component {
                               renderTextInput={()=> (
                                   <View style={{ width : width -20, borderWidth : 0, borderBottomWidth:1 ,borderColor:Style.GREY_BACKGROUND_COLOR, flexDirection : 'row',alignItems : 'center', marginHorizontal : 10, marginBottom : 10}}>
                                       <Icon style={styles.searchIcon} name="search" size={24} color={Style.GREY_TEXT_COLOR}/>
-                                      <TextInput onChangeText={text => this.setState({ query : text })} placeholder={"Nhập mã sản phẩm"} style={[styles.textInput, {marginTop:10}]}>
+                                      <TextInput onChangeText={text => this.setState({ query : text })} placeholder={"Nhập mã sản phẩm"} style={[styles.textInput, {marginTop:10, width: width -50}]}>
                                       </TextInput>
                                   </View>
                                 )

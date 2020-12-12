@@ -20,6 +20,7 @@ class OrderItemrenderer extends PureComponent{
         super(props);
         this.state = {
             item: this.props.item,
+            isCancel: this.props.item.is_delete == 1? true: false,
             stateCount: 0.0,
             selectValue: this.props.item.selectValue,
         };
@@ -108,7 +109,7 @@ class OrderItemrenderer extends PureComponent{
                     <View style={styles.info}>
                         <View>
                             <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
-                                <Text style={styles.titleInfo}>{model.code}</Text>
+                                <Text style={this.state.isCancel ? styles.titleInfoCancel :styles.titleInfo}>{model.code}</Text>
                                 {/*<TouchableOpacity style={{marginTop:-3 , paddingHorizontal:5, paddingVertical:3}} onPress={() => {this.deleteHandleClick(this.props.item)}}>*/}
                                     {/*<Icon name="trash-alt"  size={17} color={Style.GREY_TEXT_COLOR} />*/}
                                 {/*</TouchableOpacity>*/}
@@ -118,24 +119,24 @@ class OrderItemrenderer extends PureComponent{
 
                             <View style={styles.groupInfo}>
                                 <Text style={styles.infoText}>{"Khách hàng"  }</Text>
-                                <Text style={styles.valueText}>{model['customer']['name']  }</Text>
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['customer']['name']  }</Text>
                                 {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
                             </View>
 
                             <View style={styles.groupInfo}>
                                 <Text style={styles.infoText}>{"Điện thoại"  }</Text>
-                                <Text style={styles.valueText}>{model['customer']['phone']  }</Text>
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['customer']['phone']  }</Text>
                                 {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
                             </View>
                             <View style={styles.groupInfo}>
                                 <Text style={styles.infoText}>{"Ngày giao hàng"  }</Text>
-                                <Text style={styles.valueText}>{model['deliver_date'] ? Def.getDateString(new Date(model['deliver_date'] * 1000) , "yyyy-MM-dd") : ""}</Text>
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['deliver_date'] ? Def.getDateString(new Date(model['deliver_date'] * 1000) , "yyyy-MM-dd") : ""}</Text>
                                 {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
                             </View>
 
                             <View style={styles.groupInfo}>
                                 <Text style={styles.infoText}>{"Ngày tạo"  }</Text>
-                                <Text style={styles.valueText}>{model['created_at'] ? Def.getDateString(new Date(model['created_at'] * 1000) , "yyyy-MM-dd") : ""}</Text>
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['created_at'] ? Def.getDateString(new Date(model['created_at'] * 1000) , "yyyy-MM-dd") : ""}</Text>
                                 {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
                             </View>
                         </View>
@@ -143,7 +144,7 @@ class OrderItemrenderer extends PureComponent{
                         <View style={styles.listenView}>
                             <View style={styles.groupInfo}>
                                 {/*<Text style={styles.infoText}>{"Ngày giao hàng" }</Text>*/}
-                                <Text style={styles.valueText}>{Def.getAddressStr(model.address)}</Text>
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{Def.getAddressStr(model.address)}</Text>
                                 {/*<Text style={styles.priceText}>{Def.getAddressStr(model.address) }</Text>*/}
                             </View>
                         </View>
@@ -227,6 +228,13 @@ const  styles = StyleSheet.create({
         paddingBottom : 8,
         flex: 1,
     },
+    titleInfoCancel : {
+        fontWeight: 'bold',
+        fontSize : Style.NORMAL_SIZE,
+        paddingBottom : 8,
+        color: Style.GREY_TEXT_COLOR,
+        flex: 1,
+    },
     infoText : {
         fontSize : Style.NORMAL_SIZE,
         color: Style.GREY_TEXT_COLOR
@@ -234,6 +242,10 @@ const  styles = StyleSheet.create({
     valueText : {
         fontSize : Style.NORMAL_SIZE,
         // color: Style.GREY_TEXT_COLOR
+    },
+    valueTextCancel : {
+        fontSize : Style.NORMAL_SIZE,
+        color: Style.GREY_TEXT_COLOR
     },
 
 

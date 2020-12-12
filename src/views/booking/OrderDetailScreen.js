@@ -231,7 +231,7 @@ class OrderDetailScreen extends React.Component {
                     </View>
                 </View>
 
-                {   this.state.order &&  (this.state.order.status == null || this.state.order.status == 0 || this.state.order.status == 1) ?
+                {   this.state.order && (this.state.order.is_delete != 1) &&  (this.state.order.status == null || this.state.order.status == 0 || this.state.order.status == 1) ?
                     <TouchableOpacity style={[styles.button, {
                         backgroundColor: Style.DEFAUT_RED_COLOR,
                         justifyContent: 'center',
