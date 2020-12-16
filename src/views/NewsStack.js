@@ -45,14 +45,18 @@ class NewsStack extends React.Component {
         this.state = {
             new_noti: Def.order_number
         };
+        this.showNotification = this.showNotification.bind(this);
     }
 
-    formatText(text){
-        let rs = text;
-        if(text && text.length > 10){
-            rs = text.substring(0, 20) ;
+    showNotification() {
+
+        if(this.props.navigation){
+            Def.mainNavigate = this.props.navigation;
         }
-        return rs;
+
+        console.log('Go to create Notification');
+
+        Def.mainNavigate.navigate('Notification', {screen:'noti-screen', params:{refresh:1}});
     }
 
     render() {
@@ -92,7 +96,7 @@ class NewsStack extends React.Component {
                                     alignItems : 'center'
                                 }
                             }
-                            onPress={this.goProductList}>
+                            onPress={this.showNotification}>
                             { this.state.new_noti ?
                                 <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
                                     <Text style={{color: 'white', fontSize: this.state.new_noti > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>

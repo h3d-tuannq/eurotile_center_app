@@ -1,9 +1,10 @@
 import React from 'react'
 import {View, Text, StyleSheet, Dimensions,Linking,TouchableOpacity} from  'react-native'
-import NetChannel from '../../../Net/NetChannel'
-import NetDailyContent from '../../../Net/NetDailyContent'
-import Def from '../../../Def/Def'
-import Style from "../../../Def/Style";
+import PlusCircleIcon from "../../../assets/icons/Plus circle.svg";
+
+
+import Def from '../../def/Def'
+import Style from "../../def/Style";
 
 const {width, height} = Dimensions.get('window');
 
@@ -12,10 +13,10 @@ class NotificationItemrenderer extends React.PureComponent{
         super(props);
         this.goLink = this.goLink.bind(this);
 
-        this.onChannelSuccess = this.onChannelSuccess.bind(this);
-        this.onChannelErr = this.onChannelErr.bind(this);
-        this.onProgramSuccess = this.onProgramSuccess.bind(this);
-        this.onProgramErr = this.onProgramErr.bind(this);
+        // this.onChannelSuccess = this.onChannelSuccess.bind(this);
+        // this.onChannelErr = this.onChannelErr.bind(this);
+        // this.onProgramSuccess = this.onProgramSuccess.bind(this);
+        // this.onProgramErr = this.onProgramErr.bind(this);
     }
 
     onChannelSuccess(data){

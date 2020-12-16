@@ -283,6 +283,7 @@ function AppStack() {
             <Stack.Screen name="MainTab" component={MainTab} />
             <Stack.Screen name="Login" component={LoginStack} />
             <Stack.Screen name="Booking" component={BookingStack} />
+            <Stack.Screen name="Notification" component={NotificationStack} />
         </RootStack.Navigator>
     );
 }
@@ -446,6 +447,7 @@ import MyStack from "./src/views/MyStack";
 import HomeStack from "./src/views/HomeStack"
 import SchemeStack from "./src/views/SchemeStack"
 import BookingStack from "./src/views/BookingStack"
+import NotificationStack from "./src/views/NotificationStack"
 
 
 
