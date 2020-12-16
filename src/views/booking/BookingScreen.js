@@ -273,7 +273,7 @@ class BookingScreen extends React.Component {
                                 </Text>
 
                                 <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR, marginTop:3}]}>
-                                    {address.address_detail}
+                                    {address ? address.address_detail : ""}
                                 </Text>
                             </View>
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />

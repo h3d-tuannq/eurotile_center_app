@@ -2,6 +2,7 @@ import React from 'react'
 import {Text, View, Button, TouchableOpacity} from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack';
 import MenuIcon from '../../assets/icon/menu.svg';
+import NotiIcon from '../../assets/icon/icon-notification.svg';
 import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
 
@@ -42,7 +43,7 @@ class NewsStack extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            number_order: Def.order_number
+            new_noti: Def.order_number
         };
     }
 
@@ -75,6 +76,35 @@ class NewsStack extends React.Component {
                             <EurotileLogo
                                 width={Style.LOGO_WIDTH}
                                 height={Style.LOGO_HEIGHT}
+                            />
+                        </TouchableOpacity>
+
+                    ),
+
+                    headerRight: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.DRAWER_MENU_SIZE,
+                                    height: Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingRight:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={this.goProductList}>
+                            { this.state.new_noti ?
+                                <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
+                                    <Text style={{color: 'white', fontSize: this.state.new_noti > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>
+                                        {Def.formatOrderNumber(this.state.new_noti)}
+                                    </Text>
+                                </View>
+                                :<View/>
+                            }
+
+                            <NotiIcon
+                                width={Style.CART_ICON_SIZE -5}
+                                height={Style.CART_ICON_SIZE }
                             />
                         </TouchableOpacity>
 

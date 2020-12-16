@@ -12,6 +12,7 @@ import Style from "../../src/def/Style";
 import EurotileLogo from '../../assets/icons/Logo w.svg';
 import CartIcon from '../../assets/icons/cart.svg';
 import Def from '../def/Def';
+import NotiIcon from '../../assets/icon/icon-notification.svg';
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
@@ -21,9 +22,10 @@ class SchemeStack extends React.Component {
         super(props);
         this.getOrderNumber = this.getOrderNumber.bind(this);
         this.state = {
-            number_order: Def.cart_data.length
+            new_noti: Def.order_number
         };
         this.goProductList = this.goProductList.bind(this);
+
     }
 
     goProductList() {
@@ -78,18 +80,18 @@ class SchemeStack extends React.Component {
                                 }
                             }
                             onPress={this.goProductList}>
-                            { this.state.number_order ?
+                            { this.state.new_noti ?
                                 <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
-                                    <Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>
-                                        {this.formatOrderNumber(this.state.number_order)}
+                                    <Text style={{color: 'white', fontSize: this.state.new_noti > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>
+                                        {Def.formatOrderNumber(this.state.new_noti)}
                                     </Text>
                                 </View>
                                 :<View/>
                             }
 
-                            <CartIcon
-                                width={Style.CART_ICON_SIZE}
-                                height={Style.CART_ICON_SIZE}
+                            <NotiIcon
+                                width={Style.CART_ICON_SIZE -5}
+                                height={Style.CART_ICON_SIZE }
                             />
                         </TouchableOpacity>
 

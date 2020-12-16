@@ -141,10 +141,12 @@ export default class UserController{
             //await auth().signInWithCredential(credential);
 
         } catch (error) {
+            if(Def.setIsLogin)
+                Def.setIsLogin(false);
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow
+                console.log('Cancel login with google!');
 
-                alert('Cancel');
             } else if (error.code === statusCodes.IN_PROGRESS) {
                 alert('Signin in progress');
                 // operation (f.e. sign in) is in progress already

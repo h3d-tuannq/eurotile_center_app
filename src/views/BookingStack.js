@@ -42,15 +42,25 @@ class BookingStack extends React.Component {
     goProductList() {
         console.log("Go to Product List");
         if(this.props.navigation){
-            this.props.navigation.navigate('Product', {screen:'product-list-screen'});
+            this.props.navigation.navigate('Product', {screen:'product-screen'});
         }
     }
 
     goToCreateCustomer() {
+
         if(this.props.navigation){
-            this.props.navigation.navigate('Booking', {screen:'create-customer'});
+            Def.mainNavigate = this.props.navigation;
         }
+
+        console.log('Go to create customer');
+
+        Def.mainNavigate.navigate('Booking', {screen:'create-customer', params:{refresh:1}});
     }
+
+    goToProduct(){
+
+    }
+
 
     getOrderNumber(){
         return Def.cart_data.length;
@@ -76,34 +86,34 @@ class BookingStack extends React.Component {
                         headerTitleStyle: {
                             fontWeight: 'bold',
                         },
-                        headerRight: () => (
-                            <TouchableOpacity
-                                style=  {
-                                    {
-                                        width: Style.DRAWER_MENU_SIZE,
-                                        height: Style.DRAWER_MENU_SIZE,
-                                        justifyContent: 'center',
-                                        paddingRight:15 ,
-                                        alignItems : 'center'
-                                    }
-                                }
-                                onPress={this.goProductList}>
-                                { this.state.number_order ?
-                                    <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
-                                        <Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>
-                                            {this.formatOrderNumber(this.state.number_order)}
-                                        </Text>
-                                    </View>
-                                    :<View/>
-                                }
-
-                                <CartIcon
-                                    width={Style.CART_ICON_SIZE}
-                                    height={Style.CART_ICON_SIZE}
-                                />
-                            </TouchableOpacity>
-
-                        ),
+                        // headerRight: () => (
+                        //     <TouchableOpacity
+                        //         style=  {
+                        //             {
+                        //                 width: Style.DRAWER_MENU_SIZE,
+                        //                 height: Style.DRAWER_MENU_SIZE,
+                        //                 justifyContent: 'center',
+                        //                 paddingRight:15 ,
+                        //                 alignItems : 'center'
+                        //             }
+                        //         }
+                        //         onPress={this.goProductList}>
+                        //         { this.state.number_order ?
+                        //             <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
+                        //                 <Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>
+                        //                     {this.formatOrderNumber(this.state.number_order)}
+                        //                 </Text>
+                        //             </View>
+                        //             :<View/>
+                        //         }
+                        //
+                        //         <CartIcon
+                        //             width={Style.CART_ICON_SIZE}
+                        //             height={Style.CART_ICON_SIZE}
+                        //         />
+                        //     </TouchableOpacity>
+                        //
+                        // ),
                         headerBackImage: ()=> {
                             return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                         }
@@ -196,7 +206,7 @@ class BookingStack extends React.Component {
                                             alignItems : 'center'
                                         }
                                     }
-                                    onPress={this.goToCreateCustomer}>
+                                    onPress={this.goProductList}>
                                     {/*{ this.state.number_order ?*/}
                                     {/*<View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>*/}
                                     {/*<Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>*/}

@@ -87,6 +87,8 @@ export default class Def {
 
     static refreshDashBoard = null;
 
+    static mainNavigate = null;
+
     static updateAddress = null;
 
     static redirectScreen = null;
@@ -304,4 +306,9 @@ export default class Def {
         console.log("Payment Url " + $rsUrl);
         return $rsUrl;
     }
+
+    static formatOrderNumber(order_number){
+        return order_number < 100 ? order_number : '99+';
+    }
+
 }

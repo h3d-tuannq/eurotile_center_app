@@ -213,20 +213,20 @@ class CreateCustomerScreen extends React.Component {
     }
 
     validateAddress(){
+
         let err = 0;
-        if(!this.state.city_item){
-            alert("Vui cập nhật dữ liệu tỉnh/thành phố");
-            err = 1;
-        }
+        if(!this.state.address) {
+            if (!this.state.city_item) {
+                err = 1;
+            }
 
-        if(!this.state.district_item){
-            alert("Vui cập nhật dữ liệu quận/huyện");
-            err = 2;
-        }
+            if (!this.state.district_item) {
+                err = 2;
+            }
 
-        if(!this.state.ward_item){
-            alert("Vui cập nhật dữ liệu phường/xã");
-            err = 3;
+            if (!this.state.ward_item) {
+                err = 3;
+            }
         }
         return err;
     }
@@ -255,7 +255,10 @@ class CreateCustomerScreen extends React.Component {
         } else if (!this.state.mobile) {
             alert("Vui lòng điền số điện thoại");
         }
-        // this.validateAddress();
+        let err = this.validateAddress();
+        if(err > 0) {
+            alert("Vui lòng nhập thông tin địa chỉ");
+        }
         let customerInfo = {
             id: "",
             create_by : Def.user_info ? Def.user_info['id'] : 14,
@@ -276,7 +279,10 @@ class CreateCustomerScreen extends React.Component {
 
     saveCustomerSuccess(customer){
         console.log("Customer Info : " + JSON.stringify(customer));
-
+        if(customer['err_code']){
+            alert(customer['msg']);
+            return ;
+        }
 
         if(Def.currentOrder){
             Def.currentOrder['customer'] = customer;

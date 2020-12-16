@@ -20,6 +20,7 @@ import CartIcon from '../../assets/icons/cart.svg'
 
 
 import EurotileLogo from '../../assets/icons/Logo w.svg'
+import AsyncStorage from "@react-native-community/async-storage";
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
@@ -28,9 +29,16 @@ class ProductStack extends React.Component {
     constructor(props){
         super(props);
         this.getOrderNumber = this.getOrderNumber.bind(this);
+
         this.state = {
           number_order: Def.cart_data.length
         };
+        AsyncStorage.getItem('cart_data').then((value) => {
+            if(value){
+                Def.cart_data = JSON.parse(value);
+                this.setState({number_order:Def.cart_data.length});
+            }
+        });
         this.goProductList = this.goProductList.bind(this);
         this.goToCreateCustomer = this.goToCreateCustomer.bind(this);
     }
@@ -55,6 +63,17 @@ class ProductStack extends React.Component {
     formatOrderNumber(order_number){
         return order_number < 100 ? order_number : '99+';
     }
+
+    shouldComponentUpdate(){
+        return true;
+    }
+
+    componentDidMount(){
+        if(Def.cart_data.length != this.state.number_order){
+            this.setState({number_order:Def.cart_data.length});
+        }
+    }
+
 
     render() {
         return (
