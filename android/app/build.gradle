@@ -131,7 +131,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.eurotile_center_app"
+        applicationId "com.life_style"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

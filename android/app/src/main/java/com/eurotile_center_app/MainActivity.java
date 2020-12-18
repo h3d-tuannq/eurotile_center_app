@@ -1,4 +1,4 @@
-package com.eurotile_center_app;
+package com.life_style;
 
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen; // Import this.
@@ -12,7 +12,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "eurotile_center_app";
+    return "life_style";
   }
 
   @Override

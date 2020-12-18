@@ -1,5 +1,5 @@
 
-package com.eurotile_center_app;
+package com.life_style;
 
 import android.content.Intent;
 import android.os.Bundle;
