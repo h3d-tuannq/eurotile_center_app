@@ -65,6 +65,7 @@ class ProductStack extends React.Component {
     }
 
     shouldComponentUpdate(){
+        console.log('Product Stack should update');
         return true;
     }
 

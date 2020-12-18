@@ -10,7 +10,6 @@ import MenuIcon from '../../assets/icon/menu.svg';
 import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
 import EurotileLogo from '../../assets/icons/Logo w.svg';
-import CartIcon from '../../assets/icons/cart.svg';
 import Def from '../def/Def';
 import NotiIcon from '../../assets/icon/icon-notification.svg';
 
@@ -24,8 +23,15 @@ class SchemeStack extends React.Component {
         this.state = {
             new_noti: Def.order_number
         };
-        this.goProductList = this.goProductList.bind(this);
+        this.showNotification = this.showNotification.bind(this);
+    }
 
+    showNotification() {
+
+        if(this.props.navigation){
+            Def.mainNavigate = this.props.navigation;
+        }
+        Def.mainNavigate.navigate('Notification', {screen:'noti-screen', params:{refresh:1}});
     }
 
     goProductList() {
@@ -79,7 +85,7 @@ class SchemeStack extends React.Component {
                                     alignItems : 'center'
                                 }
                             }
-                            onPress={this.goProductList}>
+                            onPress={this.showNotification}>
                             { this.state.new_noti ?
                                 <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
                                     <Text style={{color: 'white', fontSize: this.state.new_noti > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>

@@ -2,6 +2,7 @@ import React from 'react'
 import {View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, FlatList} from 'react-native'
 import DownIconSvg from '../../../assets/icon/icon-down-black.svg'
 import NotificationItemrenderer from "../item-render/NotificationItemrenderer";
+import NotificationController from '../'
 
 import Def from '../../../src/def/Def'
 import analytics from '@react-native-firebase/analytics';

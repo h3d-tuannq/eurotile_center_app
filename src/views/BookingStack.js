@@ -19,7 +19,7 @@ import Def from "../../src/def/Def";
 
 import AddIcon from '../../assets/icons/Plus circle.svg'
 
-import TileIcon from '../../assets/icons/Tile.svg';
+import TileIcon from '../../assets/icons/product-tab.svg';
 
 import CartIcon from '../../assets/icons/cart.svg'
 import PaymentScreen from "./booking/PaymentScreen";

@@ -1,66 +1,69 @@
 import React from 'react'
-import {View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, FlatList} from 'react-native'
+import {View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, FlatList, RefreshControl} from 'react-native'
 import DownIconSvg from '../../../assets/icon/icon-down-black.svg'
 import NotificationItemrenderer from "../../com/item-render/NotificationItemrenderer";
 
+import NotificationController from "../../controller/NotificationController"
+
 import Def from '../../def/Def'
 import Style from "../../def/Style";
+import NetNews from "../../net/NetNews";
 const {width, height} = Dimensions.get('window');
 
 const notiData = [
     {
         id:'1',
         title:'Thông báo 1',
-        content: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
-        create_datetime:'3/6/2020',
+        body: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
+        created_at:1607936433,
     },
     {
         id:'2',
         title:'Thông báo 2',
-        content: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
-        create_datetime:'3/6/2020',
+        body: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
+        created_at:1607936433,
     },
     {
         id:'3',
         title:'Thông báo 3',
-        content: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
-        create_datetime:'3/6/2020',
+        body: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
+        created_at:1607936433,
     },
     {
         id:'4',
         title:'Thông báo 4',
-        content: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
-        create_datetime:'3/6/2020',
+        body: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
+        created_at:1607936433,
     },
     {
         id:'5',
         title:'Thông báo 5',
-        content: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
-        create_datetime:'3/6/2020',
+        body: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
+        created_at:1607936433,
     },
     {
         id:'6',
         title:'Thông báo 6',
-        content: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
-        create_datetime:'3/6/2020',
+        body: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
+        created_at:1607936433,
     },
     {
         id:'7',
         title:'Thông báo 7',
-        content: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
-        create_datetime:'3/6/2020',
+        body: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
+        created_at:1607936433,
     },
     {
         id:'8',
         title:'Thông báo 8',
-        content: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
-        create_datetime:'3/6/2020',
+        body: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
+        created_at:1607936433,
     },
     {
         id:'9',
         title:'Thông báo 9',
-        content: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
-        create_datetime:'3/6/2020',
+        body: 'Nội dung bình luận, nội dung bình luận, nội dung bình luận, nội dùng bình luận',
+        created_at:1607936433,
     }
 
 ]
@@ -68,27 +71,48 @@ const notiData = [
 class NotificationScreen extends React.Component{
 
     state ={
-        notiData: notiData
+        notiData: [],
+        isRefresh:false
     }
     constructor(props){
         super(props);
         console.log('class NotificationScreen extends React.Component');
         console.log(props);
-
         this.onNotiSuccess     = this.onNotiSuccess.bind(this);
         this.onNotiFailed     = this.onNotiFailed.bind(this);
-
-        // NetUser.listNotification(this.onNotiSuccess,this.onNotiFailed);
+        this.onRefresh = this.onRefresh.bind(this);
+        console.log('UserInfo: ' + JSON.stringify(Def.user_info));
+        if(Def.user_info){
+            console.log("Call get Notification");
+            NotificationController.getNotificationByCondition(this.onNotiSuccess,this.onNotiFailed, Def.user_info ? Def.user_info['id'] : "");
+        }
 
     }
 
+    onRefresh = () => {
+        console.log('UserInfo: ' + JSON.stringify(Def.user_info));
+        this.setState({isRefresh:true});
+        if(Def.user_info){
+            console.log("Call get Notification");
+            NotificationController.getNotificationByCondition(this.onNotiSuccess,this.onNotiFailed, Def.user_info ? Def.user_info['id'] : "");
+        }
+    };
+
     onNotiSuccess(data){
-        console.log("onNotiSuccess");
-        this.setState({notiData:data["data"]});
+        console.log("onNotiSuccess : " + JSON.stringify(data) );
+        if(data['err_code']){
+            alert(data['msg']);
+            this.setState({isRefresh:false});
+            return ;
+        } else {
+            this.setState({notiData:data, isRefresh:false});
+        }
+
+
     }
 
     onNotiFailed(data){
-        //
+        console.log('Noti false');
     }
 
 
@@ -102,7 +126,10 @@ class NotificationScreen extends React.Component{
             <View style={{flex:1, backgroundColor:'#fff'}}>
                 <View style={styles.playList}>
                     <FlatList
-                        style={{ marginBottom : 120, paddingLeft : 10, backgroundColor : '#fff'}}
+                        refreshControl={
+                            <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
+                        }
+                        style={{ marginBottom : 120, paddingHorizontal : 5, backgroundColor : '#fff'}}
                         data={this.state.notiData}
                         renderItem={renderItem}
                         keyExtractor={item => (item.id + "")}

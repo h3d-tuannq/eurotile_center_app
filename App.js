@@ -537,7 +537,7 @@ import UserController from "./src/controller/UserController";
 //     console.log("Token " +   JSON.stringify(token));
 // } );
 
- messaging().unsubscribeFromTopic('all').then(() => console.log('Subscribed to topic!'));
+ messaging().subscribeToTopic('all').then(() => console.log('Subscribed to topic!'));
 
 messaging().getToken().then((token) => {
     console.log("Token " +   JSON.stringify(token));
