@@ -38,7 +38,7 @@ class ProgramHozList extends React.Component {
     sectionClick(){
         console.log(this.props.group + ' - ' + this.props.name);
         //console.warn(this.props.data );
-        this.props.navigation.navigate(this.props.group,{name: this.props.name, data: this.props.data} );
+        this.props.navigation.navigate(this.props.group,{name: this.props.name,title: this.props.title ,data: this.props.data} );
         // this.props.clickHandle(this.props.group, this.props.name, 'test title' );
     }
 
@@ -108,21 +108,21 @@ class ProgramHozList extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <TouchableOpacity style={{flexDirection: 'row', justifyContent: 'space-between' , alignItems: 'center'}}
+                    <TouchableOpacity style={{flexDirection: 'row', justifyContent: 'space-between' , flex : 1}}
                                       onPress={this.sectionClick}
                     >
                      {/*{this.props.programType == 'music' ? <MusicWishlistIcon style={styles.icon}/>: (this.props.group == "Favorite" ? <WishlistIcon style={styles.icon}/>  : <LogoIconSmall style={styles.icon}/> )}*/}
 
 
-                    <View style={titleView} onPress={this.sectionClick} >
-                        <Text style={titleStyle}>{this.props.title}</Text>
+                    <View style={styles.titleView} onPress={this.sectionClick} >
+                        <Text style={styles.titleStyle}>{this.props.title}</Text>
                         {/*<IconArrow  style={iconStyleHome}  />*/}
                     </View>
                     </TouchableOpacity>
-                    {/*<TouchableOpacity style={titleView} onPress={this.sectionClick} >*/}
-                        {/*<Text style={{fontSize : Style.NORMAL_SIZE ,marginRight : 10 , color : Style.DEFAUT_RED_COLOR , borderWidth : 1 ,padding : 2, paddingHorizontal : 5,  borderRadius: 5, borderColor : Style.DEFAUT_RED_COLOR}}>{"Xem tất cả"}</Text>*/}
+                    <TouchableOpacity style={titleView} onPress={this.sectionClick} >
+                        <Text style={{fontSize : Style.NORMAL_SIZE ,marginRight : 10 , color : Style.DEFAUT_RED_COLOR , borderWidth : 1 ,padding : 2, paddingHorizontal : 5,  borderRadius: 5, borderColor : Style.DEFAUT_RED_COLOR}}>{"Xem tất cả"}</Text>
 
-                    {/*</TouchableOpacity>*/}
+                    </TouchableOpacity>
 
                 </View>
 
@@ -167,7 +167,10 @@ const styles = StyleSheet.create ({
           fontSize : Style.BIG_SIZE,
           // color: Style.GREY_TEXT_COLOR,
         // fontWeight: 'bold',
-        marginRight : 10
+        //   backgroundColor : 'red',
+        //   width : width * 0.9,
+
+        marginRight : 5,
       },
       titleView: {
         paddingVertical : 10,

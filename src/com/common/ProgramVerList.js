@@ -4,11 +4,13 @@ import {View, Text, TouchableOpacity, FlatList, StyleSheet, Dimensions} from 're
 import DesignItemrenderer from '../item-render/DesignItemrenderer'
 import Style from "../../../src/def/Style";
 import Def from "../../../src/def/Def";
+import CollectionItemrenderer from "../item-render/CollectionItemrenderer";
+import OrganItemrenderer from "../item-render/OrganItemrenderer";
 
 const {width, height} = Dimensions.get('window');
 
-const PROGRAM_IMAGE_WIDTH = (width - 30) ;
-const PROGRAM_IMAGE_HEIGHT = (width * 0.6);
+const PROGRAM_IMAGE_WIDTH = (width - 20) ;
+const PROGRAM_IMAGE_HEIGHT = PROGRAM_IMAGE_WIDTH;
 
 
 
@@ -27,7 +29,7 @@ class ProgramVerList extends React.Component{
     itemClick(item){
         console.log("itemClick(item))))))))))))))))))))))))))))))))))))))))))))))))");
         let stack = this.props.stack ? this.props.stack :false;
-        let screen = this.props.screen ? this.props.screen :'detail-design';
+        let screen = this.props.screen ? this.props.screen :'virtual-store';
         if(stack){
             this.props.navigation.navigate(stack, {screen:screen, params: { item: item }});
         } else {
@@ -41,12 +43,22 @@ class ProgramVerList extends React.Component{
         const {iconStyleHome, titleStyle,titleView, } = styles;
         const renderItem = ({item}) => {
             return (
-                <View style={{paddingHorizontal : 15}}>
-                    <DesignItemrenderer
-                        item ={item} click={this.itemClick} canPlayBack={this.props.canPlayBack}
-                        styleImage={{width: PROGRAM_IMAGE_WIDTH , height: PROGRAM_IMAGE_HEIGHT}}
-                        type={this.props.type}
-                    />
+
+                <View style={{paddingLeft : 10}}>
+                    {
+                        this.props.type == 'organ' ?
+                            <OrganItemrenderer
+                                item ={item} click={this.itemClick} canPlayBack={this.props.canPlayBack}
+                                styleImage={{width: PROGRAM_IMAGE_WIDTH , height: PROGRAM_IMAGE_HEIGHT}}
+                                type={this.props.type}
+                            />
+                        :
+                        <CollectionItemrenderer
+                            item ={item} click={this.itemClick} canPlayBack={this.props.canPlayBack}
+                            styleImage={{width: PROGRAM_IMAGE_WIDTH , height: PROGRAM_IMAGE_HEIGHT}}
+                            type={this.props.type}
+                        />
+                    }
                 </View>
             )
         }
@@ -59,10 +71,13 @@ class ProgramVerList extends React.Component{
                     renderItem={renderItem}
                     keyExtractor={(item,index) => item.id + "" + index.toString()}
                     showsHorizontalScrollIndicator={false}
+                    numColumns={this.props.numColumns ?  this.props.numColumns : 1}
                     ListHeaderComponent={this.props.header}
                     ListFooterComponent={this.props.footer ? this.props.footer : null}
                     showsVerticalScrollIndicator ={false}
-                     onEndReached={() => {this.props.endListReach ? this.props.endListReach() : console.log('list ended');}}
+                    ItemSeparatorComponent={this.props.itemSeparatorComponent}
+
+                    onEndReached={() => {this.props.endListReach ? this.props.endListReach() : console.log('list ended');}}
                 />
             </View>
         )

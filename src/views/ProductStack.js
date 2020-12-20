@@ -5,6 +5,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import ProductScreen from './product/ProductScreen'
 import CollectionDetailScreen from  './product/CollectionDetailScreen'
 import ProductDetailScreen from  './product/ProductDetailScreen'
+import IndustryScreen from  './product/IndustryScreen'
+import VirtualStoreScreen from  './product/VirtualStoreScreen'
 
 
 
@@ -14,7 +16,7 @@ import Def from "../../src/def/Def";
 
 
 
-import MenuIcon from '../../assets/icons/expand.svg';
+import MenuIcon from '../../assets/icon/menu.svg';
 
 import CartIcon from '../../assets/icons/cart.svg'
 
@@ -81,12 +83,12 @@ class ProductStack extends React.Component {
             <RootStack.Navigator>
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="product-screen" component={ProductScreen} options={{
-                    title: null,
+                    title: 'Life Style',
                     headerLeft: () => (
                         <TouchableOpacity
                             style=  {
                                 {
-                                    width: Style.LOGO_WIDTH + 20,
+                                    width: Style.DRAWER_MENU_SIZE,
                                     height:Style.DRAWER_MENU_SIZE,
                                     justifyContent: 'center',
                                     paddingLeft:15 ,
@@ -94,9 +96,9 @@ class ProductStack extends React.Component {
                                 }
                             }
                             onPress={() => this.props.navigation.toggleDrawer()}>
-                            <EurotileLogo
-                                width={Style.LOGO_WIDTH}
-                                height={Style.LOGO_HEIGHT}
+                            <MenuIcon
+                                width={Style.DRAWER_MENU_ICON_SIZE}
+                                height={Style.DRAWER_MENU_ICON_SIZE}
                             />
                         </TouchableOpacity>
 
@@ -234,6 +236,70 @@ class ProductStack extends React.Component {
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }}
+                    )
+                    } />
+
+                <RootStack.Screen name="industry" component={IndustryScreen} options=
+                    {({route}) => ({
+                            title: route.params.title ? route.params.title :'Ngành hàng',
+                            headerStyle: {
+                                backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                                height: Style.HEADER_HEIGHT,
+                            },
+                            headerTintColor: '#fff',
+                            headerTitleStyle: {
+                                fontWeight: 'bold',
+                            },
+                            headerRight: () => (
+                                <TouchableOpacity
+                                    style=  {
+                                        {
+                                            width: Style.DRAWER_MENU_SIZE,
+                                            height: Style.DRAWER_MENU_SIZE,
+                                            justifyContent: 'center',
+                                            paddingRight:15 ,
+                                            alignItems : 'center'
+                                        }
+                                    }
+                                    onPress={this.goProductList}>
+                                    { this.state.number_order ?
+                                        <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
+                                            <Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>
+                                                {this.formatOrderNumber(this.state.number_order)}
+                                            </Text>
+                                        </View>
+                                        :<View/>
+                                    }
+
+                                    <CartIcon
+                                        width={Style.CART_ICON_SIZE}
+                                        height={Style.CART_ICON_SIZE}
+                                    />
+                                </TouchableOpacity>
+
+                            ),
+
+                            headerBackImage: ()=> {
+                                return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                            }}
+                    )
+                    } />
+
+                <RootStack.Screen name="virtual-store" component={VirtualStoreScreen} options=
+                    {({route}) => ({
+                            title: route.params.item ? route.params.item.name :'Ngành hàng',
+                            headerStyle: {
+                                backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                                height: Style.HEADER_HEIGHT,
+                            },
+                            headerTintColor: '#fff',
+                            headerTitleStyle: {
+                                fontWeight: 'bold',
+                            },
+
+                            headerBackImage: ()=> {
+                                return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                            }}
                     )
                     } />
 

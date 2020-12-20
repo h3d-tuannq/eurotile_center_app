@@ -10,6 +10,7 @@ const {width, height} = Dimensions.get('window');
 import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
+import ProductTabScreen from  './ProductTabScreen'
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -43,10 +44,13 @@ class ProductDetailScreen extends React.Component {
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
 
+        Def.product_detail_data = this.props.route.params.item;
+        Def.product_detail_menu = this.createConfigData(Def.product_detail_data);
+
         this.state = {
             // collection_data: null,
             stateCount: 0.0,
-            configMenu: Def.config_collection_menu,
+            configMenu: Def.product_detail_menu,
             slide_data : this.getImageForCollection(this.props.route.params.item),
             item:this.props.route.params.item,
             activeSlide:0,
@@ -70,12 +74,12 @@ class ProductDetailScreen extends React.Component {
         if(item.faces){
             let subImgs = item.faces.split(',');
             subImgs = subImgs.map(x => {
-                return {image_path:Def.URL_CONTENT_BASE + x}
+                return {image_path:Def.VIETCRAFT_URL_CONTENT_BASE + x}
             });
             collectionImages = subImgs;
         }
 
-        // console.log("Slide Product data : " + JSON.stringify(collectionImages) );
+        console.log("Slide Product data : " + JSON.stringify(collectionImages) );
 
         return collectionImages;
     }
@@ -101,24 +105,22 @@ class ProductDetailScreen extends React.Component {
     }
 
     createConfigData(data){
-
-
+        console.log("Data : " + JSON.stringify(data));
+        var configData = [];
         if(data){
-            let configData =  Object.entries(data).map((prop, key) => {
-                // console.log("Props : " + JSON.stringify(prop));
-                return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
-            });
-            Object.entries(configData).map((prop, key) => {
-                // console.log("start" + key);
-                // console.log("prop[0]" + prop[0]);
-                // console.log("prop[1]" + prop[1]["name_vi"]);
-                //
-                // console.log("data" + prop[1]["data"]);
-                //
-                // console.log("end");
-            });
-            return configData;
+            if(data.viewer_url){
+                let viewerUrl =  Def.LIFE_STYLE_BASE + '/viewer-3d/view?id=' + data.id;
+                configData.push({key: '3D', type:'3D' ,name_vi:"3D", hidden:0, data:{url_3d:viewerUrl  , url_ar:data["viewer_url"]}});
+            }
+            // if(data.url_vr){
+            //     configData.push({key: 'VR', type:'VR' ,name_vi:"VR", hidden:0, data:data["url_vr"]});
+            // }
+            configData.push({key: '2D', type:'2D' ,name_vi:"2D", hidden:0, data:this.getImageForCollection(data)});
+
+
         }
+        console.log('Config Menu : ' + JSON.stringify(configData));
+        return configData;
 
     }
 
@@ -135,8 +137,6 @@ class ProductDetailScreen extends React.Component {
     }
 
     shouldComponentUpdate(){
-        // this.setState({ activeSlide: 0});
-        // console.log('SortData ddd:' + JSON.stringify(this.props.route));
         return true;
     }
 
@@ -189,28 +189,24 @@ class ProductDetailScreen extends React.Component {
 
     render() {
         const {navigation} = this.props;
-        // const configMenu = Def.config_collection_menu;
+        const configMenu = this.state.configMenu;
 
         // console.log("Slide Product data : " + JSON.stringify(this.state.slide_data) );
         return (
             <View style={{flex:1}}>
-                <View style={Style.styles.carousel}>
-                    <Carousel
-                        ref={(c) => { this._carousel = c; }}
-                        // keyExtractor={(item, index) => `${item.id}--${item.index}`}
-                        data={this.state.slide_data}
-                        renderItem={this.renderItem}
-                        itemWidth={width/2}
-                        sliderWidth={width}
-                        inactiveSlideOpacity={1}
-                        inactiveSlideScale={1}
-                        activeSlideAlignment={'start'}
-                        // loop={true}
-                        autoplay={true}
-                        autoplayInterval={5000}
-                        onSnapToItem={(index) => this.setState({ activeSlide: index }) }
-                    />
-                    { this.pagination }
+                <View style={{height:height/2+40}}>
+                    <ScrollableTabView  locked={true}   tabBarPosition={"bottom"} style={{height: height/2}} renderTabBar={() => <MyCustomizeTabBar style={{borderTopWidth:1, borderTopColor : Style.GREY_TEXT_COLOR}} navigation={navigation} />}  >
+                        {
+                            configMenu && Object.entries(configMenu).map((prop, key) => {
+                                console.log("Props Item: " + JSON.stringify(prop));
+                                if((prop[1]["hidden"]) == 0){
+                                    return (
+                                        <ProductTabScreen key ={prop[0] + "acv"}  type={prop['type']} name={prop['name']} navigation={navigation}  tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />
+                                    );
+                                }
+                            })
+                        }
+                    </ScrollableTabView>
                 </View>
 
                 <View style={{flex:1, justifyContent: 'space-between', marginTop :10}}>
@@ -222,29 +218,27 @@ class ProductDetailScreen extends React.Component {
                         {"Mã sản phẩm " + this.state.item.model }
                     </Text>
                     <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Kích thước: 600*600"}
-                    </Text>
-                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Đóng hộp: 6 viên"}
+                        {"Kích thước: "}
                     </Text>
 
                     <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Trọng lượng: 36 kg"}
+                        {"Vật liệu : " + this.state.item.materials}
                     </Text>
 
                     <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Bề mặt: Matt, in kỹ thuật số"}
+                        {"Mô tả : " + this.state.item.description}
                     </Text>
+
                     {/*<Text style={Style.text_styles.normalText}>*/}
                         {/*{"Mô tả"}*/}
                     {/*</Text>*/}
                 </View>
 
-                {/*<TouchableOpacity style={styles.bookingBtn}>*/}
-                    {/*<Text style={Style.text_styles.whiteTitleText}>*/}
-                        {/*Đặt hàng*/}
-                    {/*</Text>*/}
-                {/*</TouchableOpacity>*/}
+                <TouchableOpacity style={styles.bookingBtn}>
+                    <Text style={Style.text_styles.whiteTitleText}>
+                        Thêm giỏ hàng
+                    </Text>
+                </TouchableOpacity>
                 </View>
 
                 {/*<ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >*/}

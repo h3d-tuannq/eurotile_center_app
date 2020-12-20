@@ -154,30 +154,30 @@ export default class SignIn extends Component {
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[button, {backgroundColor:'#1976d2'}]}  onPress={()=>{
-                        console.log('test');
-                        this.setState({isLoging:true});
-                        UserController.facebookLogin(navigation);
-                    }}>
-                        <FacebookIcon style={styles.icon}
+                    {/*<TouchableOpacity style={[button, {backgroundColor:'#1976d2'}]}  onPress={()=>{*/}
+                        {/*console.log('test');*/}
+                        {/*this.setState({isLoging:true});*/}
+                        {/*UserController.facebookLogin(navigation);*/}
+                    {/*}}>*/}
+                        {/*<FacebookIcon style={styles.icon}*/}
 
-                        />
-                        <Text style={styles.buttonText}>
-                            Đăng nhập với Facebook
-                        </Text>
-                    </TouchableOpacity>
+                        {/*/>*/}
+                        {/*<Text style={styles.buttonText}>*/}
+                            {/*Đăng nhập với Facebook*/}
+                        {/*</Text>*/}
+                    {/*</TouchableOpacity>*/}
 
-                    <TouchableOpacity style={[button, {backgroundColor:'#ffffff'}]} onPress={()=> {
-                        this.setState({isLoging:true});
-                        UserController.googleLogin(navigation);
+                    {/*<TouchableOpacity style={[button, {backgroundColor:'#ffffff'}]} onPress={()=> {*/}
+                        {/*this.setState({isLoging:true});*/}
+                        {/*UserController.googleLogin(navigation);*/}
 
-                    }}>
-                        <GoogleIcon style={styles.icon}
-                        />
-                        <Text style={[styles.buttonText, {color: '#b3b3b3'}]}>
-                            Đăng nhập với Google
-                        </Text>
-                    </TouchableOpacity>
+                    {/*}}>*/}
+                        {/*<GoogleIcon style={styles.icon}*/}
+                        {/*/>*/}
+                        {/*<Text style={[styles.buttonText, {color: '#b3b3b3'}]}>*/}
+                            {/*Đăng nhập với Google*/}
+                        {/*</Text>*/}
+                    {/*</TouchableOpacity>*/}
 
 
                 </View>

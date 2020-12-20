@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 // Add this line
 apply plugin: 'com.google.gms.google-services' // <- Add this line
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 import com.android.build.OutputFile
 
@@ -208,6 +209,8 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-analytics'
 
+    compile project(':RNSendIntentModule')
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }
@@ -228,6 +231,7 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    compile project(':react-native-vector-icons')
 }
 
 // Run this once to be able to run the application with BUCK

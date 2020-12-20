@@ -69,7 +69,7 @@ class NewsStack extends React.Component {
                         <TouchableOpacity
                             style=  {
                                 {
-                                    width: Style.LOGO_WIDTH + 20,
+                                    width: Style.DRAWER_MENU_SIZE,
                                     height:Style.DRAWER_MENU_SIZE,
                                     justifyContent: 'center',
                                     paddingLeft:15 ,
@@ -77,9 +77,9 @@ class NewsStack extends React.Component {
                                 }
                             }
                             onPress={() => this.props.navigation.toggleDrawer()}>
-                            <EurotileLogo
-                                width={Style.LOGO_WIDTH}
-                                height={Style.LOGO_HEIGHT}
+                            <MenuIcon
+                                width={Style.DRAWER_MENU_ICON_SIZE}
+                                height={Style.DRAWER_MENU_ICON_SIZE}
                             />
                         </TouchableOpacity>
 

@@ -3,9 +3,9 @@
     <item
             android:drawable="@color/splashscreen_bg"/>
     <item
-            android:width="270dp"
-            android:height="70dp"
-            android:drawable="@mipmap/loading"
+            android:width="260dp"
+            android:height="135dp"
+            android:drawable="@mipmap/lifestyle_loading"
             android:gravity="center" />
 
 </layer-list>

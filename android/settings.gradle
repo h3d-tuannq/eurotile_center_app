@@ -1,4 +1,11 @@
 rootProject.name = 'life_style'
+include ':react-native-vector-icons'
+project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
+include ':react-native-send-intent'
+project(':react-native-send-intent').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-send-intent/android')
+include ':react-native-send-intent'
+project(':react-native-send-intent').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-send-intent/android')
+include ':react-native-send-intent'
 include ':react-native-image-resizer'
 project(':react-native-image-resizer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-resizer/android')
 include ':@react-native-community_checkbox'
@@ -19,4 +26,6 @@ include ':react-native-google-signin'
 project(':react-native-google-signin').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/google-signin/android')
 include ':react-native-fbsdk'
 project(':react-native-fbsdk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fbsdk/android')
+include ':RNSendIntentModule', ':app'
+project(':RNSendIntentModule').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-send-intent/android')
 

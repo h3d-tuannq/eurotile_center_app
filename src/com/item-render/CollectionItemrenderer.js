@@ -58,7 +58,7 @@ class CollectionItemrenderer extends PureComponent{
         return (
             <View>
 
-            <TouchableOpacity style={[styles.itemStyle, this.props.styleImage]} onPress={
+            <TouchableOpacity style={[styles.itemStyle]} onPress={
                 () => {
                     click(model);
                 }
@@ -73,7 +73,7 @@ class CollectionItemrenderer extends PureComponent{
 
 
                 {model.image_path ?
-                    <Image  style={[this.props.styleImage, styles.imageStyle ]}  source={{uri:model.image_path}}  />
+                    <Image  style={[this.props.styleImage, styles.imageStyle ]}  source={{uri: Def.getThumnailImg(model.image_path)}}  />
                     :
                     <DefaultProgramImage style={styles.imageStyle} width={this.props.styleImage.width} height={this.props.styleImage.height}/>
                 }
@@ -83,7 +83,7 @@ class CollectionItemrenderer extends PureComponent{
                 <View style = {{width:this.props.styleImage.width, justifyContent:'center', alignItems: (this.props.type == 'product' ? 'flex-start' :'center')}}>
 
                     <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:1 , borderRadius : 3 ,bottom:5, backgroundColor: this.props.type == 'product' ? Style.DEFAUT_BLUE_COLOR :Style.DEFAUT_RED_COLOR, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>
-                          {this.formatText(this.props.type == 'product' ?model.model :model.name, 15)}
+                          {this.formatText(this.props.type == 'product' ?model.model :model.model, 15)}
                     </Text>
                 </View>
             </View>
@@ -98,6 +98,8 @@ const  styles = StyleSheet.create({
             marginRight: 5,
             alignItems : 'flex-start',
             marginTop: 5,
+            borderWidth : 2,
+            borderColor : Style.GREY_TEXT_COLOR,
 
     },
     imageStyle : {

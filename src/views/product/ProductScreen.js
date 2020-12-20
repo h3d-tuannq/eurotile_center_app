@@ -4,6 +4,7 @@ import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-nativ
 import CollectionTab from './CollectionTab'
 import MyCustomizeTabBar from  '../../com/common/tabar/MyCustomizeTabBar'
 import NetCollection from '../../net/NetCollection'
+import OrganController from  '../../controller/OrganController'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 
@@ -37,13 +38,7 @@ class ProductScreen extends React.Component {
 
         Def.mainNavigate = this.props.navigation;
 
-        if(!Def.collection_data) {
-            NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
-        }
-        else if (!Def.config_collection_menu) {
-            Def.config_collection_menu = this.createConfigData(Def.collection_data);
-            // this.setState({configMenu: Def.config_news_menu});
-        }
+
 
         console.log("UserInfo Permission: " + Def.checkPartnerPermission());
 
@@ -66,7 +61,7 @@ class ProductScreen extends React.Component {
     onRefresh = () => {
         console.log("Refresh!");
         this.setState({isRefresh:true});
-        NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
+        OrganController.getVirtualStore(this.onGetCollectionSuccess, this.onGetCollectionFalse);
     }
 
     onGetCollectionSuccess(data){
@@ -104,8 +99,9 @@ class ProductScreen extends React.Component {
 
     formatText(text){
         let rs = text;
-        if(text && text.length > 10){
-            rs = text.substring(0, 20) ;
+        if(text && text.length > 30){
+            rs = text.substring(0, 27) ;
+            rs +='...';
         }
         return rs;
     }
@@ -115,6 +111,19 @@ class ProductScreen extends React.Component {
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
         return true;
     }
+
+
+    componentDidMount(){
+        console.log('Component Did Mount');
+        if(!Def.collection_data) {
+            OrganController.getVirtualStore(this.onGetCollectionSuccess, this.onGetCollectionFalse);
+        }
+        else if (!Def.config_collection_menu) {
+            Def.config_collection_menu = this.createConfigData(Def.collection_data);
+            // this.setState({configMenu: Def.config_news_menu});
+        }
+    }
+
 
     getNewDataByConfigKey(key){
 
@@ -147,9 +156,9 @@ class ProductScreen extends React.Component {
     renderItem = ({item, index}) => {
 
         return (
-            <View key={index} style={Style.styles.schemeCardStyle}>
+            <View key={index} style={Style.styles.cardImg}>
                 <TouchableOpacity >
-                    <Image  style = {[Style.styles.schemeSlideImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
+                    <Image  style = {[Style.styles.cardStyle, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
                 </TouchableOpacity>
             </View>
         );
@@ -194,8 +203,8 @@ class ProductScreen extends React.Component {
 
                             <View key={key} style={[styles.programListStyle, {marginTop: key == 0 ? 5 : 10}]}>
                                 <ProgramHozList refresh={this.refresh} stack={'Product'}
-                                screen={'collection-detail-screen'} favorite={true}
-                                navigation={this.props.navigation} name={prop[0]}
+                                screen={'virtual-store'} favorite={true} group={"industry"}
+                                navigation={this.props.navigation} name={prop[0]}  key={key}
                                 style={styles.programListStyle} data={prop[1]["data"]} title={this.formatText(prop[1]["name_vi"])}/>
                             </View>
                         )

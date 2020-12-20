@@ -194,24 +194,24 @@ function MainTab() {
                 // item:program
             }}>
 
-            <Tab.Screen
-                name="scheme"
-                component={SchemeStack}
-                options={(route) => {
-                    return false
-                        ? {tabBarVisible: false}
-                        : {
-                            tabBarLabel: 'Thiết kế',
-                            tabBarIcon: ({focused, color, size}) => {
-                                if (focused) {
-                                    return <GallerySelectedIcon style={styles.tabBarIconStyle} />;
-                                    // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
-                                }
-                                return <GalleryIcon style={styles.tabBarIconStyle} />;
-                            },
-                        };
-                }}
-            />
+            {/*<Tab.Screen*/}
+                {/*name="scheme"*/}
+                {/*component={SchemeStack}*/}
+                {/*options={(route) => {*/}
+                    {/*return false*/}
+                        {/*? {tabBarVisible: false}*/}
+                        {/*: {*/}
+                            {/*tabBarLabel: 'Trang chủ',*/}
+                            {/*tabBarIcon: ({focused, color, size}) => {*/}
+                                {/*if (focused) {*/}
+                                    {/*return <GallerySelectedIcon style={styles.tabBarIconStyle} />;*/}
+                                    {/*// return <MyProfileIconSelect style={styles.tabBarIconStyle} />;*/}
+                                {/*}*/}
+                                {/*return <GalleryIcon style={styles.tabBarIconStyle} />;*/}
+                            {/*},*/}
+                        {/*};*/}
+                {/*}}*/}
+            {/*/>*/}
 
             <Tab.Screen
                 name="Product"
@@ -334,7 +334,7 @@ function CustomDrawerContent(props) {
                     <BackIcon width={25} height={25} />
                 </TouchableOpacity>
                 <Text style={{marginLeft: 30, fontSize:(Def.email == null || Def.email == '') ? Style.TITLE_SIZE : Style.NORMAL_SIZE, color: '#fff'}}>
-                    {Def.email == null || Def.email == '' ? 'Cài đặt' : Def.email}
+                    {Def.email == null || Def.email == '' ? 'Cài đặt' : 'Cài đặt'}
                 </Text>
                 <View />
             </View>
@@ -422,9 +422,9 @@ function CustomDrawerContent(props) {
                     paddingLeft: 10,
                     zIndex: 10,
                 }}>
-                <Text style={styles.infoText}>Hotline: 0902798538</Text>
-                <Text style={styles.infoText}>Email: admin-eurtile@gmail.com</Text>
-                <Text style={styles.infoText}>Website: http://eurotiledev.house3d.net</Text>
+                <Text style={styles.infoText}>Hotline: +84 24 3936 9284</Text>
+                <Text style={styles.infoText}>Email: hellolifestylevietnam@gmail.com</Text>
+                <Text style={styles.infoText}>Website: https://lifestylevietnamonline.com</Text>
                 <Text style={styles.infoText}>Phiên bản 1.0</Text>
             </View>
         </View>
@@ -487,7 +487,7 @@ function AppDrawer() {
              drawerContent={(props) => <CustomDrawerContent {...props} />}
         >
             <Drawer.Screen
-                name="Center"
+                name="Life Style"
                 component={AppStack}
                 options={{
                     drawerIcon: ({focused: boolean, color: string, size: number}) => {
@@ -495,6 +495,16 @@ function AppDrawer() {
                     },
                 }}
             />
+            <Drawer.Screen
+                name="Điều khoản sử dụng"
+                component={TermScreen}
+                options={{
+                    drawerIcon: ({focused: boolean, color: string, size: number}) => {
+                        return <RuleIcon width={iconSize} height={iconSize} />;
+                    },
+                }}
+            />
+
             <Drawer.Screen
                 name="Hướng dẫn sử dụng"
                 component={GuideScreen}
@@ -506,15 +516,7 @@ function AppDrawer() {
             />
 
 
-            <Drawer.Screen
-                name="Điều khoản sử dụng"
-                component={TermScreen}
-                options={{
-                    drawerIcon: ({focused: boolean, color: string, size: number}) => {
-                        return <RuleIcon width={iconSize} height={iconSize} />;
-                    },
-                }}
-            />
+
 
             <Drawer.Screen
                 name="Chính sách bảo mật"
@@ -577,7 +579,7 @@ export default class App extends Component {
         AsyncStorage.getItem('access_token').then((value) => {
             if (value) {
                 Def.login_token = value;
-                NetNews.listNews(this.onNewSuccess, this.onNewFailed);
+                // NetNews.listNews(this.onNewSuccess, this.onNewFailed);
             }
         });
 
@@ -591,14 +593,6 @@ export default class App extends Component {
 
         this.onDesignCateSuccess = this.onDesignCateSuccess.bind(this);
         this.onDesignCateFalse = this.onDesignCateFalse.bind(this);
-
-
-
-
-        NetCollection.listCollection(this.onCollectionSuccess, this.onNewFailed);
-        NetNews.listNews(this.onNewSuccess, this.onNewFailed);
-
-
 
         // AsyncStorage.getItem('access_token').then((value) => {
         //     if (value) {
@@ -675,26 +669,17 @@ export default class App extends Component {
 
     componentDidMount() {
         SplashScreen.hide();
-        console.log('Get Product Info From Scratch');
-        NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
-        NetScheme.getAllDesign(this.onDesignSuccess, this.onDesignFalse);
-        NetScheme.getPopularDesign(this.onPopularDesignSuccess, this.onPopularDesignFalse);
-        NetScheme.getDesignCategory(this.onDesignCateSuccess, this.onDesignCateFalse);
-
-        OrderController.getOrder();
-
-
-        AsyncStorage.getItem('cart_data').then((value) => {
-            if(value){
-                Def.cart_data = JSON.parse(value);
-            }
-        });
-
-        AsyncStorage.getItem('order').then((value) => {
-            if(value){
-                Def.order = JSON.parse(value);
-            }
-        });
+        // AsyncStorage.getItem('cart_data').then((value) => {
+        //     if(value){
+        //         Def.cart_data = JSON.parse(value);
+        //     }
+        // });
+        //
+        // AsyncStorage.getItem('order').then((value) => {
+        //     if(value){
+        //         Def.order = JSON.parse(value);
+        //     }
+        // });
 
     }
 

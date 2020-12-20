@@ -127,17 +127,17 @@ export default class SignUp extends Component {
                     {/*</View>*/}
 
 
-                    <TextInput
-                        onFocus={() => this.setState({focus:1})}
-                        onBlur={()=> this.setState({focus:0})}
-                        style={this.state.focus == 1 ? textInputHover : textInputNormal}
-                        value={this.state.display_name}
-                        onChangeText={text => this.setState({display_name:text})}
-                        placeholder='Tên hiển thị'
-                        placeholderTextColor="#b3b3b3"
-                        autoCapitalize = 'none'
-                        // underlineColorAndroid = "transparent"
-                    />
+                    {/*<TextInput*/}
+                        {/*onFocus={() => this.setState({focus:1})}*/}
+                        {/*onBlur={()=> this.setState({focus:0})}*/}
+                        {/*style={this.state.focus == 1 ? textInputHover : textInputNormal}*/}
+                        {/*value={this.state.display_name}*/}
+                        {/*onChangeText={text => this.setState({display_name:text})}*/}
+                        {/*placeholder='Tên hiển thị'*/}
+                        {/*placeholderTextColor="#b3b3b3"*/}
+                        {/*autoCapitalize = 'none'*/}
+                        {/*// underlineColorAndroid = "transparent"*/}
+                    {/*/>*/}
                     <TextInput
                         onFocus={() => this.setState({focus:1})}
                         onBlur={()=> this.setState({focus:0})}
@@ -198,30 +198,30 @@ export default class SignUp extends Component {
                         {/*</Text>*/}
                     {/*</TouchableOpacity>*/}
 
-                    <TouchableOpacity style={{alignItems: 'center', marginTop : 20, paddingVertical: 5,marginRight : 20, flexDirection : 'row'}} onPress={()=> {
-                        navigation.navigate('signIn');
-                    }}>
-                        <Text style={{fontSize:Style.TITLE_SIZE, color:'#b3b3b3'}}>
-                            Tài khoản bạn đã sẵn sàng?
-                        </Text>
-                        <Text style={{fontSize:Style.MIDLE_SIZE, marginLeft:5 , color:Style.DEFAUT_RED_COLOR}}>
-                            Đăng nhập ngay
-                        </Text>
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity style={{alignItems: 'center', marginTop : 20, paddingVertical: 5,marginRight : 20, flexDirection : 'row'}} onPress={()=> {*/}
+                        {/*navigation.navigate('signIn');*/}
+                    {/*}}>*/}
+                        {/*<Text style={{fontSize:Style.TITLE_SIZE, color:'#b3b3b3'}}>*/}
+                            {/*Tài khoản bạn đã sẵn sàng?*/}
+                        {/*</Text>*/}
+                        {/*<Text style={{fontSize:Style.MIDLE_SIZE, marginLeft:5 , color:Style.DEFAUT_RED_COLOR}}>*/}
+                            {/*Đăng nhập ngay*/}
+                        {/*</Text>*/}
+                    {/*</TouchableOpacity>*/}
 
-                    <TouchableOpacity style={[button, {backgroundColor:'#1976d2'}]} onPress={()=> FirebaseController.facebookLogin(navigation)}>
-                        <FacebookIcon style={styles.icon}/>
-                        <Text style={styles.buttonText}>
-                            Đăng nhập với Facebook
-                        </Text>
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity style={[button, {backgroundColor:'#1976d2'}]} onPress={()=> FirebaseController.facebookLogin(navigation)}>*/}
+                        {/*<FacebookIcon style={styles.icon}/>*/}
+                        {/*<Text style={styles.buttonText}>*/}
+                            {/*Đăng nhập với Facebook*/}
+                        {/*</Text>*/}
+                    {/*</TouchableOpacity>*/}
 
-                    <TouchableOpacity style={[button, {backgroundColor:'#ffffff'}]} onPress={()=> FirebaseController.googleLogin(navigation)}>
-                        <GoogleIcon style={styles.icon}/>
-                        <Text style={[styles.buttonText, {color: '#b3b3b3'}]}>
-                            Đăng nhập với Google
-                        </Text>
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity style={[button, {backgroundColor:'#ffffff'}]} onPress={()=> FirebaseController.googleLogin(navigation)}>*/}
+                        {/*<GoogleIcon style={styles.icon}/>*/}
+                        {/*<Text style={[styles.buttonText, {color: '#b3b3b3'}]}>*/}
+                            {/*Đăng nhập với Google*/}
+                        {/*</Text>*/}
+                    {/*</TouchableOpacity>*/}
 
 
                 </View>

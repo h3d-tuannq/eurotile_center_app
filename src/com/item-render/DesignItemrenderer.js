@@ -73,6 +73,8 @@ const  styles = StyleSheet.create({
             marginRight: 5,
             alignItems : 'flex-start',
             marginTop: 5,
+            borderWidth : 1,
+            borderColor : Style.GREY_TEXT_COLOR,
 
     },
     imageStyle : {

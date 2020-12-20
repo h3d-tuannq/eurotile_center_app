@@ -24,6 +24,8 @@ target 'eurotile_center_app' do
 
   pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'eurotile_center_appTests' do
     inherit! :complete
     # Pods for testing

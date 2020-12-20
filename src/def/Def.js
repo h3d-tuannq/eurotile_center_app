@@ -3,7 +3,10 @@ import AsyncStorage from "@react-native-community/async-storage";
 export default class Def {
     static URL_BASE = "https://eurotiledev.house3d.net";
     static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
+
+    static VIETCRAFT_URL_CONTENT_BASE = "https://fairadmin.house3d.com/data/vietcraftData/";
     static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com/uploads/2019/07/02/5d1aa12048236.jpg";
+    static LIFE_STYLE_BASE = "https://fair.house3d.com";
 
     static PARTNER_ACTIVE_STATUS = 1;
 

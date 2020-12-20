@@ -10,7 +10,7 @@ export default class Style{
     static SMALL_SIZE = PixelRatio.get() < 2 ? 10:11;
     static BIG_SIZE = PixelRatio.get() < 2 ? 17 :19;
     static DEFAUT_RED_COLOR = '#AD2428';
-    static DEFAUT_BLUE_COLOR = '#305E74';
+    static DEFAUT_BLUE_COLOR = '#e51c8b';// '#305E74';
 
     static GREY_TEXT_COLOR = '#b3b3b3';
     static GREY_BACKGROUND_COLOR = "#e6e6e6";
@@ -68,7 +68,7 @@ export default class Style{
 
         cardImg: {
             width: width,
-            paddingVertical :5,
+            paddingVertical :0,
             height: width * 0.5,
             borderRadius : 5,
         },

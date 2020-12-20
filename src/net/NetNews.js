@@ -7,7 +7,7 @@ export default class NetNews{
 
     static listNews(callback,errCallback ) {
         console.log("List News");
-        Net.sendRequest(callback,errCallback,Def.URL_BASE + "/api/article/news" ,Def.POST_METHOD, {'slug': 'xu-huong-thiet-ke,tin-chuyen-mon,su-kien'});
+        Net.sendRequest(callback,errCallback,Def.LIFE_STYLE_BASE + "/api/article/news" ,Def.POST_METHOD, {'slug': 'xu-huong-thiet-ke,tin-chuyen-mon,su-kien'});
     }
 
 }
