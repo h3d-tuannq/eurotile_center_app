@@ -307,19 +307,19 @@ class MyScreen extends React.Component {
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
-                        onPress={this.gotoPartnerInfo}
-                    >
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                            <Icon name="id-card" size={25} color={Style.GREY_TEXT_COLOR} />
-                            </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                {Def.checkPartnerPermission() <0 ?'Đăng ký Partner' : 'Hồ sơ Partner'}
-                            </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}*/}
+                        {/*onPress={this.gotoPartnerInfo}*/}
+                    {/*>*/}
+                        {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
+                            {/*<View style={{width :30}}>*/}
+                            {/*<Icon name="id-card" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                            {/*</View>*/}
+                            {/*<Text style={[Style.text_styles.middleText, {marginLeft :10}]}>*/}
+                                {/*{Def.checkPartnerPermission() <0 ?'Đăng ký Partner' : 'Hồ sơ Partner'}*/}
+                            {/*</Text>*/}
+                        {/*</View>*/}
+                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                    {/*</TouchableOpacity>*/}
 
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
@@ -334,7 +334,6 @@ class MyScreen extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
-                                      onPress={this.gotoOrderList}
                     >
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <View style={{width :30}}>
