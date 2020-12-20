@@ -34,7 +34,7 @@ class MyStack extends React.Component {
             <RootStack.Navigator>
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="my-screen" component={MyScreen} options={{
-                     title: null,
+                     title: "Tài khoản",
                     headerLeft: () => (
                         <TouchableOpacity
                             style=  {
@@ -55,25 +55,25 @@ class MyStack extends React.Component {
 
                     ),
 
-                    headerRight: () => (
-                        <TouchableOpacity
-                            style=  {
-                                {
-                                    width: Style.DRAWER_MENU_SIZE,
-                                    height: Style.DRAWER_MENU_SIZE,
-                                    justifyContent: 'center',
-                                    paddingRight:15 ,
-                                    alignItems : 'center'
-                                }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
-                            <MenuIcon
-                                width={Style.DRAWER_MENU_ICON_SIZE}
-                                height={Style.DRAWER_MENU_ICON_SIZE}
-                            />
-                        </TouchableOpacity>
-
-                    ),
+                    // headerRight: () => (
+                    //     <TouchableOpacity
+                    //         style=  {
+                    //             {
+                    //                 width: Style.DRAWER_MENU_SIZE,
+                    //                 height: Style.DRAWER_MENU_SIZE,
+                    //                 justifyContent: 'center',
+                    //                 paddingRight:15 ,
+                    //                 alignItems : 'center'
+                    //             }
+                    //         }
+                    //         onPress={() => this.props.navigation.toggleDrawer()}>
+                    //         <MenuIcon
+                    //             width={Style.DRAWER_MENU_ICON_SIZE}
+                    //             height={Style.DRAWER_MENU_ICON_SIZE}
+                    //         />
+                    //     </TouchableOpacity>
+                    //
+                    // ),
 
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
@@ -81,7 +81,7 @@ class MyStack extends React.Component {
                     },
                     headerTintColor: '#fff',
                     headerTitleStyle: {
-                        alignSelf: 'center'
+                        // alignSelf: 'center'
                     },
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
