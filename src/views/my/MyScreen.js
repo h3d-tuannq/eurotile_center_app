@@ -106,10 +106,16 @@ class MyScreen extends React.Component {
     onGetUserInfoFun(value){
         if(value){
             Def.user_info = JSON.parse(value);
-            Def.username = Def.user_info['user_name'];
-            Def.email = Def.user_info['email'];
-            // this.setState({user:Def.user_info});
-            this.refresh();
+            if(Def.user_info.id){
+                Def.username = Def.user_info['user_name'];
+                Def.email = Def.user_info['email'];
+                // this.setState({user:Def.user_info});
+                this.refresh();
+
+            }else {
+                Def.user_info = null;
+            }
+
         }
     }
 
@@ -237,6 +243,7 @@ class MyScreen extends React.Component {
     render() {
         const {navigation} = this.props;
         const {user} = this.state;
+        console.log('User Info : ' + JSON.stringify(Def.user_info));
         return (
             (!user) ?
 

@@ -55,7 +55,7 @@ class ProgramVerList extends React.Component{
                         :
                         <CollectionItemrenderer
                             item ={item} click={this.itemClick} canPlayBack={this.props.canPlayBack}
-                            styleImage={{width: PROGRAM_IMAGE_WIDTH , height: PROGRAM_IMAGE_HEIGHT}}
+                            styleImage={{width: (PROGRAM_IMAGE_WIDTH -40) /2 , height: (PROGRAM_IMAGE_WIDTH -40) /2}}
                             type={this.props.type}
                         />
                     }
