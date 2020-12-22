@@ -329,7 +329,7 @@ export default class UserController{
         if(navigation){
             Def.mainNavigate = navigation;
         }
-        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/change-account-info' , Def.POST_METHOD , param);
+        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.LIFE_STYLE_BASE + '/api/user/change-account-info' , Def.POST_METHOD , param);
         // if(Def.setLoader)
         //     Def.setLoader(false);
 
