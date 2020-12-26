@@ -8,10 +8,12 @@ import LocationIcon from '../../../assets/icons/Location.svg';
 import CalendarIcon from '../../../assets/icons/calendar.svg';
 
 import ProductAutocomplete from "../../com/common/ProductAutocomplete";
+import PhoneInput from "react-native-phone-number-input";
 
 
 import OrderController from  '../../controller/OrderController'
 import Modal from 'react-native-modal';
+import AddIcon from '../../../assets/icons/Plus circle.svg'
 
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
@@ -22,6 +24,7 @@ const ITEM_HEIGHT = 30;
 import OrderitemItemrenderer from "../../com/item-render/OrderitemItemrenderer";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AsyncStorage from "@react-native-community/async-storage";
+import CustomerController from "../../controller/CustomerController";
 
 class BookingScreen extends React.Component {
     constructor(props){
@@ -51,6 +54,11 @@ class BookingScreen extends React.Component {
             paymentMethod:0,
             productData: Def.product_data,
             choseProduct: false,
+            value: "032657897",
+            isValid:0, // 0 chưa valid , 1 valid, 2 validted
+            formattedValue : null,
+            displayInfo : false,
+            customerInfo : null,
 
         };
 
@@ -59,7 +67,37 @@ class BookingScreen extends React.Component {
         Def.mainNavigate = this.props.navigation;
         this.refresh = this.refresh.bind(this);
         Def.updateAddress = this.refresh;
+
+        this.checkCustomer = this.checkCustomer.bind(this);
+        this.checkCustomerSuccess = this.checkCustomerSuccess.bind(this);
+        this.checkCustomerFalse = this.checkCustomerFalse.bind(this);
+
         this.closeFunction = this.closeFunction.bind(this);
+    }
+
+    checkCustomer(){
+        if (this.state.value && this.state.isValid){
+            CustomerController.checkCustomerByPhone(this.checkCustomerSuccess, this.checkCustomerFalse, this.state.value);
+        }
+
+    }
+
+    checkCustomerSuccess = (data) => {
+        console.log("Check Succes" + JSON.stringify(data));
+        if(data['err_code']){
+            alert(data['msg']);
+        } else {
+            this.setState({
+                customerInfo: data,
+                displayInfo:true,
+                isValid:2, // Đã validated
+            });
+
+        }
+    }
+
+    checkCustomerFalse = (data) => {
+        console.log("Check customer false : " + JSON.stringify(data));
     }
 
     refresh(order = null){
@@ -256,17 +294,21 @@ class BookingScreen extends React.Component {
                         Thông tin nhận hàng
                     </Text>
                 </View>
-                <View style={{marginLeft:0}}>
+                <View style={{marginLeft:0 , marginTop:5}}>
+                    {
+                        this.state.order.customer ?
+
+
                     <View style={{marginTop:10}}>
                         <Text style={[Style.text_styles.titleTextNotBold, {fontSize: Style.MIDLE_SIZE}]}>
-                            {this.state.order.customer.name}
+                            {this.state.order.customer ? this.state.order.customer.name : ""}
                         </Text>
                         <TouchableOpacity style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}
                             onPress={this.changeAddress}
                         >
                             <View style={styles.orderInfo}>
                                 <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR}]}>
-                                    {'(+84) '+ this.state.order.customer.phone}
+                                    {this.state.order.customer ? '(+84) '+ this.state.order.customer.phone : ""}
                                 </Text>
                                 <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR, marginTop:3}]}>
                                     {this.state.addressStr ? this.state.addressStr :Def.getAddressStr(address)}
@@ -279,6 +321,80 @@ class BookingScreen extends React.Component {
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </TouchableOpacity>
                     </View>
+                            :
+                    <View style={{justifyContent :'flex-start', alignItems: 'center'  , paddingHorizontal : 0, backgroundColor:'#fff'}}>
+                        <View style={{flexDirection:'row', alignItems:'center', paddingVertical:0}}>
+                            <View style={{flexDirection:'row', justifyContent:'space-between' ,  marginTop:0 , width: width -80, borderBottomWidth:1 , borderWidth:1,  height:45}}>
+                                <PhoneInput
+                                    containerStyle={{marginHorizontal : 0, marginTop : 0, paddingHorizontal:0 ,borderBottomWidth:0 , width: width -105   , height:42 , backgroundColor : '#fff' }}
+                                    textContainerStyle={{marginHorizontal : 0, marginTop : 0, paddingVertical:0 ,paddingHorizontal:0 , height:42 , backgroundColor : '#fff' }}
+                                    ref={(ref) => { this.phoneInput = ref; }}
+                                    defaultValue={this.state.value}
+                                    defaultCode="VN"
+                                    layout="first"
+                                    onChangeText={(text) => {
+                                        console.log("Change text: " + text);
+                                        if(text.length > 8 && this.phoneInput.isValidNumber(text)){
+                                            console.log("IsValid");
+                                            this.setState({value:text, isValid :true });
+                                        }else {
+                                        this.setState({value : text , isValid: false});
+                                    }
+
+                                    }}
+                                    onChangeFormattedText={(text) => {
+                                        this.setState({formattedValue : text});
+                                    }}
+                                    placeholder={"Nhập số điện thoại"}
+                                    value={this.state.value}
+                                    textInputProps={{
+                                        maxLength:10
+                                        }
+                                    }
+                                    flagButtonStyle={{width:50}}
+                                    disableArrowIcon={true}
+                                    // withDarkTheme
+                                    // withShadow
+                                    modalVisible={false}
+                                    countryPickerProps={{withAlphaFilter:true}}
+                                    // disabled={true}
+
+                                    // autoFocus
+                                    textInputStyle={{ alignItems:'center',height:42 , backgroundColor : '#fff' , width : width *0.7}}
+                                    // flagButtonStyle={{width : 60, height :35}}
+                                    // countryPickerButtonStyle={{width:0}}
+
+                                />
+                                <TouchableOpacity disabled={!this.state.isValid} onPress={this.checkCustomer} style={{justifyContent : 'center', alignItems: 'center', marginRight: 10}}>
+                                    <Icon style={styles.searchIcon} name="check" size={22} color={ this.state.isValid == 0 ? Style.GREY_TEXT_COLOR : this.state.isValid == 1? Style.DEFAUT_RED_COLOR : 'green'}/>
+                                </TouchableOpacity>
+                            </View>
+
+                            <TouchableOpacity disabled={!this.state.isValid} onPress={this.checkCustomer} style={{justifyContent : 'center', alignItems: 'center', height:45 ,width:42 , backgroundColor:'red'}}>
+                                <Icon style={styles.searchIcon} name="plus" size={22} color={'#fff'}/>
+                            </TouchableOpacity>
+                            {/*{this.renderInfo()}*/}
+                        </View>
+
+                        { this.state.displayInfo && this.state.customerInfo?
+                            <View style={styles.info}>
+                                <Text style={styles.titleInfo}>{'(+84) ' + this.state.customerInfo.phone}</Text>
+                                <View style={styles.groupInfo}>
+                                    <Text style={styles.addressText}>{ this.state.customerInfo.name }</Text>
+                                </View>
+                                {
+                                    this.state.customerInfo['address'] ?
+                                        <View style={styles.address}>
+                                            <Text style={styles.addressText}>{Def.getAddressStr(this.state.customerInfo['address'])}</Text>
+                                        </View>
+                                        : null
+                                }
+                            </View>
+                            : null
+                        }
+                    </View>
+
+                    }
                 </View>
             </View>
 
@@ -510,6 +626,34 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         // zIndex:10,
     },
+    info: {
+        // width: 200,
+        flex:1,
+        borderRadius: 5,
+        backgroundColor: "#f0f0f0",
+        padding: 10,
+        marginTop: 20,
+        width: width * 0.9
+    },
+    button: {
+        marginTop: 20,
+        padding: 10
+    },
+
+    titleInfo: {
+
+    },
+    groupInfo : {
+
+    },
+
+    addressText: {
+
+    },
+    address:{
+
+    },
+
 
 
 });

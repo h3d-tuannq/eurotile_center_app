@@ -52,6 +52,7 @@ class CartScreen extends React.Component {
     }
 
     booking(){
+        console.log("Booking Click");
         var order = {
             orderItems: Def.cart_data,
             customer: null,
@@ -70,7 +71,8 @@ class CartScreen extends React.Component {
             };
             this.props.navigation.navigate('Login', {screen:'signIn'});
         } else {
-            this.props.navigation.navigate('Booking', {screen:'select-customer', params:{customers : Def.customer, order: order}});
+            this.props.navigation.navigate('Booking', {screen: 'booking', params: {order:order}});
+            // this.props.navigation.navigate('Booking', {screen:'select-customer', params:{customers : Def.customer, order: order}});
         }
         AsyncStorage.setItem('order', JSON.stringify(order));
     }
