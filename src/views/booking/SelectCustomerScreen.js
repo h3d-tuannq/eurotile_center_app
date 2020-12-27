@@ -30,7 +30,7 @@ class SelectCustomerScreen extends React.Component {
             pickerData: null,
             valid: "",
             type: "",
-            value: "032657897",
+            value: "",
             isValid:false,
             formattedValue : null,
             displayInfo : false,
@@ -251,7 +251,7 @@ class SelectCustomerScreen extends React.Component {
                                 countryPickerProps={{withAlphaFilter:true}}
                                 // disabled={true}
 
-                                autoFocus
+                                // autoFocus
                                 textInputStyle={{ height:50 , backgroundColor : '#fff', width: width * 0.8}}
                                 // flagButtonStyle={{width : 60, height :35}}
                                 // countryPickerButtonStyle={{width:0}}

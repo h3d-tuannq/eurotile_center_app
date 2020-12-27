@@ -54,11 +54,12 @@ class BookingScreen extends React.Component {
             paymentMethod:0,
             productData: Def.product_data,
             choseProduct: false,
-            value: "032657897",
-            isValid:0, // 0 chưa valid , 1 valid, 2 validted
+            value: order.customer ? order.customer.phone : '032703',
+            isValid: order.customer && order.customer.phone ? 2 :0, // 0 chưa valid , 1 valid, 2 validted
             formattedValue : null,
             displayInfo : false,
             customerInfo : null,
+            text:''
 
         };
 
@@ -71,6 +72,10 @@ class BookingScreen extends React.Component {
         this.checkCustomer = this.checkCustomer.bind(this);
         this.checkCustomerSuccess = this.checkCustomerSuccess.bind(this);
         this.checkCustomerFalse = this.checkCustomerFalse.bind(this);
+
+        this.applySelectCustomer = this.applySelectCustomer.bind(this);
+        this.cancelSelectCustomer = this.cancelSelectCustomer.bind(this);
+
 
         this.closeFunction = this.closeFunction.bind(this);
     }
@@ -89,8 +94,7 @@ class BookingScreen extends React.Component {
         } else {
             this.setState({
                 customerInfo: data,
-                displayInfo:true,
-                isValid:2, // Đã validated
+                displayInfo:true
             });
 
         }
@@ -230,6 +234,18 @@ class BookingScreen extends React.Component {
         return true;
     }
 
+    applySelectCustomer(){
+        let order = this.state.order;
+        order.customer = this.state.customerInfo;
+        let address = order.customer.address;
+        this.setState({customerInfo:null, order:order, isValid:2, address:address});
+    }
+
+    cancelSelectCustomer(){
+        this.setState({address:address, displayInfo:false, isValid:1});
+    }
+
+
     // callback when item change
     orderItemChange = (item, isRemove = false) => {
         console.log("Item change: " + JSON.stringify(item.amount));
@@ -293,10 +309,18 @@ class BookingScreen extends React.Component {
                     <Text style={Style.text_styles.titleText}>
                         Thông tin nhận hàng
                     </Text>
+                    <TextInput
+                        style={{ width:130,height: 40, borderColor: 'gray', borderWidth: 1 }}
+                        onChangeText={text => this.setState({text:text})}
+                        value={this.state.text}
+                        autoFocus={false}
+                        autoCapitalize = "none"
+                        onFocus={() => {void(0)}}
+                    />
                 </View>
                 <View style={{marginLeft:0 , marginTop:5}}>
                     {
-                        this.state.order.customer ?
+                        this.state.order.customer && false ?
 
 
                     <View style={{marginTop:10}}>
@@ -322,33 +346,36 @@ class BookingScreen extends React.Component {
                         </TouchableOpacity>
                     </View>
                             :
-                    <View style={{justifyContent :'flex-start', alignItems: 'center'  , paddingHorizontal : 0, backgroundColor:'#fff'}}>
+                    <View style={{justifyContent :'flex-start', paddingHorizontal : 0, backgroundColor:'#fff'}}>
                         <View style={{flexDirection:'row', alignItems:'center', paddingVertical:0}}>
                             <View style={{flexDirection:'row', justifyContent:'space-between' ,  marginTop:0 , width: width -80, borderBottomWidth:1 , borderWidth:1,  height:45}}>
                                 <PhoneInput
-                                    containerStyle={{marginHorizontal : 0, marginTop : 0, paddingHorizontal:0 ,borderBottomWidth:0 , width: width -105   , height:42 , backgroundColor : '#fff' }}
-                                    textContainerStyle={{marginHorizontal : 0, marginTop : 0, paddingVertical:0 ,paddingHorizontal:0 , height:42 , backgroundColor : '#fff' }}
+                                    containerStyle={{marginHorizontal : 0, marginTop : 0, paddingHorizontal:0 ,borderBottomWidth:0 , width: width -125   , height:42 , backgroundColor : '#fff', paddingRight:10 }}
+                                    textContainerStyle={{marginHorizontal : 0, marginTop : 0, paddingVertical:0 ,paddingHorizontal:0 , height:42 , backgroundColor : '#fff' , paddingRight:10}}
                                     ref={(ref) => { this.phoneInput = ref; }}
                                     defaultValue={this.state.value}
                                     defaultCode="VN"
                                     layout="first"
                                     onChangeText={(text) => {
-                                        console.log("Change text: " + text);
-                                        if(text.length > 8 && this.phoneInput.isValidNumber(text)){
-                                            console.log("IsValid");
-                                            this.setState({value:text, isValid :true });
-                                        }else {
-                                        this.setState({value : text , isValid: false});
+                                            console.log("Change text: " + text);
+                                            if(text.length > 8 && this.phoneInput.isValidNumber(text)){
+                                                console.log("IsValid");
+                                                this.setState({value:text, isValid :1 });
+                                            }else {
+                                                this.setState({value : text , isValid: 0});
+                                            }
+                                        }
                                     }
+                                    // autoFocus
 
-                                    }}
                                     onChangeFormattedText={(text) => {
                                         this.setState({formattedValue : text});
                                     }}
                                     placeholder={"Nhập số điện thoại"}
                                     value={this.state.value}
                                     textInputProps={{
-                                        maxLength:10
+                                        maxLength:10,
+                                        autoFocus :false
                                         }
                                     }
                                     flagButtonStyle={{width:50}}
@@ -365,31 +392,121 @@ class BookingScreen extends React.Component {
                                     // countryPickerButtonStyle={{width:0}}
 
                                 />
-                                <TouchableOpacity disabled={!this.state.isValid} onPress={this.checkCustomer} style={{justifyContent : 'center', alignItems: 'center', marginRight: 10}}>
-                                    <Icon style={styles.searchIcon} name="check" size={22} color={ this.state.isValid == 0 ? Style.GREY_TEXT_COLOR : this.state.isValid == 1? Style.DEFAUT_RED_COLOR : 'green'}/>
+                                <TouchableOpacity disabled={!this.state.isValid} onPress={this.checkCustomer} style={{justifyContent : 'center', alignItems: 'center' , width : 45 }}>
+                                    <Icon style={styles.searchIcon} name={this.state.isValid == 2 ? "check" : "search"} size={22} color={ this.state.isValid == 0 ? Style.GREY_TEXT_COLOR : this.state.isValid == 1? Style.DEFAUT_RED_COLOR : 'green'}/>
                                 </TouchableOpacity>
                             </View>
 
                             <TouchableOpacity disabled={!this.state.isValid} onPress={this.checkCustomer} style={{justifyContent : 'center', alignItems: 'center', height:45 ,width:42 , backgroundColor:'red'}}>
                                 <Icon style={styles.searchIcon} name="plus" size={22} color={'#fff'}/>
                             </TouchableOpacity>
-                            {/*{this.renderInfo()}*/}
                         </View>
+                            {/*{this.renderInfo()}*/}
+                            {
+                                this.state.order.customer ?
+                                    <View style={{marginTop: 15}}>
+                                        <Text
+                                            style={[Style.text_styles.titleTextNotBold, {fontSize: Style.MIDLE_SIZE}]}>
+                                            {this.state.order.customer ? this.state.order.customer.name : ""}
+                                        </Text>
+                                        <TouchableOpacity style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center'
+                                        }}
+                                                          onPress={this.changeAddress}
+                                        >
+                                            <View style={styles.orderInfo}>
+                                                <Text
+                                                    style={[Style.text_styles.middleText, {color: Style.GREY_TEXT_COLOR}]}>
+                                                    {this.state.order.customer ? '(+84) ' + this.state.order.customer.phone : ""}
+                                                </Text>
+                                                <Text style={[Style.text_styles.middleText, {
+                                                    color: Style.GREY_TEXT_COLOR,
+                                                    marginTop: 3
+                                                }]}>
+                                                    {this.state.addressStr ? this.state.addressStr : Def.getAddressStr(address)}
+                                                </Text>
+
+                                                <Text style={[Style.text_styles.middleText, {
+                                                    color: Style.GREY_TEXT_COLOR,
+                                                    marginTop: 3
+                                                }]}>
+                                                    {address ? address.address_detail : ""}
+                                                </Text>
+                                            </View>
+                                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
+                                        </TouchableOpacity>
+                                    </View>
+                                    : null
+                            }
+
+
+
+
 
                         { this.state.displayInfo && this.state.customerInfo?
-                            <View style={styles.info}>
-                                <Text style={styles.titleInfo}>{'(+84) ' + this.state.customerInfo.phone}</Text>
-                                <View style={styles.groupInfo}>
-                                    <Text style={styles.addressText}>{ this.state.customerInfo.name }</Text>
-                                </View>
-                                {
-                                    this.state.customerInfo['address'] ?
-                                        <View style={styles.address}>
-                                            <Text style={styles.addressText}>{Def.getAddressStr(this.state.customerInfo['address'])}</Text>
+                            <Modal isVisible={this.state.displayInfo}>
+                                <View  style={styles.info} >
+                                    <View style={{ height: Style.PANEL_HEIGHT, backgroundColor: Style.DEFAUT_BLUE_COLOR , justifyContent:'center', padding:5}}>
+                                        <Text style={[Style.titleTextNotBold, {color:'#fff'}]}>
+                                            Thông tin khách hàng
+                                        </Text>
+                                    </View>
+                                    <View style={{padding:5, }}>
+                                        <Text style={styles.titleInfo}>{'(+84) ' + this.state.customerInfo.phone}</Text>
+                                        {/*<Text style={styles.titleInfo}>{ this.state.customerInfo.email ? this.state.customerInfo.email : 'Không có dữ liệu ' }</Text>*/}
+                                        <View style={styles.groupInfo}>
+                                            <Text style={styles.groupInfoLabel}>
+                                                {"Tên: "}
+                                            </Text>
+                                            <Text style={styles.addressText}>{ this.state.customerInfo.name }</Text>
                                         </View>
-                                        : null
-                                }
-                            </View>
+
+                                        <View style={styles.groupInfo}>
+                                            <Text style={styles.groupInfoLabel}>
+                                                {"Email: "}
+                                            </Text>
+                                            <Text style={styles.addressText}>{ this.state.customerInfo.description ?? "Chưa có thông tin" }</Text>
+                                        </View>
+
+                                        <View style={styles.groupInfo}>
+                                            <Text style={styles.groupInfoLabel}>
+                                                {"Mô tả: "}
+                                            </Text>
+                                            <Text style={styles.addressText}>{ this.state.customerInfo.description?? "Chưa có thông tin" }</Text>
+                                        </View>
+                                        {
+                                            this.state.customerInfo['address'] ?
+
+                                                <View style={styles.address}>
+                                                    {
+                                                        this.state.customerInfo['address']['city_code'] ?
+                                                            <Text style={styles.addressText}>{Def.getAddressStr(this.state.customerInfo['address'])}</Text> :
+                                                            null
+                                                    }
+
+                                                    <Text style={styles.addressText}>{this.state.customerInfo['address']['address_detail']}</Text>
+                                                </View>
+                                                : null
+                                        }
+                                    </View>
+                                    <View style={{flexDirection : 'row', padding:5 }}>
+                                        <TouchableOpacity onPress={this.applySelectCustomer} style={[styles.button, {borderRadius: 5 , backgroundColor:Style.DEFAUT_RED_COLOR, minWidth:80 , alignItems:'center', height:40}]}>
+                                            <Text style={styles.buttonText}>
+                                                Chọn
+                                            </Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={this.cancelSelectCustomer} style={[styles.button, { borderRadius: 5 ,backgroundColor:Style.DEFAUT_RED_COLOR, minWidth:80 , alignItems:'center', height:40}]}>
+                                            <Text style={styles.buttonText}>
+                                                Hủy
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+
+                            </Modal>
+
                             : null
                         }
                     </View>
@@ -480,11 +597,12 @@ class BookingScreen extends React.Component {
 
         return (
             <View style={{flex:1, backgroundColor:'#ffffff'}}>
-                { this.state.order ?
-                <View keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: '#fff', paddingLeft : 10, paddingRight: 5, paddingTop:10}}>
-                    <View>
+                { this.state.order && true ?
+                <View  keyboardShouldPersistTaps="always" style={{flex:1, backgroundColor: '#fff', paddingLeft : 10, paddingRight: 5, paddingTop:10}}>
                         <FlatList
+                            keyboardDismissMode={'none'}
                         data={this.state.orderItems}
+                        removeClippedSubviews={false}
                         renderItem={renderOrderItem}
                         keyExtractor={item => item.product.id +"-" + item.amount}
                         showsHorizontalScrollIndicator={false}
@@ -492,8 +610,9 @@ class BookingScreen extends React.Component {
                         // ListFooterComponent={footerComponent}
                         />
 
-                    </View>
-                </View>:<View/>}
+                </View>:<View>
+                    {bookingHeader()}
+                    </View>}
                 <Modal  onBackButtonPress={this.closeFunction} isVisible={this.state.choseProduct}    style={styles.modalView}>
                     <KeyboardAvoidingView enabled  behavior={Platform.OS === "android" ? undefined : "position"}>
                         <View  style={{flex:1}} scrollEnabled={false} keyboardShouldPersistTaps="handled">
@@ -628,22 +747,40 @@ const styles = StyleSheet.create({
     },
     info: {
         // width: 200,
-        flex:1,
+        // flex:1,
         borderRadius: 5,
         backgroundColor: "#f0f0f0",
-        padding: 10,
+        // padding: 10,
         marginTop: 20,
+        height : 250,
         width: width * 0.9
     },
-    button: {
-        marginTop: 20,
-        padding: 10
-    },
-
+    modalInfo:{
+        margin : 0,
+        borderRadius: 20,
+        height:height /3,
+        backgroundColor: "#f0f0f0",
+        // width : width * 0.6,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 1,
+        shadowRadius: 3.84,
+    }
+    ,
     titleInfo: {
 
     },
     groupInfo : {
+        flexDirection : 'row',
+        marginTop :2,
+
+    },
+    groupInfoLabel : {
+      minWidth : 60,
 
     },
 
@@ -651,6 +788,7 @@ const styles = StyleSheet.create({
 
     },
     address:{
+        marginTop:3
 
     },
 

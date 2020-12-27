@@ -12,6 +12,8 @@ export default class Style{
     static DEFAUT_RED_COLOR = '#AD2428';
     static DEFAUT_BLUE_COLOR = '#305E74';
 
+    static PANEL_HEIGHT = PixelRatio.get() < 2? 35 :37;
+
     static GREY_TEXT_COLOR = '#b3b3b3';
     static GREY_BACKGROUND_COLOR = "#e6e6e6";
 
