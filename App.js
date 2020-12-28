@@ -50,6 +50,7 @@ const RootStack = createStackNavigator();
 import NetNews from './src/net/NetNews'
 import NetCollection from './src/net/NetCollection'
 import NetScheme from './src/net/NetScheme'
+import Modal from 'react-native-modal';
 
 const styles = StyleSheet.create({
     baseText: {
@@ -71,6 +72,27 @@ const styles = StyleSheet.create({
         color: '#b3b3b3',
         marginVertical: PixelRatio.get() < 2 ? 6 :10,
     },
+
+    modalView: {
+        position: 'absolute',
+        bottom :Style.HEADER_HEIGHT,
+        margin : 0,
+        borderRadius: 10,
+        // borderWidth : 1,
+        zIndex:20,
+        alignItems: "center",
+        minHeight:45,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 15,
+            height: 3,
+        },
+        shadowOpacity: 0.43,
+        shadowRadius: 9.51,
+
+        elevation: 2,
+    },
+
 });
 
 
@@ -333,7 +355,7 @@ function CustomDrawerContent(props) {
                     }}>
                     <BackIcon width={25} height={25} />
                 </TouchableOpacity>
-                <Text style={{marginLeft: 30, fontSize:(Def.email == null || Def.email == '') ? Style.TITLE_SIZE : Style.NORMAL_SIZE, color: '#fff'}}>
+                <Text style={{marginLeft: 30, fontSize: Style.TITLE_SIZE , color: '#fff'}}>
                     {Def.email == null || Def.email == '' ? 'Cài đặt' : Def.email}
                 </Text>
                 <View />
@@ -545,32 +567,13 @@ messaging().getToken().then((token) => {
 
 
 
-messaging().onMessage(async (remoteMessage) => {
-    //
-    //alert(JSON.stringify(remoteMessage));
-    Alert.alert(
-        remoteMessage.notification.title,
-        remoteMessage.notification.body,
-        [
-            {
-                text: 'Bỏ qua',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-            },
-            {
-                text: 'Đồng ý',
-                onPress: () => {
-                    goLink(remoteMessage.data.url);
-                },
-            },
-        ],
-        {cancelable: false},
-    );
-});
+
 
 
 export default class App extends Component {
     state = {
+        showNoti:false,
+        noti:"Thông báo từ hệ thống Eurotile-Center",
     };
     constructor(props) {
         super(props);
@@ -591,6 +594,8 @@ export default class App extends Component {
 
         this.onDesignCateSuccess = this.onDesignCateSuccess.bind(this);
         this.onDesignCateFalse = this.onDesignCateFalse.bind(this);
+        this.setDisplayNoti = this.setDisplayNoti.bind(this);
+        this.setHideNoti = this.setHideNoti.bind(this);
 
 
 
@@ -673,6 +678,8 @@ export default class App extends Component {
         console.log('onNewFailed d: ' + JSON.stringify(data));
     }
 
+
+
     componentDidMount() {
         SplashScreen.hide();
         console.log('Get Product Info From Scratch');
@@ -696,7 +703,41 @@ export default class App extends Component {
             }
         });
 
+        messaging().onMessage(async (remoteMessage) => {
+            this.setState({noti:remoteMessage && remoteMessage.notification ? remoteMessage.notification.body :"", showNoti:true});
+            console.log("Remote Message : " + JSON.stringify(remoteMessage));
+
+            //
+            //alert(JSON.stringify(remoteMessage));
+            // Alert.alert(
+            //     remoteMessage.notification.title,
+            //     remoteMessage.notification.body,
+            //     [
+            //         {
+            //             text: 'Bỏ qua',
+            //             onPress: () => console.log('Cancel Pressed'),
+            //             style: 'cancel',
+            //         },
+            //         {
+            //             text: 'Đồng ý',
+            //             onPress: () => {
+            //                 goLink(remoteMessage.data.url);
+            //             },
+            //         },
+            //     ],
+            //     {cancelable: false},
+            // );
+        });
+
     }
+
+    setDisplayNoti = () => {
+      this.setState({showNoti:true});
+    };
+
+    setHideNoti = () => {
+        this.setState({showNoti:false});
+    };
 
 
     render() {
@@ -704,6 +745,32 @@ export default class App extends Component {
             <NavigationContainer>
                 <StatusBar backgroundColor={Style.DEFAUT_BLUE_COLOR} />
                 <AppDrawer />
+                <View>
+                    <Modal isVisible={this.state.showNoti}  coverScreen={true} hasBackdrop={true}
+                           backdropOpacity={0}
+                           onBackdropPress={this.setHideNoti}
+                           // deviceWidth={width}
+                           // deviceHeight={500}
+                    >
+                        <TouchableOpacity style={[styles.modalView,{backgroundColor:'#fff', width:0.9 * width}]}>
+                            {/*<View style={{flexDirection:'row', justifyContent:'space-between'}} >*/}
+                                {/*<View/>*/}
+                                <TouchableOpacity style={{width:30,height:30, padding:2, position:'absolute', zIndex:25, right:-10 , top: -10 }}
+                                    onPress={this.setHideNoti}
+                                    >
+                                    <Icon name="times" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                </TouchableOpacity>
+
+                            {/*</View>*/}
+                            <View style={{marginLeft: 5,marginRight:10, marginTop:10}}>
+                                <Text style={[Style.text_styles.titleTextNotBold, {}]}>
+                                    {this.state.noti}
+                                </Text>
+                            </View>
+
+                        </TouchableOpacity>
+                    </Modal>
+                </View>
             </NavigationContainer>
         );
 
