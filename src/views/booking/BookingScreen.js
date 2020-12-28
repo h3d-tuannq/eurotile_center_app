@@ -406,7 +406,7 @@ class BookingScreen extends React.Component {
                                         }}
                                         defaultValue={this.state.value}
                                         defaultCode="VN"
-                                        disabled={true}
+                                        // disabled={true}
                                         layout="first"
                                         onChangeText={(text) => {
                                             console.log("Change text: " + text);
@@ -428,7 +428,6 @@ class BookingScreen extends React.Component {
                                         textInputProps={{
                                             maxLength: 10,
                                             autoFocus: false,
-                                            disabled: true
                                         }
                                         }
                                         flagButtonStyle={{width: 50}}

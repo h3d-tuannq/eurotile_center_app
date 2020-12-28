@@ -119,13 +119,13 @@ class OrderItemrenderer extends PureComponent{
 
                             <View style={styles.groupInfo}>
                                 <Text style={styles.infoText}>{"Khách hàng"  }</Text>
-                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['customer']['name']  }</Text>
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['customer'] ? model['customer']['name'] : ""  }</Text>
                                 {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
                             </View>
 
                             <View style={styles.groupInfo}>
                                 <Text style={styles.infoText}>{"Điện thoại"  }</Text>
-                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['customer']['phone']  }</Text>
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['customer'] ? model['customer']['phone'] : ""  }</Text>
                                 {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
                             </View>
                             <View style={styles.groupInfo}>

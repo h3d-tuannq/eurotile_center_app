@@ -96,30 +96,48 @@ class OrderDetailScreen extends React.Component {
                             Thông tin nhận hàng
                         </Text>
                     </View>
-                    <View style={{marginLeft:0}}>
-                        <View style={{marginTop:10}}>
-                            <Text style={[Style.text_styles.titleTextNotBold, {fontSize: Style.MIDLE_SIZE}]}>
-                                {this.state.order.customer.name}
-                            </Text>
-                            <TouchableOpacity style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}
-                                              onPress={this.changeAddress}
-                            >
-                                <View style={styles.orderInfo}>
-                                    <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR}]}>
-                                        {'(+84) '+ this.state.order.customer.phone}
-                                    </Text>
-                                    <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR, marginTop:3}]}>
-                                        {Def.getAddressStr(this.state.order.address)}
-                                    </Text>
+                    {   this.state.order.customer ?
+                        <View style={{marginLeft: 0}}>
+                            <View style={{marginTop: 10}}>
+                                <Text style={[Style.text_styles.titleTextNotBold, {fontSize: Style.MIDLE_SIZE}]}>
+                                    {this.state.order.customer.name}
+                                </Text>
+                                <TouchableOpacity style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center'
+                                }}
+                                                  onPress={this.changeAddress}
+                                >
+                                    <View style={styles.orderInfo}>
+                                        <Text style={[Style.text_styles.middleText, {color: Style.GREY_TEXT_COLOR}]}>
+                                            {'(+84) ' + this.state.order.customer.phone}
+                                        </Text>
+                                        <Text style={[Style.text_styles.middleText, {
+                                            color: Style.GREY_TEXT_COLOR,
+                                            marginTop: 3
+                                        }]}>
+                                            {Def.getAddressStr(this.state.order.address)}
+                                        </Text>
 
-                                    <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR, marginTop:3}]}>
-                                        {this.state.order.address ? this.state.order.address.address_detail : "Vui lòng cập nhật địa chỉ giao hàng"}
-                                    </Text>
-                                </View>
-                                {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                            </TouchableOpacity>
+                                        <Text style={[Style.text_styles.middleText, {
+                                            color: Style.GREY_TEXT_COLOR,
+                                            marginTop: 3
+                                        }]}>
+                                            {this.state.order.address ? this.state.order.address.address_detail : "Vui lòng cập nhật địa chỉ giao hàng"}
+                                        </Text>
+                                    </View>
+                                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                                </TouchableOpacity>
+                            </View>
+                        </View>:
+                        <View style={{}}>
+                            <Text style={[Style.text_styles.titleTextNotBold, {color: Style.DEFAUT_RED_COLOR}]}>
+                                Chưa có thông tin nhận hàng
+                            </Text>
+
                         </View>
-                    </View>
+                    }
                 </View>
 
                 <TouchableOpacity style={{
