@@ -45,8 +45,8 @@ class MyStack extends React.Component {
                                     paddingLeft:15 ,
                                     alignItems : 'center'
                                 }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            }>
+
                             <EurotileLogo
                                 width={Style.LOGO_WIDTH}
                                 height={Style.LOGO_HEIGHT}
@@ -55,25 +55,25 @@ class MyStack extends React.Component {
 
                     ),
 
-                    headerRight: () => (
-                        <TouchableOpacity
-                            style=  {
-                                {
-                                    width: Style.DRAWER_MENU_SIZE,
-                                    height: Style.DRAWER_MENU_SIZE,
-                                    justifyContent: 'center',
-                                    paddingRight:15 ,
-                                    alignItems : 'center'
-                                }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
-                            <MenuIcon
-                                width={Style.DRAWER_MENU_ICON_SIZE}
-                                height={Style.DRAWER_MENU_ICON_SIZE}
-                            />
-                        </TouchableOpacity>
-
-                    ),
+                    // headerRight: () => (
+                    //     <TouchableOpacity
+                    //         style=  {
+                    //             {
+                    //                 width: Style.DRAWER_MENU_SIZE,
+                    //                 height: Style.DRAWER_MENU_SIZE,
+                    //                 justifyContent: 'center',
+                    //                 paddingRight:15 ,
+                    //                 alignItems : 'center'
+                    //             }
+                    //         }
+                    //         onPress={() => this.props.navigation.toggleDrawer()}>
+                    //         <MenuIcon
+                    //             width={Style.DRAWER_MENU_ICON_SIZE}
+                    //             height={Style.DRAWER_MENU_ICON_SIZE}
+                    //         />
+                    //     </TouchableOpacity>
+                    //
+                    // ),
 
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,

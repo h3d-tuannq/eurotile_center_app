@@ -5,6 +5,9 @@ const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import IconArrow from '../../../assets/icon/icon_arrow.svg'
+import PolicyIcon from '../../../assets/icon/icon-policy.svg';
+import GuideIcon from '../../../assets/icon/icon-how-to-use.svg'
+import RuleIcon from '../../../assets/icon/icon-rule.svg';
 
 import ProgramHozList from '../../../src/com/common/ProgramHozList';
 
@@ -12,6 +15,8 @@ import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
 import AsyncStorage from "@react-native-community/async-storage";
+
+import  UserController from '../../../src/controller/UserController'
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -25,6 +30,8 @@ const carouselItems = [
         image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/30/2/main_img.jpg',
     }
 ];
+
+
 
 class MyScreen extends React.Component {
     constructor(props){
@@ -55,6 +62,8 @@ class MyScreen extends React.Component {
         this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
         this.signInBtnClick = this.signInBtnClick.bind(this);
         this.gotoOrderList = this.gotoOrderList.bind(this);
+        this.gotoOrderGuide = this.gotoOrderGuide.bind(this);
+        this.gotoOrderTerm = this.gotoOrderTerm.bind(this);
         this.refresh = this.refresh.bind(this);
         Def.refreshDashBoard = this.refresh;
 
@@ -100,6 +109,14 @@ class MyScreen extends React.Component {
 
     gotoOrderList() {
         this.props.navigation.navigate('Booking', {'screen':'order-list'});
+    }
+
+    gotoOrderTerm() {
+        this.props.navigation.navigate('Login', {'screen':'term-screen'});
+    }
+
+    gotoOrderGuide() {
+        this.props.navigation.navigate('Login', {'screen':'guide-screen'});
     }
 
 
@@ -342,6 +359,48 @@ class MyScreen extends React.Component {
                             </View>
                             <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
                                 Danh sách đơn hàng
+                            </Text>
+                        </View>
+                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
+                                      onPress={this.gotoOrderGuide}>
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <View style={{width :30}}>
+                                <GuideIcon width={25} height={25} color={Style.GREY_TEXT_COLOR} />
+                            </View>
+                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                                Hướng dẫn sử dụng
+                            </Text>
+                        </View>
+                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
+                                      onPress={this.gotoOrderTerm}
+                    >
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <View style={{width :30}}>
+                                <RuleIcon width={25} height={25} color={Style.GREY_TEXT_COLOR} />
+                            </View>
+                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                                Điều khoản
+                            </Text>
+                        </View>
+                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                    </TouchableOpacity>
+
+
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
+                                      onPress={ ()=>{UserController.logoutLocal()}}
+                    >
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <View style={{width :30}}>
+                                <Icon name="sign-out-alt" size={25} color={Style.GREY_TEXT_COLOR} />
+                            </View>
+                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                               Đăng xuất
                             </Text>
                         </View>
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />

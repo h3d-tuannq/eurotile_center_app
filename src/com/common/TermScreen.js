@@ -10,21 +10,21 @@ class TermScreen extends React.Component{
     render() {
         return (
             <View style={{flex:1}}>
-                <View style={styles.header}>
-                    <TouchableOpacity style={{justifyContent:'center',  paddingLeft: 10, width:50}}
-                                      onPress={() => {
-                                          this.props.navigation.goBack();
-                                      }}
-                    >
-                        <DownIconSvg width={25} height={25} />
-                    </TouchableOpacity>
-                    <View style={{alignItems:'center', justifyContent: 'center', marginLeft: 30}}>
-                        <Text style={styles.title}>
-                            {'Điều khoản sử dụng' }
-                        </Text>
-                    </View>
+                {/*<View style={styles.header}>*/}
+                    {/*<TouchableOpacity style={{justifyContent:'center',  paddingLeft: 10, width:50}}*/}
+                                      {/*onPress={() => {*/}
+                                          {/*this.props.navigation.goBack();*/}
+                                      {/*}}*/}
+                    {/*>*/}
+                        {/*<DownIconSvg width={25} height={25} />*/}
+                    {/*</TouchableOpacity>*/}
+                    {/*<View style={{alignItems:'center', justifyContent: 'center', marginLeft: 30}}>*/}
+                        {/*<Text style={styles.title}>*/}
+                            {/*{'Điều khoản sử dụng' }*/}
+                        {/*</Text>*/}
+                    {/*</View>*/}
 
-                </View>
+                {/*</View>*/}
 
             </View>
         )
