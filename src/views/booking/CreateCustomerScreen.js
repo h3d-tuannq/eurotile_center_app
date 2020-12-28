@@ -38,21 +38,27 @@ class CreateCustomerScreen extends React.Component {
         this.parseDataToView = this.parseDataToView.bind(this);
         this.setDate = this.setDate.bind(this);
         this.showAddressModal = this.showAddressModal.bind(this);
+        let user = this.props.route.params.user;
+        let address = user && user.userProfile ? user.userProfile.address : null;
+        console.log("Address : " + JSON.stringify(address));
 
         this.state = {
+
+            user:user,
+            userAddress: address,
             focus : 0,
             isUpdate: 0,
             stateCount: 0.0,
-            name : "",
-            gender : 0,
-            mobile:'',
-            address : '',
+            name : user && user.userProfile ? user.userProfile.display_name : "",
+            gender : user && user.userProfile ? user.userProfile.gender : 0,
+            mobile: user && user.userProfile ? user.userProfile.phone : "" ,
+            address : address ? address.address_detail : '',
             cities : [],
             district : [],
             ward:[],
-            city_item: null,
-            district_item: null,
-            ward_item: null,
+            city_item: address ? address.city: null,
+            district_item: address ? address.district : null,
+            ward_item: address ? address.ward : null,
             query : '',
             choseAddress : false,
             currentAddress : 1, // 1 select city, 2 select district, 3 select ward
@@ -236,7 +242,7 @@ class CreateCustomerScreen extends React.Component {
         // let address = Def.getAddressFromUserInfo();
         if (this.state.address || this.state.city_item){
             let submitAddress = {};
-            submitAddress.id = "";
+            submitAddress.id = this.state.userAddress ? this.state.userAddress.id :"";
             submitAddress.address_detail = this.state.address;
             submitAddress.city_code = this.state.city_item ? this.state.city_item.city_code : "";
             submitAddress.district_code = this.state.district_item ? this.state.district_item.district_code : "";
@@ -261,6 +267,7 @@ class CreateCustomerScreen extends React.Component {
         }
         let customerInfo = {
             id: "",
+            user_id: this.state.user ? this.state.user.id : "",
             create_by : Def.user_info ? Def.user_info['id'] : 14,
             name: this.state.name,
             mobile: this.state.mobile,

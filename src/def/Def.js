@@ -245,7 +245,7 @@ export default class Def {
         // return total;
         if (order.orderItems && Array.isArray(order.orderItems)) {
             order.orderItems.forEach(item =>  {
-                total += item.product.sale_price * item.amount *  item.product.brickBoxInfo['total_area'] / 1000000;
+                total += Def.getPriceByRole(item.product , Def.getUserRole()) * item.amount *  item.product.brickBoxInfo['total_area'] / 1000000;
             });
         }
         return total;
@@ -287,6 +287,12 @@ export default class Def {
         return -3;
     }
 
+    static getUserRole(){
+        return Def.checkPartnerPermission() > 0 ? 'partner' : 'user';
+    }
+
+
+
     static formatArea(value) {
         return Math.floor(value);
 
@@ -309,6 +315,20 @@ export default class Def {
 
     static formatOrderNumber(order_number){
         return order_number < 100 ? order_number : '99+';
+    }
+
+    static getPriceByRole(product, role = 'user'){
+        switch (role){
+            case 'partner':
+                return product.store_price > 0 ? product.store_price : product.sale_price;
+                break;
+            case 'user':
+                return product.sale_price;
+                break;
+            default:
+                return product.sale_price
+        }
+
     }
 
 }

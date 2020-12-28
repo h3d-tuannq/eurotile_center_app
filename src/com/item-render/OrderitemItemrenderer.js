@@ -135,7 +135,7 @@ class OrderitemItemrenderer extends PureComponent{
 
                             <View style={styles.groupInfo}>
                                 {/*<Text style={styles.infoText}>{model['brickBoxInfo']['width'] + "x"+ model['brickBoxInfo']['height'] + "  -  " +model['brickBoxInfo']['brick_number'] + " viên/hộp" }</Text>*/}
-                                <Text style={styles.priceText}>{Def.numberWithCommas(model['sale_price']) + " đ" }</Text>
+                                <Text style={styles.priceText}>{Def.numberWithCommas(Def.getPriceByRole(model, Def.getUserRole())) + " đ" }</Text>
                             </View>
                         </View>
 

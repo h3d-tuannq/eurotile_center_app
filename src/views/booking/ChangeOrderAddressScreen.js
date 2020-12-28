@@ -29,7 +29,11 @@ class ChangeOrderAddressScreen extends React.Component {
         this.choseWardClick = this.choseWardClick.bind(this);
         this.showAutocompleteModal = this.showAutocompleteModal.bind(this);
         this.showAddressModal = this.showAddressModal.bind(this);
-        let order = this.props.params && this.props.params.order ? this.props.params.order : Def.currentOrder;
+        let order = this.props.route.params && this.props.route.params.order ? this.props.route.params.order : Def.currentOrder;
+
+        console.log('Order Data : ' + JSON.stringify(order.address));
+
+
         this.state = {
             focus : 0,
             isUpdate: 0,
@@ -250,6 +254,8 @@ class ChangeOrderAddressScreen extends React.Component {
     render() {
         const {navigation} = this.props;
 
+        console.log("City Item : " + JSON.stringify(this.state.city_item));
+
         return (
             <View style={{flex:1, backgroundColor:'#ffffff'}}>
                 <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:5}}
@@ -306,7 +312,7 @@ class ChangeOrderAddressScreen extends React.Component {
                             onFocus={() => this.setState({focus:1, showKeyboard: true})}
                             onBlur={()=> this.setState({focus:0, showKeyboard: false})}
                             style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
-                            value={this.state.address.toString()}
+                            value={this.state.address ? this.state.address.toString() : ""}
                             onChangeText={text => {
                                 this.setState({address:text})
                             }}

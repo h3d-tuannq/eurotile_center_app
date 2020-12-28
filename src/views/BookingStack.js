@@ -168,7 +168,7 @@ class BookingStack extends React.Component {
 
                 <RootStack.Screen name="create-customer" component={CreateCustomerScreen} options=
                     {({route}) => ({
-                            title: 'Khách hàng mới',
+                            title: 'Tạo thông tin Khách hàng',
                             headerStyle: {
                                 backgroundColor: Style.DEFAUT_BLUE_COLOR,
                                 height: Style.HEADER_HEIGHT,

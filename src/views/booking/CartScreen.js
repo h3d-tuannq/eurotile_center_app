@@ -62,8 +62,21 @@ class CartScreen extends React.Component {
             deliverDate: "",
             referralCode:'',
         };
-        // Def.order = order;
 
+        if(!Def.user_info.customer){ // Trong trường hợp không
+            console.log('Go to create Customer .');
+            Def.currentOrder = order;
+            this.props.navigation.navigate('Booking', {screen:'create-customer', params:{refresh:1 , user:Def.user_info}});
+            return;
+        } else {
+            console.log("CustomerInfo" + JSON.stringify(Def.user_info.customer));
+            order.customer = Def.user_info.customer;
+            order.address = order.customer.address;
+            Def.currentOrder = order;
+            console.log("Address In Orderr" + order.address);
+        }
+
+        // Def.order = order;
         if(!Def.user_info){
             Def.redirectScreen = {
               stack:'Booking',

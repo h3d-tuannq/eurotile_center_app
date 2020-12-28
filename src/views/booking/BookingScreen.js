@@ -36,8 +36,15 @@ class BookingScreen extends React.Component {
         this.changeAddress = this.changeAddress.bind(this);
         let order = this.props.route.params && this.props.route.params.order ? this.props.route.params.order : Def.currentOrder;
 
-        // console.log('Orders : ' + JSON.stringify(order));
+
+        console.log('Orders : ' + JSON.stringify(order.address));
         let address = this.props.route.params && this.props.route.params.address ? this.props.route.params.address : order? order.address : null;
+        if(!address && order){
+            address = order ? order.address : '';
+        }
+
+        console.log('Address : ' + JSON.stringify(address));
+
         this.itemClick = this.itemClick.bind(this);
         this.state = {
             focus : 0,
@@ -54,7 +61,7 @@ class BookingScreen extends React.Component {
             paymentMethod:0,
             productData: Def.product_data,
             choseProduct: false,
-            value: order.customer ? order.customer.phone : '032703',
+            value: order.customer ? order.customer.phone : '',
             isValid: order.customer && order.customer.phone ? 2 :0, // 0 chưa valid , 1 valid, 2 validted
             formattedValue : null,
             displayInfo : false,
@@ -75,6 +82,7 @@ class BookingScreen extends React.Component {
 
         this.applySelectCustomer = this.applySelectCustomer.bind(this);
         this.cancelSelectCustomer = this.cancelSelectCustomer.bind(this);
+        this.goToCreateCustomer = this.goToCreateCustomer.bind(this);
 
 
         this.closeFunction = this.closeFunction.bind(this);
@@ -85,6 +93,11 @@ class BookingScreen extends React.Component {
             CustomerController.checkCustomerByPhone(this.checkCustomerSuccess, this.checkCustomerFalse, this.state.value);
         }
 
+    }
+
+    goToCreateCustomer() {
+        console.log('Create customer');
+        this.props.navigation.navigate('Booking', {screen:'create-customer', params:{refresh:1}});
     }
 
     checkCustomerSuccess = (data) => {
@@ -238,6 +251,8 @@ class BookingScreen extends React.Component {
         let order = this.state.order;
         order.customer = this.state.customerInfo;
         let address = order.customer.address;
+        order.address = this.state.customerInfo.address;
+        Def.currentOrder = order;
         this.setState({customerInfo:null, order:order, isValid:2, address:address});
     }
 
@@ -309,14 +324,21 @@ class BookingScreen extends React.Component {
                     <Text style={Style.text_styles.titleText}>
                         Thông tin nhận hàng
                     </Text>
-                    <TextInput
-                        style={{ width:130,height: 40, borderColor: 'gray', borderWidth: 1 }}
-                        onChangeText={text => this.setState({text:text})}
-                        value={this.state.text}
-                        autoFocus={false}
-                        autoCapitalize = "none"
-                        onFocus={() => {void(0)}}
-                    />
+                    {/*<TextInput*/}
+                        {/*style={{ width:130,height: 40, borderColor: 'gray', borderWidth: 1 }}*/}
+                        {/*onChangeText={text => this.setState({text:text})}*/}
+                        {/*value={this.state.text}*/}
+                        {/*// autoFocus={false}*/}
+                        {/*// autoCapitalize = "none"*/}
+                        {/*// onFocus={() => {void(0)}}*/}
+
+                        {/*autoCorrect = {true}*/}
+                        {/*autoFocus = {false}*/}
+                        {/*selectTextOnFocus={true}*/}
+                        {/*autoCapitalize = "none"*/}
+
+
+                    {/*/>*/}
                 </View>
                 <View style={{marginLeft:0 , marginTop:5}}>
                     {
@@ -347,60 +369,106 @@ class BookingScreen extends React.Component {
                     </View>
                             :
                     <View style={{justifyContent :'flex-start', paddingHorizontal : 0, backgroundColor:'#fff'}}>
+                        { Def.getUserRole() == 'partner' ?
                         <View style={{flexDirection:'row', alignItems:'center', paddingVertical:0}}>
-                            <View style={{flexDirection:'row', justifyContent:'space-between' ,  marginTop:0 , width: width -80, borderBottomWidth:1 , borderWidth:1,  height:45}}>
-                                <PhoneInput
-                                    containerStyle={{marginHorizontal : 0, marginTop : 0, paddingHorizontal:0 ,borderBottomWidth:0 , width: width -125   , height:42 , backgroundColor : '#fff', paddingRight:10 }}
-                                    textContainerStyle={{marginHorizontal : 0, marginTop : 0, paddingVertical:0 ,paddingHorizontal:0 , height:42 , backgroundColor : '#fff' , paddingRight:10}}
-                                    ref={(ref) => { this.phoneInput = ref; }}
-                                    defaultValue={this.state.value}
-                                    defaultCode="VN"
-                                    layout="first"
-                                    onChangeText={(text) => {
+
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    marginTop: 0,
+                                    width: width - 80,
+                                    borderBottomWidth: 1,
+                                    borderWidth: 1,
+                                    height: 45
+                                }}>
+                                    <PhoneInput
+                                        containerStyle={{
+                                            marginHorizontal: 0,
+                                            marginTop: 0,
+                                            paddingHorizontal: 0,
+                                            borderBottomWidth: 0,
+                                            width: width - 125,
+                                            height: 42,
+                                            backgroundColor: '#fff',
+                                            paddingRight: 10
+                                        }}
+                                        textContainerStyle={{
+                                            marginHorizontal: 0,
+                                            marginTop: 0,
+                                            paddingVertical: 0,
+                                            paddingHorizontal: 0,
+                                            height: 42,
+                                            backgroundColor: '#fff',
+                                            paddingRight: 10
+                                        }}
+                                        ref={(ref) => {
+                                            this.phoneInput = ref;
+                                        }}
+                                        defaultValue={this.state.value}
+                                        defaultCode="VN"
+                                        disabled={true}
+                                        layout="first"
+                                        onChangeText={(text) => {
                                             console.log("Change text: " + text);
-                                            if(text.length > 8 && this.phoneInput.isValidNumber(text)){
+                                            if (text.length > 8 && this.phoneInput.isValidNumber(text)) {
                                                 console.log("IsValid");
-                                                this.setState({value:text, isValid :1 });
-                                            }else {
-                                                this.setState({value : text , isValid: 0});
+                                                this.setState({value: text, isValid: 1});
+                                            } else {
+                                                this.setState({value: text, isValid: 0});
                                             }
                                         }
-                                    }
-                                    // autoFocus
-
-                                    onChangeFormattedText={(text) => {
-                                        this.setState({formattedValue : text});
-                                    }}
-                                    placeholder={"Nhập số điện thoại"}
-                                    value={this.state.value}
-                                    textInputProps={{
-                                        maxLength:10,
-                                        autoFocus :false
                                         }
-                                    }
-                                    flagButtonStyle={{width:50}}
-                                    disableArrowIcon={true}
-                                    // withDarkTheme
-                                    // withShadow
-                                    modalVisible={false}
-                                    countryPickerProps={{withAlphaFilter:true}}
-                                    // disabled={true}
+                                        // autoFocus
 
-                                    // autoFocus
-                                    textInputStyle={{ alignItems:'center',height:42 , backgroundColor : '#fff' , width : width *0.7}}
-                                    // flagButtonStyle={{width : 60, height :35}}
-                                    // countryPickerButtonStyle={{width:0}}
+                                        onChangeFormattedText={(text) => {
+                                            this.setState({formattedValue: text});
+                                        }}
+                                        placeholder={"Nhập số điện thoại"}
+                                        value={this.state.value}
+                                        textInputProps={{
+                                            maxLength: 10,
+                                            autoFocus: false,
+                                            disabled: true
+                                        }
+                                        }
+                                        flagButtonStyle={{width: 50}}
+                                        disableArrowIcon={true}
+                                        // withDarkTheme
+                                        // withShadow
+                                        modalVisible={false}
+                                        countryPickerProps={{withAlphaFilter: true}}
+                                        // disabled={true}
 
-                                />
-                                <TouchableOpacity disabled={!this.state.isValid} onPress={this.checkCustomer} style={{justifyContent : 'center', alignItems: 'center' , width : 45 }}>
-                                    <Icon style={styles.searchIcon} name={this.state.isValid == 2 ? "check" : "search"} size={22} color={ this.state.isValid == 0 ? Style.GREY_TEXT_COLOR : this.state.isValid == 1? Style.DEFAUT_RED_COLOR : 'green'}/>
-                                </TouchableOpacity>
-                            </View>
+                                        // autoFocus
+                                        textInputStyle={{
+                                            alignItems: 'center',
+                                            height: 42,
+                                            backgroundColor: '#fff',
+                                            width: width * 0.7
+                                        }}
+                                        // flagButtonStyle={{width : 60, height :35}}
+                                        // countryPickerButtonStyle={{width:0}}
 
-                            <TouchableOpacity disabled={!this.state.isValid} onPress={this.checkCustomer} style={{justifyContent : 'center', alignItems: 'center', height:45 ,width:42 , backgroundColor:'red'}}>
+                                    />
+                                    <TouchableOpacity disabled={!this.state.isValid} onPress={this.checkCustomer}
+                                                      style={{
+                                                          justifyContent: 'center',
+                                                          alignItems: 'center',
+                                                          width: 45
+                                                      }}>
+                                        <Icon style={styles.searchIcon}
+                                              name={this.state.isValid == 2 ? "check" : "search"} size={22}
+                                              color={this.state.isValid == 0 ? Style.GREY_TEXT_COLOR : this.state.isValid == 1 ? Style.DEFAUT_RED_COLOR : 'green'}/>
+                                    </TouchableOpacity>
+                                </View>
+
+
+                            <TouchableOpacity  onPress={this.goToCreateCustomer}
+                                              style={{justifyContent : 'center', alignItems: 'center', height:45 ,width:42 , backgroundColor:'red'}}>
                                 <Icon style={styles.searchIcon} name="plus" size={22} color={'#fff'}/>
                             </TouchableOpacity>
-                        </View>
+                        </View> : null
+                                }
                             {/*{this.renderInfo()}*/}
                             {
                                 this.state.order.customer ?
@@ -602,11 +670,12 @@ class BookingScreen extends React.Component {
                         <FlatList
                             keyboardDismissMode={'none'}
                         data={this.state.orderItems}
-                        removeClippedSubviews={false}
+                            extraData={this.state}
+                            removeClippedSubviews={false}
                         renderItem={renderOrderItem}
                         keyExtractor={item => item.product.id +"-" + item.amount}
                         showsHorizontalScrollIndicator={false}
-                        ListHeaderComponent={bookingHeader}
+                        ListHeaderComponent={bookingHeader()}
                         // ListFooterComponent={footerComponent}
                         />
 
