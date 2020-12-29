@@ -189,7 +189,7 @@ class BookingScreen extends React.Component {
     createOrderItemInfo(){
         let order = this.state.order;
         var orderItemInfo = order.orderItems.map((item) => {
-            return {product_id: item.product.id, amount: item.amount, price: item.product.sale_price};
+            return {product_id: item.product.id, amount: item.amount, price: Def.getPriceByRole(item.product, Def.getUserRole())};
         });
         return orderItemInfo;
 

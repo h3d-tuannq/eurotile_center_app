@@ -4,6 +4,7 @@ import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Style from '../../def/Style';
+import AsyncStorage from '@react-native-community/async-storage'
 
 import ImagePicker  from 'react-native-image-picker'
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
@@ -192,17 +193,52 @@ class CreateCustomerScreen extends React.Component {
         }
     }
     parseDataToView(){
-        this.setState({
-            name : "",
-            gender : 0,
-            mobile:'',
-            address : '',
-            city_item: null,
-            district_item: null,
-            ward_item: null,
-            stateCount: Math.random(),
-            customer_type:0,
-        });
+
+        let user = this.props.route.params.user;
+        let address = user && user.userProfile ? user.userProfile.address : null;
+        console.log("Address : " + JSON.stringify(address));
+
+        this.state = {
+
+            user:user,
+            userAddress: address,
+            focus : 0,
+            isUpdate: 0,
+            stateCount: 0.0,
+            name : user && user.userProfile ? user.userProfile.display_name : "",
+            gender : user && user.userProfile ? user.userProfile.gender : 0,
+            mobile: user && user.userProfile ? user.userProfile.phone : "" ,
+            address : address ? address.address_detail : '',
+            cities : [],
+            district : [],
+            ward:[],
+            city_item: address ? address.city: null,
+            district_item: address ? address.district : null,
+            ward_item: address ? address.ward : null,
+            query : '',
+            choseAddress : false,
+            currentAddress : 1, // 1 select city, 2 select district, 3 select ward
+            nextAddress : 1, // 1 select city, 2 select district, 3 select ward
+            filterAttr: 'city_name',
+            filterData: [],
+            showKeyboard : false,
+            addressTitle: 'Tỉnh/Thành phố',
+            customer_type: 0,
+
+        };
+
+
+        // this.setState({
+        //     name : "",
+        //     gender : 0,
+        //     mobile:'',
+        //     address : '',
+        //     city_item: null,
+        //     district_item: null,
+        //     ward_item: null,
+        //     stateCount: Math.random(),
+        //     customer_type:0,
+        // });
     }
 
 
@@ -210,10 +246,13 @@ class CreateCustomerScreen extends React.Component {
         if (is_create) {
             if (!this.state.full_name) {
                 alert("Vui lòng cập nhật ảnh Avatar");
+                return false;
             } else if (!this.state.mobile) {
                 alert("Vui lòng điền số điện thoại");
+                return false;
             } else if (!this.state.gender) {
                 alert("Vui lòng nhập thông tin giới tính");
+                return false;
             }
         }
     }
@@ -258,12 +297,14 @@ class CreateCustomerScreen extends React.Component {
         console.log('Update user info');
         if (!this.state.name) {
             alert("Vui lòng cập nhật ảnh Avatar");
+            return false;
         } else if (!this.state.mobile) {
             alert("Vui lòng điền số điện thoại");
         }
         let err = this.validateAddress();
-        if(err > 0) {
-            alert("Vui lòng nhập thông tin địa chỉ");
+        if(err == false) {
+            return false;
+            // alert("Vui lòng nhập thông tin địa chỉ");
         }
         let customerInfo = {
             id: "",
@@ -278,7 +319,7 @@ class CreateCustomerScreen extends React.Component {
         };
         console.log('Customer Info: ' + JSON.stringify(customerInfo));
 
-         CustomerController.saveCustomer(customerInfo, navigation, this.saveCustomerSuccess, this.saveCustomerFalse);
+        CustomerController.saveCustomer(customerInfo, navigation, this.saveCustomerSuccess, this.saveCustomerFalse);
 
         Def.setLoader = this.refresh.bind(this);
         // }
@@ -296,6 +337,11 @@ class CreateCustomerScreen extends React.Component {
             Def.currentOrder.address = customer.address;
         }
         Def.currentCustomer = customer;
+
+        if(customer.user_id && customer.user_id ==  Def.user_info.id){
+            Def.user_info.customer = customer;
+            AsyncStorage.setItem('user_info', JSON.stringify(Def.user_info));
+        }
 
         let findCus = Def.customer.findIndex(element => element.id == customer.id);
         if(findCus){
@@ -338,6 +384,7 @@ class CreateCustomerScreen extends React.Component {
     refresh()
     {
         this.parseDataToView();
+
         // this.setState({ stateCount: Math.random() });
     }
 
@@ -345,8 +392,11 @@ class CreateCustomerScreen extends React.Component {
         console.log('should update');
         console.log('Refresh Update Partner');
         const index = Def.REFESH_SCREEN.indexOf('update-partner-screen');
-        if (index > -1) {
-            Def.REFESH_SCREEN.splice(index, 1);
+
+        if (index > -1 || this.props.route.param.refresh) {
+            if(index > -1){
+                Def.REFESH_SCREEN.splice(index, 1);
+            }
             this.refresh();
         }
 
