@@ -30,6 +30,9 @@ class OrderDetailScreen extends React.Component {
             orderItems: item.orderItems ? item.orderItems : [],
             isDateTimePickerVisible : false,
         };
+
+        console.log('Order Item in Detail : ' + item.id);
+
         this.saveOrder = this.saveOrder.bind(this);
         this.hideDateTimePicker = this.hideDateTimePicker.bind(this);
     }
@@ -49,10 +52,15 @@ class OrderDetailScreen extends React.Component {
     async saveOrder() {
         const {navigation} = this.props;
         if(this.state.order.status == 1){
+
             navigation.navigate('Booking',{screen : 'payment', params: {order:this.state.order}});
             return true;
         } else {
-            navigation.navigate('Booking', {screen: 'booking', params: {order:this.state.order}});
+            console.log('Order Id Detail before next screen: ' + this.state.order.id);
+            Def.isUpdating = true;
+            Def.resetCart = true; // workaround order booking
+            Def.currentOrder = this.state.order;
+            navigation.navigate('Booking', {screen: 'booking', params: {orderId: this.state.order.id, order:this.state.order, refresh: true}});
             return true;
         }
     }

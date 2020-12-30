@@ -87,6 +87,10 @@ export default class Def {
 
     static refreshDashBoard = null;
 
+    static isUpdating = false;
+
+    static resetCart = false;
+
     static mainNavigate = null;
 
     static updateAddress = null;

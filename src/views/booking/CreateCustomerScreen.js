@@ -144,6 +144,11 @@ class CreateCustomerScreen extends React.Component {
     }
 
     choseDistrictClick(){
+        if(!this.state.city_item){
+            this.choseCityClick();
+            return;
+        }
+
         this.setState({currentAddress:2});
         if(!this.state.district || this.state.district.length == 0){
             console.log('Chưa tồn tại District : ');
@@ -158,6 +163,16 @@ class CreateCustomerScreen extends React.Component {
     }
 
     choseWardClick(){
+        if(!this.state.city_item){
+            this.choseCityClick();
+            return;
+        }
+
+        if(!this.state.district_item){
+            this.choseDistrictClick();
+            return;
+        }
+
         this.setState({currentAddress:3});
         if(!this.state.ward || this.state.ward.length == 0){
             this.getAdministrativeUnit(Def.URL_BASE + '/api/user/ward', {district_code: this.state.district_item.district_code}, this.showAutocompleteModal);
@@ -245,7 +260,7 @@ class CreateCustomerScreen extends React.Component {
     validate(is_create = true){
         if (is_create) {
             if (!this.state.full_name) {
-                alert("Vui lòng cập nhật ảnh Avatar");
+                alert("Vui lòng nhập tên khách hàng");
                 return false;
             } else if (!this.state.mobile) {
                 alert("Vui lòng điền số điện thoại");
@@ -393,7 +408,7 @@ class CreateCustomerScreen extends React.Component {
         console.log('Refresh Update Partner');
         const index = Def.REFESH_SCREEN.indexOf('update-partner-screen');
 
-        if (index > -1 || this.props.route.param.refresh) {
+        if (index > -1 || (this.props.route && this.props.route.param && this.props.route.param.refresh)) {
             if(index > -1){
                 Def.REFESH_SCREEN.splice(index, 1);
             }

@@ -37,13 +37,14 @@ class BookingScreen extends React.Component {
         let order = this.props.route.params && this.props.route.params.order ? this.props.route.params.order : Def.currentOrder;
 
 
-        console.log('Orders : ' + JSON.stringify(order.address));
+        console.log('Orders-Test : ' + JSON.stringify(order.address));
         let address = this.props.route.params && this.props.route.params.address ? this.props.route.params.address : order? order.address : null;
         if(!address && order){
             address = order ? order.address : '';
         }
 
         console.log('Address : ' + JSON.stringify(address));
+        console.log('Order Id : ' + (order ? order.id : ""));
 
         this.itemClick = this.itemClick.bind(this);
         this.state = {
@@ -240,10 +241,14 @@ class BookingScreen extends React.Component {
     };
 
     shouldComponentUpdate(){
-        console.log("Should Update");
-        if(this.props.route.params && this.props.route.params.refresh){
-            this.setState({address:Def.order.address});
-        }
+        console.log("Should Update + " + this.props.route.params.orderId + " : " + JSON.stringify(this.props.route.params));
+        // if((this.props.route.params && this.props.route.params.orderId)){
+            if(Def.isUpdating){
+                console.log('Console Refresh ');
+                Def.isUpdating = false;
+                this.setState({order:Def.currentOrder, isUpdate: true});
+            }
+        // }
         return true;
     }
 
@@ -292,7 +297,7 @@ class BookingScreen extends React.Component {
         const {navigation} = this.props;
         const {address} = this.state;
         const renderOrderItem = ({item, index}) => (
-            <OrderitemItemrenderer type={"order-item"} item={item} index={index} disabled={false} itemChange={this.orderItemChange} click={this.orderItemClick} styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
+            <OrderitemItemrenderer type={"order-item"} item={item} index={index} disabled={true} itemChange={this.orderItemChange} click={this.orderItemClick} styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
         );
 
         const footerComponent = () => (

@@ -26,13 +26,17 @@ export default class OrderController{
 
         if(data){
             Def.mainNavigate.navigate('Booking', {screen:'order-detail-screen', params:{item:data}});
-            let orderIndex = Def.orderList.findIndex(order => order.id == data.id);
+            let orderIndex = -1;
+            if(Def.orderList){
+                orderIndex = Def.orderList.findIndex(order => order.id == data.id);
+            }
             if(orderIndex === -1){
                 Def.orderList.push(data);
                 Def.ressetCart();
             } else {
                 Def.orderList[orderIndex] = data;
             }
+
         }
     }
 
