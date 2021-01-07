@@ -23,7 +23,6 @@ const ITEM_HEIGHT = 30;
 
 import OrderitemItemrenderer from "../../com/item-render/OrderitemItemrenderer";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import AsyncStorage from "@react-native-community/async-storage";
 import CustomerController from "../../controller/CustomerController";
 
 class BookingScreen extends React.Component {
@@ -329,21 +328,6 @@ class BookingScreen extends React.Component {
                     <Text style={Style.text_styles.titleText}>
                         Thông tin nhận hàng
                     </Text>
-                    {/*<TextInput*/}
-                        {/*style={{ width:130,height: 40, borderColor: 'gray', borderWidth: 1 }}*/}
-                        {/*onChangeText={text => this.setState({text:text})}*/}
-                        {/*value={this.state.text}*/}
-                        {/*// autoFocus={false}*/}
-                        {/*// autoCapitalize = "none"*/}
-                        {/*// onFocus={() => {void(0)}}*/}
-
-                        {/*autoCorrect = {true}*/}
-                        {/*autoFocus = {false}*/}
-                        {/*selectTextOnFocus={true}*/}
-                        {/*autoCapitalize = "none"*/}
-
-
-                    {/*/>*/}
                 </View>
                 <View style={{marginLeft:0 , marginTop:5}}>
                     {

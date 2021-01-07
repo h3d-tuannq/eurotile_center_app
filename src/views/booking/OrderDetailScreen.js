@@ -1,16 +1,11 @@
 import React, {PureComponent} from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList, TouchableOpacity} from 'react-native'
-import { WebView } from 'react-native-webview';
 import Def from '../../def/Def'
 import Style from "../../def/Style";
 import OrderitemItemrenderer from '../../com/item-render/OrderitemItemrenderer';
 import LocationIcon from '../../../assets/icons/Location.svg';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import CalendarIcon from '../../../assets/icons/calendar.svg';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import OrderController from "../../controller/OrderController";
-import UserController from "../../controller/UserController";
-import messaging from '@react-native-firebase/messaging';
 const {width, height} = Dimensions.get('window');
 
 

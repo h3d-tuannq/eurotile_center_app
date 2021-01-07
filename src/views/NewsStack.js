@@ -8,37 +8,11 @@ import Style from "../../src/def/Style";
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
-
-// function NewsListScreen({navigation} ) {
-//     return (
-//         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//             <Text>News List</Text>
-//             <Button
-//                 title="Go to News Details"
-//                 onPress={() => navigation.navigate('news-detail')}
-//             />
-//         </View>
-//     );
-// }
-
 import NewsScreen from './news/NewsScreen';
 import NewsDetail from './news/NewsDetailScreen';
 import EurotileLogo from '../../assets/icons/Logo w.svg';
 import CartIcon from '../../assets/icons/cart.svg';
 import Def from '../def/Def';
-
-// function OrderDetailScreen({navigation} ) {
-//     return (
-//         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//             <Text>News Detail</Text>
-//             <Button
-//                 title="Go to News-List"
-//                 onPress={() => navigation.navigate('news-list')}
-//             />
-//         </View>
-//     );
-// }
-
 class NewsStack extends React.Component {
     constructor(props){
         super(props);

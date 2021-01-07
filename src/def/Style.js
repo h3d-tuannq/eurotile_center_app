@@ -136,4 +136,29 @@ export default class Style{
         },
     });
 
+    static login_style = StyleSheet.create({
+        wraper : {flex:1, alignItems: 'center' , backgroundColor: '#fff', justifyContent : 'center'},
+        loginform : { width : width * 0.9, marginTop: height / 20,},
+        textInputNormal : {height: 45, backgroundColor : '#fff', borderColor: "#9e9e9e", borderWidth : 1 ,color:'black', fontSize : Style.TITLE_SIZE, borderRadius: 5, marginTop: 10, paddingHorizontal: 10  },
+        textInputHover : {height: 45, backgroundColor : '#fff', borderColor: "#48a5ea", borderWidth : 1 , color:'black', fontSize : Style.TITLE_SIZE,borderRadius: 5, marginTop: 10, paddingHorizontal: 10 },
+        loginButton : { backgroundColor : '#ff3c29' ,borderRadius : 5, paddingLeft: 20, paddingRight : 10 },
+        button : {
+            paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 5, paddingLeft: 20, marginTop : 20, borderWidth : 1, borderColor:'#b3b3b3',
+            flexDirection : 'row', alignItems: 'center',
+        },
+        icon : {
+            width :25,
+            height : 25
+        },
+
+        loginText : { color:'#fff', fontSize : Style.TITLE_SIZE, textAlign : 'center', paddingVertical: 8},
+        buttonText : { color:'#fff', fontSize : Style.TITLE_SIZE, paddingVertical: 8, marginLeft: 15},
+        labelInputNormal : { color:'#9e9e9e', fontSize : Style.NORMAL_SIZE, marginTop : 20 },
+        labelInputHover : { color:'#48a5ea', fontSize : Style.NORMAL_SIZE, marginTop : 20 },
+        logoContainer : {alignItems : 'center', width :  width * 0.8, justifyContent: 'center', paddingBottom : 10 , marginTop: height / 10 },
+        logoStyle : {width : width /5 , height : width /5 }
+    });
+
+
+
 }

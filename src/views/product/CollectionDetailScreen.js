@@ -2,7 +2,7 @@ import React from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
 import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
 import CollectionTab from './CollectionTab'
-import MyCustomizeTabBar from  '../../com/common/tabar/MyCustomizeTabBar'
+import MyCustomizeTabBar from  '../../com/common/tabbar/MyCustomizeTabBar'
 import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
 import { WebView } from 'react-native-webview';

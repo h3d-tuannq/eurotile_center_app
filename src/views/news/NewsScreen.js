@@ -2,7 +2,7 @@ import React from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList, TouchableOpacity} from 'react-native'
 import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
 import NewsTab from './NewsTab'
-import MyCustomizeTabBar from  './tabbar/MyCustomizeTabBar'
+import MyCustomizeTabBar from  '../../com/common/tabbar/MyCustomizeTabBar'
 
 import NetNews from '../../net/NetNews'
 import Def from '../../def/Def'

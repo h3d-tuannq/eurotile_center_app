@@ -12,8 +12,6 @@ import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
 import Def from "../../src/def/Def";
 
-
-
 import MenuIcon from '../../assets/icons/expand.svg';
 
 import CartIcon from '../../assets/icons/cart.svg'

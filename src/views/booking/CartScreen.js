@@ -18,8 +18,6 @@ const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 const type = 'product';
 import Modal from 'react-native-modal';
-import TermScreen from "../../com/common/TermScreen";
-
 class CartScreen extends React.Component {
 
     constructor(props){

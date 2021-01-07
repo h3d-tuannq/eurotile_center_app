@@ -2,14 +2,14 @@ import React from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native'
 import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
 import OrderTab from './OrderTab'
-import MyCustomizeTabBar from  './tabbar/MyCustomizeTabBar'
+import MyCustomizeTabBar from  '../../com/common/tabbar/MyCustomizeTabBar'
 
 import Def from '../../def/Def'
 import Style from "../../def/Style";
 import OrderController from '../../controller/OrderController';
 const {width, height} = Dimensions.get('window');
-const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2
-const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2
+const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
+const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 
 class OrderScreen extends React.Component {
     constructor(props){
