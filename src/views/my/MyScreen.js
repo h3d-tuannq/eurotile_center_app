@@ -4,14 +4,9 @@ import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import IconArrow from '../../../assets/icon/icon_arrow.svg'
-import PolicyIcon from '../../../assets/icon/icon-policy.svg';
 import GuideIcon from '../../../assets/icon/icon-how-to-use.svg'
 import RuleIcon from '../../../assets/icon/icon-rule.svg';
 
-import ProgramHozList from '../../../src/com/common/ProgramHozList';
-
-import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
 import AsyncStorage from "@react-native-community/async-storage";

@@ -11,18 +11,11 @@ const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 
 const ITEM_HEIGHT = 40;
 
-import DatePicker from 'react-native-datepicker'
-
-import DateTimePicker from "react-native-modal-datetime-picker";
-
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import {Picker} from '@react-native-community/picker';
 import UserController from "../../controller/UserController";
-import Autocomplete from 'react-native-autocomplete-input';
-import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
-import moment from 'moment'
 import ImageResizer from 'react-native-image-resizer';
 
 class PartnerProfileScreen extends React.Component {
@@ -964,70 +957,8 @@ class PartnerProfileScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        paddingLeft: 15,
-        // justifyContent: 'flex-start',
-        // marginVertical : 5,
-        marginBottom : 125,
-        backgroundColor: '#fff'
-    },
-    slider: {
-        justifyContent: 'center',
-        paddingTop: 5,
-        padding: 8,
-        height: 120,
-        borderRadius: 5,
-        backgroundColor: "#e6e6e6",
-        marginRight : 15
-    },
-    cardStyle: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: width-20,
-        height: width/2,
-
-    },
-    programListStyle : {
-
-    },
-    itemImage: {
-        width: PROGRAM_IMAGE_WIDTH -5,
-        height : PROGRAM_IMAGE_HEIGHT -5,
-        borderRadius: 5,
-    },
-    imageStyle : {
-        width : width /3,
-        height : width / 3,
-
-        borderRadius: width / 6,
-    },
-    imageStyleInfo : {
-        width : width /8,
-        height : width / 8,
-        borderRadius: width / 16,
-    },
-
-    button : {
-        paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 5, marginTop : 5, borderWidth : 1, borderColor:'#b3b3b3',
-        flexDirection : 'row', alignItems: 'center', paddingHorizontal : 5
-    },
-    textInputNormal : {height: 45, backgroundColor : '#fff', borderColor: "#9e9e9e", borderWidth : 1 ,color:'black', fontSize : 18, borderRadius: 5, marginVertical:3, paddingHorizontal: 10  },
-    textInputHover : {height: 45, backgroundColor : '#fff', borderColor: "#48a5ea", borderWidth : 1 , color:'black', fontSize : 18,borderRadius: 5, marginVertical:3, paddingHorizontal: 10 },
-
     textEditableNormal : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black', fontSize : Style.MIDLE_SIZE , marginRight : 5, textAlign: 'right'},
     textEditableForcus : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black', fontSize : Style.MIDLE_SIZE  , marginRight : 5, textAlign: 'right'},
-
-    buttonText : { color:'#fff', fontSize : 18, paddingVertical: 2},
-    autocompleteContainer: {
-        flex: 1,
-        left: 0,
-        position: 'absolute',
-        right: 0,
-        top: 0,
-        zIndex: 1
-    }
-
 });
 
 export default PartnerProfileScreen;

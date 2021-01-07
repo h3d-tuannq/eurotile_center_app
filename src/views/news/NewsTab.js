@@ -82,39 +82,6 @@ class NewsTab extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        paddingLeft: 15,
-        // justifyContent: 'flex-start',
-        // marginVertical : 5,
-        // marginBottom : 5,
-        backgroundColor: '#fff',
-        paddingTop : 5
-    },
-    slider: {
-        justifyContent: 'center',
-        paddingTop: 5,
-        padding: 8,
-        height: 120,
-        borderRadius: 5,
-        backgroundColor: "#e6e6e6",
-        marginRight : 15
-    },
-    cardStyle: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: width-20,
-        height: width/2,
-
-    },
-    programListStyle : {
-
-    },
-    itemImage: {
-        width: PROGRAM_IMAGE_WIDTH -5,
-        height : PROGRAM_IMAGE_HEIGHT -5,
-        borderRadius: 5,
-    },
 });
 
 export default NewsTab;

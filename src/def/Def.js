@@ -302,6 +302,14 @@ export default class Def {
 
     }
 
+    static formatText(text, number = 20){
+        let rs = text;
+        if(text && text.length > number){
+            rs = text.substring(0, number - 3) + '...';
+        }
+        return rs;
+    }
+
 
     static ressetCart() {
         Def.cart_data = [];

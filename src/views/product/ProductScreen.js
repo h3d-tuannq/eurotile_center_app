@@ -1,8 +1,5 @@
 import React from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, RefreshControl} from 'react-native'
-import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
-import CollectionTab from './CollectionTab'
-import MyCustomizeTabBar from  '../../com/common/tabbar/MyCustomizeTabBar'
 import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
@@ -31,12 +28,9 @@ class ProductScreen extends React.Component {
         super(props);
         this.onGetCollectionSuccess     = this.onGetCollectionSuccess.bind(this);
         this.onGetCollectionFalse     = this.onGetCollectionFalse.bind(this);
-        this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
-
         Def.mainNavigate = this.props.navigation;
-
         if(!Def.collection_data) {
             NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
         }
@@ -73,10 +67,6 @@ class ProductScreen extends React.Component {
         // console.log(Object.entries(data["data"]));
         console.log('Get Collection');
         Object.entries(data["data"]).map((prop, key) => {
-            // console.log('Start');
-            // console.log(prop[0]);
-            // console.log(prop[1]["data"]);
-            // console.log('Start');
         });
         this.setState({ collection_data: data["data"] , isRefresh : false});
         Def.collection_data = data["data"];
@@ -85,11 +75,8 @@ class ProductScreen extends React.Component {
     }
 
     createConfigData(data){
-
-
         if(data){
             let configData =  Object.entries(data).map((prop, key) => {
-                // console.log("Props : " + JSON.stringify(prop));
                 return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
             });
             return configData;
@@ -102,13 +89,6 @@ class ProductScreen extends React.Component {
         this.setState({isRefresh: false});
     }
 
-    formatText(text){
-        let rs = text;
-        if(text && text.length > 10){
-            rs = text.substring(0, 20) ;
-        }
-        return rs;
-    }
 
     shouldComponentUpdate(){
         // this.setState({ configMenu: Def.config_news_menu});
@@ -196,7 +176,7 @@ class ProductScreen extends React.Component {
                                 <ProgramHozList refresh={this.refresh} stack={'Product'}
                                 screen={'collection-detail-screen'} favorite={true}
                                 navigation={this.props.navigation} name={prop[0]}
-                                style={styles.programListStyle} data={prop[1]["data"]} title={this.formatText(prop[1]["name_vi"])}/>
+                                style={styles.programListStyle} data={prop[1]["data"]} title={Def.formatText(prop[1]["name_vi"])}/>
                             </View>
                         )
                         }
@@ -205,54 +185,14 @@ class ProductScreen extends React.Component {
                 }
                 </View>
 
-                {/*<ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >*/}
-                    {/*{*/}
-                        {/*configMenu && Object.entries(configMenu).map((prop, key) => {*/}
-                            {/*if((prop[1]["hidden"]) == 0){*/}
-                                {/*return (*/}
-                                    {/*<CollectionTab key ={prop[0] + "acv"} displayTitle={'Bộ sưu tập'} type={"collection"} navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />*/}
-                                {/*);*/}
-                            {/*}*/}
-                        {/*})*/}
-                    {/*}*/}
-                {/*</ScrollableTabView>*/}
             </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        paddingLeft: 15,
-        // justifyContent: 'flex-start',
-        // marginVertical : 5,
-        marginBottom : 125,
-        backgroundColor: '#fff'
-    },
-    slider: {
-        justifyContent: 'center',
-        paddingTop: 5,
-        padding: 8,
-        height: 120,
-        borderRadius: 5,
-        backgroundColor: "#e6e6e6",
-        marginRight : 15
-    },
-    cardStyle: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: width-20,
-        height: width/2,
-
-    },
     programListStyle : {
 
-    },
-    itemImage: {
-        width: PROGRAM_IMAGE_WIDTH -5,
-        height : PROGRAM_IMAGE_HEIGHT -5,
-        borderRadius: 5,
     },
 });
 

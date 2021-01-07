@@ -4,9 +4,6 @@ import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-import IconArrow from '../../../assets/icon/icon_arrow.svg'
-
-import ProgramHozList from '../../../src/com/common/ProgramHozList';
 
 import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
@@ -292,19 +289,6 @@ class PartnerInfoScreen extends React.Component {
                         </Text>
 
                     </View>
-                {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}>*/}
-                    {/*<Text style={[Style.text_styles.middleText,{}]}>*/}
-                        {/*Nơi làm việc*/}
-                    {/*</Text>*/}
-                    {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
-
-                        {/*<Text style={[Style.text_styles.middleText, {marginRight :10}]}>*/}
-                            {/*{user['userProfile']['address']}*/}
-                        {/*</Text>*/}
-                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                    {/*</View>*/}
-
-                {/*</TouchableOpacity>*/}
 
                 <View style={{flexDirection : 'row', alignItems : 'center' , justifyContent:'space-between', paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
                     <Text style={[Style.text_styles.middleText,{}]}>
@@ -374,44 +358,6 @@ class PartnerInfoScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        paddingLeft: 15,
-        // justifyContent: 'flex-start',
-        // marginVertical : 5,
-        marginBottom : 125,
-        backgroundColor: '#fff'
-    },
-    slider: {
-        justifyContent: 'center',
-        paddingTop: 5,
-        padding: 8,
-        height: 120,
-        borderRadius: 5,
-        backgroundColor: "#e6e6e6",
-        marginRight : 15
-    },
-    cardStyle: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: width-20,
-        height: width/2,
-
-    },
-    programListStyle : {
-
-    },
-    itemImage: {
-        width: PROGRAM_IMAGE_WIDTH -5,
-        height : PROGRAM_IMAGE_HEIGHT -5,
-        borderRadius: 5,
-    },
-    imageStyle : {
-        width : width /3,
-        height : width / 3,
-
-        borderRadius: width / 6,
-    },
     imageStyleInfo : {
         width : width /8,
         height : width / 8,

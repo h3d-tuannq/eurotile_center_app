@@ -7,7 +7,6 @@ import MyCustomizeTabBar from  '../../com/common/tabbar/MyCustomizeTabBar'
 import NetNews from '../../net/NetNews'
 import Def from '../../def/Def'
 import Style from "../../def/Style";
-import OrderController from "../../controller/OrderController";
 
 const {width, height} = Dimensions.get('window');
 
@@ -16,14 +15,11 @@ const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2
 
 class NewsScreen extends React.Component {
-
-
     state = {
         news_data: null,
         stateCount: 0.0,
         configMenu: Def.config_news_menu
     };
-
     constructor(props){
         super(props);
         // console.log("Def.news", JSON.stringify(Def.news_data));
@@ -148,9 +144,6 @@ class NewsScreen extends React.Component {
                                 </Text>
                             </View>
                 }
-
-
-
             </View>
 
         )
@@ -158,38 +151,6 @@ class NewsScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        paddingLeft: 15,
-        // justifyContent: 'flex-start',
-        // marginVertical : 5,
-        marginBottom : 125,
-        backgroundColor: '#fff'
-    },
-    slider: {
-        justifyContent: 'center',
-        paddingTop: 5,
-        padding: 8,
-        height: 120,
-        borderRadius: 5,
-        backgroundColor: "#e6e6e6",
-        marginRight : 15
-    },
-    cardStyle: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: width-20,
-        height: width/2,
-
-    },
-    programListStyle : {
-
-    },
-    itemImage: {
-        width: PROGRAM_IMAGE_WIDTH -5,
-        height : PROGRAM_IMAGE_HEIGHT -5,
-        borderRadius: 5,
-    },
 });
 
 export default NewsScreen;

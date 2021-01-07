@@ -1,13 +1,10 @@
 import React from 'react'
 import {View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, FlatList, RefreshControl} from 'react-native'
-import DownIconSvg from '../../../assets/icon/icon-down-black.svg'
 import NotificationItemrenderer from "../../com/item-render/NotificationItemrenderer";
 
 import NotificationController from "../../controller/NotificationController"
 
 import Def from '../../def/Def'
-import Style from "../../def/Style";
-import NetNews from "../../net/NetNews";
 const {width, height} = Dimensions.get('window');
 
 class NotificationScreen extends React.Component{

@@ -9,10 +9,6 @@ import ImagePicker  from 'react-native-image-picker'
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 
-import DatePicker from 'react-native-datepicker'
-
-import DateTimePicker from "react-native-modal-datetime-picker";
-
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import {Picker} from '@react-native-community/picker';
@@ -392,20 +388,6 @@ class UpdatePartnerInfoScreen extends React.Component {
                     </View>
                 </View>
 
-                {/*<TextInput*/}
-                    {/*onFocus={() => this.setState({focus:1})}*/}
-                    {/*onBlur={()=> this.setState({focus:0})}*/}
-                    {/*style={this.state.focus == 1 ? styles.textInputHover : styles.textInputNormal}*/}
-                    {/*value={this.state.address}*/}
-                    {/*onChangeText={text => this.setState({address:text})}*/}
-                    {/*placeholder='Địa chỉ'*/}
-                    {/*placeholderTextColor="#b3b3b3"*/}
-                    {/*autoCapitalize = 'none'*/}
-                    {/*// underlineColorAndroid = "transparent"*/}
-                {/*/>*/}
-
-
-
                 <View style={{flexDirection : 'row' , alignItems:'center' , backgroundColor:'#fff'}}>
                     <TextInput
                         onFocus={() => this.setState({focus:1})}
@@ -581,51 +563,6 @@ class UpdatePartnerInfoScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        paddingLeft: 15,
-        // justifyContent: 'flex-start',
-        // marginVertical : 5,
-        marginBottom : 125,
-        backgroundColor: '#fff'
-    },
-    slider: {
-        justifyContent: 'center',
-        paddingTop: 5,
-        padding: 8,
-        height: 120,
-        borderRadius: 5,
-        backgroundColor: "#e6e6e6",
-        marginRight : 15
-    },
-    cardStyle: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: width-20,
-        height: width/2,
-
-    },
-    programListStyle : {
-
-    },
-    itemImage: {
-        width: PROGRAM_IMAGE_WIDTH -5,
-        height : PROGRAM_IMAGE_HEIGHT -5,
-        borderRadius: 5,
-    },
-    imageStyle : {
-        width : width /3,
-        height : width / 3,
-
-        borderRadius: width / 6,
-    },
-    imageStyleInfo : {
-        width : width /8,
-        height : width / 8,
-
-        borderRadius: width / 16,
-    },
-
     button : {
         paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 5, marginTop : 5, borderWidth : 1, borderColor:'#b3b3b3',
         flexDirection : 'row', alignItems: 'center', paddingHorizontal : 5
