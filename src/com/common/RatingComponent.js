@@ -23,9 +23,6 @@ class RatingComponent extends React.Component{
 
     onGetRatingSuccess(data){
         console.log("onGetRatingSuccess");
-        //console.log(data);
-
-
         if(data['data']['avg'] && data['data']['count'])
         this.setState({
             rating:data['data']['avg'],
@@ -37,7 +34,6 @@ class RatingComponent extends React.Component{
 
     onGetRatingFailed(data){
         console.log("onGetRatingFailed");
-
     }
 
     constructor(props){

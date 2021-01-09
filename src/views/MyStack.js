@@ -15,7 +15,6 @@ import Style from "../../src/def/Style";
 
 import MyScreen from './my/MyScreen'
 import UserProfileScreen from  './my/UserProfileScreen'
-import PartnerInfoScreen from './my/PartnerInfoScreen'
 import ChangePassword from './my/ChangePassword';
 import UpdatePartnerInfoScreen from './my/UpdatePartnerScreen'
 import PartnerProfileScreen from './my/PartnerProfileScreen'
