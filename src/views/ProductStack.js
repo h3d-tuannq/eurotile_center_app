@@ -24,6 +24,8 @@ const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 
 class ProductStack extends React.Component {
+    focusListener = null;
+
     constructor(props){
         super(props);
         this.getOrderNumber = this.getOrderNumber.bind(this);
@@ -39,6 +41,7 @@ class ProductStack extends React.Component {
         });
         this.goProductList = this.goProductList.bind(this);
         this.goToCreateCustomer = this.goToCreateCustomer.bind(this);
+        this.forcusFunction = this.forcusFunction.bind(this);
     }
 
     goProductList() {
@@ -71,6 +74,27 @@ class ProductStack extends React.Component {
         if(Def.cart_data.length != this.state.number_order){
             this.setState({number_order:Def.cart_data.length});
         }
+        let {navigation} = this.props;
+        navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
+
+        if(navigation){
+            console.log('Isset Navigation : ' + JSON.stringify(navigation));
+           this.focusListener = navigation.addListener("focus", this.forcusFunction);
+        }
+
+    }
+
+    forcusFunction = () => {
+        console.log('forcus Product-Stack');
+      this.setState({number_order:Def.cart_data.length});
+    };
+
+    componentWillUnmount() {
+        // Remove the event listener
+        if(this.focusListener){
+            this.focusListener.remove();
+        }
+
     }
 
 
