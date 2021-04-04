@@ -163,7 +163,7 @@ export default class SignIn extends Component {
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[button, {backgroundColor:'#ffffff'}]} onPress={()=> {
+                    <TouchableOpacity style={[Style.login_style.button, {backgroundColor:'#ffffff'}]} onPress={()=> {
                         this.setState({isLoging:true});
                         UserController.googleLogin(navigation);
 
