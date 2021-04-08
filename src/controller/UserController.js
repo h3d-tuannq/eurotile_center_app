@@ -224,7 +224,7 @@ export default class UserController{
         if(Def.setLoader)
             Def.setLoader(false);
 
-        navigation.navigate('Home');
+        navigation.navigate('My');
     };
 
     static async  loginFirebase(param ,navigation=null, successCallback, falseCallback) {
