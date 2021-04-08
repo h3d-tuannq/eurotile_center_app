@@ -5,9 +5,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import ProductScreen from './product/ProductScreen'
 import CollectionDetailScreen from  './product/CollectionDetailScreen'
 import ProductDetailScreen from  './product/ProductDetailScreen'
-import SelectCustomerScreen from  './product/SelectCustomerScreen'
-import CreateCustomerScreen from  './product/CreateCustomerScreen'
-import BookingScreen from './product/BookingScreen'
 
 
 
@@ -15,53 +12,91 @@ import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
 import Def from "../../src/def/Def";
 
-
-
 import MenuIcon from '../../assets/icons/expand.svg';
 
-import AddIcon from '../../assets/icons/Plus circle.svg'
 import CartIcon from '../../assets/icons/cart.svg'
 
 
 import EurotileLogo from '../../assets/icons/Logo w.svg'
-import TermScreen from "../com/common/TermScreen";
-import ProductListScreen from "./product/ProductListScreen";
-import CartScreen from "./product/CartScreen";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 
 class ProductStack extends React.Component {
+    focusListener = null;
+
     constructor(props){
         super(props);
         this.getOrderNumber = this.getOrderNumber.bind(this);
+
         this.state = {
-          number_order: Def.order_number
+          number_order: Def.cart_data.length
         };
+        AsyncStorage.getItem('cart_data').then((value) => {
+            if(value){
+                Def.cart_data = JSON.parse(value);
+                this.setState({number_order:Def.cart_data.length});
+            }
+        });
         this.goProductList = this.goProductList.bind(this);
         this.goToCreateCustomer = this.goToCreateCustomer.bind(this);
+        this.forcusFunction = this.forcusFunction.bind(this);
     }
 
     goProductList() {
         console.log("Go to Product List");
         if(this.props.navigation){
-            this.props.navigation.navigate('Product', {screen:'product-list-screen'});
+            this.props.navigation.navigate('Booking', {screen:'cart'});
         }
     }
 
     goToCreateCustomer() {
         if(this.props.navigation){
-            this.props.navigation.navigate('Product', {screen:'create-customer'});
+            this.props.navigation.navigate('Booking', {screen:'create-customer'});
         }
     }
 
     getOrderNumber(){
-        return Def.order_number;
+        return Def.cart_data.length;
     }
 
     formatOrderNumber(order_number){
         return order_number < 100 ? order_number : '99+';
     }
+
+    shouldComponentUpdate(){
+        console.log('Product Stack should update');
+        return true;
+    }
+
+    componentDidMount(){
+        if(Def.cart_data.length != this.state.number_order){
+            this.setState({number_order:Def.cart_data.length});
+        }
+        let {navigation} = this.props;
+        navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
+
+        if(navigation){
+            console.log('Isset Navigation : ' + JSON.stringify(navigation));
+           this.focusListener = navigation.addListener("focus", this.forcusFunction);
+        }
+
+    }
+
+    forcusFunction = () => {
+        console.log('forcus Product-Stack');
+      this.setState({number_order:Def.cart_data.length});
+    };
+
+    componentWillUnmount() {
+        // Remove the event listener
+        if(this.focusListener){
+            this.focusListener.remove();
+        }
+
+    }
+
 
     render() {
         return (
@@ -182,51 +217,6 @@ class ProductStack extends React.Component {
                     })}
                 />
 
-                <RootStack.Screen name="product-list-screen" component={CartScreen} options=
-                    {({route}) => ({
-                        title: 'Tạo đơn hàng',
-                        headerStyle: {
-                            backgroundColor: Style.DEFAUT_BLUE_COLOR,
-                            height: Style.HEADER_HEIGHT,
-                        },
-                        headerTintColor: '#fff',
-                        headerTitleStyle: {
-                            fontWeight: 'bold',
-                        },
-                        headerRight: () => (
-                            <TouchableOpacity
-                                style=  {
-                                    {
-                                        width: Style.DRAWER_MENU_SIZE,
-                                        height: Style.DRAWER_MENU_SIZE,
-                                        justifyContent: 'center',
-                                        paddingRight:15 ,
-                                        alignItems : 'center'
-                                    }
-                                }
-                                onPress={this.goProductList}>
-                                { this.state.number_order ?
-                                    <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
-                                        <Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>
-                                            {this.formatOrderNumber(this.state.number_order)}
-                                        </Text>
-                                    </View>
-                                    :<View/>
-                                }
-
-                                <CartIcon
-                                    width={Style.CART_ICON_SIZE}
-                                    height={Style.CART_ICON_SIZE}
-                                />
-                            </TouchableOpacity>
-
-                        ),
-                        headerBackImage: ()=> {
-                            return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
-                        }
-                    })}
-                />
-
                 <RootStack.Screen name="product-detail" component={ProductDetailScreen} options=
                     {({route}) => ({
                     title: route.params.item && route.params.item.name ? route.params.item.name :'Sản phẩm chi tiết',
@@ -272,87 +262,6 @@ class ProductStack extends React.Component {
                     }}
                     )
                     } />
-
-                <RootStack.Screen name="select-customer" component={SelectCustomerScreen} options=
-                    {({route}) => ({
-                            title: 'Khách hàng',
-                            headerStyle: {
-                                backgroundColor: Style.DEFAUT_BLUE_COLOR,
-                                height: Style.HEADER_HEIGHT,
-                            },
-                            headerTintColor: '#fff',
-                            headerTitleStyle: {
-                                fontWeight: 'bold',
-                            },
-                            headerRight: () => (
-                                <TouchableOpacity
-                                    style=  {
-                                        {
-                                            width: Style.DRAWER_MENU_SIZE,
-                                            height: Style.DRAWER_MENU_SIZE,
-                                            justifyContent: 'center',
-                                            paddingRight:15 ,
-                                            alignItems : 'center'
-                                        }
-                                    }
-                                    onPress={this.goToCreateCustomer}>
-                                    {/*{ this.state.number_order ?*/}
-                                        {/*<View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>*/}
-                                            {/*<Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>*/}
-                                                {/*{this.formatOrderNumber(this.state.number_order)}*/}
-                                            {/*</Text>*/}
-                                        {/*</View>*/}
-                                        {/*:<View/>*/}
-                                    {/*}*/}
-
-                                    <AddIcon
-                                        width={Style.CART_ICON_SIZE}
-                                        height={Style.CART_ICON_SIZE}
-                                    />
-                                </TouchableOpacity>
-
-                            ),
-
-                            headerBackImage: ()=> {
-                                return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
-                            }}
-                    )
-                    } />
-
-                <RootStack.Screen name="create-customer" component={CreateCustomerScreen} options=
-                    {({route}) => ({
-                            title: 'Khách hàng mới',
-                            headerStyle: {
-                                backgroundColor: Style.DEFAUT_BLUE_COLOR,
-                                height: Style.HEADER_HEIGHT,
-                            },
-                            headerTintColor: '#fff',
-                            headerTitleStyle: {
-                                fontWeight: 'bold',
-                            },
-                            headerBackImage: ()=> {
-                                return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
-                            }}
-                    )
-                    } />
-
-                <RootStack.Screen name="booking" component={BookingScreen} options=
-                    {({route}) => ({
-                            title: 'Đặt hàng',
-                            headerStyle: {
-                                backgroundColor: Style.DEFAUT_BLUE_COLOR,
-                                height: Style.HEADER_HEIGHT,
-                            },
-                            headerTintColor: '#fff',
-                            headerTitleStyle: {
-                                fontWeight: 'bold',
-                            },
-                            headerBackImage: ()=> {
-                                return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
-                            }}
-                    )
-                    } />
-
 
             </RootStack.Navigator>
         )

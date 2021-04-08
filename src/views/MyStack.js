@@ -15,9 +15,9 @@ import Style from "../../src/def/Style";
 
 import MyScreen from './my/MyScreen'
 import UserProfileScreen from  './my/UserProfileScreen'
-import PartnerInfoScreen from './my/PartnerInfoScreen'
 import ChangePassword from './my/ChangePassword';
 import UpdatePartnerInfoScreen from './my/UpdatePartnerScreen'
+import PartnerProfileScreen from './my/PartnerProfileScreen'
 
 
 const Stack = createStackNavigator();
@@ -44,8 +44,8 @@ class MyStack extends React.Component {
                                     paddingLeft:15 ,
                                     alignItems : 'center'
                                 }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            }>
+
                             <EurotileLogo
                                 width={Style.LOGO_WIDTH}
                                 height={Style.LOGO_HEIGHT}
@@ -54,25 +54,25 @@ class MyStack extends React.Component {
 
                     ),
 
-                    headerRight: () => (
-                        <TouchableOpacity
-                            style=  {
-                                {
-                                    width: Style.DRAWER_MENU_SIZE,
-                                    height: Style.DRAWER_MENU_SIZE,
-                                    justifyContent: 'center',
-                                    paddingRight:15 ,
-                                    alignItems : 'center'
-                                }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
-                            <MenuIcon
-                                width={Style.DRAWER_MENU_ICON_SIZE}
-                                height={Style.DRAWER_MENU_ICON_SIZE}
-                            />
-                        </TouchableOpacity>
-
-                    ),
+                    // headerRight: () => (
+                    //     <TouchableOpacity
+                    //         style=  {
+                    //             {
+                    //                 width: Style.DRAWER_MENU_SIZE,
+                    //                 height: Style.DRAWER_MENU_SIZE,
+                    //                 justifyContent: 'center',
+                    //                 paddingRight:15 ,
+                    //                 alignItems : 'center'
+                    //             }
+                    //         }
+                    //         onPress={() => this.props.navigation.toggleDrawer()}>
+                    //         <MenuIcon
+                    //             width={Style.DRAWER_MENU_ICON_SIZE}
+                    //             height={Style.DRAWER_MENU_ICON_SIZE}
+                    //         />
+                    //     </TouchableOpacity>
+                    //
+                    // ),
 
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
@@ -104,7 +104,7 @@ class MyStack extends React.Component {
                 }} />
 
 
-                <RootStack.Screen name="partner-info" component={PartnerInfoScreen} options={{
+                <RootStack.Screen name="partner-info" component={PartnerProfileScreen} options={{
                     title: 'Hồ sơ Partner',
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
@@ -120,7 +120,7 @@ class MyStack extends React.Component {
                 }} />
 
                 <RootStack.Screen name="change-password" component={ChangePassword} options={{
-                    title: 'Thay đổi mật khẩu',
+                    title: 'Thiết lập tài khoản',
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
@@ -134,7 +134,7 @@ class MyStack extends React.Component {
                     }
                 }} />
                 <RootStack.Screen name="update-partner" component={UpdatePartnerInfoScreen} options={{
-                    title: 'Cập nhật Hồ sơ Partner',
+                    title: 'Đăng ký Partner',
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,

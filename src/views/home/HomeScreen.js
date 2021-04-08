@@ -2,7 +2,7 @@ import React from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
 import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
 import CollectionTab from './CollectionTab'
-import MyCustomizeTabBar from  './tabbar/MyCustomizeTabBar'
+import MyCustomizeTabBar from  '../../com/common/tabbar/MyCustomizeTabBar'
 import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
@@ -16,11 +16,11 @@ const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 const carouselItems = [
     {
         id:1,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/24/1/main_img.jpg',
+        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/24/1/main_img.jpg',
     },
     {
         id:2,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/30/2/main_img.jpg',
+        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/30/2/main_img.jpg',
     }
 ];
 

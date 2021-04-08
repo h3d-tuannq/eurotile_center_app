@@ -1,10 +1,14 @@
 import React from 'react'
-import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native'
+import {View, Text, TouchableOpacity, FlatList, StyleSheet, Dimensions} from 'react-native';
 
-import  ProgramVerItemrenderer from '../item-render/ProgramVerItemrenderer'
-import IconArrow from "../../../assets/icon/icon_arrow.svg";
-import Style from "../../../Def/Style";
-import Def from "../../../Def/Def";
+import DesignItemrenderer from '../item-render/DesignItemrenderer'
+import Style from "../../../src/def/Style";
+import Def from "../../../src/def/Def";
+
+const {width, height} = Dimensions.get('window');
+
+const PROGRAM_IMAGE_WIDTH = (width - 30) ;
+const PROGRAM_IMAGE_HEIGHT = (width * 0.6);
 
 
 
@@ -22,29 +26,13 @@ class ProgramVerList extends React.Component{
 
     itemClick(item){
         console.log("itemClick(item))))))))))))))))))))))))))))))))))))))))))))))))");
-
         let stack = this.props.stack ? this.props.stack :false;
-        let screen = this.props.screen ? this.props.screen :'player';
-        // Def.setItemMusic(item);
-
-        // item.program_name = item.name;
-        Def.setItemProgram(item);
+        let screen = this.props.screen ? this.props.screen :'detail-design';
         if(stack){
-            console.log("itemClick(item)STACKKKKKKKKKKKKKKKKKKKK");
-            ////console.log(item);
-            //console.log(this.props.data);
-            console.log(`${stack}, {screen:${screen}, params: { item: ${item}, data : this.props.data }`);
-            this.props.navigation.navigate(stack, {screen:screen, params: { item: item, data : this.props.data }});
+            this.props.navigation.navigate(stack, {screen:screen, params: { item: item }});
         } else {
-            console.log("itemClick(item)NOT STACKKKKKKKKKKKKKKKKKKKK");
-            console.log(`this.props.navigation.navigate(${screen}, { item: item, data : this.props.data })`);
-            this.props.navigation.navigate(screen, { item: item, data : this.props.data });
+            this.props.navigation.navigate(screen, { item: item });
         }
-
-
-
-
-
     }
 
 
@@ -53,8 +41,12 @@ class ProgramVerList extends React.Component{
         const {iconStyleHome, titleStyle,titleView, } = styles;
         const renderItem = ({item}) => {
             return (
-                <View style={{paddingLeft : 15}}>
-                    <ProgramVerItemrenderer item ={item} click={this.itemClick} canPlayBack={this.props.canPlayBack} />
+                <View style={{paddingHorizontal : 15}}>
+                    <DesignItemrenderer
+                        item ={item} click={this.itemClick} canPlayBack={this.props.canPlayBack}
+                        styleImage={{width: PROGRAM_IMAGE_WIDTH , height: PROGRAM_IMAGE_HEIGHT}}
+                        type={this.props.type}
+                    />
                 </View>
             )
         }
@@ -79,7 +71,7 @@ class ProgramVerList extends React.Component{
 
 const styles = StyleSheet.create ({
     container: {
-        marginTop : 5,
+        // marginTop : 5,
         backgroundColor : '#fff'
     },
     titleStyle: {

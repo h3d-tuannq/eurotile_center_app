@@ -2,7 +2,7 @@ import React from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
 import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
 import CollectionTab from './CollectionTab'
-import MyCustomizeTabBar from  '../../com/common/tabar/MyCustomizeTabBar'
+import MyCustomizeTabBar from  '../../com/common/tabbar/MyCustomizeTabBar'
 import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
@@ -13,17 +13,6 @@ import Style from '../../def/Style';
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
-const carouselItems = [
-    {
-        id:1,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/24/1/main_img.jpg',
-    },
-    {
-        id:2,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/30/2/main_img.jpg',
-    }
-];
-
 class ProductDetailScreen extends React.Component {
 
 
@@ -40,7 +29,6 @@ class ProductDetailScreen extends React.Component {
         super(props);
         this.onGetCollectionSuccess     = this.onGetCollectionSuccess.bind(this);
         this.onGetCollectionFalse     = this.onGetCollectionFalse.bind(this);
-        this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
 
         this.state = {
@@ -55,15 +43,6 @@ class ProductDetailScreen extends React.Component {
         // this.setState({ activeSlide: 0});
 
         Def.mainNavigate = this.props.navigation;
-
-        // if(!Def.collection_data) {
-        //     NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
-        // }
-        // else if (!Def.config_collection_menu) {
-        //     Def.config_collection_menu = this.createConfigData(Def.collection_data);
-        //     this.setState({configMenu: Def.config_news_menu});
-        // }
-
     }
     getImageForCollection(item){
         let collectionImages;
@@ -82,17 +61,12 @@ class ProductDetailScreen extends React.Component {
 
     refresh()
     {
-        //NetChannel.listChannel(this.onChannelSuccess,this.onChannelFailed);
         this.setState({ stateCount: Math.random() });
     }
 
     onGetCollectionSuccess(data){
         // console.log(Object.entries(data["data"]));
         Object.entries(data["data"]).map((prop, key) => {
-            // console.log('Start');
-            // console.log(prop[0]);
-            // console.log(prop[1]["data"]);
-            // console.log('Start');
         });
         this.setState({ collection_data: data["data"] });
         Def.collection_data = data["data"];
@@ -109,13 +83,6 @@ class ProductDetailScreen extends React.Component {
                 return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
             });
             Object.entries(configData).map((prop, key) => {
-                // console.log("start" + key);
-                // console.log("prop[0]" + prop[0]);
-                // console.log("prop[1]" + prop[1]["name_vi"]);
-                //
-                // console.log("data" + prop[1]["data"]);
-                //
-                // console.log("end");
             });
             return configData;
         }
@@ -124,14 +91,6 @@ class ProductDetailScreen extends React.Component {
 
     onGetCollectionFalse(data){
         console.log("false data : " + data);
-    }
-
-    formatText(text){
-        let rs = text;
-        if(text && text.length > 10){
-            rs = text.substring(0, 20) ;
-        }
-        return rs;
     }
 
     shouldComponentUpdate(){
@@ -189,9 +148,6 @@ class ProductDetailScreen extends React.Component {
 
     render() {
         const {navigation} = this.props;
-        // const configMenu = Def.config_collection_menu;
-
-        // console.log("Slide Product data : " + JSON.stringify(this.state.slide_data) );
         return (
             <View style={{flex:1}}>
                 <View style={Style.styles.carousel}>
@@ -235,9 +191,6 @@ class ProductDetailScreen extends React.Component {
                     <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
                         {"Bề mặt: Matt, in kỹ thuật số"}
                     </Text>
-                    {/*<Text style={Style.text_styles.normalText}>*/}
-                        {/*{"Mô tả"}*/}
-                    {/*</Text>*/}
                 </View>
 
                 <TouchableOpacity style={styles.bookingBtn}>
@@ -246,41 +199,12 @@ class ProductDetailScreen extends React.Component {
                     </Text>
                 </TouchableOpacity>
                 </View>
-
-                {/*<ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >*/}
-                    {/*{*/}
-                        {/*configMenu && Object.entries(configMenu).map((prop, key) => {*/}
-                            {/*if((prop[1]["hidden"]) == 0){*/}
-                                {/*return (*/}
-                                    {/*<CollectionTab key ={prop[0] + "acv"}  navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />*/}
-                                {/*);*/}
-                            {/*}*/}
-                        {/*})*/}
-                    {/*}*/}
-                {/*</ScrollableTabView>*/}
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        paddingLeft: 15,
-        // justifyContent: 'flex-start',
-        // marginVertical : 5,
-        marginBottom : 125,
-        backgroundColor: '#fff'
-    },
-    slider: {
-        justifyContent: 'center',
-        paddingTop: 5,
-        padding: 8,
-        height: 120,
-        borderRadius: 5,
-        backgroundColor: "#e6e6e6",
-        marginRight : 15
-    },
     cardStyle: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -305,12 +229,6 @@ const styles = StyleSheet.create({
         paddingHorizontal:2,
         borderWidth: 1,
         borderColor : Style.DEFAUT_BLUE_COLOR
-    },
-
-    itemImage: {
-        width: PROGRAM_IMAGE_WIDTH -5,
-        height : PROGRAM_IMAGE_HEIGHT -5,
-        borderRadius: 5,
     },
     bookingBtn : {
         backgroundColor: Style.DEFAUT_RED_COLOR,

@@ -11,25 +11,30 @@ import Def from '../../def/Def'
 import Style from "../../def/Style";
 import CheckBox from '@react-native-community/checkbox';
 import InputSpinner from "react-native-input-spinner";
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 
 class OrderItemrenderer extends PureComponent{
 
-    callbackIndex = 0;
     constructor(props) {
         super(props);
         this.state = {
             item: this.props.item,
+            isCancel: this.props.item.is_delete == 1? true: false,
             stateCount: 0.0,
             selectValue: this.props.item.selectValue,
-            quantity: this.props.item.quantity,
-            area: this.props.item.area,
-            saleArea: this.props.item.saleArea
         };
 
         this.updateOrder = this.updateOrder.bind(this);
         this.checkBoxChange = this.checkBoxChange.bind(this);
         this.quantityChange = this.quantityChange.bind(this);
+        this.deleteHandleClick = this.deleteHandleClick.bind(this);
     }
+
+    deleteHandleClick = (item) => {
+        this.props.itemChange(item, true);
+    }
+
     formatText(text, maxCharacter = 20){
         let rs = text;
         // if(this.props.type == "product"){
@@ -51,7 +56,7 @@ class OrderItemrenderer extends PureComponent{
     }
 
     quantityChange = (newValue) => {
-        this.setState({quantity : newValue});
+        this.setState({amount : newValue});
         let item = this.state.item;
         item.selectValue = newValue;
         this.props.itemChange(item);
@@ -74,13 +79,10 @@ class OrderItemrenderer extends PureComponent{
 
 
     render(){
-        const model = this.state.item.product;
-
-        // console.log('Order Item : ' + JSON.stringify(this.state.item.quantity) );
-
+        const model = this.state.item;
         const click = this.props.click;
         return (
-            <View style={{flexDirection:'row', paddingVertical:5, marginHorizontal:10, borderBottomWidth : 1, borderBottomColor: Style.GREY_TEXT_COLOR}}>
+            <View style={{flexDirection:'row', paddingVertical:5, marginHorizontal:10, borderBottomWidth : 0, borderBottomColor: Style.GREY_TEXT_COLOR}}>
 
                 {/*<CheckBox*/}
                     {/*style={styles.checkBoxStyle}*/}
@@ -89,64 +91,62 @@ class OrderItemrenderer extends PureComponent{
                     {/*onValueChange={(newValue) => this.checkBoxChange(newValue)}*/}
                 {/*/>*/}
 
-                <Text style={styles.checkIndex}>
+                <Text style={this.state.isCancel ? styles.checkIndexCancel: styles.checkIndex}>
                     {
                         this.props.index + 1
                     }
                 </Text>
-
-                <TouchableOpacity style={styles.item} onPress={
+                <TouchableOpacity  disabled = {this.props.disabled}  style={styles.item} onPress={
                     () => {
                         this.props.click(model);
                     }
                 }>
-                    <View style={styles.imageContainer} >
-                        {model.image_path ? <Image style={styles.itemImage} source={{uri:model.image_path}} /> :
-                            <Image  style={styles.itemImage}  source={require('../../../assets/icon/logo_vov_16_9.png')}  />}
-                    </View>
+                    {/*<View style={styles.imageContainer} >*/}
+                        {/*{model.image_path ? <Image style={styles.itemImage} source={{uri:model.image_path}} /> :*/}
+                            {/*<Image  style={styles.itemImage}  source={require('../../../assets/icon/logo_vov_16_9.png')}  />}*/}
+                    {/*</View>*/}
 
                     <View style={styles.info}>
                         <View>
-                            <Text style={styles.titleInfo}>{model.name}</Text>
-                            <View style={styles.groupInfo}>
-                                <Text style={styles.infoText}>{model['brickBoxInfo']['width'] + "x"+ model['brickBoxInfo']['height'] + "  -  " +model['brickBoxInfo']['brick_number'] + " viên/hộp" }</Text>
-                                <Text style={styles.priceText}>{model['sale_price'] + " đ" }</Text>
+                            <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+                                <Text style={this.state.isCancel ? styles.titleInfoCancel :styles.titleInfo}>{model.code}</Text>
+                                {/*<TouchableOpacity style={{marginTop:-3 , paddingHorizontal:5, paddingVertical:3}} onPress={() => {this.deleteHandleClick(this.props.item)}}>*/}
+                                    {/*<Icon name="trash-alt"  size={17} color={Style.GREY_TEXT_COLOR} />*/}
+                                {/*</TouchableOpacity>*/}
+                                <Text style={this.state.isCancel ? styles.priceTextCancel :styles.priceText}>{Def.numberWithCommas(model['total_value']) + " đ" }</Text>
+                            </View>
 
+
+                            <View style={styles.groupInfo}>
+                                <Text style={styles.infoText}>{"Khách hàng"  }</Text>
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['customer'] ? model['customer']['name'] : ""  }</Text>
+                                {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
+                            </View>
+
+                            <View style={styles.groupInfo}>
+                                <Text style={styles.infoText}>{"Điện thoại"  }</Text>
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['customer'] ? model['customer']['phone'] : ""  }</Text>
+                                {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
+                            </View>
+                            <View style={styles.groupInfo}>
+                                <Text style={styles.infoText}>{"Ngày giao hàng"  }</Text>
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['deliver_date'] ? Def.getDateString(new Date(model['deliver_date'] * 1000) , "yyyy-MM-dd") : ""}</Text>
+                                {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
+                            </View>
+
+                            <View style={styles.groupInfo}>
+                                <Text style={styles.infoText}>{"Ngày tạo"  }</Text>
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{model['created_at'] ? Def.getDateString(new Date(model['created_at'] * 1000) , "yyyy-MM-dd") : ""}</Text>
+                                {/*<Text style={styles.priceText}>{model['total_value'] + " đ" }</Text>*/}
                             </View>
                         </View>
 
                         <View style={styles.listenView}>
                             <View style={styles.groupInfo}>
-                                <Text style={styles.infoText}>{"Số hộp"}</Text>
-                                <InputSpinner
-                                    width={100}
-                                    height={28}
-                                    min={1}
-                                    rounded={false}
-                                    showBorder={false}
-                                    // colorMin={Style.DEFAUT_BLUE_COLOR}
-                                    // colorMax={Style.DEFAUT_BLUE_COLOR}
-                                    color={'#fff'}
-                                    style={{borderRadius:3, borderWidth:2}}
-                                    buttonTextColor={Style.DEFAUT_RED_COLOR}
-
-                                    inputStyle={{width:80, height:35}}
-                                    buttonStyle={{borderWidth : 2,borderRadius:1,borderColor:'#000' }}
-                                    max={10000} onChange={(newValue) => {this.quantityChange(newValue)}}
-                                    value={this.state.quantity}/>
-
+                                {/*<Text style={styles.infoText}>{"Ngày giao hàng" }</Text>*/}
+                                <Text style={this.state.isCancel ? styles.valueTextCancel :styles.valueText}>{Def.getAddressStr(model.address)}</Text>
+                                {/*<Text style={styles.priceText}>{Def.getAddressStr(model.address) }</Text>*/}
                             </View>
-                            <View style={styles.groupInfo}>
-                                <Text style={styles.infoText}>{"Diện tích" }</Text>
-                                <Text style={styles.priceText}>{model['brickBoxInfo']['total_area']/1000000  * this.state.quantity+ " m" }</Text>
-
-                            </View>
-                            {/*<TouchableOpacity style={[styles.listenButton, { backgroundColor: model.reader_link ? 'red' : '#cccccc'}]} onPress={this.onClickNews}>*/}
-                            {/*<SpeakerIcon style={styles.favoriteIcon}  />*/}
-                            {/*<Text style={[styles.infoText,{ marginLeft:5}]}>*/}
-                            {/*Nghe tin tức*/}
-                            {/*</Text>*/}
-                            {/*</TouchableOpacity>*/}
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -175,9 +175,18 @@ const  styles = StyleSheet.create({
     },
 
     checkIndex: {
-        marginTop: width/15,
+        // marginTop: width/15,
+        paddingVertical :5,
+        paddingTop:10,
         paddingLeft: 5,
         paddingRight: 10
+    },
+    checkIndexCancel:{
+        paddingVertical :5,
+        paddingTop:10,
+        paddingLeft: 5,
+        paddingRight: 10,
+        color: Style.GREY_TEXT_COLOR
     },
 
     imageContainer:{
@@ -215,6 +224,7 @@ const  styles = StyleSheet.create({
     },
     groupInfo: {
       flexDirection : 'row',
+        marginTop :2,
       justifyContent: 'space-between',
       alignItems:'center'
     },
@@ -225,15 +235,38 @@ const  styles = StyleSheet.create({
         paddingBottom : 8,
         flex: 1,
     },
+    titleInfoCancel : {
+        fontWeight: 'bold',
+        fontSize : Style.NORMAL_SIZE,
+        paddingBottom : 8,
+        color: Style.GREY_TEXT_COLOR,
+        flex: 1,
+    },
     infoText : {
         fontSize : Style.NORMAL_SIZE,
         color: Style.GREY_TEXT_COLOR
     },
+    valueText : {
+        fontSize : Style.NORMAL_SIZE,
+        // color: Style.GREY_TEXT_COLOR
+    },
+    valueTextCancel : {
+        fontSize : Style.NORMAL_SIZE,
+        color: Style.GREY_TEXT_COLOR
+    },
+
+
     priceText : {
         fontSize : Style.NORMAL_SIZE,
         color: Style.DEFAUT_RED_COLOR,
         fontWeight: 'bold'
     },
+    priceTextCancel : {
+        fontSize : Style.NORMAL_SIZE,
+        color: Style.GREY_TEXT_COLOR,
+        fontWeight: 'bold'
+    },
+
     favoriteIcon : {
         width : 20,
         height : 20,

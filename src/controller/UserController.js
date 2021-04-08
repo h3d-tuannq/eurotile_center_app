@@ -9,6 +9,7 @@ import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 
 import {Alert, Platform} from 'react-native'
+import RNRestart from 'react-native-restart';
 
 GoogleSignin.configure({
     webClientId: Def.WEB_CLIENT_ID,
@@ -35,8 +36,8 @@ export default class UserController{
 
         // if(Def.setLoader)
         //     Def.setLoader(false);
-        Def.mainNavigate.navigate('My');
         Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+        Def.mainNavigate.navigate('My',{screen:'my-screen', params: {'refresh' : true}});
 
         // if(Def.refreshDashBoard)
         //     Def.refreshDashBoard();
@@ -44,9 +45,24 @@ export default class UserController{
 
     }
 
-    static onLoginSuccess(data){
+    static async onLoginSuccess(data){
         try {
             if(data){
+                if(data['err_code']) {
+                    Alert.alert(
+                        "Cảnh báo",
+                        data['msg'],
+                        [
+                            {
+                                text: "Thử lại",
+                                onPress: () => {Def.setIsLogin(false)},
+                                style: 'cancel',
+                            }
+                        ],
+                        {cancelable: false},
+                    );
+                    return ;
+                }
                 console.log('data login success' + JSON.stringify(data));
                 let acess_token = data['access_token'];
                 AsyncStorage.setItem('access_token', `Bearer ${acess_token}`);
@@ -56,12 +72,21 @@ export default class UserController{
                 Def.email = data['email'];
                 Def.username = data['username'];
                 Def.user_info = data;
+
+                let token = await messaging().getToken();
+
+
+                AsyncStorage.setItem('fcmId', token);
+                UserController.registerFcmId(token);
+
             }
         } catch (err){
             console.log('Error : ' + err);
         }
-
         Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+         Def.mainNavigate.navigate('My',{screen:'my-screen', params: {'refresh' : true}});
+         console.log("Go to MyScreen");
+
         // if(Def.setLoader)
         //     Def.setLoader(false);
         //
@@ -71,27 +96,23 @@ export default class UserController{
         // Def.mainNavigate.navigate('My');
     }
 
-
-    static logout(){
-    }
-
     static onLoginFailed(data){
     }
 
     static async  googleLogin(navigation=null) {
         try {
             await GoogleSignin.hasPlayServices();
-            console.log("hasPlayServices");
+            // console.log("hasPlayServices");
             const data = await GoogleSignin.signIn();
-            console.log("Data :" + JSON.stringify(data));
+            // console.log("Data :" + JSON.stringify(data));
             const {accessToken, idToken} = data;
             const credential = auth.GoogleAuthProvider.credential( idToken, accessToken,);
             const googleUserCredential = await auth().signInWithCredential(credential);
 
             auth().currentUser.getIdToken( true).then(function(idToken) {
-                console.log(`TOKEN: ${idToken}`);
-                if(navigation)
-                    navigation.navigate('Product');
+                // console.log(`TOKEN: ${idToken}`);
+                // if(navigation)
+                //     navigation.navigate('Product');
                 AsyncStorage.setItem('firebase_token', idToken);
 
                 const result = {};
@@ -120,10 +141,12 @@ export default class UserController{
             //await auth().signInWithCredential(credential);
 
         } catch (error) {
+            if(Def.setIsLogin)
+                Def.setIsLogin(false);
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow
+                console.log('Cancel login with google!');
 
-                alert('Cancel');
             } else if (error.code === statusCodes.IN_PROGRESS) {
                 alert('Signin in progress');
                 // operation (f.e. sign in) is in progress already
@@ -143,10 +166,9 @@ export default class UserController{
 
 
     static async facebookLogin(navigation=null) {
-        // if (Platform.OS === "android") {
-        //     LoginManager.setLoginBehavior("web_only")
-        // }
-        LoginManager.setLoginBehavior("web_only")
+        if (Platform.OS === "android") {
+            LoginManager.setLoginBehavior("web_only")
+        }
         console.log('Start login facebook : ');
             const result = await LoginManager.logInWithPermissions([ 'email', 'public_profile']);
 
@@ -219,21 +241,111 @@ export default class UserController{
     static async  login(email, password ,navigation=null, successCallback, falseCallback) {
 
         let param = {'username' : email, 'password' : password};
+        if(navigation){
+            Def.mainNavigate = navigation;
+        }
+        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/login' , Def.POST_METHOD , param);
+        // if(Def.setLoader)
+        //     Def.setLoader(false);
 
-        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/login' , Def.POST_METHOD , param);
-        if(Def.setLoader)
-            Def.setLoader(false);
+        // Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+        // navigation.navigate('My', {'screen':'my-screen'});
 
-        navigation.navigate('My');
     };
+
+
+    static async logout(successCallback, falseCallback){
+        let param = {'username': Def.user_info['email'], access_token: Def.user_info['access_token'], fcmId :Def.fcmId};
+        if(navigation){
+            Def.mainNavigate = navigation;
+        }
+        Net.sendRequest(this.logoutCallback,this.onLoginFalse,Def.URL_BASE + '/api/user/logout' , Def.POST_METHOD , param);
+    }
+
+    static async registerFcmId(fcmId = null, successCallback = null, falseCallback = null){
+
+        messaging().getToken().then((token) => {
+            console.log("Token " +   JSON.stringify(token));
+        } );
+
+        if(fcmId){
+            fcmId = await messaging().getToken();
+        }
+        Def.fcmId = fcmId;
+
+        let param = { user_id:Def.user_info['id'], 'username': Def.user_info['email'], access_token: Def.user_info['access_token'], fcm_id :fcmId};
+
+        console.log('Register Fcm Params: ' + JSON.stringify(param));
+
+        Net.sendRequest(this.setFcmCallback,this.setFcmCallback,Def.URL_BASE + '/api/user/set-fcm' , Def.POST_METHOD , param);
+    }
+
+    static setFcmCallback(data){
+        console.log('setFcmResult : ' + JSON.stringify(data));
+    }
+
+    static  logoutCallback = async (data) => {
+        if(data['err_code']){
+            Alert.alert(
+                "Cảnh báo",
+                data['msg'],
+                [
+                    {
+                        text: "Thử lại",
+                        onPress: () => {Def.setIsLogin(false)},
+                        style: 'cancel',
+                    }
+                ],
+                {cancelable: false},
+            );
+            return ;
+        }
+
+        try {
+            let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data'];
+            await AsyncStorage.multiRemove(keys);
+        }catch (e){
+
+        }
+        RNRestart.Restart();
+    }
+
+    static logoutLocal = async () => {
+        try {
+            let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data'];
+            await AsyncStorage.multiRemove(keys);
+        }catch (e){
+
+        }
+        RNRestart.Restart();
+    }
+
+
+
+
+    static async  changePassword(email, displayName, oldPassword , newPass,navigation=null, successCallback, falseCallback) {
+
+        let param = {'email' : email, 'password' : newPass, 'old_password': oldPassword, 'display_name':displayName};
+        if(navigation){
+            Def.mainNavigate = navigation;
+        }
+        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/change-account-info' , Def.POST_METHOD , param);
+        // if(Def.setLoader)
+        //     Def.setLoader(false);
+
+        // Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+    };
+
+
+
 
     static async  loginFirebase(param ,navigation=null, successCallback, falseCallback) {
 
         // let param = {'email' : params.email, 'name' : params.name};
 
-        console.log('Login with firebase' + JSON.stringify(param));
+        console.log('Login with firebase');
 
-        Net.sendRequest(this.onLoginFirebaseSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/firebase-login' , Def.POST_METHOD , param);
+        Net.sendRequest(this.onLoginFirebaseSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/firebase-login' , Def.POST_METHOD , param);
         // if(Def.setLoader)
         //     Def.setLoader(false);
 
@@ -241,7 +353,7 @@ export default class UserController{
     };
 
     static async getCities ( ){
-        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/city' , Def.POST_METHOD);
+        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/city' , Def.POST_METHOD);
     }
 
 
@@ -249,7 +361,7 @@ export default class UserController{
 
         let param = {'display_name' : displayName, 'email' : email ,'password' : password, 'password_confirm' : password};
 
-        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/sign-up' , Def.POST_METHOD , param);
+        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + 'api/user/sign-up' , Def.POST_METHOD , param);
         if(Def.setLoader)
             Def.setLoader(false);
 
@@ -266,7 +378,7 @@ export default class UserController{
     };
 
 
-    static onLoginFirebaseSuccess(data){
+    static async onLoginFirebaseSuccess(data){
 
         console.log('Login Success');
         // console.log("onLoginFirebaseSuccess: " + JSON.stringify(data));
@@ -285,6 +397,9 @@ export default class UserController{
                 Def.email = data['email'];
                 Def.username = data['username'];
                 Def.user_info = data;
+                let token = await messaging().getToken();
+                AsyncStorage.setItem('fcmId', token);
+                UserController.registerFcmId(token);
 
             }
         } catch (err){
@@ -310,7 +425,7 @@ export default class UserController{
 
     static updateData(userData){
         try {
-            if(userData){
+            if(userData && userData['id']){
                 let acess_token = userData['access_token'];
                 AsyncStorage.setItem('access_token', `Bearer ${acess_token}`);
                 AsyncStorage.setItem('user_info', JSON.stringify(userData));

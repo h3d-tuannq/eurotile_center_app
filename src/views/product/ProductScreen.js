@@ -1,8 +1,5 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
-import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
-import CollectionTab from './CollectionTab'
-import MyCustomizeTabBar from  '../../com/common/tabar/MyCustomizeTabBar'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, RefreshControl} from 'react-native'
 import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
@@ -18,11 +15,11 @@ const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 const carouselItems = [
     {
         id:1,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/24/1/main_img.jpg',
+        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/24/1/main_img.jpg',
     },
     {
         id:2,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/30/2/main_img.jpg',
+        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/30/2/main_img.jpg',
     }
 ];
 
@@ -31,11 +28,9 @@ class ProductScreen extends React.Component {
         super(props);
         this.onGetCollectionSuccess     = this.onGetCollectionSuccess.bind(this);
         this.onGetCollectionFalse     = this.onGetCollectionFalse.bind(this);
-        this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
-
+        this.onRefresh = this.onRefresh.bind(this);
         Def.mainNavigate = this.props.navigation;
-
         if(!Def.collection_data) {
             NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
         }
@@ -44,12 +39,15 @@ class ProductScreen extends React.Component {
             // this.setState({configMenu: Def.config_news_menu});
         }
 
+        console.log("UserInfo Permission: " + Def.checkPartnerPermission());
+
         this.state = {
             collection_data: null,
             stateCount: 0.0,
             configMenu: Def.config_collection_menu,
             slide_data : carouselItems,
             activeSlide : 0,
+            isRefresh: false
         };
     }
 
@@ -59,26 +57,26 @@ class ProductScreen extends React.Component {
         this.setState({ stateCount: Math.random() });
     }
 
+    onRefresh = () => {
+        console.log("Refresh!");
+        this.setState({isRefresh:true});
+        NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
+    }
+
     onGetCollectionSuccess(data){
         // console.log(Object.entries(data["data"]));
+        console.log('Get Collection');
         Object.entries(data["data"]).map((prop, key) => {
-            // console.log('Start');
-            // console.log(prop[0]);
-            // console.log(prop[1]["data"]);
-            // console.log('Start');
         });
-        this.setState({ collection_data: data["data"] });
+        this.setState({ collection_data: data["data"] , isRefresh : false});
         Def.collection_data = data["data"];
         Def.config_collection_menu = this.createConfigData(data["data"]) ;
         this.setState({ configMenu: Def.config_collection_menu});
     }
 
     createConfigData(data){
-
-
         if(data){
             let configData =  Object.entries(data).map((prop, key) => {
-                // console.log("Props : " + JSON.stringify(prop));
                 return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
             });
             return configData;
@@ -88,15 +86,9 @@ class ProductScreen extends React.Component {
 
     onGetCollectionFalse(data){
         console.log("false data : " + data);
+        this.setState({isRefresh: false});
     }
 
-    formatText(text){
-        let rs = text;
-        if(text && text.length > 10){
-            rs = text.substring(0, 20) ;
-        }
-        return rs;
-    }
 
     shouldComponentUpdate(){
         // this.setState({ configMenu: Def.config_news_menu});
@@ -135,9 +127,9 @@ class ProductScreen extends React.Component {
     renderItem = ({item, index}) => {
 
         return (
-            <View key={index} style={Style.styles.cardStyle}>
+            <View key={index} style={Style.styles.schemeCardStyle}>
                 <TouchableOpacity >
-                    <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
+                    <Image  style = {[Style.styles.schemeSlideImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
                 </TouchableOpacity>
             </View>
         );
@@ -149,7 +141,11 @@ class ProductScreen extends React.Component {
         const {navigation} = this.props;
         const configMenu = Def.config_collection_menu;
         return (
-            <View style={{flex:1}}>
+            <ScrollView style={{flex:1, backgroundColor: '#fff'}}
+                        refreshControl={
+                            <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
+                        }
+            >
                 <View style={Style.styles.carousel}>
                     <Carousel
                         ref={(c) => { this._carousel = c; }}
@@ -169,7 +165,7 @@ class ProductScreen extends React.Component {
                     { this.pagination }
                 </View>
 
-                <ScrollView style={{flex:1, paddingLeft:5}}>
+                <View style={{flex:1, paddingLeft:15}}>
 
                 {
                     configMenu && Object.entries(configMenu).map((prop, key) => {
@@ -180,63 +176,23 @@ class ProductScreen extends React.Component {
                                 <ProgramHozList refresh={this.refresh} stack={'Product'}
                                 screen={'collection-detail-screen'} favorite={true}
                                 navigation={this.props.navigation} name={prop[0]}
-                                style={styles.programListStyle} data={prop[1]["data"]} title={this.formatText(prop[1]["name_vi"])}/>
+                                style={styles.programListStyle} data={prop[1]["data"]} title={Def.formatText(prop[1]["name_vi"])}/>
                             </View>
                         )
                         }
                     )
 
                 }
-                </ScrollView>
+                </View>
 
-                {/*<ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >*/}
-                    {/*{*/}
-                        {/*configMenu && Object.entries(configMenu).map((prop, key) => {*/}
-                            {/*if((prop[1]["hidden"]) == 0){*/}
-                                {/*return (*/}
-                                    {/*<CollectionTab key ={prop[0] + "acv"} displayTitle={'Bộ sưu tập'} type={"collection"} navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />*/}
-                                {/*);*/}
-                            {/*}*/}
-                        {/*})*/}
-                    {/*}*/}
-                {/*</ScrollableTabView>*/}
-            </View>
+            </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        paddingLeft: 15,
-        // justifyContent: 'flex-start',
-        // marginVertical : 5,
-        marginBottom : 125,
-        backgroundColor: '#fff'
-    },
-    slider: {
-        justifyContent: 'center',
-        paddingTop: 5,
-        padding: 8,
-        height: 120,
-        borderRadius: 5,
-        backgroundColor: "#e6e6e6",
-        marginRight : 15
-    },
-    cardStyle: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: width-20,
-        height: width/2,
-
-    },
     programListStyle : {
 
-    },
-    itemImage: {
-        width: PROGRAM_IMAGE_WIDTH -5,
-        height : PROGRAM_IMAGE_HEIGHT -5,
-        borderRadius: 5,
     },
 });
 

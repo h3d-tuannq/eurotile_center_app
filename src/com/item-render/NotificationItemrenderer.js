@@ -1,9 +1,10 @@
 import React from 'react'
-import {View, Text, StyleSheet, Dimensions,Linking,TouchableOpacity} from  'react-native'
-import NetChannel from '../../../Net/NetChannel'
-import NetDailyContent from '../../../Net/NetDailyContent'
-import Def from '../../../Def/Def'
-import Style from "../../../Def/Style";
+import {View, Text, StyleSheet, Dimensions,Linking,TouchableOpacity, Image} from  'react-native'
+import PlusCircleIcon from "../../../assets/icons/Plus circle.svg";
+
+
+import Def from '../../def/Def'
+import Style from "../../def/Style";
 
 const {width, height} = Dimensions.get('window');
 
@@ -12,10 +13,10 @@ class NotificationItemrenderer extends React.PureComponent{
         super(props);
         this.goLink = this.goLink.bind(this);
 
-        this.onChannelSuccess = this.onChannelSuccess.bind(this);
-        this.onChannelErr = this.onChannelErr.bind(this);
-        this.onProgramSuccess = this.onProgramSuccess.bind(this);
-        this.onProgramErr = this.onProgramErr.bind(this);
+        // this.onChannelSuccess = this.onChannelSuccess.bind(this);
+        // this.onChannelErr = this.onChannelErr.bind(this);
+        // this.onProgramSuccess = this.onProgramSuccess.bind(this);
+        // this.onProgramErr = this.onProgramErr.bind(this);
     }
 
     onChannelSuccess(data){
@@ -66,24 +67,28 @@ class NotificationItemrenderer extends React.PureComponent{
     render(){
         const {item} =  this.props;
         return (
-            <View style={styles.noti}>
-                <TouchableOpacity onPress={this.goLink.bind(this,item.link)}>
+            <TouchableOpacity onPress={this.goLink.bind(this,item.link)} style={styles.noti}>
+                <View style={styles.imageContainer} >
+                    {item.image ? <Image style={styles.itemImage} source={{uri:item.image}} /> :
+                        <Image  style={styles.itemImage}  source={require('../../../assets/icon/eurotile_notification.jpg')}  />}
+                </View>
+                <View style={styles.info}>
                     <View style={styles.header}>
                         <Text style={styles.title}>
                             {item.title}
                         </Text>
-                        <Text style={styles.date}>{item.create_datetime}
+                        <Text style={styles.date}>{item.created_at ? Def.getDateString(new Date(item.created_at * 1000), "dd-MM-yyyy") : ""}
                         </Text>
 
                     </View>
 
                     <View style={styles.content}>
                         <Text style={{fontSize : Style.NORMAL_SIZE}}>
-                            {item.content}
+                            {item.body}
                         </Text>
                     </View>
-                </TouchableOpacity>
-            </View>
+                </View>
+            </TouchableOpacity>
         )
     }
 }
@@ -93,28 +98,43 @@ const styles = StyleSheet.create({
         backgroundColor : '#f0f1f2',
         minHeight: 60,
         marginVertical :5,
-        marginHorizontal:10,
+        // marginHorizontal:10,
         borderRadius : 5,
+        flexDirection: 'row',
 
     },
     header: {
-        paddingHorizontal : 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         // alignItems:'center'
+    },
+    imageContainer:{
+        flex: 1,
+        // backgroundColor: "red",
+        // borderRadius :5,
+        justifyContent:'center'
+    },
+    itemImage: {
+        width : width / 5,
+        height : width / 7,
+        borderRadius : 5,
     },
     title : {
         fontSize : Style.MIDLE_SIZE,
         fontWeight: 'bold',
         marginBottom : 4,
-        flex: 1,
+        // flex: 1,
     },
     date: {
         // flex: 1,
         fontSize : Style.SMALL_SIZE,
     },
     content: {
-        paddingHorizontal: 10,
+    },
+    info : {
+        flex: 3.5,
+        // backgroundColor: 'red',
+        paddingHorizontal:5,
     }
 
 });

@@ -1,7 +1,6 @@
 import React from 'react'
 import {View, TouchableOpacity, StyleSheet, Text, FlatList, TextInput, Dimensions, Keyboard,Alert} from 'react-native'
 import DownIconSvg from "../../../../assets/icon/icon-down-black.svg";
-import GestureRecognizer from "react-native-swipe-gestures";
 import HideIcon from "../../../../assets/icon/icon-nodisplay.svg";
 import ShowIcon from "../../../../assets/icon/icon-display.svg";
 

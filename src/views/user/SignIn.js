@@ -13,10 +13,8 @@ import {
 import Style from "../../../src/def/Style";
 import FacebookIcon from '../../../assets/icon/icon-facebook.svg'
 import GoogleIcon from '../../../assets/icon/icon-google.svg'
-import ZaloIcon from '../../../assets/icon/icon-zalo.svg'
 import Def from "../../../src/def/Def";
 import UserController from  "../../../src/controller/UserController"
-import Net from "../../net/Net";
 
 const {width,height} = Dimensions.get('window');
 
@@ -42,6 +40,7 @@ export default class SignIn extends Component {
         this.loginFalseCallback = this.loginFalseCallback.bind(this);
         this.loginFalseCallback = this.loginFalseCallback.bind(this);
         Def.setLoader = this.setLoader;
+        Def.setIsLogin = this.setLoader;
     }
 
     setLoader(isLoging){
@@ -56,7 +55,6 @@ export default class SignIn extends Component {
         }else{
             const {navigation} = this.props;
             this.setState({isLoging:true});
-            console.log('signIn');
              UserController.login(this.state.email,this.state.password,navigation, this.loginSuccessCallback, this.loginFalseCallback);
         }
     }
@@ -86,24 +84,22 @@ export default class SignIn extends Component {
     }
 
     loginFalseCallback(data){
-        console.log('Login false : ' + JSON.stringify(data));
+        alert("Login lỗi " + JSON.stringify(data));
 
     }
 
 
     render() {
         const {navigation} = this.props;
-        const {wraper,loginform, loginButton, loginText , button, labelInputNormal ,
-            labelInputHover, textInputHover, textInputNormal } = styles;
 
         return (
-            <View style={wraper}>
+            <View style={Style.login_style.wraper}>
 
-                <View style={[loginform, {marginTop:-10}]}>
+                <View style={[Style.login_style.loginform, {marginTop:-10}]}>
                     <TextInput
                         onFocus={() => this.setState({focus:1})}
                         onBlur={()=> this.setState({focus:0})}
-                        style={this.state.focus == 1 ? textInputHover : textInputNormal}
+                        style={this.state.focus == 1 ? Style.login_style.textInputHover : Style.login_style.textInputNormal}
                         value={this.state.email}
                         onChangeText={text => this.setState({email:text})}
                         placeholder='Nhập Email'
@@ -115,7 +111,7 @@ export default class SignIn extends Component {
                     <TextInput
                         onFocus={() => this.setState({focus:2})}
                         onBlur={()=> this.setState({focus:0})}
-                        style={this.state.focus == 2 ? textInputHover : textInputNormal}
+                        style={this.state.focus == 2 ? Style.login_style.textInputHover : Style.login_style.textInputNormal}
                         value={this.state.password}
                         onChangeText={text => this.setState({password:text})}
                         secureTextEntry={true}
@@ -134,8 +130,8 @@ export default class SignIn extends Component {
                             </Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={loginButton} onPress={()=>this.signIn()}>
-                            <Text style={loginText}>
+                        <TouchableOpacity style={Style.login_style.loginButton} onPress={()=>this.signIn()}>
+                            <Text style={Style.login_style.loginText}>
                                 Đăng nhập
                             </Text>
                         </TouchableOpacity>
@@ -154,27 +150,27 @@ export default class SignIn extends Component {
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[button, {backgroundColor:'#1976d2'}]}  onPress={()=>{
+                    <TouchableOpacity style={[Style.login_style.button, {backgroundColor:'#1976d2'}]}  onPress={()=>{
                         console.log('test');
                         this.setState({isLoging:true});
                         UserController.facebookLogin(navigation);
                     }}>
-                        <FacebookIcon style={styles.icon}
+                        <FacebookIcon style={Style.login_style.icon}
 
                         />
-                        <Text style={styles.buttonText}>
+                        <Text style={Style.login_style.buttonText}>
                             Đăng nhập với Facebook
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[button, {backgroundColor:'#ffffff'}]} onPress={()=> {
+                    <TouchableOpacity style={[Style.login_style.button, {backgroundColor:'#ffffff'}]} onPress={()=> {
                         this.setState({isLoging:true});
                         UserController.googleLogin(navigation);
 
                     }}>
-                        <GoogleIcon style={styles.icon}
+                        <GoogleIcon style={Style.login_style.icon}
                         />
-                        <Text style={[styles.buttonText, {color: '#b3b3b3'}]}>
+                        <Text style={[Style.login_style.buttonText, {color: '#b3b3b3'}]}>
                             Đăng nhập với Google
                         </Text>
                     </TouchableOpacity>
@@ -187,24 +183,5 @@ export default class SignIn extends Component {
 }
 
 const styles = StyleSheet.create({
-    wraper : {flex:1, alignItems: 'center' , backgroundColor: '#fff', justifyContent : 'center'},
-    loginform : { width : width * 0.9, marginTop: height / 20,},
-    textInputNormal : {height: 45, backgroundColor : '#fff', borderColor: "#9e9e9e", borderWidth : 1 ,color:'black', fontSize : Style.TITLE_SIZE, borderRadius: 5, marginTop: 10, paddingHorizontal: 10  },
-    textInputHover : {height: 45, backgroundColor : '#fff', borderColor: "#48a5ea", borderWidth : 1 , color:'black', fontSize : Style.TITLE_SIZE,borderRadius: 5, marginTop: 10, paddingHorizontal: 10 },
-    loginButton : { backgroundColor : '#ff3c29' ,borderRadius : 5, paddingLeft: 20, paddingRight : 10 },
-    button : {
-        paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 5, paddingLeft: 20, marginTop : 20, borderWidth : 1, borderColor:'#b3b3b3',
-        flexDirection : 'row', alignItems: 'center',
-    },
-    icon : {
-        width :25,
-        height : 25
-    },
 
-    loginText : { color:'#fff', fontSize : Style.TITLE_SIZE, textAlign : 'center', paddingVertical: 8},
-    buttonText : { color:'#fff', fontSize : Style.TITLE_SIZE, paddingVertical: 8, marginLeft: 15},
-    labelInputNormal : { color:'#9e9e9e', fontSize : Style.NORMAL_SIZE, marginTop : 20 },
-    labelInputHover : { color:'#48a5ea', fontSize : Style.NORMAL_SIZE, marginTop : 20 },
-    logoContainer : {alignItems : 'center', width :  width * 0.8, justifyContent: 'center', paddingBottom : 10 , marginTop: height / 10 },
-    logoStyle : {width : width /5 , height : width /5 }
 });

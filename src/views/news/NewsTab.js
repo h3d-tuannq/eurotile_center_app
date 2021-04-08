@@ -1,7 +1,8 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList, Platform} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList, Platform, RefreshControl} from 'react-native'
 import NewsVerItemrenderer from '../../com/item-render/NewsVerItemrenderer'
 import Style from "../../../src/def/Style";
+import NetNews from "../../net/NetNews";
 
 const {width, height} = Dimensions.get('window');
 
@@ -14,12 +15,35 @@ class NewsTab extends React.Component {
     constructor(props){
         super(props);
         this.itemClick = this.itemClick.bind(this);
+        this.onLoadFalse = this.onLoadFalse.bind(this);
+        this.onLoadSuccess = this.onLoadSuccess.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
+        this.state = {
+          isRefresh : false
+        };
     }
 
     itemClick(item){
         console.log(item.id);
         this.props.navigation.navigate('news-detail', { item:item});
 
+    }
+
+    onRefresh = () => {
+        console.log('Refresh News');
+        this.setState({isRefresh:true});
+        NetNews.listNews(this.onLoadSuccess, this.onLoadFalse);
+    };
+
+    onLoadSuccess = (data) => {
+        console.log('Onload data sucess !');
+        this.props.onLoadDataSuccess(data);
+        this.setState({isRefresh:false});
+    }
+
+    onLoadFalse = () => {
+        console.log('Onload datae false !');
+        this.setState({isRefresh:false});
     }
 
     render() {
@@ -31,6 +55,9 @@ class NewsTab extends React.Component {
             <View style={styles.container}>
                 <View style={{}}>
                     <FlatList
+                        refreshControl={
+                            <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
+                        }
                         data={this.props.data}
                         renderItem={renderItem}
                         keyExtractor={item => item.id + ""}
@@ -55,39 +82,6 @@ class NewsTab extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        paddingLeft: 15,
-        // justifyContent: 'flex-start',
-        // marginVertical : 5,
-        // marginBottom : 5,
-        backgroundColor: '#fff',
-        paddingTop : 5
-    },
-    slider: {
-        justifyContent: 'center',
-        paddingTop: 5,
-        padding: 8,
-        height: 120,
-        borderRadius: 5,
-        backgroundColor: "#e6e6e6",
-        marginRight : 15
-    },
-    cardStyle: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: width-20,
-        height: width/2,
-
-    },
-    programListStyle : {
-
-    },
-    itemImage: {
-        width: PROGRAM_IMAGE_WIDTH -5,
-        height : PROGRAM_IMAGE_HEIGHT -5,
-        borderRadius: 5,
-    },
 });
 
 export default NewsTab;

@@ -2,10 +2,6 @@ import React from 'react'
 import {Text, View, Button, TouchableOpacity} from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack';
 
-import SignInScreen from './user/SignIn'
-import SignUpScreen from './user/SignUp'
-// import ForgetPassScreen from './user/ForgetPassword'
-
 import MenuIcon from '../../assets/icon/menu.svg';
 import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";

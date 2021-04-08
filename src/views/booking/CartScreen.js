@@ -4,8 +4,10 @@ import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 
+import AsyncStorage from '@react-native-community/async-storage'
+
 import ProductItemrenderer from "../../com/item-render/ProductItemrenderer";
-import OrderItemrenderer from "../../com/item-render/OrderItemrenderer";
+import OrderitemItemrenderer from "../../com/item-render/OrderitemItemrenderer";
 
 import ProductAutocomplete from "../../com/common/ProductAutocomplete";
 
@@ -16,8 +18,6 @@ const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 const type = 'product';
 import Modal from 'react-native-modal';
-import TermScreen from "../../com/common/TermScreen";
-
 class CartScreen extends React.Component {
 
     constructor(props){
@@ -50,85 +50,83 @@ class CartScreen extends React.Component {
     }
 
     booking(){
-        // console.log("Booking Data : " + JSON.stringify(Def.cart_data));
+        console.log("Booking Click");
         var order = {
-          orderItems: Def.cart_data,
-          customer: null,
-          partner_id:Def.user_info['id'],
-          booker_id: Def.user_info['id'] ,
-          // cityItem:'',
-          // districtItem:'',
-          // wardItem:'',
-          // detailAddress:'',
-          address:{},
-
-          deliverDate: new Date(),
-          referralCode:'',
+            orderItems: Def.cart_data,
+            customer: null,
+            partner_id:Def.user_info && Def.user_info['partnerInfo'] ? Def.user_info['id'] : null,
+            booker_id: Def.user_info ? Def.user_info['id'] : null ,
+            address:{},
+            deliverDate: "",
+            referralCode:'',
         };
 
-        Def.order = order;
+        if(!Def.user_info.customer){ // Trong trường hợp không
+            console.log('Go to create Customer .');
+            Def.currentOrder = order;
+            this.props.navigation.navigate('Booking', {screen:'create-customer', params:{refresh:1 , user:Def.user_info}});
+            return;
+        } else {
+            console.log("CustomerInfo" + JSON.stringify(Def.user_info.customer));
+            order.customer = Def.user_info.customer;
+            order.address = order.customer.address;
+            Def.currentOrder = order;
+            console.log("Address In Orderr" + order.address);
+        }
 
-        console.log("Goto booking")
-        this.props.navigation.navigate('Product', {screen:'select-customer'});
-
+        // Def.order = order;
+        if(!Def.user_info){
+            Def.redirectScreen = {
+              stack:'Booking',
+              screen: 'select-customer'
+            };
+            this.props.navigation.navigate('Login', {screen:'signIn'});
+        } else {
+            this.props.navigation.navigate('Booking', {screen: 'booking', params: {order:order}});
+            // this.props.navigation.navigate('Booking', {screen:'select-customer', params:{customers : Def.customer, order: order}});
+        }
+        AsyncStorage.setItem('order', JSON.stringify(order));
     }
     // callback when item change
-    orderItemChange = (item) => {
+    orderItemChange = (item, isRemove = false) => {
+        console.log("Item change: " + JSON.stringify(item.amount));
+
         const found = Def.cart_data.findIndex(element => element.product.id == item.product.id);
         if(found !== -1){
-            Def.cart_data[found].quantity = item.quantity;
+            if(isRemove){
+                Def.cart_data.splice(found, 1);
+                this.setState({canOrder:this.updateCartOrder(), cart_data:Def.cart_data});
+            }else {
+            Def.cart_data[found].amount = item.amount;
             Def.cart_data[found].selectValue = item.selectValue;
+                this.setState({canOrder:this.updateCartOrder()});
+            }
+            AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
         }
-        this.setState({canOrder:this.updateCartOrder()});
     }
 
 
 
     itemClick(item){
+        this.setState({choseProduct:false});
         const found = Def.cart_data.findIndex(element => element.product.id == item.id);
         if(found !== -1){
-            // let foundObj = Def.cart_data[found];
-            // let newOrderItem = {
-            //     product:foundObj.product,
-            //     selectValue: foundObj.selectValue,
-            //     quantity:foundObj.quantity + 1,
-            //     area:item['brickBoxInfo']['total_area'],
-            //     saleArea:item['brickBoxInfo']['total_area']
-            // }
-            // // Def.cart_data[found] = newOrderItem;
-            // Def.cart_data.splice(found, 1);
-            // Def.cart_data.push(newOrderItem);
-            Def.cart_data[found].quantity++;
+            Def.cart_data[found].amount++;
             Def.cart_data[found].selectValue = true;
-
-            // console.log("Quantity item found : " + Def.cart_data[found].quantity);
-            // this.forceUpdate();
-
         } else {
             let orderItem = {
                 product:item,
                 selectValue: true,
-                quantity:1,
+                amount:1,
                 area:item['brickBoxInfo']['total_area'],
                 saleArea:item['brickBoxInfo']['total_area']
             }
 
             Def.cart_data.push(orderItem);
         }
-
         let newCartData = [];
-
-        // Def.cart_data.forEach(function(item){
-        //     newCartData.push(item)
-        // });
-
-        this.setState({cart_data: Def.cart_data, choseProduct:false, canOrder: this.checkCanOrder()});
-        this.forceUpdate();
-
-        // console.log("CartData : " + JSON.stringify(this.state.cart_data))
-
-        // this.closeFunction(null);
-
+        this.setState({cart_data: Def.cart_data, canOrder: this.checkCanOrder()});
+        AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
     }
 
     addItemToCart(item){
@@ -140,7 +138,7 @@ class CartScreen extends React.Component {
     }
 
     checkCanOrder(){
-       return Def.cart_data.findIndex(element => element.selectValue === true) ;
+       return Def.cart_data && Def.cart_data.length > 0  ;
     }
 
     refresh()
@@ -205,7 +203,7 @@ class CartScreen extends React.Component {
         );
 
         const renderOrderItem = ({item, index}) => (
-            <OrderItemrenderer type={"order-item"} item={item} index={index} itemChange={this.orderItemChange} click={this.orderItemClick}  styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
+            <OrderitemItemrenderer type={"order-item"} item={item} index={index} itemChange={this.orderItemChange} click={this.orderItemClick} styleImage={{width:PROGRAM_IMAGE_WIDTH-5, height:PROGRAM_IMAGE_HEIGHT-5 }} />
         );
 
         return (
@@ -214,7 +212,7 @@ class CartScreen extends React.Component {
                     (this.state.cart_data && this.state.cart_data.length > 0) ? <FlatList
                         data={this.state.cart_data}
                         renderItem={renderOrderItem}
-                        keyExtractor={item => item.product.id +"-" + item.quantity}
+                        keyExtractor={item => item.product.id +"-" + item.amount}
                         showsHorizontalScrollIndicator={false}
                     /> :
                     <View style={{height:300, justifyContent:'space-between', alignItems:'center'}}>
@@ -238,7 +236,7 @@ class CartScreen extends React.Component {
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity enabled={true} onPress={() => {
+                    <TouchableOpacity disabled={!this.checkCanOrder()} onPress={() => {
                         this.booking();
                     }}
                         style={{width: width / 2.5, height:40, borderRadius:20, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent : 'center', alignItems: 'center'}}>
@@ -249,8 +247,8 @@ class CartScreen extends React.Component {
 
 
                 </View>
-                <Modal  onBackButtonPress={this.closeFunction} isVisible={this.state.choseProduct} avoidKeyboard={false}    style={styles.modalView}
-                        keyboardShouldPersistTaps={true}
+                <Modal  onBackButtonPress={this.closeFunction} isVisible={this.state.choseProduct}     style={styles.modalView}
+                        // keyboardShouldPersistTaps={true}
                 >
                     <KeyboardAvoidingView enabled  behavior={Platform.OS === "android" ? undefined : "position"}>
                         <View  style={{flex:1}} scrollEnabled={false} keyboardShouldPersistTaps="handled">

@@ -1,75 +1,110 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
-import NetCollection from '../../net/NetCollection'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, FlatList} from 'react-native'
+import NetScheme from '../../net/NetScheme'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 
 import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
+import ProgramHozList from '../../com/common/ProgramHozList';
+import DesignCateHozList from '../../com/common/DesignCateHozList';
+
+import ProgramVerList from '../../com/common/ProgramVerList';
+
+
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 const carouselItems = [
     {
         id:1,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/24/1/main_img.jpg',
+        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/24/1/main_img.jpg',
     },
     {
         id:2,
-        image_path : 'https://eurotiledev.house3d.net/data/eurotileData/collection/202009/30/2/main_img.jpg',
+        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/30/2/main_img.jpg',
     }
 ];
 
 class SchemeScreen extends React.Component {
     constructor(props){
         super(props);
-        this.onGetCollectionSuccess     = this.onGetCollectionSuccess.bind(this);
-        this.onGetCollectionFalse     = this.onGetCollectionFalse.bind(this);
+        this.onGetDesignSuccess     = this.onGetDesignSuccess.bind(this);
+        this.onGetDesignFalse     = this.onGetDesignFalse.bind(this);
+
+
+        this.onGetPopularDesignSuccess     = this.onGetPopularDesignSuccess.bind(this);
+        this.onGetPopularDesignFalse     = this.onGetPopularDesignFalse.bind(this);
+
+        this.onDesignCateSuccess = this.onDesignCateSuccess.bind(this);
+        this.onDesignCateFalse = this.onDesignCateFalse.bind(this);
+
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
 
         Def.mainNavigate = this.props.navigation;
 
-        if(!Def.collection_data) {
-            NetCollection.listCollection(this.onGetCollectionSuccess, this.onGetCollectionFalse);
+        if(!Def.design_data) {
+            NetScheme.getAllDesign(this.onGetDesignSuccess, this.onGetDesignFalse);
+        } else {
+            Def.config_design_menu = this.createConfigData(Def.design_data);
         }
-        else if (!Def.config_collection_menu) {
-            Def.config_collection_menu = this.createConfigData(Def.collection_data);
+
+        if(!Def.popular_design) {
+            NetScheme.getPopularDesign(this.onGetPopularDesignSuccess, this.onPopularGetDesignFalse);
         }
+
+        if(!Def.design_cate) {
+            NetScheme.getDesignCategory(this.onDesignCateSuccess, this.onGetDesignFalse);
+        }
+
+
+
         this.state = {
-            collection_data: null,
+            design_data: Def.design_data ? Def.design_data: null,
+            popular_design: Def.popular_design ? Def.popular_design: null,
+            design_cate:  Def.design_cate ? Def.design_cate: null,
             stateCount: 0.0,
-            configMenu: Def.config_collection_menu,
+            configMenu: Def.config_design_menu,
             slide_data : carouselItems,
             activeSlide : 0
         };
 
+        this.categoryClick_handle = this.categoryClick_handle.bind(this);
     }
 
     refresh()
     {
-        //NetChannel.listChannel(this.onChannelSuccess,this.onChannelFailed);
         this.setState({ stateCount: Math.random() });
     }
 
-    onGetCollectionSuccess(data){
-        // console.log(Object.entries(data["data"]));
+
+    categoryClick_handle = (item) => {
+        this.props.navigation.navigate('sheme', {screen:'design-list', params : {item:item}});
+
+    };
+
+    onGetDesignSuccess(data){
         Object.entries(data["data"]).map((prop, key) => {
-            // console.log('Start');
-            // console.log(prop[0]);
-            // console.log(prop[1]["data"]);
-            // console.log('Start');
         });
-        this.setState({ collection_data: data["data"] });
-        Def.collection_data = data["data"];
-        Def.config_collection_menu = this.createConfigData(data["data"]) ;
-        this.setState({ configMenu: Def.config_collection_menu});
+        this.setState({ design_data: data["data"] });
+        Def.design_data = data["data"];
+        Def.config_design_menu = this.createConfigData(data["data"]) ;
+        this.setState({ configMenu: Def.config_design_menu});
     }
 
+    onGetPopularDesignSuccess(data){
+        this.setState({ popular_design: data["data"] });
+        // Def.design_data = data["data"];
+    }
+
+    onGetPopularDesignFalse(data){
+        console.log("false data : " + data);
+    }
+
+
     createConfigData(data){
-
-
         if(data){
             let configData =  Object.entries(data).map((prop, key) => {
                 // console.log("Props : " + JSON.stringify(prop));
@@ -77,11 +112,10 @@ class SchemeScreen extends React.Component {
             });
             return configData;
         }
-
     }
 
 
-    onGetCollectionFalse(data){
+    onGetDesignFalse(data){
         console.log("false data : " + data);
     }
 
@@ -91,6 +125,17 @@ class SchemeScreen extends React.Component {
             rs = text.substring(0, 20) ;
         }
         return rs;
+    }
+
+    onDesignCateSuccess(data){
+        console.log("Design Cate : " + JSON.stringify(data["data"]));
+
+        this.setState({ design_cate: data["data"] });
+        Def.design_cate = data['data'];
+    }
+
+    onDesignCateFalse(data){
+        console.log('Get Design Cate False');
     }
 
     shouldComponentUpdate(){
@@ -130,9 +175,9 @@ class SchemeScreen extends React.Component {
     renderItem = ({item, index}) => {
 
         return (
-            <View key={index} style={Style.styles.cardStyle}>
+            <View key={index} style={Style.styles.schemeCardStyle}>
                 <TouchableOpacity >
-                    <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
+                    <Image  style = {[Style.styles.schemeSlideImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
                 </TouchableOpacity>
             </View>
         );
@@ -142,10 +187,11 @@ class SchemeScreen extends React.Component {
 
     render() {
         const {navigation} = this.props;
-        const configMenu = Def.config_collection_menu;
+        const configMenu = Def.config_design_menu;
         Def.order_number = 20;
-        return (
-            <View style={{flex:1}}>
+
+        const ListHeader = () => (
+            <View>
                 <View style={Style.styles.carousel}>
                     <Carousel
                         ref={(c) => { this._carousel = c; }}
@@ -164,6 +210,33 @@ class SchemeScreen extends React.Component {
                     />
                     { this.pagination }
                 </View>
+                <View style={[styles.programListStyle, {marginTop: 5, marginLeft:15}]}>
+                    <DesignCateHozList refresh={this.refresh} stack={'scheme'} type={'cate'}
+                                    screen={'design-list'} favorite={true}
+                                    navigation={this.props.navigation} name={'Danh mục'}
+                                    style={styles.programListStyle} data={this.state.design_cate} title={"Danh mục"}/>
+                </View>
+
+                <View style={{flexDirection: 'row', justifyContent: 'space-between' , alignItems: 'flex-start'}}
+                >
+
+                    <View style={{marginLeft:15, paddingBottom:8}}>
+                        <Text style={styles.titleStyle}>{"Nổi bật"}</Text>
+                    </View>
+                </View>
+            </View>
+        );
+
+
+        return (
+            <View style={{flex:1}}>
+                <ProgramVerList
+                    data={this.state.popular_design}
+                    navigation={this.props.navigation}
+                    header={ListHeader}
+                    type={'design'}
+                    stack={'scheme'}
+                />
             </View>
         )
     }
@@ -202,6 +275,10 @@ const styles = StyleSheet.create({
         height : PROGRAM_IMAGE_HEIGHT -5,
         borderRadius: 5,
     },
+    titleStyle : {
+        fontSize : Style.BIG_SIZE,
+        color: Style.GREY_TEXT_COLOR,
+    }
 });
 
 export default SchemeScreen;

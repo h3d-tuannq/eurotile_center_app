@@ -11,18 +11,12 @@ const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 
 const ITEM_HEIGHT = 40;
 
-import DatePicker from 'react-native-datepicker'
-
-import DateTimePicker from "react-native-modal-datetime-picker";
-
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import {Picker} from '@react-native-community/picker';
 import UserController from "../../controller/UserController";
-import Autocomplete from 'react-native-autocomplete-input';
-import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
-import moment from 'moment'
+import ImageResizer from 'react-native-image-resizer';
 
 class UpdatePartnerScreen extends React.Component {
     constructor(props){
@@ -83,8 +77,10 @@ class UpdatePartnerScreen extends React.Component {
             nextAddress : 1, // 1 select city, 2 select district, 3 select ward
             filterAttr: 'city_name',
             filterData: [],
-            showKeyboard : false,
-            addressTitle: 'Tỉnh/Thành phố'
+            showKeyboard : 0,
+            addressTitle: 'Tỉnh/Thành phố',
+            isPartner: Def.checkPartnerPermission()>-1,
+
 
         };
 
@@ -96,9 +92,7 @@ class UpdatePartnerScreen extends React.Component {
 
     componentDidMount(){
         console.log('component did mount recall');
-
-        Net.sendRequest(this.onGetCites,this.onGetCitesFalse,'https://eurotiledev.house3d.net/api/user/city' , Def.POST_METHOD);
-
+        Net.sendRequest(this.onGetCites,this.onGetCitesFalse,Def.URL_BASE + '/api/user/city' , Def.POST_METHOD);
     }
 
 
@@ -131,7 +125,6 @@ class UpdatePartnerScreen extends React.Component {
     }
 
     showAutocompleteModal(res){
-        console.log("Get Res Data : " + JSON.stringify(res));
         let unit = this.state.currentAddress == 1 ? 'city_item' : this.state.currentAddress == 2 ? 'district_item' : 'ward_item';
         if(this.state.currentAddress == 1){
             this.setState({ filterData: res, cites: res, filterAttr: 'city_name'});
@@ -151,7 +144,7 @@ class UpdatePartnerScreen extends React.Component {
     choseCityClick(){
         this.setState({currentAddress:1});
         if(!this.state.cities || this.state.cities.length == 0 ){
-            this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/city', null, this.showAutocompleteModal);
+            this.getAdministrativeUnit(Def.URL_BASE + '/api/user/city', null, this.showAutocompleteModal);
         } else {
             this.setState({filterData: this.state.cities, filterAttr: 'city_name'});
             this.showAddressModal();
@@ -168,10 +161,16 @@ class UpdatePartnerScreen extends React.Component {
     }
 
     choseDistrictClick(){
+        if(!this.state.city_item){
+            this.choseCityClick();
+            return;
+        }
+
+
         this.setState({currentAddress:2});
         if(!this.state.district || this.state.district.length == 0){
             console.log('Chưa tồn tại District : ');
-            this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/district', {city_code: this.state.city_item.city_code}, this.showAutocompleteModal);
+            this.getAdministrativeUnit(Def.URL_BASE + '/api/user/district', {city_code: this.state.city_item.city_code}, this.showAutocompleteModal);
         }else {
             console.log('Isset District: ' + JSON.stringify(this.state.district));
             this.setState({ filterData: this.state.district, filterAttr: 'district_name'});
@@ -182,9 +181,19 @@ class UpdatePartnerScreen extends React.Component {
     }
 
     choseWardClick(){
+        if(!this.state.city_item){
+            this.choseCityClick();
+            return;
+        }
+
+        if(!this.state.district_item){
+            this.choseDistrictClick();
+            return;
+        }
+
         this.setState({currentAddress:3});
         if(!this.state.ward || this.state.ward.length == 0){
-            this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/ward', {district_code: this.state.district_item.district_code}, this.showAutocompleteModal);
+            this.getAdministrativeUnit(Def.URL_BASE + '/api/user/ward', {district_code: this.state.district_item.district_code}, this.showAutocompleteModal);
         }else {
             this.setState({filterData: this.state.ward, filterAttr: 'ward_name'});
             this.showAddressModal();
@@ -192,20 +201,19 @@ class UpdatePartnerScreen extends React.Component {
         // setTimeout(this.showAddressModal, 500);
     }
 
-
     closeFunction = (item) => {
         if (item) {
             if(this.state.currentAddress == 1){
                if (!this.state.city_item || (this.state.city_item.city_code !== item.city_code)){
                    this.setState({nextAddress:2, district_item : null, ward_item : null });
-                   this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/district', {city_code: item.city_code});
+                   this.getAdministrativeUnit(Def.URL_BASE + '/api/user/district', {city_code: item.city_code});
                }
             }
 
             if(this.state.currentAddress == 2){
                 if (!this.state.district_item || this.state.district_item.district_code !== item.district_code){
                     this.setState({nextAddress:3 , ward_item : null});
-                    this.getAdministrativeUnit('https://eurotiledev.house3d.net/api/user/ward', {district_code: item.district_code});
+                    this.getAdministrativeUnit(Def.URL_BASE + '/api/user/ward', {district_code: item.district_code});
                 }
             }
 
@@ -233,7 +241,7 @@ class UpdatePartnerScreen extends React.Component {
             card_no : Def.user_info['userProfile']['card_number'],
             issue_on : Def.user_info['userProfile']['issued_on'] ? new Date(Def.user_info['userProfile']['issued_on']) :new Date() , // Def.user_info['userProfile']['issued_on'], // Ngày cấp
             issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
-            address : Def.getAddressFromUserInfo() ? '26 Cự lộc' : '',
+            address : Def.getDetailAddressFromUserInfo(),
             city_item: Def.getCityItemFromUserInfo(),
             district_item: Def.getDistrictItemFromUserInfo(),
             ward_item: Def.getWardItemFromUserInfo(),
@@ -304,6 +312,12 @@ class UpdatePartnerScreen extends React.Component {
             alert("Vui cập nhật dữ liệu phường/xã");
             err = 3;
         }
+
+        if(!this.state.address){
+            alert("Vui lòng cập nhật địa chỉ cụ thể");
+            err = 3;
+        }
+
         return err;
     }
 
@@ -323,35 +337,48 @@ class UpdatePartnerScreen extends React.Component {
     updatePartnerInfo() {
         const {navigation} = this.props;
         console.log('Update user info');
-        // if(!this.state.avatarSource){
-        //     alert("Vui lòng cập nhật ảnh Avatar");
-        // }else if(!this.state.mobile){
-        //     alert("Vui lòng điền số điện thoại");
-        // }else if(!this.state.birth_day){
-        //     alert("Vui lòng nhập thông tin ngày sinh");
-        // }else if(!this.state.gender){
-        //     alert("Vui lòng nhập thông tin giới tính");
-        // }else if(!this.state.address){
-        //     alert("Vui lòng nhập địa chỉ");
-        // }else if(!this.state.card_no){
-        //     alert("Vui lòng nhập số CMND");
-        // } else if(!this.state.issue_on){
-        //     alert("Vui lòng nhập ngày cấp");
-        // }else if(!this.state.issue_at){
-        //     alert("Vui lòng nhập nơi cấp");
-        // }else if(!this.state.infront_cmt_img){
-        //     alert("Vui lòng chụp ảnh mặt trước CMND");
-        // }else if(!this.state.behind_cmt_img){
-        //     alert("Vui lòng chụp ảnh mặt sau CMND");
-        // }else if(!this.state.project_img1){
-        //     alert("Vui lòng tải lên ảnh dự án");
-        // }else if(!this.state.project_img2){
-        //     alert("Vui lòng tải lên ảnh dự án");
-        // }
-        // else if(!this.state.project_img3){
-        //     alert("Vui lòng tải lên ảnh dự án");
-        // } else {
-        // this.validateAddress();
+        if(!this.state.avatarSource){
+            alert("Vui lòng cập nhật ảnh Avatar");
+            return;
+        }else if(!this.state.mobile){
+            alert("Vui lòng điền số điện thoại");
+            return;
+        }else if(!this.state.birth_day){
+            alert("Vui lòng nhập thông tin ngày sinh");
+            return;
+        }else if(!this.state.address){
+            alert("Vui lòng nhập địa chỉ");
+            return;
+        }else if(!this.state.card_no){
+            alert("Vui lòng nhập số CMND");
+            return;
+        } else if(!this.state.issue_on){
+            alert("Vui lòng nhập ngày cấp");
+            return;
+        }else if(!this.state.issue_at){
+            alert("Vui lòng nhập nơi cấp");
+            return;
+        }else if(!this.state.infront_cmt_img){
+            alert("Vui lòng chụp ảnh mặt trước CMND");
+            return;
+        }else if(!this.state.behind_cmt_img){
+            alert("Vui lòng chụp ảnh mặt sau CMND");
+            return;
+        }else if(!this.state.project_img1){
+            alert("Vui lòng tải lên ảnh dự án");
+            return;
+        }else if(!this.state.project_img2){
+            alert("Vui lòng tải lên ảnh dự án");
+            return;
+        }
+        else if(!this.state.project_img3){
+            alert("Vui lòng tải lên ảnh dự án");
+            return;
+        } else {
+        if(this.validateAddress()){
+           return;
+        }
+        }
         let userInfo = {
             user_id : Def.user_info ? Def.user_info['id'] : 14,
             card_no: this.state.card_no,
@@ -364,49 +391,53 @@ class UpdatePartnerScreen extends React.Component {
             full_name: this.state.full_name,
         };
 
-        if(this.state.avatarSource && this.state.avatarSource.fileName ) {
+        if(this.state.avatarSource && (this.state.avatarSource.fileName || this.state.avatarSource.name ) ) {
             userInfo.avatar =   {
-                name: this.state.avatarSource.fileName,
+                name: this.state.avatarSource.fileName ? this.state.avatarSource.fileName : this.state.avatarSource.name ,
                 type: this.state.avatarSource.type,
                 uri: Platform.OS === "android" ? this.state.avatarSource.uri : this.state.avatarSource.uri.replace("file://", "")
             };
         }
 
-        if(this.state.infront_cmt_img && this.state.infront_cmt_img.fileName ) {
+        console.log("In front cmt : " + JSON.stringify(this.state.infront_cmt_img));
+
+        if(this.state.infront_cmt_img && (this.state.infront_cmt_img.fileName || this.state.infront_cmt_img.name ) ) {
+
+
             userInfo.infront_cmt_img =   {
-                name: this.state.infront_cmt_img.fileName,
+                name: this.state.infront_cmt_img.fileName ? this.state.infront_cmt_img.fileName : this.state.infront_cmt_img.name,
                 type: this.state.infront_cmt_img.type,
                 uri: Platform.OS === "android" ? this.state.infront_cmt_img.uri : this.state.infront_cmt_img.uri.replace("file://", "")
             };
         }
 
-        if(this.state.behind_cmt_img && this.state.behind_cmt_img.fileName ) {
+        if(this.state.behind_cmt_img && (this.state.behind_cmt_img.fileName || this.state.behind_cmt_img.name)) {
             userInfo.behind_cmt_img =   {
-                name: this.state.behind_cmt_img.fileName,
+                name: this.state.behind_cmt_img.fileName ? this.state.behind_cmt_img.fileName : this.state.behind_cmt_img.name ,
                 type: this.state.behind_cmt_img.type,
                 uri: Platform.OS === "android" ? this.state.behind_cmt_img.uri : this.state.behind_cmt_img.uri.replace("file://", "")
             };
         }
 
-        if(this.state.project_img1 && this.state.project_img1.fileName ) {
+        if(this.state.project_img1 && (this.state.project_img1.fileName || this.state.project_img1.name) ) {
             userInfo.project_img1 =   {
-                name: this.state.project_img1.fileName,
+                name: this.state.project_img1.fileName ? this.state.project_img1.fileName : this.state.project_img1.name ,
                 type: this.state.project_img1.type,
                 uri: Platform.OS === "android" ? this.state.project_img1.uri : this.state.project_img1.uri.replace("file://", "")
             };
         }
 
-        if(this.state.project_img2 && this.state.project_img2.fileName ) {
+        if(this.state.project_img2 && (this.state.project_img2.fileName || this.state.project_img2.name) ) {
             userInfo.project_img2 =   {
-                name: this.state.project_img2.fileName,
+                name: this.state.project_img2.fileName ? this.state.project_img2.fileName :  this.state.project_img2.name,
                 type: this.state.project_img2.type,
                 uri: Platform.OS === "android" ? this.state.project_img2.uri : this.state.project_img2.uri.replace("file://", "")
             };
         }
 
-        if(this.state.project_img3 && this.state.project_img3.fileName ) {
+        if(this.state.project_img3 && (this.state.project_img3.fileName || this.state.project_img3.name) ) {
             userInfo.project_img3 =   {
-                name: this.state.project_img3.fileName,
+                name: this.state.project_img3.fileName ? this.state.project_img3.fileName : this.state.project_img3.name,
                 type: this.state.project_img3.type,
                 uri: Platform.OS === "android" ? this.state.project_img3.uri : this.state.project_img3.uri.replace("file://", "")
             };
@@ -478,12 +509,32 @@ class UpdatePartnerScreen extends React.Component {
 
 
         ImagePicker.showImagePicker(options, response => {
-            console.log('Attr res' + attr);
-            console.log(response);
-            if (response.uri) {
-                this.setState({ [attr]: response })
+                console.log('Attr res' + attr);
+                if (response.uri) {
+                    let maxsize = response.width > response.height ? response.width : response.height;
+
+                    if (maxsize > Def.DEFAULT_MAX_SIZE) {
+
+                        let compressType = response.type == "image/jpeg" ? "JPEG" : "PNG";
+                        ImageResizer.createResizedImage(response.uri, Def.DEFAULT_MAX_SIZE, Def.DEFAULT_MAX_SIZE, compressType, 50, 0, undefined, false)
+                            .then(resizedImage => {
+                                console.log("Attr : " + attr);
+                                resizedImage['type'] = response.type;
+                                this.setState({[attr]: resizedImage});
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                return Alert.alert(
+                                    'Unable to resize the photo',
+                                    'Check the console for full the error message',
+                                );
+                            });
+                    } else {
+                        this.setState({[attr]: response})
+                    }
+                }
             }
-        })
+        )
     }
 
 
@@ -517,7 +568,7 @@ class UpdatePartnerScreen extends React.Component {
         return (
             <View style={{flex:1}}>
                 <ScrollView keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}>
-                    {!this.state.showKeyboard ?
+                    {this.state.showKeyboard == 0 ?
                         <View>
                             <TouchableOpacity onPress={() => this.handleChoosePhoto('avatarSource')}
                                               style={{alignItems: 'center', justifyContent: 'center', marginBottom: 5}}>
@@ -565,10 +616,11 @@ class UpdatePartnerScreen extends React.Component {
 
                                     <TextInput
                                         onFocus={() => this.setState({focus: 1})}
-                                        onBlur={() => this.setState({focus: 0})}
+                                        onBlur={() =>  this.setState({focus: 0})}
                                         style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                         value={this.state.full_name}
                                         onChangeText={text => this.setState({full_name: text})}
+                                        placeholder={'Nhập họ tên'}
                                     />
                                     <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
                                 </View>
@@ -593,6 +645,7 @@ class UpdatePartnerScreen extends React.Component {
                                         style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                         value={this.state.mobile}
                                         onChangeText={text => this.setState({mobile: text})}
+                                        placeholder={'Nhập số điện thoại'}
                                     />
                                     <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
                                 </View>
@@ -818,9 +871,6 @@ class UpdatePartnerScreen extends React.Component {
                                     source={{ uri: this.state.infront_cmt_img.uri }}
                                     style={{ width: width, height:150, maxHeight: 200 , marginTop: 5 }}
                                 />
-                                <Text>
-                                    Test
-                                </Text>
                             </View>
                             :
                             <View style={{ width: width * 0.8, height: 150 , marginTop: 5 , borderWidth: 2 , borderColor:Style.DEFAUT_RED_COLOR,
@@ -920,8 +970,6 @@ class UpdatePartnerScreen extends React.Component {
                             </View>
                         }
                     </TouchableOpacity>
-
-
                 </ScrollView>
                 <Modal onRequestClose={() => {this.closeFunction(null)}} visible={this.state.choseAddress}  transparent={false} styles={{backgroundColor : 'green'}} >
                     {/*{this.state.choseAddress ?*/}
@@ -946,70 +994,8 @@ class UpdatePartnerScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        paddingLeft: 15,
-        // justifyContent: 'flex-start',
-        // marginVertical : 5,
-        marginBottom : 125,
-        backgroundColor: '#fff'
-    },
-    slider: {
-        justifyContent: 'center',
-        paddingTop: 5,
-        padding: 8,
-        height: 120,
-        borderRadius: 5,
-        backgroundColor: "#e6e6e6",
-        marginRight : 15
-    },
-    cardStyle: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: width-20,
-        height: width/2,
-
-    },
-    programListStyle : {
-
-    },
-    itemImage: {
-        width: PROGRAM_IMAGE_WIDTH -5,
-        height : PROGRAM_IMAGE_HEIGHT -5,
-        borderRadius: 5,
-    },
-    imageStyle : {
-        width : width /3,
-        height : width / 3,
-
-        borderRadius: width / 6,
-    },
-    imageStyleInfo : {
-        width : width /8,
-        height : width / 8,
-        borderRadius: width / 16,
-    },
-
-    button : {
-        paddingVertical : 5,backgroundColor : '#ff3c29' ,borderRadius : 5, marginTop : 5, borderWidth : 1, borderColor:'#b3b3b3',
-        flexDirection : 'row', alignItems: 'center', paddingHorizontal : 5
-    },
-    textInputNormal : {height: 45, backgroundColor : '#fff', borderColor: "#9e9e9e", borderWidth : 1 ,color:'black', fontSize : 18, borderRadius: 5, marginVertical:3, paddingHorizontal: 10  },
-    textInputHover : {height: 45, backgroundColor : '#fff', borderColor: "#48a5ea", borderWidth : 1 , color:'black', fontSize : 18,borderRadius: 5, marginVertical:3, paddingHorizontal: 10 },
-
     textEditableNormal : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black', fontSize : Style.MIDLE_SIZE , marginRight : 5, textAlign: 'right'},
     textEditableForcus : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black', fontSize : Style.MIDLE_SIZE  , marginRight : 5, textAlign: 'right'},
-
-    buttonText : { color:'#fff', fontSize : 18, paddingVertical: 2},
-    autocompleteContainer: {
-        flex: 1,
-        left: 0,
-        position: 'absolute',
-        right: 0,
-        top: 0,
-        zIndex: 1
-    }
-
 });
 
 export default UpdatePartnerScreen;

@@ -1,20 +1,23 @@
 import React, {PureComponent} from 'react'
 import {Text, View , FlatList , Button , StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
-
 import IconArrow from '../../../assets/icon/icon_arrow.svg'
-
-
 import LogoIconSmall from '../../../assets/icon/icon-vov-small.svg'
 import WishlistIcon from '../../../assets/icon/icon-wishlist.svg'
 import MusicWishlistIcon from '../../../assets/icon/icon-catalog-music.svg'
 
 import DefaultProgramImage from '../../../assets/icon/logo-vov.svg'
 import CollectionItemrenderer from '../item-render/CollectionItemrenderer'
+import DesignItemrenderer from '../item-render/DesignItemrenderer'
+import CategoryItemrenderer from '../item-render/CategoryItemrenderer'
+
 import Style from "../../../src/def/Style";
 
 const {width, height} = Dimensions.get('window');
 const PROGRAM_IMAGE_WIDTH = (width - 15) /2.5;
 const PROGRAM_IMAGE_HEIGHT = (width - 15) /2.5;
+
+const CATE_IMAGE_WIDTH = width * 0.7;
+const CATE_IMAGE_HEIGHT = width * 0.6;
 
 
 
@@ -66,16 +69,40 @@ class ProgramHozList extends React.Component {
         const {iconStyleHome, titleStyle,titleView, } = styles;
         const favorite = this.props.favorite;
         const minusSize = this.props.programType == 'music' ? 12 : 5;
+        const type = this.props.type;
         const renderItem = ({ item }) => (
+               <View>
+                   {type == 'cate' ?
+                       <CategoryItemrenderer
+                           click={this.itemClick}
+                           refresh={this.refresh}
+                           item={item}
+                           favorite={favorite}
+                           styleImage={{width: CATE_IMAGE_WIDTH - minusSize, height: CATE_IMAGE_HEIGHT - minusSize}}
+                           type={this.props.type}
+                       />
+                       : type == 'design' ?
+                    <DesignItemrenderer
+                       click={this.itemClick}
+                       refresh={this.refresh}
+                       item={item}
+                       favorite={favorite}
+                       styleImage={{width: PROGRAM_IMAGE_WIDTH - minusSize, height: PROGRAM_IMAGE_HEIGHT - minusSize}}
+                       type={this.props.type}
+                   /> :
 
-            <CollectionItemrenderer
-                click={this.itemClick}
-                refresh={this.refresh}
-                item={item}
-                favorite={favorite}
-                styleImage={{width:PROGRAM_IMAGE_WIDTH-minusSize, height:PROGRAM_IMAGE_HEIGHT-minusSize }}
-                type={this.props.programType}
-            />
+                   <CollectionItemrenderer
+                           click={this.itemClick}
+                           refresh={this.refresh}
+                           item={item}
+                           favorite={favorite}
+                           styleImage={{width: PROGRAM_IMAGE_WIDTH - minusSize, height: PROGRAM_IMAGE_HEIGHT - minusSize}}
+                           type={this.props.programType}
+                   />
+
+               }
+                </View>
+
 
         );
         return (
@@ -84,7 +111,7 @@ class ProgramHozList extends React.Component {
                     <TouchableOpacity style={{flexDirection: 'row', justifyContent: 'space-between' , alignItems: 'center'}}
                                       onPress={this.sectionClick}
                     >
-                     {this.props.programType == 'music' ? <MusicWishlistIcon style={styles.icon}/>: (this.props.group == "Favorite" ? <WishlistIcon style={styles.icon}/>  : <LogoIconSmall style={styles.icon}/> )}
+                     {/*{this.props.programType == 'music' ? <MusicWishlistIcon style={styles.icon}/>: (this.props.group == "Favorite" ? <WishlistIcon style={styles.icon}/>  : <LogoIconSmall style={styles.icon}/> )}*/}
 
 
                     <View style={titleView} onPress={this.sectionClick} >
@@ -92,17 +119,17 @@ class ProgramHozList extends React.Component {
                         {/*<IconArrow  style={iconStyleHome}  />*/}
                     </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={titleView} onPress={this.sectionClick} >
-                        <Text style={{fontSize : Style.NORMAL_SIZE ,marginRight : 10 , color : Style.DEFAUT_RED_COLOR , borderWidth : 1 ,padding : 2, paddingHorizontal : 5,  borderRadius: 5, borderColor : Style.DEFAUT_RED_COLOR}}>{"Xem tất cả"}</Text>
+                    {/*<TouchableOpacity style={titleView} onPress={this.sectionClick} >*/}
+                        {/*<Text style={{fontSize : Style.NORMAL_SIZE ,marginRight : 10 , color : Style.DEFAUT_RED_COLOR , borderWidth : 1 ,padding : 2, paddingHorizontal : 5,  borderRadius: 5, borderColor : Style.DEFAUT_RED_COLOR}}>{"Xem tất cả"}</Text>*/}
 
-                    </TouchableOpacity>
+                    {/*</TouchableOpacity>*/}
 
                 </View>
 
 
                 {   this.props.data ?
                     <FlatList
-                        style={{height: this.props.programType == 'music' ? PROGRAM_IMAGE_HEIGHT + 20 : PROGRAM_IMAGE_HEIGHT}}
+                        // style={{height: this.props.programType == 'music' ? PROGRAM_IMAGE_HEIGHT + 20 : PROGRAM_IMAGE_HEIGHT}}
                         horizontal={true}
                         data={this.props.data}
                         renderItem={renderItem}
@@ -122,12 +149,12 @@ const styles = StyleSheet.create ({
       container: {
         // marginTop : 25,
           backgroundColor: '#ffffff',
-          paddingBottom : 15,
+          paddingBottom : 10,
       },
       item: {
         backgroundColor: '#ffffff',
-        width: (width - 60) / 2.5,
-        height : (width - 60 ) / 2.5,
+        // width: (width - 60) / 2.5,
+        // height : (width - 60 ) / 2.5,
         borderRadius: 5,
         justifyContent : 'center',
         marginRight: 8,
@@ -136,16 +163,10 @@ const styles = StyleSheet.create ({
       width : 20,
       height : 20
     },
-    itemImage: {
-        width: PROGRAM_IMAGE_WIDTH -5,
-        height : PROGRAM_IMAGE_HEIGHT -5,
-        borderRadius: 5,
-    },
-
       titleStyle: {
           fontSize : Style.BIG_SIZE,
-        color: Style.DEFAUT_RED_COLOR,
-        fontWeight: 'bold',
+          // color: Style.GREY_TEXT_COLOR,
+        // fontWeight: 'bold',
         marginRight : 10
       },
       titleView: {

@@ -20,6 +20,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import BackIcon from './assets/icon/icon-back.svg';
+import OrderController from './src/controller/OrderController'
 
 
 import PolicyIcon from './assets/icon/icon-policy.svg';
@@ -48,6 +49,8 @@ const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 import NetNews from './src/net/NetNews'
 import NetCollection from './src/net/NetCollection'
+import NetScheme from './src/net/NetScheme'
+import Modal from 'react-native-modal';
 
 const styles = StyleSheet.create({
     baseText: {
@@ -69,6 +72,27 @@ const styles = StyleSheet.create({
         color: '#b3b3b3',
         marginVertical: PixelRatio.get() < 2 ? 6 :10,
     },
+
+    modalView: {
+        position: 'absolute',
+        bottom :Style.HEADER_HEIGHT,
+        margin : 0,
+        borderRadius: 10,
+        // borderWidth : 1,
+        zIndex:20,
+        alignItems: "center",
+        minHeight:45,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 15,
+            height: 3,
+        },
+        shadowOpacity: 0.43,
+        shadowRadius: 9.51,
+
+        elevation: 2,
+    },
+
 });
 
 
@@ -280,6 +304,8 @@ function AppStack() {
         <RootStack.Navigator headerMode="none">
             <Stack.Screen name="MainTab" component={MainTab} />
             <Stack.Screen name="Login" component={LoginStack} />
+            <Stack.Screen name="Booking" component={BookingStack} />
+            <Stack.Screen name="Notification" component={NotificationStack} />
         </RootStack.Navigator>
     );
 }
@@ -293,6 +319,23 @@ import {
 
 
 const Drawer = createDrawerNavigator();
+
+
+const logoutFunction = async () => {
+    try {
+        let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data'];
+        await AsyncStorage.multiRemove(keys);
+        // AsyncStorage.removeItem('email');
+        // AsyncStorage.removeItem('login_token');
+        // AsyncStorage.removeItem('user_info');
+        // AsyncStorage.removeItem('username');
+        // AsyncStorage.removeItem('firebase_token');
+        // AsyncStorage.removeItem('cart_data');
+    }catch (e){
+
+    }
+    RNRestart.Restart();
+}
 
 function CustomDrawerContent(props) {
     return (
@@ -328,7 +371,7 @@ function CustomDrawerContent(props) {
                                 paddingHorizontal: 10,
                                 marginTop: PixelRatio.get() < 2 ? 6 :10,
                                 marginBottom: PixelRatio.get() < 2 ? 6 :10,
-                                
+
                             }}>
                             <TouchableOpacity
                                 style={{
@@ -376,12 +419,14 @@ function CustomDrawerContent(props) {
                                     alignItems: 'center',
                                 }}
                                 onPress={() => {
-                                    AsyncStorage.removeItem('email');
-                                    AsyncStorage.removeItem('login_token');
-                                    AsyncStorage.removeItem('user_info');
-                                    AsyncStorage.removeItem('username');
-                                    AsyncStorage.removeItem('firebase_token');
-                                    RNRestart.Restart();
+                                    // AsyncStorage.removeItem('email');
+                                    // AsyncStorage.removeItem('login_token');
+                                    // AsyncStorage.removeItem('user_info');
+                                    // AsyncStorage.removeItem('username');
+                                    // AsyncStorage.removeItem('firebase_token');
+                                    // AsyncStorage.removeItem('cart_data');
+                                    // RNRestart.Restart();
+                                    UserController.logoutLocal();
                                 }}>
                                 <Text style={{fontSize: Style.TITLE_SIZE, color: '#fff'}}> Đăng xuất </Text>
                             </TouchableOpacity>
@@ -423,6 +468,8 @@ import NewsStack from "./src/views/NewsStack";
 import MyStack from "./src/views/MyStack";
 import HomeStack from "./src/views/HomeStack"
 import SchemeStack from "./src/views/SchemeStack"
+import BookingStack from "./src/views/BookingStack"
+import NotificationStack from "./src/views/NotificationStack"
 
 
 
@@ -508,40 +555,28 @@ function AppDrawer() {
 import messaging from '@react-native-firebase/messaging';
 import UserController from "./src/controller/UserController";
 
-messaging().onMessage(async (remoteMessage) => {
-    //
-    //alert(JSON.stringify(remoteMessage));
-    Alert.alert(
-        remoteMessage.notification.title,
-        remoteMessage.notification.body,
-        [
-            {
-                text: 'Bỏ qua',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-            },
-            {
-                text: 'Đồng ý',
-                onPress: () => {
-                    goLink(remoteMessage.data.url);
-                },
-            },
-        ],
-        {cancelable: false},
-    );
-});
+// messaging().getToken().then((token) => {
+//     console.log("Token " +   JSON.stringify(token));
+// } );
+
+ messaging().subscribeToTopic('all').then(() => console.log('Subscribed to topic!'));
+
+messaging().getToken().then((token) => {
+    console.log("Token " +   JSON.stringify(token));
+} );
+
+
+
+
 
 
 export default class App extends Component {
     state = {
+        showNoti:false,
+        noti:"Thông báo từ hệ thống Eurotile-Center",
     };
-
-
-
     constructor(props) {
         super(props);
-
-
         AsyncStorage.getItem('access_token').then((value) => {
             if (value) {
                 Def.login_token = value;
@@ -551,6 +586,19 @@ export default class App extends Component {
 
         this.onGetProductSuccess = this.onGetProductSuccess.bind(this);
         this.onGetProductFalse = this.onGetProductFalse.bind(this);
+        this.onDesignSuccess = this.onDesignSuccess.bind(this);
+        this.onDesignFalse = this.onDesignFalse.bind(this);
+
+        this.onPopularDesignSuccess = this.onPopularDesignSuccess.bind(this);
+        this.onPopularDesignFalse = this.onPopularDesignFalse.bind(this);
+
+        this.onDesignCateSuccess = this.onDesignCateSuccess.bind(this);
+        this.onDesignCateFalse = this.onDesignCateFalse.bind(this);
+        this.setDisplayNoti = this.setDisplayNoti.bind(this);
+        this.setHideNoti = this.setHideNoti.bind(this);
+
+
+
 
         NetCollection.listCollection(this.onCollectionSuccess, this.onNewFailed);
         NetNews.listNews(this.onNewSuccess, this.onNewFailed);
@@ -581,7 +629,6 @@ export default class App extends Component {
     }
 
     onGetProductSuccess(data){
-        console.log('Return Product Data');
         Def.product_data = data["data"];
     }
 
@@ -595,20 +642,131 @@ export default class App extends Component {
     }
 
     onCollectionSuccess(data){
-
         console.log('onCollectionSuccess : ');
         Def.collection_data = data['data'];
     }
+
+    onDesignSuccess(data){
+        Def.design_data = data['data'];
+    }
+
+    onDesignFalse(data){
+        console.log('Get Design False');
+    }
+
+    onPopularDesignSuccess(data){
+        console.log('onPopularDesignSuccess : ');
+
+        Def.popular_design = data['data'];
+    }
+
+
+    onPopularDesignFalse(data){
+        console.log('Get Popular Design False');
+    }
+
+    onDesignCateSuccess(data){
+        Def.design_cate = data['data'];
+    }
+
+    onDesignCateFalse(data){
+        console.log('Get Design Cate False');
+    }
+
 
     onNewFailed(data){
         console.log('onNewFailed d: ' + JSON.stringify(data));
     }
 
+
+
     componentDidMount() {
         SplashScreen.hide();
         console.log('Get Product Info From Scratch');
         NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
+        NetScheme.getAllDesign(this.onDesignSuccess, this.onDesignFalse);
+        NetScheme.getPopularDesign(this.onPopularDesignSuccess, this.onPopularDesignFalse);
+        NetScheme.getDesignCategory(this.onDesignCateSuccess, this.onDesignCateFalse);
+
+        OrderController.getOrder();
+
+
+        AsyncStorage.getItem('cart_data').then((value) => {
+            if(value){
+                Def.cart_data = JSON.parse(value);
+            }
+        });
+
+        AsyncStorage.getItem('order').then((value) => {
+            if(value){
+                Def.order = JSON.parse(value);
+            }
+        });
+
+        messaging().onNotificationOpenedApp(remoteMessage => {
+            console.log(
+                'Notification caused app to open from background state:',
+                remoteMessage.notification,
+            );
+            navigation.navigate(remoteMessage.data.type);
+        });
+
+        // Check whether an initial notification is available
+        messaging()
+            .getInitialNotification()
+            .then(remoteMessage => {
+                if (remoteMessage) {
+                    console.log(
+                        'Notification caused app to open from quit state:',
+                        remoteMessage.notification,
+                    );
+                    setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+                }
+                setLoading(false);
+            });
+
+
+
+
+
+
+
+
+        messaging().onMessage(async (remoteMessage) => {
+            this.setState({noti:remoteMessage && remoteMessage.notification ? remoteMessage.notification.body :"", showNoti:true});
+            console.log("Remote Message : " + JSON.stringify(remoteMessage));
+
+            //
+            //alert(JSON.stringify(remoteMessage));
+            // Alert.alert(
+            //     remoteMessage.notification.title,
+            //     remoteMessage.notification.body,
+            //     [
+            //         {
+            //             text: 'Bỏ qua',
+            //             onPress: () => console.log('Cancel Pressed'),
+            //             style: 'cancel',
+            //         },
+            //         {
+            //             text: 'Đồng ý',
+            //             onPress: () => {
+            //                 goLink(remoteMessage.data.url);
+            //             },
+            //         },
+            //     ],
+            //     {cancelable: false},
+            // );
+        });
+
     }
+
+    setDisplayNoti = () => {
+      this.setState({showNoti:true});
+    };
+
+    setHideNoti = () => {
+        this.setState({showNoti:false});
+    };
 
 
     render() {
@@ -616,6 +774,32 @@ export default class App extends Component {
             <NavigationContainer>
                 <StatusBar backgroundColor={Style.DEFAUT_BLUE_COLOR} />
                 <AppDrawer />
+                <View>
+                    <Modal isVisible={this.state.showNoti}  coverScreen={true} hasBackdrop={true}
+                           backdropOpacity={0}
+                           onBackdropPress={this.setHideNoti}
+                           // deviceWidth={width}
+                           // deviceHeight={500}
+                    >
+                        <TouchableOpacity style={[styles.modalView,{backgroundColor:'#fff', width:0.9 * width}]}>
+                            {/*<View style={{flexDirection:'row', justifyContent:'space-between'}} >*/}
+                                {/*<View/>*/}
+                                <TouchableOpacity style={{width:30,height:30, padding:2, position:'absolute', zIndex:25, right:-10 , top: -10 }}
+                                    onPress={this.setHideNoti}
+                                    >
+                                    <Icon name="times" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                </TouchableOpacity>
+
+                            {/*</View>*/}
+                            <View style={{marginLeft: 5,marginRight:10, marginTop:10}}>
+                                <Text style={[Style.text_styles.titleTextNotBold, {}]}>
+                                    {this.state.noti}
+                                </Text>
+                            </View>
+
+                        </TouchableOpacity>
+                    </Modal>
+                </View>
             </NavigationContainer>
         );
 
