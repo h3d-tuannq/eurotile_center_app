@@ -9,6 +9,8 @@ import ProgramHozList from '../../../src/com/common/ProgramHozList';
 import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
+import ProgramVerList from "../../com/common/ProgramVerList";
+import ProductItemRenderer from '../../../src/com/item-render/ProductItemrenderer'
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -41,15 +43,55 @@ class ProductScreen extends React.Component {
 
         console.log("UserInfo Permission: " + Def.checkPartnerPermission());
 
+        let currentCart = this.props.route.params && this.props.route.params.currentCart ? this.props.route.params.currentCart : Def.currentCart;
+
         this.state = {
             collection_data: null,
             stateCount: 0.0,
+            currentCart: currentCart,
             configMenu: Def.config_collection_menu,
             slide_data : carouselItems,
             activeSlide : 0,
-            isRefresh: false
+            isRefresh: false,
+            productData: Def.product_data,
+            orderItems: currentCart ? currentCart.orderItems : [],
+            choseProduct: false,
+            canOrder : false,
         };
+        this.itemClick = this.itemClick.bind(this);
+        this.renderProductItem = this.renderProductItem.bind(this);
+        this.onGetProductSuccess = this.onGetProductSuccess.bind(this);
+        this.onGetProductFalse = this.onGetProductFalse.bind(this);
+        this.createOrderItemInfo = this.createOrderItemInfo.bind(this);
     }
+
+    createOrderItemInfo(){
+        let order = this.state.order;
+        var orderItemInfo = order.orderItems.map((item) => {
+            return {product_id: item.product.id, amount: item.amount, price: Def.getPriceByRole(item.product, Def.getUserRole())};
+        });
+        return orderItemInfo;
+
+    }
+
+    componentDidMount(){
+        if(!this.state.productData || Def.product_data.length < 1){
+            NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
+        } else {
+            console.log("Leng Data : " + Def.product_data.length);
+        }
+    }
+
+    onGetProductSuccess(data){
+        Def.product_data = data["data"];
+        this.setState({productData: Def.product_data,});
+    }
+
+
+    onGetProductFalse(data){
+        console.log(" False data : " + data);
+    }
+
 
     refresh()
     {
@@ -136,57 +178,58 @@ class ProductScreen extends React.Component {
 
     }
 
+    itemClick = (item) => {
+
+        console.log("Item click ");
+        let orderItems = this.state.orderItems;
+        let currentCart = this.state.currentCart;
+        if(!Array.isArray(orderItems)) {
+            orderItems = [];
+        }
+
+        const found = orderItems.findIndex(element => element.product.id == item.id);
+        if(found !== -1){
+            orderItems[found].amount++;
+            orderItems[found].selectValue = true;
+        } else {
+            let orderItem = {
+                product:item,
+                selectValue: true,
+                amount:1,
+                area:item['brickBoxInfo']['total_area'],
+                saleArea:item['brickBoxInfo']['total_area']
+            }
+
+            orderItems.push(orderItem);
+        }
+        let newCartData = [];
+        currentCart.orderItems = orderItems;
+        this.setState({orderItems: orderItems, cart:currentCart});
+        // AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
+    }
+
+     renderProductItem = ({ item }) => (
+        <ProductItemRenderer  type={"product"} click={this.itemClick}
+                              item={item} favorite={true} styleImage={{width:PROGRAM_IMAGE_WIDTH -2, height:PROGRAM_IMAGE_HEIGHT-5, marginRight:6, marginBottom : 5 }} />
+    );
+
 
     render() {
-        const {navigation} = this.props;
-        const configMenu = Def.config_collection_menu;
+
         return (
-            <ScrollView style={{flex:1, backgroundColor: '#fff'}}
-                        refreshControl={
-                            <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
-                        }
-            >
-                <View style={Style.styles.carousel}>
-                    <Carousel
-                        ref={(c) => { this._carousel = c; }}
-                        // keyExtractor={(item, index) => `${item.id}--${item.index}`}
-                        data={this.state.slide_data}
-                        renderItem={this.renderItem}
-                        itemWidth={width}
-                        sliderWidth={width}
-                        inactiveSlideOpacity={1}
-                        inactiveSlideScale={1}
-                        activeSlideAlignment={'start'}
-                        loop={true}
-                        autoplay={true}
-                        autoplayInterval={5000}
-                        onSnapToItem={(index) => this.setState({ activeSlide: index }) }
-                    />
-                    { this.pagination }
-                </View>
+            <View style={{ backgroundColor:'#fff', alignItems:'center'}}>
+                <ProgramVerList
+                data={this.state.productData}
+                navigation={this.props.navigation}
+                renderFunction={this.renderProductItem}
+                numberColumns={2}
+                type={'design'}
+                stack={'scheme'}
+                screen={'detail-design'}
 
-                <View style={{flex:1, paddingLeft:15}}>
-
-                {
-                    configMenu && Object.entries(configMenu).map((prop, key) => {
-                        prop[0] = (prop[0] == "" ? "Khác" : prop[0]);
-                        return (
-
-                            <View key={key} style={[styles.programListStyle, {marginTop: key == 0 ? 5 : 10}]}>
-                                <ProgramHozList refresh={this.refresh} stack={'Product'}
-                                screen={'collection-detail-screen'} favorite={true}
-                                navigation={this.props.navigation} name={prop[0]}
-                                style={styles.programListStyle} data={prop[1]["data"]} title={Def.formatText(prop[1]["name_vi"])}/>
-                            </View>
-                        )
-                        }
-                    )
-
-                }
-                </View>
-
-            </ScrollView>
-        )
+            />
+            </View>
+        );
     }
 }
 

@@ -10,5 +10,10 @@ export default class NetNews{
         Net.sendRequest(callback,errCallback,Def.URL_BASE + "/api/article/news" ,Def.POST_METHOD, {'slug': 'xu-huong-thiet-ke,tin-chuyen-mon,su-kien'});
     }
 
+    static getPopularArticle(callback,errCallback ) {
+        console.log("popular article");
+        Net.sendRequest(callback,errCallback,Def.URL_BASE + "/api/article/get-article" ,Def.POST_METHOD);
+    }
+
 }
 

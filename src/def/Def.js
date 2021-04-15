@@ -60,6 +60,12 @@ export default class Def {
 
     static OrderStatus = {0: "Chưa tiếp nhận", 1: "Xác nhận", 2: "Thanh toán", 3: "Giao hàng", 4: "Hoàn thành"}; // DRAFT, CONFIRM, PAID, DELIVERING, ACCOMPLISHED
 
+    static STATUS_DRAFT = 0;
+    static STATUS_CONFIRMED = 1;
+    static STATUS_PAID = 2;
+    static STATUS_DELIVERING = 3;
+    static STATUS_ACCOMPLISHED = 4;
+
     static news_data = null;
     static collection_data = null;
     static design_data = null;
@@ -68,9 +74,10 @@ export default class Def {
     static design_cate = null;
     static product_data = [];
     static cart_data = [];
+    static currentCart = [];
     static customer = [];
     static currentOrder = null; // Model đang thực hiện thao tác
-
+    static popularNews = [];
 
     static currentCustomer = null;
 
@@ -255,6 +262,22 @@ export default class Def {
         return total;
     }
 
+    static calTotalOrderValue(orderList) {
+        var total = 0;
+        orderList.forEach(item =>  {
+            total += item.sale_value;
+        });
+        return total;
+    }
+
+    static calProfitValue(orderList) {
+        var total = 0;
+        orderList.forEach(item =>  {
+            total += item.sale_value * item.partner_discount / 100;
+        });
+        return total;
+    }
+
     static getOrderByStatus(orderList, status) {
         let filterData = [];
         // console.log("Status : "  + status);
@@ -265,6 +288,9 @@ export default class Def {
         }
         return filterData;
     }
+
+
+
 
     static numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -291,6 +317,17 @@ export default class Def {
         return -3;
     }
 
+    static partnerlevelInfo = {1:'Vàng' , 2: 'Bạch kim', 3: 'Kim cương'};
+
+    static getLevelPartnerName(levelId){
+        if(Def.partnerlevelInfo && Def.partnerlevelInfo[levelId]){
+            return Def.partnerlevelInfo[levelId].name;
+        }
+        return false;
+    }
+
+
+
     static getUserRole(){
         return Def.checkPartnerPermission() > 0 ? 'partner' : 'user';
     }
@@ -309,7 +346,6 @@ export default class Def {
         }
         return rs;
     }
-
 
     static ressetCart() {
         Def.cart_data = [];

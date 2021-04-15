@@ -56,12 +56,13 @@ class ProgramVerList extends React.Component{
 
                     style={[styles.programList, { marginBottom :  0, backgroundColor:'#fff'}]}
                     data={this.props.data ? this.props.data : [] }
-                    renderItem={renderItem}
+                    renderItem={this.props.renderFunction ? this.props.renderFunction :renderItem}
                     keyExtractor={(item,index) => item.id + "" + index.toString()}
                     showsHorizontalScrollIndicator={false}
                     ListHeaderComponent={this.props.header}
                     ListFooterComponent={this.props.footer ? this.props.footer : null}
                     showsVerticalScrollIndicator ={false}
+                    numColumns={this.props.numberColumns ? this.props.numberColumns : 1 }
                      onEndReached={() => {this.props.endListReach ? this.props.endListReach() : console.log('list ended');}}
                 />
             </View>

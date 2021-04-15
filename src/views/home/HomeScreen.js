@@ -4,25 +4,78 @@ import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-nativ
 import CollectionTab from './CollectionTab'
 import MyCustomizeTabBar from  '../../com/common/tabbar/MyCustomizeTabBar'
 import NetCollection from '../../net/NetCollection'
+import NetNews from '../../net/NetNews'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 
 import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
+import HotNewsVerItemrenderer from '../../../src/com/item-render/HotNewsVerItemrenderer'
+import MyCarousel from '../../../src/com/common/MyCarousel';
+
+import ProgramVerList from '../../com/common/ProgramVerList';
+import AsyncStorage  from '@react-native-community/async-storage'
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
+
+const BUTTON_WIDTH = (width - 60 ) / 3;
+const BUTTON_HEIGHT = (width - 60 ) / 3;
+
+
 const carouselItems = [
     {
         id:1,
-        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/24/1/main_img.jpg',
+        thumbnail_url : Def.URL_BASE + '/data/eurotileData/1/wuChCa3qD616OzWresrKxTKiE6OPv1j8.jpg',
+        slug: "eurotile-don-kien-truc-su-trong-buoi-gap-mat-dau-xuan-tai-ha-noi",
     },
     {
         id:2,
-        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/30/2/main_img.jpg',
+        thumbnail_url : Def.URL_BASE + '/eurotileData/1/euHYKYXEj7WPpwH_7eaAv_4QglT5iwe1.png',
+        slug: "tinh-te-hoa-chat-luong-song-de-mai-am-va-cuoc-song-diu-dang-hon",
     }
 ];
+
+const centerItems = [
+    {
+        id:1,
+        name : 'EUROTILE CENTER HÀ NỘI',
+        contact: "(024)73008166",
+        address: 'M03-04 Võ Chí Công, P.Xuân La, Q. Tây Hồ, Hà Nội'
+    },
+    {
+        id:2,
+        name : 'EUROTILE CENTER VINH',
+        contact: "0913522308",
+        address: 'Lô C1+C2, KDT Minh Khang, Đại lộ Lenin, TP. Vinh'
+    },
+    {
+        id:3,
+        name : 'EUROTILE CENTER ĐÀ NẴNG',
+        contact: "(023) 6366 6899",
+        address: '297 Nguyễn Văn Linh, Q. Thanh Khê, TP. Đà Nẵng'
+    },
+    {
+        id:4,
+        name : 'EUROTILE CENTER ĐẮK LẮK',
+        contact: "0913446525",
+        address: '332-334 Phan Bội Châu, TP. Buôn Mê Thuột'
+    },
+    {
+        id:5,
+        name : 'EUROTILE CENTER HỒ CHÍ MINH',
+        contact: "(038)62876899",
+        address: '433 Cộng Hòa, P.15, Q. Tân Bình, TP. Hồ Chí Minh'
+    },
+    {
+        id:6,
+        name : 'EUROTILE CENTER CẦN THƠ',
+        contact: "0916639668",
+        address: '353 đường 30/4, Q. Ninh Kiều, TP. Cần Thơ'
+    },
+];
+
 
 class HomeScreen extends React.Component {
     constructor(props){
@@ -31,6 +84,11 @@ class HomeScreen extends React.Component {
         this.onGetCollectionFalse     = this.onGetCollectionFalse.bind(this);
         this.formatText    = this.formatText.bind(this);
         this.refresh     = this.refresh.bind(this);
+        this.itemClick = this.itemClick.bind(this);
+        this.getPopularNews = this.getPopularNews.bind(this);
+        this.getPopularNewsSuccess = this.getPopularNewsSuccess.bind(this);
+        this.getPopularNewsFalse = this.getPopularNewsFalse.bind(this);
+
 
         Def.mainNavigate = this.props.navigation;
 
@@ -40,15 +98,53 @@ class HomeScreen extends React.Component {
         else if (!Def.config_collection_menu) {
             Def.config_collection_menu = this.createConfigData(Def.collection_data);
         }
+
+        if(!Def.popularNews || Def.popularNews.length == 0){
+            this.getPopularNews();
+        }
+
         this.state = {
             collection_data: null,
             stateCount: 0.0,
             configMenu: Def.config_collection_menu,
-            slide_data : carouselItems,
-            activeSlide : 0
+            slide_data : Def.popularNews,
+            activeSlide : 0,
+            popularNews : Def.popularNews
         };
 
+        this.setActiveItem = this.setActiveItem.bind(this);
+
+
     }
+
+
+    getPopularNews = () => {
+        console.log('Get Popular News');
+        NetNews.getPopularArticle(this.getPopularNewsSuccess, this.getPopularNewsFalse);
+    };
+
+    getPopularNewsSuccess = (data) => {
+
+        console.log('PopularNewsSuccess');
+        if(data['result'] == 1){
+            this.setState({slide_data : data['data']});
+            AsyncStorage.setItem('popularNews', JSON.stringify(Def.popularNews))
+        } else {
+            console.log("GetPopularMessage : " + data['message']);
+        }
+    };
+    getPopularNewsFalse = (data) => {
+        console.log('GetPopularNewsFalse Err ' + JSON.stringify(data));
+    };
+
+    componentDidMount(){
+        if(!Def.popularNews || Def.popularNews.length == 0){
+            this.getPopularNews();
+        }
+    }
+
+
+
 
     refresh()
     {
@@ -87,6 +183,14 @@ class HomeScreen extends React.Component {
         console.log("false data : " + data);
     }
 
+    itemClick = (item)=>
+    {
+        console.log(item.id);
+        // this.props.navigation.navigate('news-detail', { item:item});
+        this.props.navigation.navigate('News', {screen:'news-detail', params: { item: item }});
+
+    };
+
     formatText(text){
         let rs = text;
         if(text && text.length > 10){
@@ -112,7 +216,7 @@ class HomeScreen extends React.Component {
                 dotsLength={slide_data.length}
                 activeDotIndex={activeSlide}
                 containerStyle={{ position:'absolute',top : 5, right : slide_data.length  * 5 , width : slide_data.length  * 5,  paddingVertical: 5  }}
-                dotContainerStyle={{marginHorizontal : 6,}}
+                dotContainerStyle={{marginHorizontal : 6}}
                 dotStyle={{
                     width: 10,
                     height: 10,
@@ -132,51 +236,143 @@ class HomeScreen extends React.Component {
     renderItem = ({item, index}) => {
 
         return (
-            <View key={index} style={Style.styles.cardStyle}>
-                <TouchableOpacity >
-                    <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
-                </TouchableOpacity>
-            </View>
+            <HotNewsVerItemrenderer item={item} click={this.itemClick} />
         );
 
+    }
+
+    setActiveItem = (index) => {
+        console.log('setActiveItem');
+        this.setState({ activeSlide: index });
     }
 
 
     render() {
         const {navigation} = this.props;
         const configMenu = Def.config_collection_menu;
-        return (
-            <View style={{flex:1}}>
-                <View style={Style.styles.carousel}>
+        const renderCenterItem = ({item}) => {
+
+            return (
+                <View style={{width: width - 20, padding:5, marginTop:5, marginHorizontal:10, borderBottomWidth : 1 ,  borderColor: Style.DEFAUT_RED_COLOR}} >
+                    <Text style={[Style.text_styles.titleText, {color:Style.DEFAUT_RED_COLOR, marginLeft: 0, fontSize : Style.MIDLE_SIZE}]}>
+                        {item.name}
+                    </Text>
+                    <Text style={[Style.text_styles.titleText, {color:'#000', marginLeft: 0,fontSize : Style.MIDLE_SIZE, fontWeight:'800'}]}>
+                        {item.address}
+                    </Text>
+                    <Text style={[Style.text_styles.titleText, {color:'#000', marginLeft: 0, fontSize : Style.MIDLE_SIZE, fontWeight:'800'}]}>
+                        {item.contact}
+                    </Text>
+
+                </View>
+                            )
+          };
+
+        const ListHeader = () => (
+            <View >
+                <View style={[Style.styles.carousel, {marginTop:0}]}>
+
                     <Carousel
                         ref={(c) => { this._carousel = c; }}
-                        // keyExtractor={(item, index) => `${item.id}--${item.index}`}
                         data={this.state.slide_data}
                         renderItem={this.renderItem}
-                        itemWidth={width}
-                        sliderWidth={width}
+                        itemWidth={width -20}
+                        sliderWidth={width -20}
                         inactiveSlideOpacity={1}
                         inactiveSlideScale={1}
                         activeSlideAlignment={'start'}
                         loop={true}
                         autoplay={true}
                         autoplayInterval={5000}
-                        onSnapToItem={(index) => this.setState({ activeSlide: index }) }
                     />
-                    { this.pagination }
+
+                    {/*<MyCarousel*/}
+                        {/*// data={this.state.slide_data}*/}
+                        {/*renderItem={this.renderItem}*/}
+                        {/*onSnap={this.setActiveItem}*/}
+                    {/*/>*/}
+
+                    {/*<View style={{ position:'absolute',top : 5, right :   5 , width : 40,  paddingVertical: 5  }}>*/}
+                        {/*<Text>*/}
+                            {/*{(this.state.activeSlide + 1) + "/" + this.state.slide_data.length}*/}
+                        {/*</Text>*/}
+                    {/*</View>*/}
+
+                    {/*{ this.pagination }*/}
                 </View>
 
-                <ScrollableTabView  renderTabBar={() => <MyCustomizeTabBar navigation={navigation} />}  >
-                    {
-                        configMenu && Object.entries(configMenu).map((prop, key) => {
-                            if((prop[1]["hidden"]) == 0){
-                                return (
-                                    <CollectionTab key ={prop[0] + "acv"}  navigation={navigation} refresh={this.refresh} tabLabel={this.formatText(prop[1]["name_vi"])} title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />
-                                );
-                            }
-                        })
-                    }
-                </ScrollableTabView>
+                {
+                Def.user_info ?
+
+
+                <View style={styles.overviewInfo} >
+                    <View>
+                        <Text style={[Style.text_styles.titleText, {color:Style.DEFAUT_RED_COLOR, marginLeft: 0}]}>
+                            {Def.user_info ? Def.user_info['username'] : ''}
+                        </Text>
+                        <View>
+                            <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
+                                {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id)}
+                            </Text>
+                            <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
+                                {Def.calTotalOrderValue(Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED))}
+                            </Text>
+                        </View>
+
+                    </View>
+
+                    <View style={{flexDirection:'row', justifyContent: 'space-between' , marginTop:10}}>
+                        <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
+                            <Text>
+                                {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id)}
+                            </Text>
+                            <Text>
+                                {Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id] ? Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id].discount + "%" : "%"}
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width:BUTTON_WIDTH, height:BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#F19C26' , justifyContent:'center', alignItems:'center'}}>
+                            <Text>
+                                Đơn hàng
+                            </Text>
+                            <Text>
+                                {Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED).length}
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
+                            <Text>
+                                Hoa hồng
+                            </Text>
+                            <Text>
+                                {Def.calProfitValue(Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED))}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View> : null
+
+                }
+
+                <View style={{ paddingHorizontal:10}}>
+                    <Text style={[{marginLeft:10, marginTop : 20 }, Style.text_styles.titleText]}>
+                        HỆ THỐNG EUROTILE CENTER
+                    </Text>
+                </View>
+
+            </View>
+        );
+
+        return (
+
+            <View style={{flex:1, paddingTop:0}}>
+                <ProgramVerList
+                    data={centerItems}
+                    navigation={this.props.navigation}
+                    header={ListHeader}
+                    renderFunction={renderCenterItem}
+                    type={'design'}
+                    stack={'scheme'}
+                    screen={'detail-design'}
+                />
+
             </View>
         )
     }
@@ -200,6 +396,36 @@ const styles = StyleSheet.create({
         backgroundColor: "#e6e6e6",
         marginRight : 15
     },
+
+    overviewInfo: {
+        // height: height/4,
+        minHeight: 200,
+        width : width -20,
+        marginHorizontal:10,
+        paddingVertical:10,
+        paddingHorizontal:10,
+        // backgroundColor:'#FF5E62',
+        // borderRadius:10,
+        marginTop:10,
+        borderColor : Style.DEFAUT_RED_COLOR,
+        borderWidth:2,
+    },
+
+    centerInfo: {
+        height: 300,
+        minHeight: 200,
+        width : width -20,
+        marginHorizontal:10,
+        paddingVertical:10,
+        paddingHorizontal:10,
+        // backgroundColor:'#FF5E62',
+        borderRadius:10,
+        marginTop:10,
+        borderColor : Style.DEFAUT_RED_COLOR,
+        borderWidth:2,
+    },
+
+
     cardStyle: {
         justifyContent: 'center',
         alignItems: 'center',

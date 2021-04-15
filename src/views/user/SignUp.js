@@ -51,7 +51,7 @@ export default class SignUp extends Component {
         return (
             <View style={Style.login_style.wraper}>
 
-                <View style={[loginform, {marginTop:-10}]}>
+                <View style={[Style.login_style.loginform, {marginTop:-10}]}>
                     <TextInput
                         onFocus={() => this.setState({focus:1})}
                         onBlur={()=> this.setState({focus:0})}
@@ -108,7 +108,7 @@ export default class SignUp extends Component {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={Style.login_style.loginButton} onPress={()=>this.signUp()}>
-                            <Text style={loginText}>
+                            <Text style={Style.login_style.loginText}>
                                 Đăng ký
                             </Text>
                         </TouchableOpacity>

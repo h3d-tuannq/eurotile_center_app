@@ -51,6 +51,7 @@ import NetNews from './src/net/NetNews'
 import NetCollection from './src/net/NetCollection'
 import NetScheme from './src/net/NetScheme'
 import Modal from 'react-native-modal';
+import PartnerController from './src/controller/PartnerController'
 
 const styles = StyleSheet.create({
     baseText: {
@@ -201,7 +202,7 @@ function MainTab() {
             style={{height: 120, paddingVertical: 20 , backgroundColor : 'red'}}
 
             tabBar={(props) => <MyTabBar {...props} item={null} />}
-            initialRouteName={'Product'}
+            initialRouteName={'home'}
             tabBarOptions={{
                 activeTintColor: Style.DEFAUT_RED_COLOR,
                 inactiveTintColor: '#b3b3b3',
@@ -217,13 +218,13 @@ function MainTab() {
             }}>
 
             <Tab.Screen
-                name="scheme"
-                component={SchemeStack}
+                name="home"
+                component={HomeStack}
                 options={(route) => {
                     return false
                         ? {tabBarVisible: false}
                         : {
-                            tabBarLabel: 'Thiết kế',
+                            tabBarLabel: 'Trang chủ',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
                                     return <GallerySelectedIcon style={styles.tabBarIconStyle} />;
@@ -234,6 +235,25 @@ function MainTab() {
                         };
                 }}
             />
+
+            {/*<Tab.Screen*/}
+                {/*name="scheme"*/}
+                {/*component={SchemeStack}*/}
+                {/*options={(route) => {*/}
+                    {/*return false*/}
+                        {/*? {tabBarVisible: false}*/}
+                        {/*: {*/}
+                            {/*tabBarLabel: 'Thiết kế',*/}
+                            {/*tabBarIcon: ({focused, color, size}) => {*/}
+                                {/*if (focused) {*/}
+                                    {/*return <GallerySelectedIcon style={styles.tabBarIconStyle} />;*/}
+                                    {/*// return <MyProfileIconSelect style={styles.tabBarIconStyle} />;*/}
+                                {/*}*/}
+                                {/*return <GalleryIcon style={styles.tabBarIconStyle} />;*/}
+                            {/*},*/}
+                        {/*};*/}
+                {/*}}*/}
+            {/*/>*/}
 
             <Tab.Screen
                 name="Product"
@@ -254,24 +274,24 @@ function MainTab() {
                         };
                 }}
             />
-            <Tab.Screen
-                name="News"
-                component={NewsStack}
-                options={(route) => {
-                    return false
-                        ? {tabBarVisible: false}
-                        : {
-                            tabBarLabel: 'Tin tức',
-                            tabBarIcon: ({focused, color, size}) => {
-                                if (focused) {
-                                    return <NewsSelectedIcon style={styles.tabBarIconStyle} />;
-                                    // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
-                                }
-                                return <NewsIcon style={styles.tabBarIconStyle} />;
-                            },
-                        };
-                }}
-            />
+            {/*<Tab.Screen*/}
+                {/*name="News"*/}
+                {/*component={NewsStack}*/}
+                {/*options={(route) => {*/}
+                    {/*return false*/}
+                        {/*? {tabBarVisible: false}*/}
+                        {/*: {*/}
+                            {/*tabBarLabel: 'Tin tức',*/}
+                            {/*tabBarIcon: ({focused, color, size}) => {*/}
+                                {/*if (focused) {*/}
+                                    {/*return <NewsSelectedIcon style={styles.tabBarIconStyle} />;*/}
+                                    {/*// return <MyProfileIconSelect style={styles.tabBarIconStyle} />;*/}
+                                {/*}*/}
+                                {/*return <NewsIcon style={styles.tabBarIconStyle} />;*/}
+                            {/*},*/}
+                        {/*};*/}
+                {/*}}*/}
+            {/*/>*/}
 
             <Tab.Screen
                 name="My"
@@ -293,6 +313,26 @@ function MainTab() {
                 }}
             />
 
+            <Tab.Screen
+                name="Expand"
+                component={ExpandStack}
+                options={(route) => {
+                    return false
+                        ? {tabBarVisible: false}
+                        : {
+                            tabBarLabel: 'Mở rộng',
+                            tabBarIcon: ({focused, color, size}) => {
+                                if (focused) {
+                                    return <Icon name="expand-arrows-alt" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    return <UserProfileSelectedIcon style={styles.tabBarIconStyle} />;
+                                }
+                                return <Icon name="expand-arrows-alt" size={25} color={Style.GREY_TEXT_COLOR} />
+                                return <UserProfileIcon style={styles.tabBarIconStyle} />;
+                            },
+                        };
+                }}
+            />
+
 
 
         </Tab.Navigator>
@@ -305,6 +345,7 @@ function AppStack() {
             <Stack.Screen name="MainTab" component={MainTab} />
             <Stack.Screen name="Login" component={LoginStack} />
             <Stack.Screen name="Booking" component={BookingStack} />
+            <Stack.Screen name="News" component={NewsStack} />
             <Stack.Screen name="Notification" component={NotificationStack} />
         </RootStack.Navigator>
     );
@@ -467,6 +508,7 @@ import ProductStack from "./src/views/ProductStack";
 import NewsStack from "./src/views/NewsStack";
 import MyStack from "./src/views/MyStack";
 import HomeStack from "./src/views/HomeStack"
+import ExpandStack from "./src/views/ExpandStack"
 import SchemeStack from "./src/views/SchemeStack"
 import BookingStack from "./src/views/BookingStack"
 import NotificationStack from "./src/views/NotificationStack"
@@ -639,6 +681,7 @@ export default class App extends Component {
 
     onNewSuccess(data){
         Def.news_data = data['data'];
+        console.log('Data News : ');
     }
 
     onCollectionSuccess(data){
@@ -702,6 +745,24 @@ export default class App extends Component {
                 Def.order = JSON.parse(value);
             }
         });
+
+        AsyncStorage.getItem('partnerlevelInfo').then((value) => {
+            if(value){
+                Def.partnerlevelInfo = JSON.parse(value);
+            } else {
+                PartnerController.getPartnerLevel();
+            }
+        });
+
+        AsyncStorage.getItem('popularNews').then((value) => {
+            if(value){
+                Def.popularNews = JSON.parse(value);
+            } else {
+                console.log('Async Storage PopularNews not exits');
+            }
+        });
+
+
 
         messaging().onNotificationOpenedApp(remoteMessage => {
             console.log(

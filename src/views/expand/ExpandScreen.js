@@ -15,10 +15,6 @@ import  UserController from '../../../src/controller/UserController'
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
-
-const BUTTON_WIDTH = (width - 60 ) / 3;
-const BUTTON_HEIGHT = (width - 60 ) / 3;
-
 const carouselItems = [
     {
         id:1,
@@ -32,7 +28,7 @@ const carouselItems = [
 
 
 
-class MyScreen extends React.Component {
+class ExpandScreen extends React.Component {
     constructor(props){
         super(props);
         this.formatText    = this.formatText.bind(this);
@@ -141,7 +137,7 @@ class MyScreen extends React.Component {
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         } else {
-           console.log('exits User info');
+            console.log('exits User info');
         }
 
         this.setState({ stateCount: Math.random() });
@@ -254,129 +250,18 @@ class MyScreen extends React.Component {
         const {navigation} = this.props;
         const {user} = this.state;
         return (
-            (!user) ?
-
-                <View style={{justifyContent :'center',flex: 1, alignItems : 'center', width: width}}>
-                    <View style={{flexDirection: 'row'}}>
-                        <Text style={{fontSize:Style.TITLE_SIZE, color:'#b3b3b3'}}>
-                            Vui lòng
-                        </Text>
-                        <TouchableOpacity onPress={this.signInBtnClick}>
-                            <Text style={{fontSize:Style.TITLE_SIZE, marginLeft:5 , color:Style.DEFAUT_RED_COLOR}}>
-                                đăng nhập
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                    <Text style={{fontSize:Style.TITLE_SIZE, color:'#b3b3b3'}}>
-                        để sử dụng đầy đủ tính năng cá nhân
-                    </Text>
-
-                </View> :
                 <View style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
 
-                    <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginBottom: 10}}>
-
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <Image  style={styles.imageStyle}  source={{uri: Def.getAvatarUrlFromUserInfo() }}  />
-
-                        </View>
-                        <View style={{marginTop: 10, justifyContent:'space-between'}}>
-                            <Text style={Style.text_styles.titleTextNotBold}>
-                                {user['email']}
-                            </Text>
-                            {/*<Text style={Style.text_styles.middleText}>*/}
-                            {/*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*/}
-                            {/*</Text>*/}
-                        </View>
-                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                    </View>
-
-                    {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff'}}*/}
-                        {/*onPress={this.gotoProfile}*/}
-                        {/*>*/}
-                        {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
-                        {/*<Image  style={styles.imageStyleInfo}  source={{uri:Def.getAvatarUrlFromUserInfo() }}  />*/}
-                        {/*<View style={{marginLeft: 10, justifyContent:'space-between'}}>*/}
-                            {/*<Text style={Style.text_styles.middleText}>*/}
-                                {/*{user['email']}*/}
-                            {/*</Text>*/}
-                            {/*/!*<Text style={Style.text_styles.middleText}>*!/*/}
-                                {/*/!*{user['userProfile'] && user['userProfile']['phone'] ? user['userProfile']['phone'] : (user['userProfile']['display_name'] ? user['userProfile']['display_name'] : "SDT không tồn tại")}*!/*/}
-                            {/*/!*</Text>*!/*/}
-                        {/*</View>*/}
-                        {/*</View>*/}
-                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                    {/*</TouchableOpacity>*/}
-
-
-                    <View style={styles.overviewInfo} >
-                        <View>
-                            <Text style={[Style.text_styles.titleText, {color:Style.DEFAUT_RED_COLOR, marginLeft: 0}]}>
-                                {Def.user_info ? Def.user_info['username'] : ''}
-                            </Text>
-                            <View>
-                                <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
-                                    {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id)}
-                                </Text>
-                                <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
-                                    {Def.calTotalOrderValue(Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED))}
-                                </Text>
-                            </View>
-
-                        </View>
-
-                        <View style={{flexDirection:'row', justifyContent: 'space-between' , marginTop:10}}>
-                            <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
-                                <Text>
-                                    {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id)}
-                                </Text>
-                                <Text>
-                                    {Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id] ? Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id].discount + "%" : "%"}
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{width:BUTTON_WIDTH, height:BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#F19C26' , justifyContent:'center', alignItems:'center'}}>
-                                <Text>
-                                    Đơn hàng
-                                </Text>
-                                <Text>
-                                    {Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED).length}
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
-                                <Text>
-                                    Hoa hồng
-                                </Text>
-                                <Text>
-                                    {Def.calProfitValue(Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED))}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                      onPress={this.gotoChangePass}>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                            <Icon name="user-cog" size={25} color={Style.GREY_TEXT_COLOR} />
-                            </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Thiết lập tài khoản
-                            </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
 
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
-                        onPress={this.gotoPartnerInfo}
+                                      onPress={this.gotoPartnerInfo}
                     >
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <View style={{width :30}}>
-                            <Icon name="id-card" size={25} color={Style.GREY_TEXT_COLOR} />
+                                <Icon name="file-signature" size={25} color={Style.GREY_TEXT_COLOR} />
                             </View>
                             <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                {Def.checkPartnerPermission() <0 ?'Đăng ký Partner' : 'Hồ sơ Partner'}
+                                {'Liên hệ'}
                             </Text>
                         </View>
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
@@ -385,37 +270,10 @@ class MyScreen extends React.Component {
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <View style={{width :30}}>
-                            <Icon name="credit-card" size={25} color={Style.GREY_TEXT_COLOR} />
+                                <Icon name="share" size={25} color={Style.GREY_TEXT_COLOR} />
                             </View>
                             <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Cài đặt thanh toán
-                            </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
-                                      onPress={this.gotoOrderList}
-                    >
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                                <Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />
-                            </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Danh sách đơn hàng
-                            </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                      onPress={this.gotoOrderGuide}>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                                <GuideIcon width={25} height={25} color={Style.GREY_TEXT_COLOR} />
-                            </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Chính sách bán hàng Eurotile
+                                Chia sẻ ứng dụng
                             </Text>
                         </View>
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
@@ -429,41 +287,59 @@ class MyScreen extends React.Component {
                                 <RuleIcon width={25} height={25} color={Style.GREY_TEXT_COLOR} />
                             </View>
                             <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Điều khoản trở thành Partner
+                                Điều khoản, chính sách sử dụng
+                            </Text>
+                        </View>
+                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
+                                      onPress={this.gotoChangePass}>
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <View style={{width :30}}>
+                                <Icon name="user-cog" size={25} color={Style.GREY_TEXT_COLOR} />
+                            </View>
+                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                                Cài đăt thông tin người dùng
                             </Text>
                         </View>
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                     </TouchableOpacity>
 
 
+
+
+
+
                     {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}*/}
-                                      {/*onPress={ ()=>{UserController.logoutLocal()}}*/}
-                    {/*>*/}
+                                      {/*onPress={this.gotoOrderGuide}>*/}
                         {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
                             {/*<View style={{width :30}}>*/}
-                                {/*<Icon name="sign-out-alt" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                                {/*<GuideIcon width={25} height={25} color={Style.GREY_TEXT_COLOR} />*/}
                             {/*</View>*/}
                             {/*<Text style={[Style.text_styles.middleText, {marginLeft :10}]}>*/}
-                               {/*Đăng xuất*/}
+                                {/*Hướng dẫn sử dụng*/}
                             {/*</Text>*/}
                         {/*</View>*/}
                         {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                     {/*</TouchableOpacity>*/}
 
-                    {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}*/}
-                                      {/*onPress={this.updatePartnerInfo}*/}
-                    {/*>*/}
-                        {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
-                            {/*<View style={{width :30}}>*/}
-                                {/*<Icon name="shopping-cart" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                            {/*</View>*/}
-                            {/*<Text style={[Style.text_styles.middleText, {marginLeft :10}]}>*/}
-                                {/*Cập nhật Hồ sơ Partner*/}
-                            {/*</Text>*/}
-                        {/*</View>*/}
-                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                    {/*</TouchableOpacity>*/}
 
+
+
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
+                                      onPress={ ()=>{UserController.logoutLocal()}}
+                    >
+                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                            <View style={{width :30}}>
+                                <Icon name="sign-out-alt" size={25} color={Style.GREY_TEXT_COLOR} />
+                            </View>
+                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                                Đăng xuất
+                            </Text>
+                        </View>
+                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                    </TouchableOpacity>
                 </View>
         )
     }
@@ -515,20 +391,7 @@ const styles = StyleSheet.create({
         borderRadius: width / 16,
     },
     buttonText : { color:'#fff', fontSize : 18, paddingVertical: 8, marginLeft : 15},
-    overviewInfo: {
-        // height: height/4,
-        minHeight: 200,
-        width : width -20,
-        marginHorizontal:10,
-        paddingVertical:10,
-        paddingHorizontal:10,
-        // backgroundColor:'#FF5E62',
-        borderRadius:10,
-        marginTop:10,
-        borderColor : Style.DEFAUT_RED_COLOR,
-        borderWidth:2,
-    },
 
 });
 
-export default MyScreen;
+export default ExpandScreen;
