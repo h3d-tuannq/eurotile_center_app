@@ -661,6 +661,7 @@ export default class App extends Component {
                  Def.user_info = JSON.parse(value);
                  Def.username = Def.user_info['user_name'];
                  Def.email = Def.user_info['email'];
+                 // OrderController.getOrder();
              }
         });
 

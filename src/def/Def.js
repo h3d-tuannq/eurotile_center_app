@@ -286,6 +286,9 @@ export default class Def {
                 item.status == status
             );
         }
+
+        console.log("Status : " + status + " Length : " + filterData.length + " OrderList Length : " + orderList.length);
+
         return filterData;
     }
 

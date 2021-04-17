@@ -6,6 +6,7 @@ import MyCustomizeTabBar from  '../../com/common/tabbar/MyCustomizeTabBar'
 import NetCollection from '../../net/NetCollection'
 import NetNews from '../../net/NetNews'
 import Def from '../../def/Def'
+import OrderController from '../../controller/OrderController';
 const {width, height} = Dimensions.get('window');
 
 import Carousel from 'react-native-snap-carousel';
@@ -88,6 +89,7 @@ class HomeScreen extends React.Component {
         this.getPopularNews = this.getPopularNews.bind(this);
         this.getPopularNewsSuccess = this.getPopularNewsSuccess.bind(this);
         this.getPopularNewsFalse = this.getPopularNewsFalse.bind(this);
+        this.getOrderSuccess = this.getOrderSuccess.bind(this);
 
 
         Def.mainNavigate = this.props.navigation;
@@ -141,6 +143,19 @@ class HomeScreen extends React.Component {
         if(!Def.popularNews || Def.popularNews.length == 0){
             this.getPopularNews();
         }
+        if((!Def.orderList || Def.orderList.length == 0 ) && Def.user_info) {
+            console.log('Get OrderList ++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+            OrderController.getOrder(this.getOrderSuccess);
+            this.refresh();
+        }
+
+    }
+
+     getOrderSuccess(data){
+        console.log("Order List Length: " + data['data'].length);
+        Def.orderList = data['data'];
+        console.log("Order List Length: " + Def.orderList.length);
+        this.refresh();
     }
 
 
@@ -271,7 +286,6 @@ class HomeScreen extends React.Component {
         const ListHeader = () => (
             <View >
                 <View style={[Style.styles.carousel, {marginTop:0}]}>
-
                     <Carousel
                         ref={(c) => { this._carousel = c; }}
                         data={this.state.slide_data}
@@ -284,6 +298,9 @@ class HomeScreen extends React.Component {
                         loop={true}
                         autoplay={true}
                         autoplayInterval={5000}
+                        // onSnapToItem={(index) => {
+                        //     this.setState({ activeSlide: index });
+                        // }}
                     />
 
                     {/*<MyCarousel*/}
@@ -315,7 +332,7 @@ class HomeScreen extends React.Component {
                                 {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id)}
                             </Text>
                             <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
-                                {Def.calTotalOrderValue(Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED))}
+                                {Def.calTotalOrderValue(Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED))}
                             </Text>
                         </View>
 
@@ -335,7 +352,7 @@ class HomeScreen extends React.Component {
                                 Đơn hàng
                             </Text>
                             <Text>
-                                {Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED).length}
+                                {Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length}
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
@@ -343,7 +360,7 @@ class HomeScreen extends React.Component {
                                 Hoa hồng
                             </Text>
                             <Text>
-                                {Def.calProfitValue(Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED))}
+                                {Def.calProfitValue(Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED))}
                             </Text>
                         </TouchableOpacity>
                     </View>
