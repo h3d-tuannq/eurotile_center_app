@@ -319,7 +319,7 @@ class HomeScreen extends React.Component {
                 </View>
 
                 {
-                Def.user_info ?
+                Def.user_info && Def.user_info.partnerInfo ?
 
 
                 <View style={styles.overviewInfo} >
@@ -341,7 +341,7 @@ class HomeScreen extends React.Component {
                     <View style={{flexDirection:'row', justifyContent: 'space-between' , marginTop:10}}>
                         <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
                             <Text>
-                                {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id)}
+                                {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id) ? Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id) : "CK" }
                             </Text>
                             <Text>
                                 {Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id] ? Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id].discount + "%" : "%"}

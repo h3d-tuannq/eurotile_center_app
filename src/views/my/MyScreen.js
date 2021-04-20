@@ -308,50 +308,55 @@ class MyScreen extends React.Component {
                         {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                     {/*</TouchableOpacity>*/}
 
-
-                    <View style={styles.overviewInfo} >
-                        <View>
-                            <Text style={[Style.text_styles.titleText, {color:Style.DEFAUT_RED_COLOR, marginLeft: 0}]}>
-                                {Def.user_info ? Def.user_info['username'] : ''}
-                            </Text>
+                    {
+                        Def.user_info && Def.user_info.partnerInfo ?
+                        <View style={styles.overviewInfo} >
                             <View>
-                                <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
-                                    {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id)}
+                                <Text style={[Style.text_styles.titleText, {color:Style.DEFAUT_RED_COLOR, marginLeft: 0}]}>
+                                    {Def.user_info ? Def.user_info['username'] : ''}
                                 </Text>
-                                <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
-                                    {Def.calTotalOrderValue(Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED))}
-                                </Text>
+                                <View>
+                                    <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
+                                        {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id)}
+                                    </Text>
+                                    <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
+                                        {Def.calTotalOrderValue(Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED))}
+                                    </Text>
+                                </View>
+
                             </View>
 
-                        </View>
+                            <View style={{flexDirection:'row', justifyContent: 'space-between' , marginTop:10}}>
+                                <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
+                                    <Text>
+                                        {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id)}
+                                    </Text>
+                                    <Text>
+                                        {Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id] ? Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id].discount + "%" : "%"}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{width:BUTTON_WIDTH, height:BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#F19C26' , justifyContent:'center', alignItems:'center'}}>
+                                    <Text>
+                                        Đơn hàng
+                                    </Text>
+                                    <Text>
+                                        {Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED).length}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
+                                    <Text>
+                                        Hoa hồng
+                                    </Text>
+                                    <Text>
+                                        {Def.calProfitValue(Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED))}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View> : null
 
-                        <View style={{flexDirection:'row', justifyContent: 'space-between' , marginTop:10}}>
-                            <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
-                                <Text>
-                                    {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id)}
-                                </Text>
-                                <Text>
-                                    {Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id] ? Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id].discount + "%" : "%"}
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{width:BUTTON_WIDTH, height:BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#F19C26' , justifyContent:'center', alignItems:'center'}}>
-                                <Text>
-                                    Đơn hàng
-                                </Text>
-                                <Text>
-                                    {Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED).length}
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
-                                <Text>
-                                    Hoa hồng
-                                </Text>
-                                <Text>
-                                    {Def.calProfitValue(Def.getOrderByStatus(Def.order, Def.STATUS_ACCOMPLISHED))}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+
+                    }
+
 
 
 
