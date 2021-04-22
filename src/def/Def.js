@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-community/async-storage";
 
 export default class Def {
-    static URL_BASE = "http://eurotile-prod.house3d.net/";
-    static URL_CONTENT_BASE = "http://eurotile-prod.house3d.net/data/eurotileData/";
+    static URL_BASE = "https://eurotile-prod.house3d.net/";
+    static URL_CONTENT_BASE = "https://eurotile-prod.house3d.net/data/eurotileData/";
 
     // static URL_BASE = "https://eurotiledev.house3d.net/";
     // static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
@@ -218,10 +218,11 @@ export default class Def {
     }
 
     static getThumnailImg(img_path) {
+        // img_path = Def.URL_CONTENT_BASE + img_path;
         let rs = img_path.split(".");
         let lastItem = rs.pop();
         rs = rs.join('.') + '_200x200.' + lastItem;
-        // console.log(rs);
+        console.log('RS : ' + rs);
         return rs;
     }
 
@@ -291,7 +292,7 @@ export default class Def {
             );
         }
 
-        console.log("Status : " + status + " Length : " + filterData.length + " OrderList Length : " + orderList.length);
+        // console.log("Status : " + status + " Length : " + filterData.length + " OrderList Length : " + orderList.length);
 
         return filterData;
     }

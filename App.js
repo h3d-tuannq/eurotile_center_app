@@ -784,7 +784,7 @@ export default class App extends Component {
                     );
                     setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
                 }
-                setLoading(false);
+                // setLoading(false);
             });
 
 
