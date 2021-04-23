@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Modal, Keyboard} from 'react-native'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
+
+import AutocompleteModal from '../../../src/com/common/AutocompleteModal';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Style from '../../def/Style';
 
