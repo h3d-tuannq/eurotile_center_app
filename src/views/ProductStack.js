@@ -19,12 +19,13 @@ import CartIcon from '../../assets/icons/cart.svg'
 
 import EurotileLogo from '../../assets/icons/Logo w.svg'
 import AsyncStorage from "@react-native-community/async-storage";
+import NativeTVNavigationEventEmitter from "react-native/Libraries/Components/AppleTV/NativeTVNavigationEventEmitter";
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 
 class ProductStack extends React.Component {
-    focusListener = null;
+    // focusListener = null;
 
     constructor(props){
         super(props);
@@ -42,6 +43,8 @@ class ProductStack extends React.Component {
         this.goProductList = this.goProductList.bind(this);
         this.goToCreateCustomer = this.goToCreateCustomer.bind(this);
         this.forcusFunction = this.forcusFunction.bind(this);
+        this.updateCartNumber = this.updateCartNumber.bind(this);
+        Def.updateCartNumber = this.updateCartNumber;
     }
 
     goProductList() {
@@ -61,6 +64,10 @@ class ProductStack extends React.Component {
         return Def.cart_data.length;
     }
 
+    updateCartNumber = (number) => {
+        this.setState({number_order:number});
+    }
+
     formatOrderNumber(order_number){
         return order_number < 100 ? order_number : '99+';
     }
@@ -70,9 +77,11 @@ class ProductStack extends React.Component {
         return true;
     }
 
+
+
     componentDidMount(){
-        if(Def.cart_data.length != this.state.number_order){
-            this.setState({number_order:Def.cart_data.length});
+        if(Def.currentCart && Def.currentCart.orderItems && Def.calCartOrderNumber(Def.currentCart.orderItems)  != this.state.number_order){
+            this.setState({number_order:Def.calCartOrderNumber(Def.currentCart.orderItems)});
         }
         let {navigation} = this.props;
         navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
@@ -86,13 +95,13 @@ class ProductStack extends React.Component {
 
     forcusFunction = () => {
         console.log('forcus Product-Stack');
-      this.setState({number_order:Def.cart_data.length});
+      this.setState({number_order:Def.currentCart && Def.currentCart.orderItems ? Def.calCartOrderNumber(Def.currentCart.orderItems) : 0});
     };
 
     componentWillUnmount() {
         // Remove the event listener
-        if(this.focusListener){
-            this.focusListener.remove();
+        if(this.focusListener && (typeof this.focusListener.remove === 'function')){
+             this.focusListener.remove();
         }
 
     }

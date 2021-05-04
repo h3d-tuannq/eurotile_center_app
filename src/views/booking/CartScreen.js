@@ -29,10 +29,12 @@ class CartScreen extends React.Component {
         this.closeFunction = this.closeFunction.bind(this);
         this.booking = this.booking.bind(this);
         this.orderItemChange = this.orderItemChange.bind(this);
-
         Def.mainNavigate = this.props.navigation;
+
+        console.log('cart constructor : ' + JSON.stringify(Def.currentCart));
+
         this.state = {
-            cart_data: Def.cart_data,
+            cart_data: Def.currentCart ? Def.currentCart.orderItems : [] ,
             stateCount: 0.0,
             productData:Def.product_data ? Def.product_data: [],
             choseProduct: false,
@@ -50,9 +52,9 @@ class CartScreen extends React.Component {
     }
 
     booking(){
-        console.log("Booking Click");
+        console.log("Booking Click -- ");
         var order = {
-            orderItems: Def.cart_data,
+            orderItems: Def.currentCart ? Def.currentCart.orderItems : Def.cart_data,
             customer: null,
             partner_id:Def.user_info && Def.user_info['partnerInfo'] ? Def.user_info['id'] : null,
             booker_id: Def.user_info ? Def.user_info['id'] : null ,
@@ -103,6 +105,7 @@ class CartScreen extends React.Component {
             }
             AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
         }
+
     }
 
 
@@ -127,6 +130,7 @@ class CartScreen extends React.Component {
         let newCartData = [];
         this.setState({cart_data: Def.cart_data, canOrder: this.checkCanOrder()});
         AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
+        AsyncStorage.setItem('current_cart', JSON.stringify(Def.currentCart));
     }
 
     addItemToCart(item){
@@ -134,11 +138,14 @@ class CartScreen extends React.Component {
     }
 
     updateCartOrder(){
+        if(Def.currentCart){
+            Def.currentCart.orderItems = this.state.cart_data;
+        }
 
     }
 
     checkCanOrder(){
-       return Def.cart_data && Def.cart_data.length > 0  ;
+       return Def.currentCart && Def.currentCart.orderItems && Def.currentCart.orderItems.length > 0  ;
     }
 
     refresh()
@@ -176,6 +183,13 @@ class CartScreen extends React.Component {
     shouldComponentUpdate(){
         // this.setState({ configMenu: Def.config_news_menu});
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
+
+        console.log('Should update ');
+
+        if(Def.currentCart){
+            console.log('Current Update : ' + JSON.stringify(Def.currentCart));
+        }
+
         return true;
     }
 
@@ -228,13 +242,13 @@ class CartScreen extends React.Component {
                 }
                 <View style={{alignItems:'center', justifyContent: 'space-around', marginBottom :10, flexDirection:'row', }}>
 
-                    <TouchableOpacity onPress={() => {
-                        this.setState({choseProduct:true});
-                    }} style={{width: width/2.5, height:40, borderRadius:20, borderWidth:1,borderColor:Style.DEFAUT_BLUE_COLOR, justifyContent : 'center', alignItems: 'center'}}>
-                        <Text style={{fontSize: Style.TITLE_SIZE, color: Style.DEFAUT_BLUE_COLOR}}>
-                            Thêm sản phẩm
-                        </Text>
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity onPress={() => {*/}
+                    {/*    this.setState({choseProduct:true});*/}
+                    {/*}} style={{width: width/2.5, height:40, borderRadius:20, borderWidth:1,borderColor:Style.DEFAUT_BLUE_COLOR, justifyContent : 'center', alignItems: 'center'}}>*/}
+                    {/*    <Text style={{fontSize: Style.TITLE_SIZE, color: Style.DEFAUT_BLUE_COLOR}}>*/}
+                    {/*        Thêm sản phẩm*/}
+                    {/*    </Text>*/}
+                    {/*</TouchableOpacity>*/}
 
                     <TouchableOpacity disabled={!this.checkCanOrder()} onPress={() => {
                         this.booking();

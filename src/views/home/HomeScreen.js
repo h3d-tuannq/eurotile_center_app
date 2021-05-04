@@ -152,9 +152,7 @@ class HomeScreen extends React.Component {
     }
 
      getOrderSuccess(data){
-        console.log("Order List Length: " + data['data'].length);
         Def.orderList = data['data'];
-        console.log("Order List Length: " + Def.orderList.length);
         this.refresh();
     }
 

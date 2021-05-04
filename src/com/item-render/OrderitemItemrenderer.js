@@ -150,7 +150,7 @@ class OrderitemItemrenderer extends PureComponent{
                                         </Text> :
                                 <InputSpinner
                                     width={100}
-                                    height={28}
+                                    height={38}
                                     min={1}
                                     rounded={false}
                                     showBorder={false}
@@ -158,10 +158,10 @@ class OrderitemItemrenderer extends PureComponent{
                                     // colorMin={Style.DEFAUT_BLUE_COLOR}
                                     // colorMax={Style.DEFAUT_BLUE_COLOR}
                                     color={'#fff'}
-                                    style={{borderRadius:3, borderWidth:2}}
+                                    style={{borderRadius:3, borderWidth:2, height:36, padding:0}}
                                     buttonTextColor={Style.DEFAUT_RED_COLOR}
 
-                                    inputStyle={{width:80, height:35}}
+                                    inputStyle={{width:50, height:38 , borderWidth : 0, padding : 0}}
                                     buttonStyle={{borderWidth : 2,borderRadius:1,borderColor:'#000' }}
                                     max={10000} onChange={(newValue) => {this.quantityChange(newValue)}}
                                     value={this.state.amount}/>

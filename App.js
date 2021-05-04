@@ -202,7 +202,7 @@ function MainTab() {
             style={{height: 120, paddingVertical: 20 , backgroundColor : 'red'}}
 
             tabBar={(props) => <MyTabBar {...props} item={null} />}
-            initialRouteName={'home'}
+            initialRouteName={'Product'}
             tabBarOptions={{
                 activeTintColor: Style.DEFAUT_RED_COLOR,
                 inactiveTintColor: '#b3b3b3',
@@ -364,7 +364,7 @@ const Drawer = createDrawerNavigator();
 
 const logoutFunction = async () => {
     try {
-        let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data'];
+        let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data','current_cart'];
         await AsyncStorage.multiRemove(keys);
         // AsyncStorage.removeItem('email');
         // AsyncStorage.removeItem('login_token');
@@ -686,7 +686,6 @@ export default class App extends Component {
     }
 
     onCollectionSuccess(data){
-        console.log('onCollectionSuccess : ');
         Def.collection_data = data['data'];
     }
 
@@ -699,8 +698,6 @@ export default class App extends Component {
     }
 
     onPopularDesignSuccess(data){
-        console.log('onPopularDesignSuccess : ');
-
         Def.popular_design = data['data'];
     }
 
@@ -726,7 +723,6 @@ export default class App extends Component {
 
     componentDidMount() {
         SplashScreen.hide();
-        console.log('Get Product Info From Scratch');
         NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
         NetScheme.getAllDesign(this.onDesignSuccess, this.onDesignFalse);
         NetScheme.getPopularDesign(this.onPopularDesignSuccess, this.onPopularDesignFalse);
@@ -739,6 +735,17 @@ export default class App extends Component {
             if(value){
                 Def.cart_data = JSON.parse(value);
             }
+        });
+
+        AsyncStorage.getItem('current_cart').then((value) => {
+            if(value){
+                console.log('current_cart exits ----------------------------------------');
+                Def.currentCart = JSON.parse(value);
+                console.log('number_orrder: ' + Def.calCartOrderNumber(Def.currentCart.orderItems));
+            }
+        })
+        .catch(err => {
+            console.log('current_cart not exits ----------------------------------------');
         });
 
         AsyncStorage.getItem('order').then((value) => {

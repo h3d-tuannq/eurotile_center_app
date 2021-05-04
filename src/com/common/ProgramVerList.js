@@ -54,7 +54,7 @@ class ProgramVerList extends React.Component{
             <View style={styles.container}>
                 <FlatList
 
-                    style={[styles.programList, { marginBottom :  0, backgroundColor:'#fff'}]}
+                    style={[this.props.styleList,{ marginBottom :  0 , backgroundColor:'#fff'}]}
                     data={this.props.data ? this.props.data : [] }
                     renderItem={this.props.renderFunction ? this.props.renderFunction :renderItem}
                     keyExtractor={(item,index) => item.id + "" + index.toString()}
@@ -73,7 +73,7 @@ class ProgramVerList extends React.Component{
 const styles = StyleSheet.create ({
     container: {
         // marginTop : 5,
-        backgroundColor : '#fff'
+        backgroundColor : 'red'
     },
     titleStyle: {
         fontSize: Style.TITLE_SIZE,

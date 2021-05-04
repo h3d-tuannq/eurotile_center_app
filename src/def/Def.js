@@ -222,7 +222,6 @@ export default class Def {
         let rs = img_path.split(".");
         let lastItem = rs.pop();
         rs = rs.join('.') + '_200x200.' + lastItem;
-        console.log('RS : ' + rs);
         return rs;
     }
 
@@ -271,6 +270,14 @@ export default class Def {
         var total = 0;
         orderList.forEach(item =>  {
             total += item.sale_value;
+        });
+        return total;
+    }
+
+    static calCartOrderNumber(orderList) {
+        var total = 0;
+        orderList.forEach(item =>  {
+            total += item.amount;
         });
         return total;
     }
