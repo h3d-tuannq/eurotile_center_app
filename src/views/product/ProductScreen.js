@@ -47,6 +47,7 @@ class ProductScreen extends React.Component {
         }
 
         console.log("UserInfo Permission: " + Def.checkPartnerPermission());
+        this.getOrderNumber = this.getOrderNumber.bind(this);
 
         let currentCart = this.props.route.params && this.props.route.params.currentCart ? this.props.route.params.currentCart : Def.currentCart;
 
@@ -132,6 +133,33 @@ class ProductScreen extends React.Component {
             NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
         } else {
             console.log("Leng Data : " + Def.product_data.length);
+        }
+
+        if(Def.currentCart && Def.currentCart.orderItems) {
+            console.log('Current Cart exits ');
+            this.getOrderNumber();
+
+        } else {
+            console.log('Current Cart not exits ');
+            AsyncStorage.getItem('current_cart').then((value) => {
+                console.log('Current Cart read');
+                if(value){
+                    Def.currentCart = JSON.parse(value);
+                    console.log("Current Cart Data : " + JSON.stringify(Def.currentCart));
+                    this.getOrderNumber();
+                }
+            });
+        }
+    }
+
+    getOrderNumber(){
+        if(Def.calCartOrderNumber(Def.currentCart.orderItems)){
+            let numerOrder = Def.calCartOrderNumber(Def.currentCart.orderItems);
+            if(Def.updateCartNumber)
+            {
+                Def.updateCartNumber(Def.calCartOrderNumber(Def.currentCart.orderItems));
+            }
+
         }
     }
 
@@ -232,8 +260,6 @@ class ProductScreen extends React.Component {
     }
 
     itemClick = (item) => {
-
-        console.log("Item click ");
         let orderItems = this.state.orderItems;
         let currentCart = this.state.currentCart;
         if(!Array.isArray(orderItems)) {
@@ -259,7 +285,6 @@ class ProductScreen extends React.Component {
             orderItems.push(orderItem);
             console.log('Order item : ' + orderItems.length );
         }
-        console.log('Current Cart Length : ' + JSON.stringify(orderItems.length));
         let newCartData = [];
         if(!currentCart || currentCart.length < 1) {
             console.log('current cart is null');

@@ -83,6 +83,8 @@ class BookingScreen extends React.Component {
         this.applySelectCustomer = this.applySelectCustomer.bind(this);
         this.cancelSelectCustomer = this.cancelSelectCustomer.bind(this);
         this.goToCreateCustomer = this.goToCreateCustomer.bind(this);
+        this.onUpdateSuccess = this.onUpdateSuccess.bind(this);
+        this.onSaveFalse = this.onSaveFalse.bind(this);
 
 
         this.closeFunction = this.closeFunction.bind(this);
@@ -178,13 +180,34 @@ class BookingScreen extends React.Component {
             address: JSON.stringify(this.buildAddress(order.address)),
             order_item: JSON.stringify(this.createOrderItemInfo()),
         };
-
-        // console.log('Sava Order Info: ' + JSON.stringify(orderInfo));
-
         if(orderInfo){
-            OrderController.saveOrder(orderInfo, this.props.navigation);
+            OrderController.saveOrder(orderInfo, this.props.navigation, this.onUpdateSuccess, this.onSaveFalse);
         }
     }
+
+    onUpdateSuccess(data){
+        console.log('Update Order success: '+ JSON.stringify(data));
+
+        if(data){
+            Def.mainNavigate.navigate('Booking', {screen:'order-detail-screen', params:{item:data}});
+            let orderIndex = -1;
+            if(Def.orderList){
+                orderIndex = Def.orderList.findIndex(order => order.id == data.id);
+            }
+            if(orderIndex === -1){
+                Def.orderList.push(data);
+                Def.ressetCart();
+            } else {
+                Def.orderList[orderIndex] = data;
+            }
+
+        }
+    }
+
+    onSaveFalse(data){
+        console.log("Update Error : " + JSON.stringify(data));
+    }
+
 
     createOrderItemInfo(){
         let order = this.state.order;

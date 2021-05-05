@@ -16,7 +16,7 @@ export default class OrderController{
     static async  saveOrder(orderInfo, navigation = null, successCallback, falseCallback) {
         // console.log("Order Info: "+ orderInfo);
 
-        Net.sendRequest(this.onUpdateSuccess,this.onSaveFalse,'https://eurotiledev.house3d.net/api/order/create-order' , Def.POST_METHOD , orderInfo, 'multipart/form-data');
+        Net.sendRequest(successCallback ?successCallback : this.onUpdateSuccess, falseCallback ? falseCallback : this.onSaveFalse, Def.URL_BASE + 'api/order/create-order' , Def.POST_METHOD , orderInfo, 'multipart/form-data');
 
     };
 

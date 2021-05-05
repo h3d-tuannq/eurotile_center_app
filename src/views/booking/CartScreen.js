@@ -53,6 +53,10 @@ class CartScreen extends React.Component {
 
     booking(){
         console.log("Booking Click -- ");
+        if(Def.user_info.customer) {
+            console.log("Tồn tại khách hàng -- : " + JSON.stringify(Def.user_info.customer));
+
+        }
         var order = {
             orderItems: Def.currentCart ? Def.currentCart.orderItems : Def.cart_data,
             customer: null,
@@ -93,17 +97,19 @@ class CartScreen extends React.Component {
     orderItemChange = (item, isRemove = false) => {
         console.log("Item change: " + JSON.stringify(item.amount));
 
-        const found = Def.cart_data.findIndex(element => element.product.id == item.product.id);
+        const found = Def.currentCart.orderItems.findIndex(element => element.product.id == item.product.id);
         if(found !== -1){
             if(isRemove){
-                Def.cart_data.splice(found, 1);
-                this.setState({canOrder:this.updateCartOrder(), cart_data:Def.cart_data});
+                Def.currentCart.orderItems.splice(found, 1);
+                this.setState({canOrder:this.updateCartOrder(), cart_data:Def.currentCart.orderItems});
             }else {
-            Def.cart_data[found].amount = item.amount;
-            Def.cart_data[found].selectValue = item.selectValue;
+                Def.currentCart.orderItems[found].amount = item.amount;
+                Def.currentCart.orderItems[found].selectValue = item.selectValue;
                 this.setState({canOrder:this.updateCartOrder()});
             }
-            AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
+            // Def.currentCart.orderItems = Def.cart_data;
+            // AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
+            AsyncStorage.setItem('current_cart', JSON.stringify(Def.currentCart));
         }
 
     }
@@ -127,6 +133,7 @@ class CartScreen extends React.Component {
 
             Def.cart_data.push(orderItem);
         }
+        Def.currentCart.orderItems = Def.cart_data;
         let newCartData = [];
         this.setState({cart_data: Def.cart_data, canOrder: this.checkCanOrder()});
         AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
@@ -242,13 +249,13 @@ class CartScreen extends React.Component {
                 }
                 <View style={{alignItems:'center', justifyContent: 'space-around', marginBottom :10, flexDirection:'row', }}>
 
-                    {/*<TouchableOpacity onPress={() => {*/}
-                    {/*    this.setState({choseProduct:true});*/}
-                    {/*}} style={{width: width/2.5, height:40, borderRadius:20, borderWidth:1,borderColor:Style.DEFAUT_BLUE_COLOR, justifyContent : 'center', alignItems: 'center'}}>*/}
-                    {/*    <Text style={{fontSize: Style.TITLE_SIZE, color: Style.DEFAUT_BLUE_COLOR}}>*/}
-                    {/*        Thêm sản phẩm*/}
-                    {/*    </Text>*/}
-                    {/*</TouchableOpacity>*/}
+                    <TouchableOpacity onPress={() => {
+                        this.setState({choseProduct:true});
+                    }} style={{width: width/2.5, height:40, borderRadius:20, borderWidth:1,borderColor:Style.DEFAUT_BLUE_COLOR, justifyContent : 'center', alignItems: 'center'}}>
+                        <Text style={{fontSize: Style.TITLE_SIZE, color: Style.DEFAUT_BLUE_COLOR}}>
+                            Thêm sản phẩm
+                        </Text>
+                    </TouchableOpacity>
 
                     <TouchableOpacity disabled={!this.checkCanOrder()} onPress={() => {
                         this.booking();

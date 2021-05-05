@@ -364,9 +364,10 @@ export default class Def {
 
     static ressetCart() {
         Def.cart_data = [];
+        Def.currentCart = [];
         Def.order = null;
         AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
-
+        AsyncStorage.setItem('current_data', JSON.stringify(Def.currentCart));
     }
 
     static createPaymentUrl(orderId){

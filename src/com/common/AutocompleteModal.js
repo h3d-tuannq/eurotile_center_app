@@ -31,7 +31,7 @@ class AutocompleteModal extends React.Component {
         super(props);
         this.state = {
             // data : this.props.data.length > 0 ? this.props.data : [],
-            data : FlatStatusData,
+            data : this.props.data.length > 0 ? this.props.data : [],
             query : ""
         };
     }
@@ -70,7 +70,7 @@ class AutocompleteModal extends React.Component {
                                       this.item_click(item)
                                   }}>
                                       <LocationIcon width={25} height={25} style={{padding:5}}/>
-                                      <Text style={{paddingHorizontal:10}} >{ "test"}</Text>
+                                      <Text style={{paddingHorizontal:10}} >{item[this.props.filterAttr] + ""}</Text>
                                   </TouchableOpacity>
                               )}
                               renderTextInput={()=> (

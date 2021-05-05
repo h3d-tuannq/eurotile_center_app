@@ -316,13 +316,15 @@ class CreateCustomerScreen extends React.Component {
         } else if (!this.state.mobile) {
             alert("Vui lòng điền số điện thoại");
         }
-        let err = this.validateAddress();
-        if(err == false) {
-            return false;
-            // alert("Vui lòng nhập thông tin địa chỉ");
-        }
+        // let err = this.validateAddress();
+        // if(err == false) {
+        //     console.log('Err : ' + err);
+        //
+        //     return false;
+        //     // alert("Vui lòng nhập thông tin địa chỉ");
+        // }
         let customerInfo = {
-            id: "",
+            id: Def.user_info && Def.user_info.customer ? Def.user_info.customer.id :"" ,
             user_id: this.state.user ? this.state.user.id : "",
             create_by : Def.user_info ? Def.user_info['id'] : 14,
             name: this.state.name,
@@ -332,7 +334,7 @@ class CreateCustomerScreen extends React.Component {
             customer_type:this.state.customer_type == "1" ? 1: 0,
             partner_id:  Def.user_info['id'],
         };
-        console.log('Customer Info: ' + JSON.stringify(customerInfo));
+        // console.log('Customer Info: ' + JSON.stringify(customerInfo));
 
         CustomerController.saveCustomer(customerInfo, navigation, this.saveCustomerSuccess, this.saveCustomerFalse);
 
@@ -342,7 +344,7 @@ class CreateCustomerScreen extends React.Component {
 
     saveCustomerSuccess(customer){
         console.log("Customer Info : " + JSON.stringify(customer));
-        if(customer['err_code']){
+        if(customer['err_code'] ){
             alert(customer['msg']);
             return ;
         }
@@ -354,9 +356,18 @@ class CreateCustomerScreen extends React.Component {
         Def.currentCustomer = customer;
 
         if(customer.user_id && customer.user_id ==  Def.user_info.id){
+            console.log('gabs kauh customer ');
+
             Def.user_info.customer = customer;
             AsyncStorage.setItem('user_info', JSON.stringify(Def.user_info));
         }
+
+        if(Def.user_info.customer){
+            console.log('Customer info exits');
+        }
+
+
+
 
         let findCus = Def.customer.findIndex(element => element.id == customer.id);
         if(findCus){

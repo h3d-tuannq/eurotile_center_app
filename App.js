@@ -202,7 +202,7 @@ function MainTab() {
             style={{height: 120, paddingVertical: 20 , backgroundColor : 'red'}}
 
             tabBar={(props) => <MyTabBar {...props} item={null} />}
-            initialRouteName={'Product'}
+            initialRouteName={'home'}
             tabBarOptions={{
                 activeTintColor: Style.DEFAUT_RED_COLOR,
                 inactiveTintColor: '#b3b3b3',
@@ -737,16 +737,16 @@ export default class App extends Component {
             }
         });
 
-        AsyncStorage.getItem('current_cart').then((value) => {
-            if(value){
-                console.log('current_cart exits ----------------------------------------');
-                Def.currentCart = JSON.parse(value);
-                console.log('number_orrder: ' + Def.calCartOrderNumber(Def.currentCart.orderItems));
-            }
-        })
-        .catch(err => {
-            console.log('current_cart not exits ----------------------------------------');
-        });
+        // AsyncStorage.getItem('current_cart').then((value) => {
+        //     if(value){
+        //         console.log('current_cart exits ----------------------------------------');
+        //         Def.currentCart = JSON.parse(value);
+        //         console.log('number_orrder: ' + Def.calCartOrderNumber(Def.currentCart.orderItems));
+        //     }
+        // })
+        // .catch(err => {
+        //     console.log('current_cart not exits ----------------------------------------');
+        // });
 
         AsyncStorage.getItem('order').then((value) => {
             if(value){

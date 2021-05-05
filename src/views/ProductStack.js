@@ -34,17 +34,12 @@ class ProductStack extends React.Component {
         this.state = {
           number_order: Def.cart_data.length
         };
-        AsyncStorage.getItem('cart_data').then((value) => {
-            if(value){
-                Def.cart_data = JSON.parse(value);
-                this.setState({number_order:Def.cart_data.length});
-            }
-        });
         this.goProductList = this.goProductList.bind(this);
         this.goToCreateCustomer = this.goToCreateCustomer.bind(this);
         this.forcusFunction = this.forcusFunction.bind(this);
         this.updateCartNumber = this.updateCartNumber.bind(this);
         Def.updateCartNumber = this.updateCartNumber;
+        this.getOrderNumber = this.getOrderNumber.bind(this);
     }
 
     goProductList() {
@@ -61,10 +56,24 @@ class ProductStack extends React.Component {
     }
 
     getOrderNumber(){
-        return Def.cart_data.length;
+        if(Def.calCartOrderNumber(Def.currentCart.orderItems)  != this.state.number_order){
+            let numerOrder = Def.calCartOrderNumber(Def.currentCart.orderItems);
+            console.log('Number Order : ' + numerOrder);
+            this.setState({number_order:numerOrder});
+            console.log('Number state : ' + this.state.number_order);
+
+        }
+        let {navigation} = this.props;
+        navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
+
+        if(navigation){
+            console.log('Isset Navigation : ' + JSON.stringify(navigation));
+            this.focusListener = navigation.addListener("focus", this.forcusFunction);
+        }
     }
 
     updateCartNumber = (number) => {
+        console.log('Update Number Order : '+ number);
         this.setState({number_order:number});
     }
 
@@ -80,17 +89,27 @@ class ProductStack extends React.Component {
 
 
     componentDidMount(){
-        if(Def.currentCart && Def.currentCart.orderItems && Def.calCartOrderNumber(Def.currentCart.orderItems)  != this.state.number_order){
-            this.setState({number_order:Def.calCartOrderNumber(Def.currentCart.orderItems)});
-        }
+        // if(Def.currentCart && Def.currentCart.orderItems) {
+        //     console.log('Current Cart exits ');
+        //     this.getOrderNumber();
+        //
+        // } else {
+        //     console.log('Current Cart not exits ');
+        //     AsyncStorage.getItem('current_cart').then((value) => {
+        //         if(value){
+        //             Def.currentCart = JSON.parse(value);
+        //             this.getOrderNumber();
+        //         }
+        //     });
+        // }
+
         let {navigation} = this.props;
         navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
 
         if(navigation){
             console.log('Isset Navigation : ' + JSON.stringify(navigation));
-           this.focusListener = navigation.addListener("focus", this.forcusFunction);
+            this.focusListener = navigation.addListener("focus", this.forcusFunction);
         }
-
     }
 
     forcusFunction = () => {
