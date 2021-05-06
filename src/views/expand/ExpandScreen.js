@@ -3,11 +3,7 @@ import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
-
-import GuideIcon from '../../../assets/icon/icon-how-to-use.svg'
 import RuleIcon from '../../../assets/icon/icon-rule.svg';
-
-import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
 import AsyncStorage from "@react-native-community/async-storage";
 
@@ -15,51 +11,27 @@ import  UserController from '../../../src/controller/UserController'
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
-const carouselItems = [
-    {
-        id:1,
-        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/24/1/main_img.jpg',
-    },
-    {
-        id:2,
-        image_path : Def.URL_BASE + '/data/eurotileData/collection/202009/30/2/main_img.jpg',
-    }
-];
-
-
-
 class ExpandScreen extends React.Component {
     constructor(props){
         super(props);
-        this.formatText    = this.formatText.bind(this);
-        this.onGetUserInfoFun = this.onGetUserInfoFun.bind(this);
-        console.log('MyScreen init');
-
         Def.mainNavigate = this.props.navigation;
         if(this.props.navigation){
             console.log('isset naviagtion');
         }
-
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
-
         this.state = {
             user: Def.user_info,
             stateCount: 0.0,
             configMenu: Def.config_collection_menu,
-            slide_data : carouselItems,
             activeSlide : 0,
         };
-        this.gotoProfile = this.gotoProfile.bind(this);
-        this.gotoPartnerInfo = this.gotoPartnerInfo.bind(this);
-        this.gotoChangePass = this.gotoChangePass.bind(this);
-        this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
-        this.signInBtnClick = this.signInBtnClick.bind(this);
-        this.gotoOrderList = this.gotoOrderList.bind(this);
-        this.gotoOrderGuide = this.gotoOrderGuide.bind(this);
-        this.gotoOrderTerm = this.gotoOrderTerm.bind(this);
-        this.refresh = this.refresh.bind(this);
+
+        this.gotoContact = this.gotoContact.bind(this);
+        this.gotoTerm = this.gotoTerm.bind(this);
+        this.shareApplication = this.shareApplication.bind(this);
+        this.gotoSetupInfo = this.gotoSetupInfo.bind(this);
         Def.refreshDashBoard = this.refresh;
 
     }
@@ -82,179 +54,29 @@ class ExpandScreen extends React.Component {
         this.props.navigation.navigate('Login', {'screen': 'signIn'});
     }
 
-    gotoProfile(){
-        this.props.navigation.navigate('My', {'screen':'my-profile'});
+    gotoContact = () => {
+        this.props.navigation.navigate('Expand', {'screen':'contact-screen'});
     }
 
-    gotoPartnerInfo(){
-        let screen = 'partner-info';
-        if(Def.checkPartnerPermission() <0){
-            screen = 'update-partner';
-        }
-        this.props.navigation.navigate('My', {'screen':screen});
+    shareApplication = () => {
+        this.props.navigation.navigate('Expand', {'screen':'share-app-screen'});
     }
 
-    updatePartnerInfo(){
-        this.props.navigation.navigate('My', {'screen':'update-partner'});
-    }
-
-    gotoChangePass() {
-        this.props.navigation.navigate('My', {'screen':'change-password'});
-    }
-
-    gotoOrderList() {
-        this.props.navigation.navigate('Booking', {'screen':'order-list'});
-    }
-
-    gotoOrderTerm() {
-        this.props.navigation.navigate('Login', {'screen':'term-screen'});
-    }
-
-    gotoOrderGuide() {
-        this.props.navigation.navigate('Login', {'screen':'guide-screen'});
+    gotoTerm = () => {
+        this.props.navigation.navigate('Expand', {'screen':'term-screen'});
     }
 
 
-    onGetUserInfoFun(value){
-        if(value){
-            Def.user_info = JSON.parse(value);
-            Def.username = Def.user_info['user_name'];
-            Def.email = Def.user_info['email'];
-            // this.setState({user:Def.user_info});
-            this.refresh();
-        }
+    gotoSetupInfo = () => {
+        this.props.navigation.navigate('Expand', {'screen':'setup-info-screen'});
     }
-
-    refresh()
-    {
-        this.setState( {
-            user: Def.user_info,
-            stateCount: 0.0,
-            configMenu: Def.config_collection_menu,
-            slide_data : carouselItems,
-            activeSlide : 0,
-        });
-        if(!Def.user_info){
-            AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
-        } else {
-            console.log('exits User info');
-        }
-
-        this.setState({ stateCount: Math.random() });
-    }
-
-    onGetCollectionSuccess(data){
-        // console.log(Object.entries(data["data"]));
-        Object.entries(data["data"]).map((prop, key) => {
-            // console.log('Start');
-            // console.log(prop[0]);
-            // console.log(prop[1]["data"]);
-            // console.log('Start');
-        });
-        this.setState({ collection_data: data["data"] });
-        Def.collection_data = data["data"];
-        Def.config_collection_menu = this.createConfigData(data["data"]) ;
-        this.setState({ configMenu: Def.config_collection_menu});
-    }
-
-    createConfigData(data){
-        if(data){
-            let configData =  Object.entries(data).map((prop, key) => {
-                // console.log("Props : " + JSON.stringify(prop));
-                return {key: prop[0],name_vi:prop[1]["name_vi"], hidden:0, data:prop[1]["data"]};
-            });
-            Object.entries(configData).map((prop, key) => {
-                console.log("start" + key);
-                console.log("prop[0]" + prop[0]);
-                console.log("prop[1]" + prop[1]["name_vi"]);
-
-                console.log("data" + prop[1]["data"]);
-
-                console.log("end");
-            });
-            return configData;
-        }
-
-    }
-
-    onGetCollectionFalse(data){
-        console.log("false data : " + data);
-    }
-
-    formatText(text){
-        let rs = text;
-        if(text && text.length > 10){
-            rs = text.substring(0, 20) ;
-        }
-        return rs;
-    }
-    shouldComponentUpdate(){
-        // this.setState({ configMenu: Def.config_news_menu});
-        // console.log('SortData ddd:' + JSON.stringify(this.props.route));
-
-        if(!Def.user_info){
-            AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
-        }
-        const index = Def.REFESH_SCREEN.indexOf('my-screen');
-        console.log("Index in refresh : " + index);
-        if (index > -1) {
-            Def.REFESH_SCREEN.splice(index, 1);
-            this.refresh();
-        }
-
-        return true;
-    }
-
-    getNewDataByConfigKey(key){
-
-    }
-
-    get pagination () {
-        const { slide_data, activeSlide } = this.state;
-        return (
-            <Pagination
-                dotsLength={slide_data.length}
-                activeDotIndex={activeSlide}
-                containerStyle={{ position:'absolute',top : 5, right : slide_data.length  * 5, width : slide_data.length  * 5,  paddingVertical: 5  }}
-                dotContainerStyle={{marginHorizontal : 6,}}
-                dotStyle={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: 5,
-                    borderWidth : 1,
-                    backgroundColor : 'rgba(179, 179, 179, 0.92)',
-                }}
-                inactiveDotStyle={{
-
-                    backgroundColor: 'rgba(255, 255, 255, 0.92)'
-                }}
-                inactiveDotOpacity={1}
-                inactiveDotScale={1}
-            />
-        );
-    }
-    renderItem = ({item, index}) => {
-
-        return (
-            <View key={index} style={Style.styles.cardStyle}>
-                <TouchableOpacity >
-                    <Image  style = {[Style.styles.cardImg, {resizeMode : 'stretch'}]} source={{ uri: item.image_path}} />
-                </TouchableOpacity>
-            </View>
-        );
-
-    }
-
-
     render() {
         const {navigation} = this.props;
         const {user} = this.state;
         return (
                 <View style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
-
-
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
-                                      onPress={this.gotoPartnerInfo}
+                                      onPress={this.gotoContact}
                     >
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <View style={{width :30}}>
@@ -267,7 +89,9 @@ class ExpandScreen extends React.Component {
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}>
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
+                                      onPress={this.shareApplication}
+                    >
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <View style={{width :30}}>
                                 <Icon name="share" size={25} color={Style.GREY_TEXT_COLOR} />
@@ -280,7 +104,7 @@ class ExpandScreen extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
-                                      onPress={this.gotoOrderTerm}
+                                      onPress={this.gotoTerm}
                     >
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <View style={{width :30}}>
@@ -294,7 +118,7 @@ class ExpandScreen extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                      onPress={this.gotoChangePass}>
+                                      onPress={this.gotoSetupInfo}>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <View style={{width :30}}>
                                 <Icon name="user-cog" size={25} color={Style.GREY_TEXT_COLOR} />
@@ -305,28 +129,6 @@ class ExpandScreen extends React.Component {
                         </View>
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                     </TouchableOpacity>
-
-
-
-
-
-
-                    {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}*/}
-                                      {/*onPress={this.gotoOrderGuide}>*/}
-                        {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
-                            {/*<View style={{width :30}}>*/}
-                                {/*<GuideIcon width={25} height={25} color={Style.GREY_TEXT_COLOR} />*/}
-                            {/*</View>*/}
-                            {/*<Text style={[Style.text_styles.middleText, {marginLeft :10}]}>*/}
-                                {/*Hướng dẫn sử dụng*/}
-                            {/*</Text>*/}
-                        {/*</View>*/}
-                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                    {/*</TouchableOpacity>*/}
-
-
-
-
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
                                       onPress={ ()=>{UserController.logoutLocal()}}
                     >

@@ -308,7 +308,8 @@ export default class Def {
 
 
     static numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        return x != null ?  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
     }
 
     static clearCartData() {

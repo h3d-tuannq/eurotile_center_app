@@ -76,6 +76,7 @@ class ProductScreen extends React.Component {
         this.searchButtonClick = this.searchButtonClick.bind(this);
         this.filterFunc = this.filterFunc.bind(this);
         this.resetCriteria = this.resetCriteria.bind(this);
+        this.forcusFunction = this.forcusFunction.bind(this);
     }
 
     searchButtonClick = () => {
@@ -132,25 +133,40 @@ class ProductScreen extends React.Component {
         if(!this.state.productData || Def.product_data.length < 1){
             NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
         } else {
-            console.log("Leng Data : " + Def.product_data.length);
         }
 
         if(Def.currentCart && Def.currentCart.orderItems) {
-            console.log('Current Cart exits ');
             this.getOrderNumber();
 
         } else {
-            console.log('Current Cart not exits ');
             AsyncStorage.getItem('current_cart').then((value) => {
-                console.log('Current Cart read');
                 if(value){
                     Def.currentCart = JSON.parse(value);
-                    console.log("Current Cart Data : " + JSON.stringify(Def.currentCart));
                     this.getOrderNumber();
                 }
             });
         }
+
+        let {navigation} = this.props;
+        navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
+
+        if(navigation){
+            this.focusListener = navigation.addListener("focus", this.forcusFunction);
+        }
+
     }
+
+    componentWillUnmount() {
+        // Remove the event listener
+        if(this.focusListener && (typeof this.focusListener.remove === 'function')){
+            this.focusListener.remove();
+        }
+
+    }
+r
+    forcusFunction = () => {
+        this.setState({orderItems : Def.currentCart && Def.currentCart.orderItems ? Def.currentCart.orderItems :  []});
+    };
 
     getOrderNumber(){
         if(Def.calCartOrderNumber(Def.currentCart.orderItems)){
@@ -187,8 +203,6 @@ class ProductScreen extends React.Component {
     }
 
     onGetCollectionSuccess(data){
-        // console.log(Object.entries(data["data"]));
-        console.log('Get Collection');
         Object.entries(data["data"]).map((prop, key) => {
         });
         this.setState({ collection_data: data["data"] , isRefresh : false});
@@ -266,11 +280,7 @@ class ProductScreen extends React.Component {
             console.log('Order item is not array ');
             orderItems = [];
         }
-
         const found = orderItems.findIndex(element => element.product.id == item.id);
-        console.log('Found add item ' + found);
-        console.log('Order items : ' + JSON.stringify(orderItems));
-
         if(found !== -1){
             orderItems[found].amount++;
             orderItems[found].selectValue = true;
@@ -283,23 +293,19 @@ class ProductScreen extends React.Component {
                 saleArea:item['brickBoxInfo']['total_area']
             }
             orderItems.push(orderItem);
-            console.log('Order item : ' + orderItems.length );
         }
         let newCartData = [];
         if(!currentCart || currentCart.length < 1) {
-            console.log('current cart is null');
             currentCart = {
                 orderItems: []
             };
         }
         currentCart.orderItems = orderItems;
         this.setState({orderItems: orderItems, cart:currentCart});
-        console.log("Current cart : " + JSON.stringify(currentCart));
         Def.currentCart = currentCart;
         if(Def.updateCartNumber){
             Def.updateCartNumber(Def.calCartOrderNumber(orderItems));
         }
-
         AsyncStorage.setItem('current_cart', JSON.stringify(Def.currentCart));
     }
 
@@ -307,8 +313,6 @@ class ProductScreen extends React.Component {
         <ProductItemRenderer  type={"product"} click={this.itemClick}
                               item={item} favorite={true} styleImage={{width:PROGRAM_IMAGE_WIDTH -2, height:PROGRAM_IMAGE_HEIGHT-5, marginRight:6, marginBottom : 5 }} />
     );
-
-
     render() {
 
         const ListHeader = () => (

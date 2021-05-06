@@ -30,9 +30,6 @@ class CartScreen extends React.Component {
         this.booking = this.booking.bind(this);
         this.orderItemChange = this.orderItemChange.bind(this);
         Def.mainNavigate = this.props.navigation;
-
-        console.log('cart constructor : ' + JSON.stringify(Def.currentCart));
-
         this.state = {
             cart_data: Def.currentCart ? Def.currentCart.orderItems : [] ,
             stateCount: 0.0,
@@ -52,10 +49,8 @@ class CartScreen extends React.Component {
     }
 
     booking(){
-        console.log("Booking Click -- ");
         if(Def.user_info.customer) {
             console.log("Tồn tại khách hàng -- : " + JSON.stringify(Def.user_info.customer));
-
         }
         var order = {
             orderItems: Def.currentCart ? Def.currentCart.orderItems : Def.cart_data,
@@ -136,7 +131,7 @@ class CartScreen extends React.Component {
         Def.currentCart.orderItems = Def.cart_data;
         let newCartData = [];
         this.setState({cart_data: Def.cart_data, canOrder: this.checkCanOrder()});
-        AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
+        // AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
         AsyncStorage.setItem('current_cart', JSON.stringify(Def.currentCart));
     }
 
@@ -191,7 +186,7 @@ class CartScreen extends React.Component {
         // this.setState({ configMenu: Def.config_news_menu});
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
 
-        console.log('Should update ');
+        console.log('Should update  : ' + Def.cart_data.length);
 
         if(Def.currentCart){
             console.log('Current Update : ' + JSON.stringify(Def.currentCart));
@@ -213,6 +208,9 @@ class CartScreen extends React.Component {
          if((!this.state.productData) || (this.state.productData.length == 0) ){
             NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
          }
+
+        console.log('Should update  : ' + Def.cart_data.length);
+
     }
 
     render() {

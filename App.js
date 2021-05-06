@@ -202,7 +202,7 @@ function MainTab() {
             style={{height: 120, paddingVertical: 20 , backgroundColor : 'red'}}
 
             tabBar={(props) => <MyTabBar {...props} item={null} />}
-            initialRouteName={'home'}
+            initialRouteName={'Expand'}
             tabBarOptions={{
                 activeTintColor: Style.DEFAUT_RED_COLOR,
                 inactiveTintColor: '#b3b3b3',
@@ -682,7 +682,6 @@ export default class App extends Component {
 
     onNewSuccess(data){
         Def.news_data = data['data'];
-        console.log('Data News : ');
     }
 
     onCollectionSuccess(data){

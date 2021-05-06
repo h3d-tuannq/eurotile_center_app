@@ -272,7 +272,7 @@ class MyScreen extends React.Component {
                     </Text>
 
                 </View> :
-                <View style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
+                <ScrollView style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
 
                     <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginBottom: 10}}>
 
@@ -356,24 +356,7 @@ class MyScreen extends React.Component {
 
 
                     }
-
-
-
-
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                      onPress={this.gotoChangePass}>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                            <Icon name="user-cog" size={25} color={Style.GREY_TEXT_COLOR} />
-                            </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Thiết lập tài khoản
-                            </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
                         onPress={this.gotoPartnerInfo}
                     >
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
@@ -469,7 +452,7 @@ class MyScreen extends React.Component {
                         {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                     {/*</TouchableOpacity>*/}
 
-                </View>
+                </ScrollView>
         )
     }
 }

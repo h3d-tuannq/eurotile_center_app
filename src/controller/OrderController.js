@@ -64,9 +64,7 @@ export default class OrderController{
 
 
     static getOrderSuccess(data){
-        console.log("Order List Length: " + data['data'].length);
         Def.orderList = data['data'];
-        console.log("Order List Length: " + Def.orderList.length);
     }
 
     static getOrderFalse(data){
