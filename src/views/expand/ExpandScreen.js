@@ -15,6 +15,8 @@ class ExpandScreen extends React.Component {
     constructor(props){
         super(props);
         Def.mainNavigate = this.props.navigation;
+
+        this.onGetUserInfoFun = this.onGetUserInfoFun.bind(this);
         if(this.props.navigation){
             console.log('isset naviagtion');
         }
@@ -32,20 +34,47 @@ class ExpandScreen extends React.Component {
         this.gotoTerm = this.gotoTerm.bind(this);
         this.shareApplication = this.shareApplication.bind(this);
         this.gotoSetupInfo = this.gotoSetupInfo.bind(this);
+        this.forcusFunction = this.forcusFunction.bind(this);
         Def.refreshDashBoard = this.refresh;
 
     }
 
-    componentDicMount(){
-        console.log("User info: " + Def.user_info);
-        if(!Def.user_info){
-            AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
-        }
-        const index = Def.REFESH_SCREEN.indexOf('my-screen');
-        console.log("Index in refresh : " + index);
-        if (index > -1) {
-            Def.REFESH_SCREEN.splice(index, 1);
+    onGetUserInfoFun(value){
+        if(value){
+            Def.user_info = JSON.parse(value);
+            Def.username = Def.user_info['user_name'];
+            Def.email = Def.user_info['email'];
+            // this.setState({user:Def.user_info});
             this.refresh();
+        }
+    }
+
+    onGetUserInfoFun(value){
+        if(value){
+            Def.user_info = JSON.parse(value);
+            Def.username = Def.user_info['user_name'];
+            Def.email = Def.user_info['email'];
+            // this.setState({user:Def.user_info});
+            this.refresh();
+        }
+    }
+
+    componentDicMount(){
+            let {navigation} = this.props;
+            navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
+
+            if(navigation){
+                this.focusListener = navigation.addListener("focus", this.forcusFunction);
+            }
+    }
+
+    forcusFunction = () => {
+        this.setState({user:Def.user_info});
+    };
+
+    componentWillUnmount() {
+        if(this.focusListener && (typeof this.focusListener.remove === 'function')){
+            this.focusListener.remove();
         }
 
     }
@@ -129,19 +158,24 @@ class ExpandScreen extends React.Component {
                         </View>
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                      onPress={ ()=>{UserController.logoutLocal()}}
-                    >
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                                <Icon name="sign-out-alt" size={25} color={Style.GREY_TEXT_COLOR} />
+                    {
+                        user ?
+                        <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
+                                          onPress={ ()=>{UserController.logoutLocal()}}
+                        >
+                            <View style={{flexDirection : 'row', alignItems : 'center'}}>
+                                <View style={{width :30}}>
+                                    <Icon name="sign-out-alt" size={25} color={Style.GREY_TEXT_COLOR} />
+                                </View>
+                                <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                                    Đăng xuất
+                                </Text>
                             </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Đăng xuất
-                            </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
+                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
+                        </TouchableOpacity>
+                        : null
+                    }
+
                 </View>
         )
     }

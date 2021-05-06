@@ -49,7 +49,7 @@ class CartScreen extends React.Component {
     }
 
     booking(){
-        if(Def.user_info.customer) {
+        if(Def.user_info && Def.user_info.customer) {
             console.log("Tồn tại khách hàng -- : " + JSON.stringify(Def.user_info.customer));
         }
         var order = {
@@ -62,12 +62,12 @@ class CartScreen extends React.Component {
             referralCode:'',
         };
 
-        if(!Def.user_info.customer){ // Trong trường hợp không
+        if(Def.user_info && !Def.user_info.customer){ // Trong trường hợp không
             console.log('Go to create Customer .');
             Def.currentOrder = order;
             this.props.navigation.navigate('Booking', {screen:'create-customer', params:{refresh:1 , user:Def.user_info}});
             return;
-        } else {
+        } else if(Def.user_info) {
             console.log("CustomerInfo" + JSON.stringify(Def.user_info.customer));
             order.customer = Def.user_info.customer;
             order.address = order.customer.address;

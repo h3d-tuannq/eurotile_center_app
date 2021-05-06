@@ -49,8 +49,7 @@ class NewsStack extends React.Component {
                                     paddingLeft:15 ,
                                     alignItems : 'center'
                                 }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            }>
                             <EurotileLogo
                                 width={Style.LOGO_WIDTH}
                                 height={Style.LOGO_HEIGHT}

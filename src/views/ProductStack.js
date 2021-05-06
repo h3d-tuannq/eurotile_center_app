@@ -12,14 +12,11 @@ import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
 import Def from "../../src/def/Def";
 
-import MenuIcon from '../../assets/icons/expand.svg';
 
 import CartIcon from '../../assets/icons/cart.svg'
 
 
 import EurotileLogo from '../../assets/icons/Logo w.svg'
-import AsyncStorage from "@react-native-community/async-storage";
-import NativeTVNavigationEventEmitter from "react-native/Libraries/Components/AppleTV/NativeTVNavigationEventEmitter";
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
@@ -142,8 +139,7 @@ class ProductStack extends React.Component {
                                     paddingLeft:15 ,
                                     alignItems : 'center'
                                 }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            }>
                             <EurotileLogo
                                 width={Style.LOGO_WIDTH}
                                 height={Style.LOGO_HEIGHT}

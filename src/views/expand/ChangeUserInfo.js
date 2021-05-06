@@ -2,13 +2,11 @@ import React, {Component} from 'react'
 import {Text, Image, StyleSheet, View, TextInput, Dimensions, TouchableOpacity} from 'react-native'
 import Style from "../../../src/def/Style";
 import Def from "../../../src/def/Def";
-import FacebookIcon from "../../../assets/icon/icon-facebook.svg";
-import GoogleIcon from "../../../assets/icon/icon-google.svg";
 import UserController from "../../controller/UserController";
 
 const {width,height} = Dimensions.get('window');
 
-export default class SettingUserInfo extends Component {
+export default class ChangeUserInfo extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -65,7 +63,7 @@ export default class SettingUserInfo extends Component {
                     />
                     {
                         Def.user_info && Def.user_info.oauth_client ?
-                        <View/> :
+                            <View/> :
                             <View>
                                 <TextInput
                                     onFocus={() => this.setState({focus:1})}

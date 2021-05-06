@@ -7,8 +7,7 @@ import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
 
 import ExpandScreen from './expand/ExpandScreen'
-import SettingInfo from './expand/PartnerProfileScreen'
-import ChangeUserInfo from "./expand/SettingUserInfo";
+import ChangeUserInfo from "./expand/ChangeUserInfo";
 import ContactScreen from './expand/ContactScreen'
 import ShareAppScreen from './expand/ShareAppScreen'
 import TermScreen from './expand/TermScreen'
@@ -40,8 +39,7 @@ class ExpandStack extends React.Component {
                                     paddingLeft:15 ,
                                     alignItems : 'center'
                                 }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            }>
                             <EurotileLogo
                                 width={Style.LOGO_WIDTH}
                                 height={Style.LOGO_HEIGHT}
@@ -108,8 +106,7 @@ class ExpandStack extends React.Component {
                                     paddingLeft:15 ,
                                     alignItems : 'center'
                                 }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            }>
                             <EurotileLogo
                                 width={Style.LOGO_WIDTH}
                                 height={Style.LOGO_HEIGHT}
@@ -176,8 +173,7 @@ class ExpandStack extends React.Component {
                                     paddingLeft:15 ,
                                     alignItems : 'center'
                                 }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            }>
                             <EurotileLogo
                                 width={Style.LOGO_WIDTH}
                                 height={Style.LOGO_HEIGHT}

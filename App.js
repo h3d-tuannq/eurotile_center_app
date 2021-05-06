@@ -202,7 +202,7 @@ function MainTab() {
             style={{height: 120, paddingVertical: 20 , backgroundColor : 'red'}}
 
             tabBar={(props) => <MyTabBar {...props} item={null} />}
-            initialRouteName={'Expand'}
+            initialRouteName={'home'}
             tabBarOptions={{
                 activeTintColor: Style.DEFAUT_RED_COLOR,
                 inactiveTintColor: '#b3b3b3',
@@ -841,13 +841,11 @@ export default class App extends Component {
         return (
             <NavigationContainer>
                 <StatusBar backgroundColor={Style.DEFAUT_BLUE_COLOR} />
-                <AppDrawer />
+                <AppStack />
                 <View>
                     <Modal isVisible={this.state.showNoti}  coverScreen={true} hasBackdrop={true}
                            backdropOpacity={0}
                            onBackdropPress={this.setHideNoti}
-                           // deviceWidth={width}
-                           // deviceHeight={500}
                     >
                         <TouchableOpacity style={[styles.modalView,{backgroundColor:'#fff', width:0.9 * width}]}>
                             {/*<View style={{flexDirection:'row', justifyContent:'space-between'}} >*/}

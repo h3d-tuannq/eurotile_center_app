@@ -314,10 +314,16 @@ export default class UserController{
         try {
             let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data'];
             await AsyncStorage.multiRemove(keys);
-        }catch (e){
+            if(Def.mainNavigate){
+                Def.mainNavigate.navigate('home', {'screen':'home-screen'});
+            }
+            RNRestart.Restart();
 
         }
-        RNRestart.Restart();
+        catch (e){
+        }
+
+
     }
 
 
