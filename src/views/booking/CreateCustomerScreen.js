@@ -311,20 +311,20 @@ class CreateCustomerScreen extends React.Component {
         const {navigation} = this.props;
         console.log('Update user info');
         if (!this.state.name) {
-            alert("Vui lòng cập nhật ảnh Avatar");
+            alert("Vui lòng cập nhật tên khách hàng");
             return false;
         } else if (!this.state.mobile) {
             alert("Vui lòng điền số điện thoại");
         }
-        // let err = this.validateAddress();
-        // if(err == false) {
-        //     console.log('Err : ' + err);
-        //
-        //     return false;
-        //     // alert("Vui lòng nhập thông tin địa chỉ");
-        // }
+        let err = this.validateAddress();
+        if(err != 0) {
+            console.log('Err : ' + err);
+            alert("Vui lòng nhập thông tin địa chỉ");
+            return false;
+
+        }
         let customerInfo = {
-            id: Def.user_info && Def.user_info.customer ? Def.user_info.customer.id :"" ,
+            id:"" ,
             user_id: this.state.user ? this.state.user.id : "",
             create_by : Def.user_info ? Def.user_info['id'] : 14,
             name: this.state.name,
@@ -344,10 +344,12 @@ class CreateCustomerScreen extends React.Component {
 
     saveCustomerSuccess(customer){
         console.log("Customer Info : " + JSON.stringify(customer));
-        if(customer['err_code'] ){
+        if(customer['result'] != 1 ){
             alert(customer['msg']);
             return ;
         }
+
+        customer = customer['customer'];
 
         if(Def.currentOrder){
             Def.currentOrder['customer'] = customer;
@@ -356,8 +358,6 @@ class CreateCustomerScreen extends React.Component {
         Def.currentCustomer = customer;
 
         if(customer.user_id && customer.user_id ==  Def.user_info.id){
-            console.log('gabs kauh customer ');
-
             Def.user_info.customer = customer;
             AsyncStorage.setItem('user_info', JSON.stringify(Def.user_info));
         }
@@ -365,16 +365,13 @@ class CreateCustomerScreen extends React.Component {
         if(Def.user_info.customer){
             console.log('Customer info exits');
         }
-
-
-
-
         let findCus = Def.customer.findIndex(element => element.id == customer.id);
         if(findCus){
             Def.customer[findCus] = customer;
         }else  {
             Def.customer.push(customer);
         }
+        Def.isUpdating = true;
         this.props.navigation.navigate('Booking', {screen: 'booking', params : {order:Def.currentOrder}});
         console.log("Navigate to Booking");
     }

@@ -312,8 +312,10 @@ export default class UserController{
 
     static logoutLocal = async () => {
         try {
-            let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data'];
+            let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data', 'current_cart'];
+
             await AsyncStorage.multiRemove(keys);
+            Def.ressetCart();
             if(Def.mainNavigate){
                 Def.mainNavigate.navigate('home', {'screen':'home-screen'});
             }

@@ -38,6 +38,9 @@ class BookingScreen extends React.Component {
 
         console.log('Orders-Test : ' + JSON.stringify(order.address));
         let address = this.props.route.params && this.props.route.params.address ? this.props.route.params.address : order? order.address : null;
+
+        console.log('Contructor');
+
         if(!address && order){
             address = order ? order.address : '';
         }
@@ -186,8 +189,6 @@ class BookingScreen extends React.Component {
     }
 
     onUpdateSuccess(data){
-        console.log('Update Order success: '+ JSON.stringify(data));
-
         if(data){
             Def.mainNavigate.navigate('Booking', {screen:'order-detail-screen', params:{item:data}});
             let orderIndex = -1;
@@ -263,12 +264,14 @@ class BookingScreen extends React.Component {
     };
 
     shouldComponentUpdate(){
-        console.log("Should Update + " + this.props.route.params.orderId + " : " + JSON.stringify(this.props.route.params));
+        // console.log("Should Update + " + this.props.route.params.order.id + " : " + JSON.stringify(this.props.route.params));
+        let order = this.props.route.params ? this.props.route.params.order : null;
+        let address = this.props.route.params && this.props.route.params.address ? this.props.route.params.address : order? order.address : null;
         // if((this.props.route.params && this.props.route.params.orderId)){
             if(Def.isUpdating){
                 console.log('Console Refresh ');
                 Def.isUpdating = false;
-                this.setState({order:Def.currentOrder, isUpdate: true});
+                this.setState({order:Def.currentOrder, isUpdate: true, address : address, addressStr: Def.getAddressStr(order.address)});
             }
         // }
         return true;
@@ -279,12 +282,13 @@ class BookingScreen extends React.Component {
         order.customer = this.state.customerInfo;
         let address = order.customer.address;
         order.address = this.state.customerInfo.address;
+
         Def.currentOrder = order;
-        this.setState({customerInfo:null, order:order, isValid:2, address:address});
+        this.setState({customerInfo:null, order:order, isValid:2, address:address, addressStr: Def.getAddressStr(order.address)});
     }
 
     cancelSelectCustomer(){
-        this.setState({address:address, displayInfo:false, isValid:1});
+        this.setState({displayInfo:false, isValid:1});
     }
 
 

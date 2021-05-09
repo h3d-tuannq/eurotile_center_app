@@ -736,16 +736,16 @@ export default class App extends Component {
             }
         });
 
-        // AsyncStorage.getItem('current_cart').then((value) => {
-        //     if(value){
-        //         console.log('current_cart exits ----------------------------------------');
-        //         Def.currentCart = JSON.parse(value);
-        //         console.log('number_orrder: ' + Def.calCartOrderNumber(Def.currentCart.orderItems));
-        //     }
-        // })
-        // .catch(err => {
-        //     console.log('current_cart not exits ----------------------------------------');
-        // });
+        AsyncStorage.getItem('current_cart').then((value) => {
+            if(value){
+                console.log('current_cart exits ----------------------------------------');
+                Def.currentCart = JSON.parse(value);
+                console.log('number_orrder: ' + Def.calCartOrderNumber(Def.currentCart.orderItems));
+            }
+        })
+        .catch(err => {
+            console.log('current_cart not exits ----------------------------------------');
+        });
 
         AsyncStorage.getItem('order').then((value) => {
             if(value){

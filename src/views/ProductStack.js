@@ -110,7 +110,6 @@ class ProductStack extends React.Component {
     }
 
     forcusFunction = () => {
-        console.log('forcus Product-Stack');
       this.setState({number_order:Def.currentCart && Def.currentCart.orderItems ? Def.calCartOrderNumber(Def.currentCart.orderItems) : 0});
     };
 

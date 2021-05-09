@@ -59,16 +59,18 @@ class ExpandScreen extends React.Component {
         }
     }
 
-    componentDicMount(){
+    componentDidMount(){
             let {navigation} = this.props;
             navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
 
             if(navigation){
+                console.log('Add EventListener');
                 this.focusListener = navigation.addListener("focus", this.forcusFunction);
             }
     }
 
     forcusFunction = () => {
+        console.log('forcus in');
         this.setState({user:Def.user_info});
     };
 
@@ -161,7 +163,7 @@ class ExpandScreen extends React.Component {
                     {
                         user ?
                         <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                          onPress={ ()=>{UserController.logoutLocal()}}
+                                          onPress={()=>{UserController.logoutLocal()}}
                         >
                             <View style={{flexDirection : 'row', alignItems : 'center'}}>
                                 <View style={{width :30}}>

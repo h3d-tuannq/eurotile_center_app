@@ -40,6 +40,7 @@ class CartScreen extends React.Component {
         this.itemClick = this.itemClick.bind(this);
         this.orderItemClick = this.orderItemClick.bind(this);
         this.addItemToCart = this.addItemToCart.bind(this);
+        this.resetCart = this.resetCart.bind(this);
     }
 
 
@@ -113,10 +114,12 @@ class CartScreen extends React.Component {
 
     itemClick(item){
         this.setState({choseProduct:false});
-        const found = Def.cart_data.findIndex(element => element.product.id == item.id);
+        let cart_data = this.state.cart_data;
+        const found = cart_data.findIndex(element => element.product.id == item.id);
+        // console.log('DataCart : ' + JSON.);
         if(found !== -1){
-            Def.cart_data[found].amount++;
-            Def.cart_data[found].selectValue = true;
+            cart_data[found].amount++;
+            cart_data[found].selectValue = true;
         } else {
             let orderItem = {
                 product:item,
@@ -126,11 +129,11 @@ class CartScreen extends React.Component {
                 saleArea:item['brickBoxInfo']['total_area']
             }
 
-            Def.cart_data.push(orderItem);
+            cart_data.push(orderItem);
         }
-        Def.currentCart.orderItems = Def.cart_data;
+        Def.currentCart.orderItems = cart_data;
         let newCartData = [];
-        this.setState({cart_data: Def.cart_data, canOrder: this.checkCanOrder()});
+        this.setState({cart_data: cart_data, canOrder: this.checkCanOrder()});
         // AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
         AsyncStorage.setItem('current_cart', JSON.stringify(Def.currentCart));
     }
@@ -193,6 +196,10 @@ class CartScreen extends React.Component {
         }
 
         return true;
+    }
+
+    resetCart() {
+        AsyncStorage.removeItem('current_cart');
     }
 
     getNewDataByConfigKey(key){
@@ -263,6 +270,15 @@ class CartScreen extends React.Component {
                             Đặt hàng
                         </Text>
                     </TouchableOpacity>
+
+                    {/*<TouchableOpacity  onPress={() => {*/}
+                    {/*    this.resetCart();*/}
+                    {/*}}*/}
+                    {/*                  style={{width: width / 2.5, height:40, borderRadius:20, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent : 'center', alignItems: 'center'}}>*/}
+                    {/*    <Text style={{fontSize: Style.TITLE_SIZE, color: '#fff'}}>*/}
+                    {/*        Đặt hàng*/}
+                    {/*    </Text>*/}
+                    {/*</TouchableOpacity>*/}
 
 
                 </View>

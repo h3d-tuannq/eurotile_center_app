@@ -1,11 +1,11 @@
 import AsyncStorage from "@react-native-community/async-storage";
 
 export default class Def {
-    static URL_BASE = "https://eurotile-prod.house3d.net/";
-    static URL_CONTENT_BASE = "https://eurotile-prod.house3d.net/data/eurotileData/";
+    // static URL_BASE = "https://eurotile-prod.house3d.net/";
+    // static URL_CONTENT_BASE = "https://eurotile-prod.house3d.net/data/eurotileData/";
 
-    // static URL_BASE = "https://eurotiledev.house3d.net/";
-    // static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
+    static URL_BASE = "https://eurotiledev.house3d.net/";
+    static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
 
     static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com/uploads/2019/07/02/5d1aa12048236.jpg";
 
@@ -24,6 +24,8 @@ export default class Def {
     static user_info = null;
 
     static order_number = 12;
+
+    static refreshHome = [];
 
     static os = 'android';
 
@@ -97,6 +99,8 @@ export default class Def {
     static config_design_menu = null;
 
     static refreshDashBoard = null;
+
+    static refreshStatistical = {};
 
     static isUpdating = false;
 
@@ -276,6 +280,7 @@ export default class Def {
 
     static calCartOrderNumber(orderList) {
         var total = 0;
+        console.log('OrderList ' + JSON.stringify(orderList));
         orderList.forEach(item =>  {
             total += item.amount;
         });
@@ -336,8 +341,8 @@ export default class Def {
     static partnerlevelInfo = {1:'Vàng' , 2: 'Bạch kim', 3: 'Kim cương'};
 
     static getLevelPartnerName(levelId){
-        if(Def.partnerlevelInfo && Def.partnerlevelInfo[levelId]){
-            return Def.partnerlevelInfo[levelId].name;
+        if(Def.partnerlevelInfo && Def.partnerlevelInfo[levelId - 1]){
+            return Def.partnerlevelInfo[levelId - 1].name;
         }
         return false;
     }

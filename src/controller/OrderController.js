@@ -65,6 +65,9 @@ export default class OrderController{
 
     static getOrderSuccess(data){
         Def.orderList = data['data'];
+        if(Def.refreshStatistical){
+            Def.refreshStatistical();
+        }
     }
 
     static getOrderFalse(data){

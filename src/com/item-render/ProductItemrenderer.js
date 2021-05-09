@@ -69,12 +69,12 @@ class ProductItemrenderer extends PureComponent{
 
                 </TouchableOpacity>
 
-                {/*<View style = {{width:this.props.styleImage.width, justifyContent:'center', alignItems: (this.props.type == 'product' ? 'flex-start' :'center')}}>*/}
+                <View style = {{width:this.props.styleImage.width, justifyContent:'center', alignItems: (this.props.type == 'product' ? 'flex-start' :'center')}}>
 
-                {/*    <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:1 , borderRadius : 3 ,bottom:5, backgroundColor: this.props.type == 'product' ? Style.DEFAUT_BLUE_COLOR :Style.DEFAUT_RED_COLOR, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>*/}
-                {/*          {this.formatText(this.props.type == 'product' ? model.model :model.name, 15)}*/}
-                {/*    </Text>*/}
-                {/*</View>*/}
+                    <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:1 , borderRadius : 3 ,bottom:5, backgroundColor: this.props.type == 'product' ? Style.DEFAUT_BLUE_COLOR :Style.DEFAUT_RED_COLOR, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>
+                          {this.formatText(this.props.type == 'product' ? model.model :model.name, 15)}
+                    </Text>
+                </View>
             </View>
 
         )

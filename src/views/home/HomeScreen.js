@@ -13,6 +13,7 @@ import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
 import HotNewsVerItemrenderer from '../../../src/com/item-render/HotNewsVerItemrenderer'
+import StatisticalComponent from "../../com/common/StatisticalComponent";
 import MyCarousel from '../../../src/com/common/MyCarousel';
 
 import ProgramVerList from '../../com/common/ProgramVerList';
@@ -90,6 +91,8 @@ class HomeScreen extends React.Component {
         this.getPopularNewsSuccess = this.getPopularNewsSuccess.bind(this);
         this.getPopularNewsFalse = this.getPopularNewsFalse.bind(this);
         this.getOrderSuccess = this.getOrderSuccess.bind(this);
+        // Def.refreshHome = this.refresh.bind(this);
+        this.forcusFunction = this.forcusFunction.bind(this);
 
 
         Def.mainNavigate = this.props.navigation;
@@ -111,7 +114,10 @@ class HomeScreen extends React.Component {
             configMenu: Def.config_collection_menu,
             slide_data : Def.popularNews,
             activeSlide : 0,
-            popularNews : Def.popularNews
+            popularNews : Def.popularNews,
+            profit: Def.calProfitValue(Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED)),
+            accomplishedOrder: Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length,
+
         };
 
         this.setActiveItem = this.setActiveItem.bind(this);
@@ -149,11 +155,36 @@ class HomeScreen extends React.Component {
             this.refresh();
         }
 
+        let {navigation} = this.props;
+        navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
+
+        if(navigation){
+            console.log('set event forcus');
+
+            this.focusListener = navigation.addListener("focus", this.forcusFunction);
+        } else {
+            console.log('not exit navigation')
+        }
+    }
+
+    forcusFunction = () => {
+        console.log('Set State count');
+        this.setState({stateCount:Math.random()});
+    };
+
+    componentWillUnmount() {
+        // Remove the event listener
+        if(this.focusListener && (typeof this.focusListener.remove === 'function')){
+            this.focusListener.remove();
+        }
+
     }
 
      getOrderSuccess(data){
         Def.orderList = data['data'];
-        this.refresh();
+        if(Def.refreshStatistical) {
+            Def.refreshStatistical();
+        }
     }
 
 
@@ -161,8 +192,8 @@ class HomeScreen extends React.Component {
 
     refresh()
     {
-        //NetChannel.listChannel(this.onChannelSuccess,this.onChannelFailed);
-        this.setState({ stateCount: Math.random() });
+        this.setState({ stateCount: Math.random() ,  profit: Def.calProfitValue(Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED)),
+            accomplishedOrder: Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length,  });
     }
 
     onGetCollectionSuccess(data){
@@ -317,54 +348,55 @@ class HomeScreen extends React.Component {
                 </View>
 
                 {
-                Def.user_info && Def.user_info.partnerInfo ?
-
-
-                <View style={styles.overviewInfo} >
-                    <View>
-                        <Text style={[Style.text_styles.titleText, {color:Style.DEFAUT_RED_COLOR, marginLeft: 0}]}>
-                            {Def.user_info ? Def.user_info['username'] : ''}
-                        </Text>
-                        <View>
-                            <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
-                                {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id)}
-                            </Text>
-                            <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
-                                {Def.calTotalOrderValue(Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED))}
-                            </Text>
-                        </View>
-
-                    </View>
-
-                    <View style={{flexDirection:'row', justifyContent: 'space-between' , marginTop:10}}>
-                        <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
-                            <Text>
-                                {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id) ? Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id) : "CK" }
-                            </Text>
-                            <Text>
-                                {Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id] ? Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id].discount + "%" : "%"}
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{width:BUTTON_WIDTH, height:BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#F19C26' , justifyContent:'center', alignItems:'center'}}>
-                            <Text>
-                                Đơn hàng
-                            </Text>
-                            <Text>
-                                {Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length}
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>
-                            <Text>
-                                Hoa hồng
-                            </Text>
-                            <Text>
-                                {Def.calProfitValue(Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED))}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View> : null
-
+                    Def.user_info && Def.user_info.partnerInfo ?
+                        <StatisticalComponent/>
+                        : null
                 }
+
+                {/*{*/}
+                {/*Def.user_info && Def.user_info.partnerInfo ?*/}
+                {/*<View style={styles.overviewInfo} >*/}
+                {/*    <View>*/}
+                {/*        <Text style={[Style.text_styles.titleText, {color:Style.DEFAUT_RED_COLOR, marginLeft: 0}]}>*/}
+                {/*            {Def.user_info ? Def.user_info['username'] : ''}*/}
+                {/*        </Text>*/}
+                {/*        <View>*/}
+                {/*            <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>*/}
+                {/*                {Def.numberWithCommas(Def.calTotalOrderValue(Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED))) + ' đ'}*/}
+                {/*            </Text>*/}
+                {/*        </View>*/}
+
+                {/*    </View>*/}
+
+                {/*    <View style={{flexDirection:'row', justifyContent: 'space-between' , marginTop:10}}>*/}
+                {/*        <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>*/}
+                {/*            <Text>*/}
+                {/*                {Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id) ? Def.getLevelPartnerName(Def.user_info.partnerInfo.level_id) : "CK" }*/}
+                {/*            </Text>*/}
+                {/*            <Text>*/}
+                {/*                {Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id -1] ? Def.partnerlevelInfo[Def.user_info.partnerInfo.level_id -1].discount + "%" : "%"}*/}
+                {/*            </Text>*/}
+                {/*        </TouchableOpacity>*/}
+                {/*        <TouchableOpacity style={{width:BUTTON_WIDTH, height:BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#F19C26' , justifyContent:'center', alignItems:'center'}}>*/}
+                {/*            <Text>*/}
+                {/*                Đơn hàng*/}
+                {/*            </Text>*/}
+                {/*            <Text>*/}
+                {/*                {this.state.accomplishedOrder}*/}
+                {/*            </Text>*/}
+                {/*        </TouchableOpacity>*/}
+                {/*        <TouchableOpacity style={{width:BUTTON_WIDTH, height: BUTTON_HEIGHT , borderRadius : 10, backgroundColor : '#20C0F0' , justifyContent:'center', alignItems:'center'}}>*/}
+                {/*            <Text>*/}
+                {/*                Hoa hồng*/}
+                {/*            </Text>*/}
+                {/*            <Text>*/}
+                {/*                {Def.numberWithCommas(this.state.profit) + ' đ'}*/}
+                {/*            </Text>*/}
+                {/*        </TouchableOpacity>*/}
+                {/*    </View>*/}
+                {/*</View> : null*/}
+
+                {/*}*/}
 
                 <View style={{ paddingHorizontal:10}}>
                     <Text style={[{marginLeft:10, marginTop : 20 }, Style.text_styles.titleText]}>
