@@ -9,7 +9,7 @@ const {width, height} = Dimensions.get('window');
 const BUTTON_WIDTH = (width - 60 ) / 3;
 const BUTTON_HEIGHT = (width - 60 ) / 3;
 
-class StatisticalComponent extends React.Component{
+class DashboardComponent extends React.Component{
 
     constructor(props){
         super(props);
@@ -20,11 +20,9 @@ class StatisticalComponent extends React.Component{
            accomplishedOrder: props.numberOrder != null ? props.numberOrder :Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED).length,
            user : Def.user_info,
            stateCount : this.props.stateCount != null ? this.props.stateCount:  0,
-
-
         }
 
-        Def.refreshStatistical = this.refresh.bind(this);
+        Def.refreshDashBoard = this.refresh.bind(this);
 
     }
 
@@ -130,4 +128,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default StatisticalComponent;
+export default DashboardComponent;

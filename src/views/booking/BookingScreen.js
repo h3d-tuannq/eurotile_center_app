@@ -182,8 +182,6 @@ class BookingScreen extends React.Component {
 
     onUpdateSuccess(data){
         if(data){
-            console.log('Updated Data : ' + JSON.stringify(data));
-
             let orderIndex = -1;
             if(Def.orderList){
                 orderIndex = Def.orderList.findIndex(order => order.id == data.id);
@@ -193,7 +191,6 @@ class BookingScreen extends React.Component {
                 Def.ressetCart();
             } else {
                 if(!Def.refreshOrderList.includes(data.id)){
-                    console.log('Push order list' + data.id);
                     Def.refreshOrderList.push(data.id);
                 }
                 Def.orderList[orderIndex] = data;

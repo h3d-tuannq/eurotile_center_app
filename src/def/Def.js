@@ -314,7 +314,7 @@ export default class Def {
 
 
     static numberWithCommas(x) {
-
+        // x = Math.floor(x);
         return x != null ?  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
     }
 

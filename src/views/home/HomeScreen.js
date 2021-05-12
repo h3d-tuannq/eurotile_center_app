@@ -210,8 +210,6 @@ class HomeScreen extends React.Component {
     }
 
     createConfigData(data){
-
-
         if(data){
             let configData =  Object.entries(data).map((prop, key) => {
                 // console.log("Props : " + JSON.stringify(prop));
@@ -348,7 +346,7 @@ class HomeScreen extends React.Component {
 
                 {
                     Def.user_info && Def.user_info.partnerInfo ?
-                        <StatisticalComponent/>
+                        <StatisticalComponent orderList={Def.orderList} />
                         : null
                 }
 

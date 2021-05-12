@@ -19,6 +19,8 @@ const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 const BUTTON_WIDTH = (width - 60 ) / 3;
 const BUTTON_HEIGHT = (width - 60 ) / 3;
 import StatisticalComponent from "../../com/common/StatisticalComponent";
+import OrderController from "../../controller/OrderController";
+import DashboardComponent from "../../com/common/DashboardComponent";
 
 const carouselItems = [
     {
@@ -39,12 +41,10 @@ class MyScreen extends React.Component {
         this.formatText    = this.formatText.bind(this);
         this.onGetUserInfoFun = this.onGetUserInfoFun.bind(this);
         console.log('MyScreen init');
-
         Def.mainNavigate = this.props.navigation;
         if(this.props.navigation){
             console.log('isset naviagtion');
         }
-
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
@@ -55,6 +55,7 @@ class MyScreen extends React.Component {
             configMenu: Def.config_collection_menu,
             slide_data : carouselItems,
             activeSlide : 0,
+            number_order: Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length,
         };
         this.gotoProfile = this.gotoProfile.bind(this);
         this.gotoPartnerInfo = this.gotoPartnerInfo.bind(this);
@@ -68,6 +69,7 @@ class MyScreen extends React.Component {
         Def.refreshDashBoard = this.refresh;
         Def.refreshMyDashboard = this.refreshMyDashboard.bind(this);
         this.forcusFunction = this.forcusFunction.bind(this);
+        this.getOrderSuccess = this.getOrderSuccess.bind(this);
 
     }
 
@@ -82,10 +84,8 @@ class MyScreen extends React.Component {
             Def.REFESH_SCREEN.splice(index, 1);
             this.refresh();
         }
-
         let {navigation} = this.props;
         navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
-
         if(navigation){
             console.log('set event forcus');
             this.focusListener = navigation.addListener("focus", this.forcusFunction);
@@ -94,11 +94,25 @@ class MyScreen extends React.Component {
         }
     }
 
-    forcusFunction = () => {
-        console.log('Catch event forcus!');
-        this.setState({stateCount:Math.random()});
-        if(Def.refreshStatistical && typeof Def.refreshStatistical == 'function'){
+    getOrderSuccess(data){
+        Def.orderList = data['data'];
+        if(Def.refreshStatistical && (typeof  Def.refreshStatistical == 'function')) {
             Def.refreshStatistical();
+        }
+    }
+
+    forcusFunction = () => {
+
+        if((!Def.orderList || Def.orderList.length == 0 ) && Def.user_info) {
+            OrderController.getOrder(this.getOrderSuccess);
+            this.refresh();
+        }
+        console.log('Number Order : ' + Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length);
+
+        this.setState({stateCount:Math.random(),  number_order: Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length,});
+
+        if(Def.refreshDashBoard && typeof Def.refreshDashBoard == 'function'){
+            Def.refreshDashBoard();
         }
     };
 
@@ -109,9 +123,6 @@ class MyScreen extends React.Component {
         }
 
     }
-
-
-
 
     signInBtnClick(){
         this.props.navigation.navigate('Login', {'screen': 'signIn'});
@@ -178,8 +189,8 @@ class MyScreen extends React.Component {
         } else {
            console.log('exits User info');
         }
-        if(Def.refreshStatistical && typeof Def.refreshStatistical == 'function') {
-            Def.refreshStatistical();
+        if(Def.refreshDashBoard && typeof Def.refreshDashBoard == 'function') {
+            Def.refreshDashBoard();
         }
 
         this.setState({ stateCount: Math.random() });
@@ -348,7 +359,7 @@ class MyScreen extends React.Component {
 
                     {
                         Def.user_info && Def.user_info.partnerInfo ?
-                            <StatisticalComponent stateCount={this.state.stateCount} />
+                            <DashboardComponent orderList={Def.orderList} stateCount={this.state.stateCount}  />
                        : null
 
 
@@ -419,8 +430,6 @@ class MyScreen extends React.Component {
                         </View>
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                     </TouchableOpacity>
-
-
                     {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}*/}
                                       {/*onPress={ ()=>{UserController.logoutLocal()}}*/}
                     {/*>*/}
