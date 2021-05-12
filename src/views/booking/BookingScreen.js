@@ -29,25 +29,14 @@ class BookingScreen extends React.Component {
     constructor(props){
         super(props);
         this.saveOrder = this.saveOrder.bind(this);
-        this.orderItemChange = this.orderItemChange.bind(this);
         this.parseDataToView = this.parseDataToView.bind(this);
         this.showDateTimePicker = this.showDateTimePicker.bind(this);
         this.changeAddress = this.changeAddress.bind(this);
         let order = this.props.route.params && this.props.route.params.order ? this.props.route.params.order : Def.currentOrder;
-
-
-        console.log('Orders-Test : ' + JSON.stringify(order.address));
         let address = this.props.route.params && this.props.route.params.address ? this.props.route.params.address : order? order.address : null;
-
-        console.log('Contructor');
-
         if(!address && order){
             address = order ? order.address : '';
         }
-
-        console.log('Address : ' + JSON.stringify(address));
-        console.log('Order Id : ' + (order ? order.id : ""));
-
         this.itemClick = this.itemClick.bind(this);
         this.state = {
             focus : 0,
@@ -88,6 +77,9 @@ class BookingScreen extends React.Component {
         this.goToCreateCustomer = this.goToCreateCustomer.bind(this);
         this.onUpdateSuccess = this.onUpdateSuccess.bind(this);
         this.onSaveFalse = this.onSaveFalse.bind(this);
+
+        Def.orderItemChange = this.orderItemChange;
+        this.orderItemChange = this.orderItemChange.bind(this);
 
 
         this.closeFunction = this.closeFunction.bind(this);
@@ -190,7 +182,8 @@ class BookingScreen extends React.Component {
 
     onUpdateSuccess(data){
         if(data){
-            Def.mainNavigate.navigate('Booking', {screen:'order-detail-screen', params:{item:data}});
+            console.log('Updated Data : ' + JSON.stringify(data));
+
             let orderIndex = -1;
             if(Def.orderList){
                 orderIndex = Def.orderList.findIndex(order => order.id == data.id);
@@ -199,8 +192,14 @@ class BookingScreen extends React.Component {
                 Def.orderList.push(data);
                 Def.ressetCart();
             } else {
+                if(!Def.refreshOrderList.includes(data.id)){
+                    console.log('Push order list' + data.id);
+                    Def.refreshOrderList.push(data.id);
+                }
                 Def.orderList[orderIndex] = data;
             }
+
+            Def.mainNavigate.navigate('Booking', {screen:'order-detail-screen', params:{item:data, createdOrder : 1 , refresh : true}});
 
         }
     }
@@ -218,6 +217,8 @@ class BookingScreen extends React.Component {
         return orderItemInfo;
 
     }
+
+
 
     itemClick(item){
         this.setState({choseProduct:false});
@@ -307,7 +308,7 @@ class BookingScreen extends React.Component {
                 orderItems[found].amount = item.amount;
                 orderItems[found].selectValue = item.selectValue;
                 order.orderItems = orderItems;
-                this.setState({canOrder:this.checkCanOrder()});
+                // this.setState({canOrder:this.checkCanOrder()});
             }
 
             // AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
@@ -316,7 +317,7 @@ class BookingScreen extends React.Component {
 
     closeFunction = (item) => {
         console.log("back button click!");
-        this.setState({choseProduct: false})
+        this.setState({choseProduct: false })
     }
 
     render() {
@@ -528,74 +529,12 @@ class BookingScreen extends React.Component {
 
 
 
-                        { this.state.displayInfo && this.state.customerInfo?
-                            <Modal isVisible={this.state.displayInfo}>
-                                <View  style={styles.info} >
-                                    <View style={{ height: Style.PANEL_HEIGHT, backgroundColor: Style.DEFAUT_BLUE_COLOR , justifyContent:'center', padding:5}}>
-                                        <Text style={[Style.titleTextNotBold, {color:'#fff'}]}>
-                                            Thông tin khách hàng
-                                        </Text>
-                                    </View>
-                                    <View style={{padding:5, }}>
-                                        <Text style={styles.titleInfo}>{'(+84) ' + this.state.customerInfo.phone}</Text>
-                                        {/*<Text style={styles.titleInfo}>{ this.state.customerInfo.email ? this.state.customerInfo.email : 'Không có dữ liệu ' }</Text>*/}
-                                        <View style={styles.groupInfo}>
-                                            <Text style={styles.groupInfoLabel}>
-                                                {"Tên: "}
-                                            </Text>
-                                            <Text style={styles.addressText}>{ this.state.customerInfo.name }</Text>
-                                        </View>
 
-                                        <View style={styles.groupInfo}>
-                                            <Text style={styles.groupInfoLabel}>
-                                                {"Email: "}
-                                            </Text>
-                                            <Text style={styles.addressText}>{ this.state.customerInfo.description ?? "Chưa có thông tin" }</Text>
-                                        </View>
-
-                                        <View style={styles.groupInfo}>
-                                            <Text style={styles.groupInfoLabel}>
-                                                {"Mô tả: "}
-                                            </Text>
-                                            <Text style={styles.addressText}>{ this.state.customerInfo.description?? "Chưa có thông tin" }</Text>
-                                        </View>
-                                        {
-                                            this.state.customerInfo['address'] ?
-
-                                                <View style={styles.address}>
-                                                    {
-                                                        this.state.customerInfo['address']['city_code'] ?
-                                                            <Text style={styles.addressText}>{Def.getAddressStr(this.state.customerInfo['address'])}</Text> :
-                                                            null
-                                                    }
-
-                                                    <Text style={styles.addressText}>{this.state.customerInfo['address']['address_detail']}</Text>
-                                                </View>
-                                                : null
-                                        }
-                                    </View>
-                                    <View style={{flexDirection : 'row', padding:5 }}>
-                                        <TouchableOpacity onPress={this.applySelectCustomer} style={[styles.button, {borderRadius: 5 , backgroundColor:Style.DEFAUT_RED_COLOR, minWidth:80 , alignItems:'center', height:40}]}>
-                                            <Text style={styles.buttonText}>
-                                                Chọn
-                                            </Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={this.cancelSelectCustomer} style={[styles.button, { borderRadius: 5 ,backgroundColor:Style.DEFAUT_RED_COLOR, minWidth:80 , alignItems:'center', height:40}]}>
-                                            <Text style={styles.buttonText}>
-                                                Hủy
-                                            </Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-
-                            </Modal>
-
-                            : null
-                        }
                     </View>
 
                     }
                 </View>
+
             </View>
 
                 <TouchableOpacity style={{
@@ -697,7 +636,7 @@ class BookingScreen extends React.Component {
                 </View>:<View>
                     {bookingHeader()}
                     </View>}
-                <Modal  onBackButtonPress={this.closeFunction} isVisible={this.state.choseProduct}    style={styles.modalView}>
+                <Modal  onBackButtonPress={this.closeFunction} isVisible={this.state.choseProduct}    style={styles.modalView} deviceHeight={height + 50}>
                     <KeyboardAvoidingView enabled  behavior={Platform.OS === "android" ? undefined : "position"}>
                         <View  style={{flex:1}} scrollEnabled={false} keyboardShouldPersistTaps="handled">
                     <ProductAutocomplete
@@ -709,6 +648,75 @@ class BookingScreen extends React.Component {
                         </View>
                     </KeyboardAvoidingView>
                 </Modal>
+
+                { this.state.displayInfo && this.state.customerInfo?
+                    <Modal isVisible={this.state.displayInfo} style={[styles.modalView, {marginBottom:0}] } deviceHeight={height + 30}>
+                        <View>
+                        <View  style={styles.info} >
+                            <View style={{ height: Style.PANEL_HEIGHT, backgroundColor: Style.DEFAUT_BLUE_COLOR , justifyContent:'center', padding:5}}>
+                                <Text style={[Style.titleTextNotBold, {color:'#fff'}]}>
+                                    Thông tin khách hàng
+                                </Text>
+                            </View>
+                            <View style={{padding:5, }}>
+                                <Text style={styles.titleInfo}>{'(+84) ' + this.state.customerInfo.phone}</Text>
+                                {/*<Text style={styles.titleInfo}>{ this.state.customerInfo.email ? this.state.customerInfo.email : 'Không có dữ liệu ' }</Text>*/}
+                                <View style={styles.groupInfo}>
+                                    <Text style={styles.groupInfoLabel}>
+                                        {"Tên: "}
+                                    </Text>
+                                    <Text style={styles.addressText}>{ this.state.customerInfo.name }</Text>
+                                </View>
+
+                                <View style={styles.groupInfo}>
+                                    <Text style={styles.groupInfoLabel}>
+                                        {"Email: "}
+                                    </Text>
+                                    <Text style={styles.addressText}>{ this.state.customerInfo.description ?? "Chưa có thông tin" }</Text>
+                                </View>
+
+                                <View style={styles.groupInfo}>
+                                    <Text style={styles.groupInfoLabel}>
+                                        {"Mô tả: "}
+                                    </Text>
+                                    <Text style={styles.addressText}>{ this.state.customerInfo.description?? "Chưa có thông tin" }</Text>
+                                </View>
+                                {
+                                    this.state.customerInfo['address'] ?
+
+                                        <View style={styles.address}>
+                                            {
+                                                this.state.customerInfo['address']['city_code'] ?
+                                                    <Text style={styles.addressText}>{Def.getAddressStr(this.state.customerInfo['address'])}</Text> :
+                                                    null
+                                            }
+
+                                            <Text style={styles.addressText}>{this.state.customerInfo['address']['address_detail']}</Text>
+                                        </View>
+                                        : null
+                                }
+                            </View>
+                            <View style={{flexDirection : 'row', padding:5 }}>
+                                <TouchableOpacity onPress={this.applySelectCustomer} style={[styles.button, {borderRadius: 5 , backgroundColor:Style.DEFAUT_RED_COLOR, minWidth:80 , alignItems:'center', justifyContent : 'center', height:40}]}>
+                                    <Text style={styles.buttonText}>
+                                        Chọn
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={this.cancelSelectCustomer} style={[styles.button, { borderRadius: 5 , marginLeft : 20 ,backgroundColor:Style.DEFAUT_RED_COLOR, minWidth:80 , justifyContent : 'center', alignItems:'center', height:40}]}>
+                                    <Text style={styles.buttonText}>
+                                        Hủy
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+
+                      </View>
+                        </View>
+
+                    </Modal>
+
+                    : null
+                }
+
                 <View style={{marginTop:10,  borderBottomWidth:1, borderColor:Style.GREY_TEXT_COLOR, marginHorizontal:20, paddingVertical:5}}>
                     <View style={styles.orderInfo}>
                         <View style={{flexDirection: 'row', justifyContent:'space-between' }}>
@@ -825,9 +833,11 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2
         },
+        // height : height,
         shadowOpacity: 1,
         shadowRadius: 3.84,
-        // zIndex:10,
+        flex:1,
+        zIndex:10,
     },
     info: {
         // width: 200,
@@ -837,7 +847,7 @@ const styles = StyleSheet.create({
         // padding: 10,
         marginTop: 20,
         height : 250,
-        width: width * 0.9
+        width: width * 0.9,
     },
     modalInfo:{
         margin : 0,

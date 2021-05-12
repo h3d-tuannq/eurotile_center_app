@@ -40,7 +40,6 @@ class ProductStack extends React.Component {
     }
 
     goProductList() {
-        console.log("Go to Product List");
         if(this.props.navigation){
             this.props.navigation.navigate('Booking', {screen:'cart'});
         }
@@ -70,7 +69,6 @@ class ProductStack extends React.Component {
     }
 
     updateCartNumber = (number) => {
-        console.log('Update Number Order : '+ number);
         this.setState({number_order:number});
     }
 
@@ -79,7 +77,6 @@ class ProductStack extends React.Component {
     }
 
     shouldComponentUpdate(){
-        console.log('Product Stack should update');
         return true;
     }
 

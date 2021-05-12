@@ -40,7 +40,6 @@ class BookingStack extends React.Component {
     }
 
     goProductList() {
-        console.log("Go to Product List");
         if(this.props.navigation){
             this.props.navigation.navigate('Product', {screen:'product-screen'});
         }

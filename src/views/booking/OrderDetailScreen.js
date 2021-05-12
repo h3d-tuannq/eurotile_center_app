@@ -1,11 +1,12 @@
 import React, {PureComponent} from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList, TouchableOpacity} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList, TouchableOpacity, BackHandler, Alert} from 'react-native'
 import Def from '../../def/Def'
 import Style from "../../def/Style";
 import OrderitemItemrenderer from '../../com/item-render/OrderitemItemrenderer';
 import LocationIcon from '../../../assets/icons/Location.svg';
 import CalendarIcon from '../../../assets/icons/calendar.svg';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {create} from "react-native/jest/renderer";
 const {width, height} = Dimensions.get('window');
 
 
@@ -18,19 +19,78 @@ class OrderDetailScreen extends React.Component {
     constructor(props){
         super(props);
         let item = this.props.route.params && this.props.route.params.item ? this.props.route.params.item : null;
+        let createdOrder = this.props.route.params && this.props.route.params.createdOrder ? this.props.route.params.createdOrder : false;
         this.state = {
             order:item,
             editable: false,
             receipt_date: item.receipt_date ? new Date(item.receipt_date*1000) : new Date() ,
             orderItems: item.orderItems ? item.orderItems : [],
             isDateTimePickerVisible : false,
+            createdOrder: createdOrder,
         };
 
-        console.log('Order Item in Detail : ' + item.id);
+        console.log('Order Detail Constructor : ' + item.id);
+
+        this.onBackfunc = this.onBackfunc.bind(this);
 
         this.saveOrder = this.saveOrder.bind(this);
         this.hideDateTimePicker = this.hideDateTimePicker.bind(this);
+        this.gotoProductScreen = this.gotoProductScreen.bind(this);
+        this.refresh = this.refresh.bind(this);
     }
+
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            this.backAction
+        );
+
+        let {navigation} = this.props;
+        navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
+
+        if(navigation){
+            this.backListener = navigation.addListener("beforeRemove", this.onBackfunc);
+        }
+
+
+    }
+
+    onBackfunc = (e = null) => {
+        console.log('onBackfunc');
+
+        if(this.state.createdOrder){
+            e.preventDefault();
+            this.gotoProductScreen();
+        }
+        return true;
+    }
+
+    gotoProductScreen = () => {
+        if(Def.mainNavigate){
+            console.log('Go to ProductScreen');
+            Def.mainNavigate.navigate('Product', {screen:'product-screen'});
+        }
+
+    }
+
+    componentWillUnmount() {
+        if(this.backListener && (typeof this.backListener.remove === 'function')){
+            this.backListener.remove();
+        }
+        if(this.backHandler && (typeof this.backHandler.remove === 'function')){
+            this.backHandler.remove();
+        }
+    }
+
+    backAction = () => {
+        console.log('BackAction');
+        if(this.state.createdOrder){
+            this.gotoProductScreen();
+        }
+        return true;
+
+    };
+
 
     goToPayment = () => {
 
@@ -42,6 +102,37 @@ class OrderDetailScreen extends React.Component {
         let showDateVisible =      'isDateTimePickerVisible';
         this.setState({  [showDateVisible] : false });
     };
+
+    refresh = (item, createdOrder = false) => {
+        console.log('Refresh on order detail : ' + item.receipt_date );
+        this.setState({
+                order:item,
+                editable: false,
+                receipt_date: item.receipt_date ? new Date(item.receipt_date*1000) : new Date() ,
+                orderItems: item.orderItems ? item.orderItems : [],
+                isDateTimePickerVisible : false,
+                createdOrder: createdOrder
+            }
+        );
+    }
+
+    shouldComponentUpdate(): boolean {
+
+
+        console.log('OrderList : ' + JSON.stringify(Def.refreshOrderList));
+        const index = Def.refreshOrderList.indexOf(this.state.order.id);
+        if (index > -1) {
+            let itemIndex = Def.orderList.findIndex(order => this.state.order.id);
+            if(itemIndex > -1 ){
+                Def.refreshOrderList.splice(index, 1);
+                this.refresh(Def.orderList[itemIndex]);
+            }
+
+        }
+
+        return true;
+
+    }
 
 
     async saveOrder() {

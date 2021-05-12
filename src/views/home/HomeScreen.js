@@ -150,7 +150,6 @@ class HomeScreen extends React.Component {
             this.getPopularNews();
         }
         if((!Def.orderList || Def.orderList.length == 0 ) && Def.user_info) {
-            console.log('Get OrderList ++++++++++++++++++++++++++++++++++++++++++++++++++++++');
             OrderController.getOrder(this.getOrderSuccess);
             this.refresh();
         }
@@ -182,7 +181,7 @@ class HomeScreen extends React.Component {
 
      getOrderSuccess(data){
         Def.orderList = data['data'];
-        if(Def.refreshStatistical) {
+        if(Def.refreshStatistical && (typeof  Def.refreshStatistical == 'function')) {
             Def.refreshStatistical();
         }
     }

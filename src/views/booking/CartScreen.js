@@ -28,7 +28,6 @@ class CartScreen extends React.Component {
         this.refresh     = this.refresh.bind(this);
         this.closeFunction = this.closeFunction.bind(this);
         this.booking = this.booking.bind(this);
-        this.orderItemChange = this.orderItemChange.bind(this);
         Def.mainNavigate = this.props.navigation;
         this.state = {
             cart_data: Def.currentCart ? Def.currentCart.orderItems : [] ,
@@ -41,12 +40,14 @@ class CartScreen extends React.Component {
         this.orderItemClick = this.orderItemClick.bind(this);
         this.addItemToCart = this.addItemToCart.bind(this);
         this.resetCart = this.resetCart.bind(this);
+        this.orderItemChange = this.orderItemChange.bind(this);
+        Def.orderItemChange = this.orderItemChange.bind(this);
     }
 
 
 
-    orderItemClick = (item) => {
-        console.log('OrderItem Click');
+    orderItemClick = (item = null) => {
+        this.setState({stateCount:1});
     }
 
     booking(){
@@ -90,18 +91,17 @@ class CartScreen extends React.Component {
         AsyncStorage.setItem('order', JSON.stringify(order));
     }
     // callback when item change
-    orderItemChange = (item, isRemove = false) => {
-        console.log("Item change: " + JSON.stringify(item.amount));
-
+    orderItemChange = (item, isRemove = false, newValue = null) => {
         const found = Def.currentCart.orderItems.findIndex(element => element.product.id == item.product.id);
         if(found !== -1){
             if(isRemove){
                 Def.currentCart.orderItems.splice(found, 1);
-                this.setState({canOrder:this.updateCartOrder(), cart_data:Def.currentCart.orderItems});
+                this.setState({canOrder:this.checkCanOrder(), cart_data:Def.currentCart.orderItems});
             }else {
+                // Def.currentCart.orderItems[found] = item;
                 Def.currentCart.orderItems[found].amount = item.amount;
-                Def.currentCart.orderItems[found].selectValue = item.selectValue;
-                this.setState({canOrder:this.updateCartOrder()});
+                Def.currentCart.orderItems[found].selectValue =  item.selectValue;
+                // this.setState({canOrder:this.checkCanOrder()});
             }
             // Def.currentCart.orderItems = Def.cart_data;
             // AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
@@ -110,11 +110,32 @@ class CartScreen extends React.Component {
 
     }
 
+    // orderItemChange = (item, isRemove = false) => {
+    //     const found = Def.currentCart.orderItems.findIndex(element => element.product.id == item.product.id);
+    //     if(found !== -1){
+    //         if(isRemove){
+    //             Def.currentCart.orderItems.splice(found, 1);
+    //             this.setState({canOrder:this.checkCanOrder(), cart_data:Def.currentCart.orderItems});
+    //         }else {
+    //             Def.currentCart.orderItems[found].amount = item.amount;
+    //             Def.currentCart.orderItems[found].selectValue = item.selectValue;
+    //             this.setState({canOrder:this.checkCanOrder()});
+    //         }
+    //         // Def.currentCart.orderItems = Def.cart_data;
+    //         // AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
+    //         AsyncStorage.setItem('current_cart', JSON.stringify(Def.currentCart));
+    //     }
+    //
+    // }
+
+
 
 
     itemClick(item){
+
+        console.log( 'This is array : ' + Array.isArray([]));
         this.setState({choseProduct:false});
-        let cart_data = this.state.cart_data;
+        let cart_data = this.state.cart_data ? this.state.cart_data : [];
         const found = cart_data.findIndex(element => element.product.id == item.id);
         // console.log('DataCart : ' + JSON.);
         if(found !== -1){
@@ -188,11 +209,7 @@ class CartScreen extends React.Component {
     shouldComponentUpdate(){
         // this.setState({ configMenu: Def.config_news_menu});
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
-
-        console.log('Should update  : ' + Def.cart_data.length);
-
         if(Def.currentCart){
-            console.log('Current Update : ' + JSON.stringify(Def.currentCart));
         }
 
         return true;

@@ -17,7 +17,8 @@ class StatisticalComponent extends React.Component{
            profit: Def.calProfitValue(Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED)),
            accomplishedOrder: Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length,
            user : Def.user_info,
-            stateCount : 0,
+           stateCount : this.props.stateCount ? this.props.stateCount:  0,
+
         }
 
         Def.refreshStatistical = this.refresh.bind(this);

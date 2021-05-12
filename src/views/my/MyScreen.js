@@ -88,7 +88,6 @@ class MyScreen extends React.Component {
 
         if(navigation){
             console.log('set event forcus');
-
             this.focusListener = navigation.addListener("focus", this.forcusFunction);
         } else {
             console.log('not exit navigation')
@@ -96,8 +95,11 @@ class MyScreen extends React.Component {
     }
 
     forcusFunction = () => {
-        console.log('Set State count');
+        console.log('Catch event forcus!');
         this.setState({stateCount:Math.random()});
+        if(Def.refreshStatistical && typeof Def.refreshStatistical == 'function'){
+            Def.refreshStatistical();
+        }
     };
 
     componentWillUnmount() {
@@ -175,6 +177,9 @@ class MyScreen extends React.Component {
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         } else {
            console.log('exits User info');
+        }
+        if(Def.refreshStatistical && typeof Def.refreshStatistical == 'function') {
+            Def.refreshStatistical();
         }
 
         this.setState({ stateCount: Math.random() });
@@ -343,7 +348,7 @@ class MyScreen extends React.Component {
 
                     {
                         Def.user_info && Def.user_info.partnerInfo ?
-                            <StatisticalComponent />
+                            <StatisticalComponent stateCount={this.state.stateCount} />
                        : null
 
 

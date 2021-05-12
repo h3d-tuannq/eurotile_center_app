@@ -62,6 +62,8 @@ export default class Def {
     static TYPE_NEWS = 4;
     static TYPE_DAILYCONTENT = 5;
 
+    static orderItemChange = {};
+
     static PLAYBACK_SUB_TYPE = 1;
 
     static OrderStatus = {0: "Chưa tiếp nhận", 1: "Xác nhận", 2: "Thanh toán", 3: "Giao hàng", 4: "Hoàn thành"}; // DRAFT, CONFIRM, PAID, DELIVERING, ACCOMPLISHED
@@ -88,6 +90,7 @@ export default class Def {
     static currentCustomer = null;
 
     static orderList = [];
+    static refreshOrderList = [];
     static config_order_menu = [];
     static OrderListForStatus = [];
 
@@ -144,7 +147,6 @@ export default class Def {
         let rsUrl = Def.URL_DEFAULT_AVATAR;
         if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['avatar_path']) {
             if (Def.user_info['userProfile']['avatar_base_url'] && Def.user_info['userProfile']['avatar_base_url'].length > 0) {
-                console.log("Avatar Url" + Def.user_info['userProfile']['avatar_base_url'].length);
                 rsUrl = Def.user_info['userProfile']['avatar_base_url'] + '/' + Def.user_info['userProfile']['avatar_path'];
             } else {
                 rsUrl = Def.user_info['userProfile']['avatar_path'];
@@ -280,7 +282,6 @@ export default class Def {
 
     static calCartOrderNumber(orderList) {
         var total = 0;
-        console.log('OrderList ' + JSON.stringify(orderList));
         orderList.forEach(item =>  {
             total += item.amount;
         });

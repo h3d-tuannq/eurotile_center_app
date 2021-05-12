@@ -484,8 +484,6 @@ class UpdatePartnerScreen extends React.Component {
     }
 
     shouldComponentUpdate(){
-        console.log('should update');
-        console.log('Refresh Update Partner');
         const index = Def.REFESH_SCREEN.indexOf('update-partner-screen');
         if (index > -1) {
             Def.REFESH_SCREEN.splice(index, 1);

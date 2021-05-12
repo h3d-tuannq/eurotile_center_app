@@ -47,7 +47,7 @@ class OrderScreen extends React.Component {
         this.setState({ order_data: data["data"] });
         Def.orderList = data["data"];
         Def.config_order_menu = this.createConfigData(data["data"]) ;
-        if(Def.refreshStatistical){
+        if(Def.refreshStatistical && (typeof  Def.refreshStatistical == 'function')){
             Def.refreshStatistical();
         }
         this.setState({ configMenu: Def.config_order_menu});

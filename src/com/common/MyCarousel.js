@@ -30,13 +30,11 @@ class MyCarousel extends React.Component{
     }
 
     getPopularNews = () => {
-        console.log('Get Popular News in MyCarousel');
         NetNews.getPopularArticle(this.getPopularNewsSuccess, this.getPopularNewsFalse);
     };
 
     getPopularNewsSuccess = (data) => {
 
-        console.log('PopularNewsSuccess');
         if(data['result'] == 1){
             this.setState({slide_data : data['data']});
             Def.popularNews = data['data'];

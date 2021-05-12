@@ -46,7 +46,6 @@ export default class OrderController{
 
 
     static getOrder(callback,errCallback ) {
-        console.log("Get Order : " + Def.orderList.length);
         if(Def.user_info){
             console.log("Call Get Order");
             Net.sendRequest(callback ? callback : this.getOrderSuccess,errCallback? errCallback: this.getOrderFalse ,Def.URL_BASE + "/api/order/get-order" ,Def.POST_METHOD, {booker_id:Def.user_info['id']});
@@ -65,7 +64,7 @@ export default class OrderController{
 
     static getOrderSuccess(data){
         Def.orderList = data['data'];
-        if(Def.refreshStatistical){
+        if(Def.refreshStatistical && (typeof  Def.refreshStatistical == 'function') ){
             Def.refreshStatistical();
         }
     }

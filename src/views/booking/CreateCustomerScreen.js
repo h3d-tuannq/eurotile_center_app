@@ -412,8 +412,6 @@ class CreateCustomerScreen extends React.Component {
     }
 
     shouldComponentUpdate(){
-        console.log('should update');
-        console.log('Refresh Update Partner');
         const index = Def.REFESH_SCREEN.indexOf('update-partner-screen');
 
         if (index > -1 || (this.props.route && this.props.route.param && this.props.route.param.refresh)) {
