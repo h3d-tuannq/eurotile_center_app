@@ -980,7 +980,7 @@ class UpdatePartnerScreen extends React.Component {
                 </Modal>
                 <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.updatePartnerInfo}>
 
-                    <Text style={styles.buttonText}>
+                    <Text style={[styles.buttonText, {fontSize : 18}]}>
                         Cập nhật
                     </Text>
                 </TouchableOpacity>

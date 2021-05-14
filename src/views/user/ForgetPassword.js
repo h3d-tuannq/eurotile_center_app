@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {Text, Image, StyleSheet, View, TextInput, Dimensions, TouchableOpacity} from 'react-native'
 import Style from "../../../src/def/Style";
+import UserController from "../../controller/UserController";
+
 
 const {width,height} = Dimensions.get('window');
 
@@ -16,7 +18,7 @@ export default class ForgetPassword extends Component {
 
     resetPassword(){
         if(this.state.email.includes("@", 0) && this.state.email.includes(".", 0)){
-            FirebaseController.resetPassword(this.state.email);
+            UserController.resetPassword(this.state.email);
             alert("Bạn vui lòng làm theo hướng dẫn trong email để reset password");
             const {navigation} = this.props;
             navigation.navigate('signIn');
@@ -45,18 +47,20 @@ export default class ForgetPassword extends Component {
 
                     <View style={{flexDirection: 'row', justifyContent : 'flex-end', alignItems : 'center' , marginTop:10 }}>
 
-                        <TouchableOpacity style={Style.login_style.loginButton} onPress={()=>this.resetPassword()}>
+                        <TouchableOpacity style={[Style.login_style.loginButton, {justifyContent:'center', alignItems:'center'}]}
+                                          disabled={this.state.email == null ||  this.state.email == ""} onPress={()=>this.resetPassword()}>
+
                             <Text style={Style.login_style.loginText}>
-                                Gửi mail
+                                Gửi Email
                             </Text>
                         </TouchableOpacity>
                     </View>
                 <View>
                 </View>
-                <TouchableOpacity style={Style.login_style.button} onPress={()=> {
+                <TouchableOpacity style={[Style.login_style.button, {justifyContent:'center', alignItems:'center'}]} onPress={()=> {
                     navigation.navigate('signIn');
                 }}>
-                    <Text style={Style.login_style.buttonText}>
+                    <Text style={[Style.login_style.buttonText, {marginLeft : 0}]}>
                         Đăng nhập
                     </Text>
                 </TouchableOpacity>

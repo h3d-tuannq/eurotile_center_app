@@ -47,8 +47,9 @@ export default class UserController{
 
     static async onLoginSuccess(data ){
         try {
+
             if(data){
-                if(data['err_code']) {
+                if( data['result'] == 0 ||data['err_code']) {
                     Alert.alert(
                         "Cảnh báo",
                         data['msg'],
@@ -63,7 +64,9 @@ export default class UserController{
                     );
                     return ;
                 }
+
                 console.log('data login success' + JSON.stringify(data));
+                data = data['user'];
                 let acess_token = data['access_token'];
                 AsyncStorage.setItem('access_token', `Bearer ${acess_token}`);
                 AsyncStorage.setItem('user_info', JSON.stringify(data));
@@ -488,7 +491,6 @@ export default class UserController{
 
     static onSetNotiSuccess(data){
 
-        console.log("onLoginSuccess");
         //console.log(data);
         if(data['success']){
             token = data["data"]["token"];

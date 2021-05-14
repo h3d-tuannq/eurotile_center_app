@@ -197,7 +197,7 @@ export default class Def {
         if (address && address['address_detail']) {
             return address['address_detail'];
         }
-        return "ko tồn tại địa chỉ chi tiết";
+        return "";
 
     }
 
