@@ -78,6 +78,7 @@ class NotificationScreen extends React.Component{
                         renderItem={renderItem}
                         keyExtractor={item => (item.id + "")}
 
+
                     />
             </View>
         )

@@ -30,21 +30,12 @@ class StatisticalComponent extends React.Component{
 
     refresh()
     {
-        console.log('Statistical Refresh');
         let orderList = Def.orderList;
-        console.log('profit : ' + Def.calProfitValue(Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED)));
-
-        console.log('orderList : ' + orderList.length);
-
-
         this.setState({orderList:Def.orderList , stateCount: this.props.stateCount != null ? this.props.stateCount : 0 ,  profit: Def.calProfitValue(Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED)),
             accomplishedOrder: this.props.numberOrder != null ? this.props.numberOrder : Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED).length,  });
     }
     render(){
         const {user} = this.state;
-
-        console.log('state-count : '  + this.state.stateCount);
-
         return (
             <View style={styles.overviewInfo} >
                 <View>

@@ -128,13 +128,11 @@ class HomeScreen extends React.Component {
 
 
     getPopularNews = () => {
-        console.log('Get Popular News');
         NetNews.getPopularArticle(this.getPopularNewsSuccess, this.getPopularNewsFalse);
     };
 
     getPopularNewsSuccess = (data) => {
 
-        console.log('PopularNewsSuccess');
         if(data['result'] == 1){
             this.setState({slide_data : data['data']});
             AsyncStorage.setItem('popularNews', JSON.stringify(Def.popularNews))
@@ -189,7 +187,6 @@ class HomeScreen extends React.Component {
     };
 
     forcusFunction = () => {
-        console.log('Set State count');
         this.setState({stateCount:Math.random()});
     };
 
