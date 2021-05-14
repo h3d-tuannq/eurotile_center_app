@@ -18,6 +18,8 @@ import UserProfileScreen from  './my/UserProfileScreen'
 import ChangePassword from './my/ChangePassword';
 import UpdatePartnerInfoScreen from './my/UpdatePartnerScreen'
 import PartnerProfileScreen from './my/PartnerProfileScreen'
+import NotiIcon from "../../assets/icon/icon-notification.svg";
+import Def from "../def/Def";
 
 
 const Stack = createStackNavigator();
@@ -26,11 +28,54 @@ const RootStack = createStackNavigator();
 class MyStack extends React.Component {
     constructor(props){
         super(props);
+        this.showNotification = this.showNotification.bind(this);
+    }
+
+    showNotification() {
+
+        if(this.props.navigation){
+            Def.mainNavigate = this.props.navigation;
+        }
+
+        console.log('Go to create Notification');
+
+        Def.mainNavigate.navigate('Notification', {screen:'noti-screen', params:{refresh:1}});
     }
 
     render() {
         return (
-            <RootStack.Navigator>
+            <RootStack.Navigator
+                screenOptions={{
+                    headerRight: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.DRAWER_MENU_SIZE,
+                                    height: Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingRight:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={this.showNotification}>
+                            {/*{ this.state.new_noti ?*/}
+                            {/*<View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>*/}
+                            {/*<Text style={{color: 'white', fontSize: this.state.new_noti > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>*/}
+                            {/*{Def.formatOrderNumber(this.state.new_noti)}*/}
+                            {/*</Text>*/}
+                            {/*</View>*/}
+                            {/*:<View/>*/}
+                            {/*}*/}
+
+                            <NotiIcon
+                                width={Style.CART_ICON_SIZE -5}
+                                height={Style.CART_ICON_SIZE }
+                            />
+                        </TouchableOpacity>
+
+                    )
+                }}
+            >
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="my-screen" component={MyScreen} options={{
                      title: null,

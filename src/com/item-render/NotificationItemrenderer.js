@@ -11,63 +11,12 @@ const {width, height} = Dimensions.get('window');
 class NotificationItemrenderer extends React.PureComponent{
     constructor(props){
         super(props);
-        this.goLink = this.goLink.bind(this);
-
-        // this.onChannelSuccess = this.onChannelSuccess.bind(this);
-        // this.onChannelErr = this.onChannelErr.bind(this);
-        // this.onProgramSuccess = this.onProgramSuccess.bind(this);
-        // this.onProgramErr = this.onProgramErr.bind(this);
-    }
-
-    onChannelSuccess(data){
-        console.log('NotificationItemrenderer onChannelSuccess');
-        //console.log(data);
-        item = data['data'];
-
-        Def.mainNavigate.navigate('PlayRadio', {screen:'commonPlayRadio', params: { item: item, data : [item] }});
-    }
-    onChannelErr(data){}
-    onProgramSuccess(data){
-        console.log('NotificationItemrenderer onProgramSuccess');
-        console.log(data['data']);
-        Def.setItemDailyContent(data['data']);
-    }
-    onProgramErr(data){}
-
-    goLink(link){
-        //alert(link);
-        if(link.startsWith("http")){
-            Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
-        } else if(link.startsWith("vov://channel")){
-            id = link.replace("vov://channel/",'');
-            //alert(`channel ${id}`);
-
-
-            if(Def.channels_data_radio)
-                Object.entries(Def.channels_data_radio).map((prop, key) => {
-
-                    for(let i = 0; i < prop[1].length; i++){
-                        console.log(`${prop[1][i]['id']} - ${id}`);
-                        if(parseInt(prop[1][i]['id']) == parseInt(id))
-                            Def.mainNavigate.navigate('PlayRadio', {screen:'commonPlayRadio', params: { item: prop[1][i], data : prop[1] }});
-                    }
-                });
-
-
-            //NetChannel.getChannelById(this.onChannelSuccess,this.onChannelErr,id);
-            //
-        }else if(link.startsWith("vov://program")){
-            id = link.replace("vov://program/",'');
-
-            //alert(`program ${id}`);
-            NetDailyContent.getContent(this.onProgramSuccess,this.onProgramErr,id);
-        }
     }
 
     render(){
         const {item} =  this.props;
         return (
-            <TouchableOpacity onPress={this.goLink.bind(this,item.link)} style={styles.noti}>
+            <TouchableOpacity onPress={() => this.props.click(item)} style={styles.noti}>
                 <View style={styles.imageContainer} >
                     {item.image ? <Image style={styles.itemImage} source={{uri:item.image}} /> :
                         <Image  style={styles.itemImage}  source={require('../../../assets/icon/eurotile_notification.jpg')}  />}

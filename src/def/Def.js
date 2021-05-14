@@ -25,6 +25,8 @@ export default class Def {
 
     static order_number = 12;
 
+    static isSignup = false;
+
     static refreshHome = [];
 
     static os = 'android';
@@ -195,7 +197,7 @@ export default class Def {
         if (address && address['address_detail']) {
             return address['address_detail'];
         }
-        return null;
+        return "ko tồn tại địa chỉ chi tiết";
 
     }
 
@@ -340,6 +342,44 @@ export default class Def {
     }
 
     static partnerlevelInfo = {1:'Vàng' , 2: 'Bạch kim', 3: 'Kim cương'};
+    static centerInfo = [
+        {
+            id:1,
+            name : 'EUROTILE CENTER HÀ NỘI',
+            phone: "(024)73008166",
+            address: 'M03-04 Võ Chí Công, P.Xuân La, Q. Tây Hồ, Hà Nội'
+        },
+        {
+            id:2,
+            name : 'EUROTILE CENTER VINH',
+            phone: "0913522308",
+            address: 'Lô C1+C2, KDT Minh Khang, Đại lộ Lenin, TP. Vinh'
+        },
+        {
+            id:3,
+            name : 'EUROTILE CENTER ĐÀ NẴNG',
+            phone: "(023) 6366 6899",
+            address: '297 Nguyễn Văn Linh, Q. Thanh Khê, TP. Đà Nẵng'
+        },
+        {
+            id:4,
+            name : 'EUROTILE CENTER ĐẮK LẮK',
+            phone: "0913446525",
+            address: '332-334 Phan Bội Châu, TP. Buôn Mê Thuột'
+        },
+        {
+            id:5,
+            name : 'EUROTILE CENTER HỒ CHÍ MINH',
+            phone: "(038)62876899",
+            address: '433 Cộng Hòa, P.15, Q. Tân Bình, TP. Hồ Chí Minh'
+        },
+        {
+            id:6,
+            name : 'EUROTILE CENTER CẦN THƠ',
+            phone: "0916639668",
+            address: '353 đường 30/4, Q. Ninh Kiều, TP. Cần Thơ'
+        },
+    ];
 
     static getLevelPartnerName(levelId){
         if(Def.partnerlevelInfo && Def.partnerlevelInfo[levelId - 1]){

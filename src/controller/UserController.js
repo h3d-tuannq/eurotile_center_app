@@ -45,7 +45,7 @@ export default class UserController{
 
     }
 
-    static async onLoginSuccess(data){
+    static async onLoginSuccess(data ){
         try {
             if(data){
                 if(data['err_code']) {
@@ -75,6 +75,8 @@ export default class UserController{
 
                 let token = await messaging().getToken();
 
+                console.log('');
+
 
                 AsyncStorage.setItem('fcmId', token);
                 UserController.registerFcmId(token);
@@ -84,7 +86,19 @@ export default class UserController{
             console.log('Error : ' + err);
         }
         Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
-         Def.mainNavigate.navigate('My',{screen:'my-screen', params: {'refresh' : true}});
+        if(Def.mainNavigate){
+
+            if(Def.isSignup) {
+                Def.mainNavigate.navigate('My', {'screen':'update-partner'});
+                Def.isSignup = false;
+            } else {
+                Def.mainNavigate.goBack();
+            }
+        }
+
+
+
+         // Def.mainNavigate.navigate('My',{screen:'my-screen', params: {'refresh' : true}});
          console.log("Go to MyScreen");
 
         // if(Def.setLoader)
@@ -367,13 +381,15 @@ export default class UserController{
 
     static async  signup(email, password , displayName,navigation=null, successCallback, falseCallback) {
 
+        Def.isSignup = true;
+
         let param = {'display_name' : displayName, 'email' : email ,'password' : password, 'password_confirm' : password};
 
         Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + 'api/user/sign-up' , Def.POST_METHOD , param);
         if(Def.setLoader)
             Def.setLoader(false);
 
-        navigation.navigate('My', {'screen':'update-partner'});
+
     };
 
     static async  updatePartnerInfo(updateInfo, navigation = null, successCallback, falseCallback) {

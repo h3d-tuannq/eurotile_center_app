@@ -1,81 +1,42 @@
 import React from 'react'
-import {View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, FlatList} from 'react-native'
-import DownIconSvg from '../../../assets/icon/icon-down-black.svg'
-import NotificationItemrenderer from "../item-render/NotificationItemrenderer";
-
-import Def from '../../../Def/Def'
-import analytics from '@react-native-firebase/analytics';
-
-import NetUser from '../../../Net/NetUser'
-import Style from "../../../Def/Style";
-
+import {View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, FlatList, Linking, Image} from 'react-native'
+import Def from '../../def/Def'
+import Style from "../../def/Style";
 const {width, height} = Dimensions.get('window');
+class NotiDetailScreen extends React.Component{
 
-
-class NotificationScreen extends React.Component{
-
-    state ={
-        notiData: []
-    }
     constructor(props){
         super(props);
-        console.log('class NotificationScreen extends React.Component');
-        console.log(props);
-
-        this.onNotiSuccess     = this.onNotiSuccess.bind(this);
-        this.onNotiFailed     = this.onNotiFailed.bind(this);
-        this.componentDidAppear     = this.componentDidAppear.bind(this);
-
-        NetUser.listNotification(this.onNotiSuccess,this.onNotiFailed);
+        let item = this.props.route.params && this.props.route.params.item ? this.props.route.params.item : null;
+        this.state = {
+          item:item
+        };
 
     }
 
-    componentDidAppear(){
-        console.log('componentDidAppear');
-
-    }
-    onNotiSuccess(data){
-        console.log("onNotiSuccess");
-        this.setState({notiData:data["data"]});
-    }
-
-    onNotiFailed(data){
-        //
-    }
-
-
-    render() {
-        analytics().setCurrentScreen(Def.SCREEN_NOTIFICATON);
-        const renderItem = ({ item }) => (
-
-                <NotificationItemrenderer item={item} navigation={this.props.navigation} />
-
-        );
+    render(){
+        const {item} =  this.state;
         return (
-            <View style={{flex:1, backgroundColor:'#fff'}}>
-                <View style={styles.header}>
-                    <TouchableOpacity style={{justifyContent:'center',  paddingLeft: 10, width:50}}
-                                      onPress={() => {
-                                          this.props.navigation.goBack();
-                                      }}
-                    >
-                        <DownIconSvg width={25} height={25} />
-                    </TouchableOpacity>
-                    <View style={{alignItems:'center', justifyContent: 'center', marginLeft: 30}}>
+            <View style={{marginTop:5, paddingHorizontal : 10}} >
+                <View style={styles.imageContainer} >
+                    {item.image ? <Image style={styles.itemImage} source={{uri:item.image}} /> :
+                        <Image  style={styles.itemImage}  source={require('../../../assets/icon/eurotile_notification.jpg')}  />}
+                </View>
+                <View style={styles.info}>
+                    <View style={styles.header}>
                         <Text style={styles.title}>
-                            {'Thông báo' }
+                            {item.title}
                         </Text>
+                        <Text style={styles.date}>{item.created_at ? Def.getDateString(new Date(item.created_at * 1000), "dd-MM-yyyy") : ""}
+                        </Text>
+
                     </View>
 
-                </View>
-                <View style={styles.playList}>
-                    <FlatList
-                        style={{ marginBottom : 120, paddingLeft : 10, backgroundColor : '#fff'}}
-                        data={this.state.notiData}
-                        renderItem={renderItem}
-                        keyExtractor={item => (item.id + "")}
-
-                    />
+                    <View style={styles.content}>
+                        <Text style={{fontSize : Style.NORMAL_SIZE}}>
+                            {item.body}
+                        </Text>
+                    </View>
                 </View>
             </View>
         )
@@ -83,19 +44,49 @@ class NotificationScreen extends React.Component{
 }
 
 const styles = StyleSheet.create({
+    noti: {
+        backgroundColor : '#f0f1f2',
+        minHeight: 60,
+        marginVertical :5,
+        // marginHorizontal:10,
+        borderRadius : 5,
+        flexDirection: 'row',
+
+    },
     header: {
-        height :Style.HEADER_HEIGHT,
-        flexDirection:'row',
-        paddingVertical: 10,
-        width: width,
-        // flex:1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        // alignItems:'center'
     },
-    title:{
-        fontSize: Style.TITLE_SIZE,
-        color: Style.DEFAUT_RED_COLOR,
+    imageContainer:{
+        // backgroundColor: "red",
+        // borderRadius :5,
+        justifyContent:'center',
+        alignItems : 'center',
+    },
+    itemImage: {
+        width : width -20,
+        height : width -20,
+        borderRadius : 5,
+    },
+    title : {
+        fontSize : Style.MIDLE_SIZE,
         fontWeight: 'bold',
-        marginLeft: -20,
+        marginBottom : 4,
+        // flex: 1,
     },
+    date: {
+        // flex: 1,
+        fontSize : Style.SMALL_SIZE,
+    },
+    content: {
+    },
+    info : {
+        marginTop:5,
+        // flex: 3.5,
+        // backgroundColor: 'red',
+        // paddingHorizontal:5,
+    }
 });
 
-export default NotificationScreen;
+export default NotiDetailScreen;

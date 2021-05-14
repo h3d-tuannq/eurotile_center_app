@@ -55,7 +55,6 @@ class MyScreen extends React.Component {
             configMenu: Def.config_collection_menu,
             slide_data : carouselItems,
             activeSlide : 0,
-            number_order: Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length,
         };
         this.gotoProfile = this.gotoProfile.bind(this);
         this.gotoPartnerInfo = this.gotoPartnerInfo.bind(this);
@@ -66,7 +65,6 @@ class MyScreen extends React.Component {
         this.gotoOrderGuide = this.gotoOrderGuide.bind(this);
         this.gotoOrderTerm = this.gotoOrderTerm.bind(this);
         this.refresh = this.refresh.bind(this);
-        Def.refreshDashBoard = this.refresh;
         Def.refreshMyDashboard = this.refreshMyDashboard.bind(this);
         this.forcusFunction = this.forcusFunction.bind(this);
         this.getOrderSuccess = this.getOrderSuccess.bind(this);
@@ -87,17 +85,15 @@ class MyScreen extends React.Component {
         let {navigation} = this.props;
         navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
         if(navigation){
-            console.log('set event forcus');
             this.focusListener = navigation.addListener("focus", this.forcusFunction);
         } else {
-            console.log('not exit navigation')
         }
     }
 
     getOrderSuccess(data){
         Def.orderList = data['data'];
-        if(Def.refreshStatistical && (typeof  Def.refreshStatistical == 'function')) {
-            Def.refreshStatistical();
+        if(Def.refreshDashBoard && (typeof  Def.refreshDashBoard == 'function')) {
+            Def.refreshDashBoard();
         }
     }
 
@@ -107,11 +103,8 @@ class MyScreen extends React.Component {
             OrderController.getOrder(this.getOrderSuccess);
             this.refresh();
         }
-        console.log('Number Order : ' + Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length);
-
-        this.setState({stateCount:Math.random(),  number_order: Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length,});
-
-        if(Def.refreshDashBoard && typeof Def.refreshDashBoard == 'function'){
+        this.setState({stateCount:Math.random()});
+        if(Def.refreshDashBoard && typeof Def.refreshDashBoard == 'function' && Def.user_info){
             Def.refreshDashBoard();
         }
     };
@@ -137,6 +130,8 @@ class MyScreen extends React.Component {
         if(Def.checkPartnerPermission() <0){
             screen = 'update-partner';
         }
+        console.log('Screen : ' + screen);
+
         this.props.navigation.navigate('My', {'screen':screen});
     }
 
@@ -171,7 +166,7 @@ class MyScreen extends React.Component {
             Def.username = Def.user_info['user_name'];
             Def.email = Def.user_info['email'];
             // this.setState({user:Def.user_info});
-            this.refresh();
+            // this.refresh();
         }
     }
 
@@ -186,14 +181,10 @@ class MyScreen extends React.Component {
         });
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
-        } else {
-           console.log('exits User info');
         }
         if(Def.refreshDashBoard && typeof Def.refreshDashBoard == 'function') {
             Def.refreshDashBoard();
         }
-
-        this.setState({ stateCount: Math.random() });
     }
 
     onGetCollectionSuccess(data){
@@ -244,17 +235,14 @@ class MyScreen extends React.Component {
     shouldComponentUpdate(){
         // this.setState({ configMenu: Def.config_news_menu});
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
-
+        const index = Def.REFESH_SCREEN.indexOf('my-screen');
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
-        const index = Def.REFESH_SCREEN.indexOf('my-screen');
-        console.log("Index in refresh : " + index);
         if (index > -1) {
             Def.REFESH_SCREEN.splice(index, 1);
             this.refresh();
         }
-
         return true;
     }
 
@@ -359,7 +347,7 @@ class MyScreen extends React.Component {
 
                     {
                         Def.user_info && Def.user_info.partnerInfo ?
-                            <DashboardComponent orderList={Def.orderList} stateCount={this.state.stateCount}  />
+                            <DashboardComponent  stateCount={this.state.stateCount}  />
                        : null
 
 

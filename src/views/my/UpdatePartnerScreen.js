@@ -40,9 +40,6 @@ class UpdatePartnerScreen extends React.Component {
         this.parseDataToView = this.parseDataToView.bind(this);
         this.setDate = this.setDate.bind(this);
         this.showAddressModal = this.showAddressModal.bind(this);
-
-        console.log("Constructor recall");
-
         let projectImg = this.getProjectImage();
         this.state = {
             focus : 0,
@@ -93,17 +90,17 @@ class UpdatePartnerScreen extends React.Component {
     }
 
     componentDidMount(){
-        console.log('component did mount recall');
+        if(Def.user_info) {
+            console.log('Exist User');
+        }
+
         Net.sendRequest(this.onGetCites,this.onGetCitesFalse,Def.URL_BASE + '/api/user/city' , Def.POST_METHOD);
     }
 
 
 
     onGetCites(res){
-        console.log('Load Cities Return');
         this.setState({cities: res});
-        console.log('After Error' +
-            '');
     }
 
     getAdministrativeUnit(url, params = null, callBack = null){
@@ -252,7 +249,7 @@ class UpdatePartnerScreen extends React.Component {
     }
 
     getProjectImage(item){
-        var partnerInfo = Def.user_info['partnerInfo'];
+        var partnerInfo = Def.user_info && Def.user_info['partnerInfo'];
         var result = [];
         if(partnerInfo && partnerInfo['project_img']){
             let projectImg = partnerInfo['project_img'].split(',');
@@ -785,7 +782,7 @@ class UpdatePartnerScreen extends React.Component {
                                 onFocus={() => this.setState({focus:1, showKeyboard: true})}
                                 onBlur={()=> this.setState({focus:0, showKeyboard: false})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
-                                value={this.state.address.toString()}
+                                value={ typeof this.state.address ? this.state.address.toString() : ""}
                                 onChangeText={text => {
                                     this.setState({address:text})
                                 }}

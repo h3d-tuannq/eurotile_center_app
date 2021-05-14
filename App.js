@@ -759,6 +759,14 @@ export default class App extends Component {
             }
         });
 
+
+        AsyncStorage.getItem('centerInfo').then((value) => {
+            if(value){
+                Def.centerInfo = JSON.parse(value);
+            }
+        });
+
+
         AsyncStorage.getItem('popularNews').then((value) => {
             if(value){
                 Def.popularNews = JSON.parse(value);

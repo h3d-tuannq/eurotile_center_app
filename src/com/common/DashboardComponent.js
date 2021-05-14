@@ -15,9 +15,8 @@ class DashboardComponent extends React.Component{
         super(props);
         let orderList = Def.orderList;
         this.state = {
-           orderList: orderList,
            profit: Def.calProfitValue(Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED)),
-           accomplishedOrder: props.numberOrder != null ? props.numberOrder :Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED).length,
+           accomplishedOrder: Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED).length,
            user : Def.user_info,
            stateCount : this.props.stateCount != null ? this.props.stateCount:  0,
         }
@@ -28,21 +27,12 @@ class DashboardComponent extends React.Component{
 
     refresh()
     {
-        console.log('Statistical Refresh');
         let orderList = Def.orderList;
-        console.log('profit : ' + Def.calProfitValue(Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED)));
-
-        console.log('orderList : ' + orderList.length);
-
-
-        this.setState({orderList:Def.orderList , stateCount: this.props.stateCount != null ? this.props.stateCount : 0 ,  profit: Def.calProfitValue(Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED)),
-            accomplishedOrder: this.props.numberOrder != null ? this.props.numberOrder : Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED).length,  });
+        this.setState({ stateCount: this.props.stateCount != null ? this.props.stateCount : 0 ,  profit: Def.calProfitValue(Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED)),
+            accomplishedOrder: Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED).length,  });
     }
     render(){
         const {user} = this.state;
-
-        console.log('state-count : '  + this.state.stateCount);
-
         return (
             <View style={styles.overviewInfo} >
                 <View>
@@ -51,7 +41,7 @@ class DashboardComponent extends React.Component{
                     </Text>
                     <View>
                         <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}]}>
-                            {Def.numberWithCommas(Def.calTotalOrderValue(Def.getOrderByStatus(this.state.orderList, Def.STATUS_ACCOMPLISHED))) + ' đ'}
+                            {Def.numberWithCommas(Def.calTotalOrderValue(Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED))) + ' đ'}
                         </Text>
                     </View>
 
@@ -118,8 +108,6 @@ const styles = StyleSheet.create({
         marginHorizontal:10,
         paddingVertical:10,
         paddingHorizontal:10,
-        // backgroundColor:'#FF5E62',
-        // borderRadius:10,
         marginTop:10,
         borderColor : Style.DEFAUT_RED_COLOR,
         borderWidth:2,

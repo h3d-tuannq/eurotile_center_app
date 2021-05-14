@@ -18,6 +18,7 @@ import MyCarousel from '../../../src/com/common/MyCarousel';
 
 import ProgramVerList from '../../com/common/ProgramVerList';
 import AsyncStorage  from '@react-native-community/async-storage'
+import EurotileController from "../../controller/EurotileController";
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -39,7 +40,7 @@ const carouselItems = [
     }
 ];
 
-const centerItems = [
+const centerItemsd = [
     {
         id:1,
         name : 'EUROTILE CENTER HÀ NỘI',
@@ -93,8 +94,7 @@ class HomeScreen extends React.Component {
         this.getOrderSuccess = this.getOrderSuccess.bind(this);
         // Def.refreshHome = this.refresh.bind(this);
         this.forcusFunction = this.forcusFunction.bind(this);
-
-
+        this.getCenterSuccess = this.getCenterSuccess.bind(this);
         Def.mainNavigate = this.props.navigation;
 
         if(!Def.collection_data) {
@@ -117,6 +117,7 @@ class HomeScreen extends React.Component {
             popularNews : Def.popularNews,
             profit: Def.calProfitValue(Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED)),
             accomplishedOrder: Def.getOrderByStatus(Def.orderList, Def.STATUS_ACCOMPLISHED).length,
+            centerItems : Def.centerInfo,
 
         };
 
@@ -164,7 +165,28 @@ class HomeScreen extends React.Component {
         } else {
             console.log('not exit navigation')
         }
+
+        EurotileController.getCenters(this.getCenterSuccess);
+
+        if(Def.centerInfo) {
+            AsyncStorage.getItem('centerInfo').then((value) => {
+                if(value){
+                    Def.centerInfo = JSON.parse(value);
+                    this.setState({centerItems:Def.centerInfo});
+                } else {
+                    EurotileController.getCenters(this.getCenterSuccess);
+                }
+            });
+        }
     }
+
+    getCenterSuccess= (data) => {
+        if(data['rs'] == 1) {
+            Def.centerInfo = data['data'];
+            AsyncStorage.setItem('centerInfo', JSON.stringify(Def.centerInfo));
+            this.setState({centerItems:Def.centerInfo});
+        }
+    };
 
     forcusFunction = () => {
         console.log('Set State count');
@@ -299,10 +321,10 @@ class HomeScreen extends React.Component {
                         {item.name}
                     </Text>
                     <Text style={[Style.text_styles.titleText, {color:'#000', marginLeft: 0,fontSize : Style.MIDLE_SIZE, fontWeight:'800'}]}>
-                        {item.address}
+                        {item.address ? Def.getAddressStr(item.address) : ""}
                     </Text>
                     <Text style={[Style.text_styles.titleText, {color:'#000', marginLeft: 0, fontSize : Style.MIDLE_SIZE, fontWeight:'800'}]}>
-                        {item.contact}
+                        {item.phone}
                     </Text>
 
                 </View>
@@ -408,7 +430,7 @@ class HomeScreen extends React.Component {
 
             <View style={{flex:1, paddingTop:0}}>
                 <ProgramVerList
-                    data={centerItems}
+                    data={this.state.centerItems}
                     navigation={this.props.navigation}
                     header={ListHeader}
                     renderFunction={renderCenterItem}
