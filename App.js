@@ -51,6 +51,7 @@ import NetNews from './src/net/NetNews'
 import NetCollection from './src/net/NetCollection'
 import NetScheme from './src/net/NetScheme'
 import Modal from 'react-native-modal';
+import PartnerController from './src/controller/PartnerController'
 
 const styles = StyleSheet.create({
     baseText: {
@@ -200,7 +201,7 @@ function MainTab() {
     return (
         <Tab.Navigator
             tabBar={(props) => <MyTabBar {...props} item={null} />}
-            initialRouteName={'Product'}
+            initialRouteName={'home'}
             tabBarOptions={{
                 activeTintColor: Style.DEFAUT_RED_COLOR,
                 inactiveTintColor: '#b3b3b3',
@@ -217,13 +218,13 @@ function MainTab() {
             }}>
 
             <Tab.Screen
-                name="scheme"
-                component={SchemeStack}
+                name="home"
+                component={HomeStack}
                 options={(route) => {
                     return false
                         ? {tabBarVisible: false}
                         : {
-                            tabBarLabel: 'Thiết kế',
+                            tabBarLabel: 'Trang chủ',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
                                     return <GallerySelectedIcon style={styles.tabBarIconStyle} />;
@@ -234,6 +235,25 @@ function MainTab() {
                         };
                 }}
             />
+
+            {/*<Tab.Screen*/}
+                {/*name="scheme"*/}
+                {/*component={SchemeStack}*/}
+                {/*options={(route) => {*/}
+                    {/*return false*/}
+                        {/*? {tabBarVisible: false}*/}
+                        {/*: {*/}
+                            {/*tabBarLabel: 'Thiết kế',*/}
+                            {/*tabBarIcon: ({focused, color, size}) => {*/}
+                                {/*if (focused) {*/}
+                                    {/*return <GallerySelectedIcon style={styles.tabBarIconStyle} />;*/}
+                                    {/*// return <MyProfileIconSelect style={styles.tabBarIconStyle} />;*/}
+                                {/*}*/}
+                                {/*return <GalleryIcon style={styles.tabBarIconStyle} />;*/}
+                            {/*},*/}
+                        {/*};*/}
+                {/*}}*/}
+            {/*/>*/}
 
             <Tab.Screen
                 name="Product"
@@ -254,24 +274,24 @@ function MainTab() {
                         };
                 }}
             />
-            <Tab.Screen
-                name="News"
-                component={NewsStack}
-                options={(route) => {
-                    return false
-                        ? {tabBarVisible: false}
-                        : {
-                            tabBarLabel: 'Tin tức',
-                            tabBarIcon: ({focused, color, size}) => {
-                                if (focused) {
-                                    return <NewsSelectedIcon style={styles.tabBarIconStyle} />;
-                                    // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
-                                }
-                                return <NewsIcon style={styles.tabBarIconStyle} />;
-                            },
-                        };
-                }}
-            />
+            {/*<Tab.Screen*/}
+                {/*name="News"*/}
+                {/*component={NewsStack}*/}
+                {/*options={(route) => {*/}
+                    {/*return false*/}
+                        {/*? {tabBarVisible: false}*/}
+                        {/*: {*/}
+                            {/*tabBarLabel: 'Tin tức',*/}
+                            {/*tabBarIcon: ({focused, color, size}) => {*/}
+                                {/*if (focused) {*/}
+                                    {/*return <NewsSelectedIcon style={styles.tabBarIconStyle} />;*/}
+                                    {/*// return <MyProfileIconSelect style={styles.tabBarIconStyle} />;*/}
+                                {/*}*/}
+                                {/*return <NewsIcon style={styles.tabBarIconStyle} />;*/}
+                            {/*},*/}
+                        {/*};*/}
+                {/*}}*/}
+            {/*/>*/}
 
             <Tab.Screen
                 name="My"
@@ -293,6 +313,26 @@ function MainTab() {
                 }}
             />
 
+            <Tab.Screen
+                name="Expand"
+                component={ExpandStack}
+                options={(route) => {
+                    return false
+                        ? {tabBarVisible: false}
+                        : {
+                            tabBarLabel: 'Mở rộng',
+                            tabBarIcon: ({focused, color, size}) => {
+                                if (focused) {
+                                    return <Icon name="expand-arrows-alt" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    return <UserProfileSelectedIcon style={styles.tabBarIconStyle} />;
+                                }
+                                return <Icon name="expand-arrows-alt" size={25} color={Style.GREY_TEXT_COLOR} />
+                                return <UserProfileIcon style={styles.tabBarIconStyle} />;
+                            },
+                        };
+                }}
+            />
+
 
 
         </Tab.Navigator>
@@ -305,6 +345,7 @@ function AppStack() {
             <Stack.Screen name="MainTab" component={MainTab} />
             <Stack.Screen name="Login" component={LoginStack} />
             <Stack.Screen name="Booking" component={BookingStack} />
+            <Stack.Screen name="News" component={NewsStack} />
             <Stack.Screen name="Notification" component={NotificationStack} />
         </RootStack.Navigator>
     );
@@ -323,7 +364,7 @@ const Drawer = createDrawerNavigator();
 
 const logoutFunction = async () => {
     try {
-        let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data'];
+        let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data','current_cart'];
         await AsyncStorage.multiRemove(keys);
         // AsyncStorage.removeItem('email');
         // AsyncStorage.removeItem('login_token');
@@ -467,6 +508,7 @@ import ProductStack from "./src/views/ProductStack";
 import NewsStack from "./src/views/NewsStack";
 import MyStack from "./src/views/MyStack";
 import HomeStack from "./src/views/HomeStack"
+import ExpandStack from "./src/views/ExpandStack"
 import SchemeStack from "./src/views/SchemeStack"
 import BookingStack from "./src/views/BookingStack"
 import NotificationStack from "./src/views/NotificationStack"
@@ -619,6 +661,7 @@ export default class App extends Component {
                  Def.user_info = JSON.parse(value);
                  Def.username = Def.user_info['user_name'];
                  Def.email = Def.user_info['email'];
+                 // OrderController.getOrder();
              }
         });
 
@@ -642,7 +685,6 @@ export default class App extends Component {
     }
 
     onCollectionSuccess(data){
-        console.log('onCollectionSuccess : ');
         Def.collection_data = data['data'];
     }
 
@@ -655,8 +697,6 @@ export default class App extends Component {
     }
 
     onPopularDesignSuccess(data){
-        console.log('onPopularDesignSuccess : ');
-
         Def.popular_design = data['data'];
     }
 
@@ -682,7 +722,6 @@ export default class App extends Component {
 
     componentDidMount() {
         SplashScreen.hide();
-        console.log('Get Product Info From Scratch');
         NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
         NetScheme.getAllDesign(this.onDesignSuccess, this.onDesignFalse);
         NetScheme.getPopularDesign(this.onPopularDesignSuccess, this.onPopularDesignFalse);
@@ -697,11 +736,46 @@ export default class App extends Component {
             }
         });
 
+        AsyncStorage.getItem('current_cart').then((value) => {
+            if(value){
+                Def.currentCart = JSON.parse(value);
+            }
+        })
+        .catch(err => {
+            console.log('current_cart not exits ----------------------------------------');
+        });
+
         AsyncStorage.getItem('order').then((value) => {
             if(value){
                 Def.order = JSON.parse(value);
             }
         });
+
+        AsyncStorage.getItem('partnerlevelInfo').then((value) => {
+            if(value){
+                Def.partnerlevelInfo = JSON.parse(value);
+            } else {
+                PartnerController.getPartnerLevel();
+            }
+        });
+
+
+        AsyncStorage.getItem('centerInfo').then((value) => {
+            if(value){
+                Def.centerInfo = JSON.parse(value);
+            }
+        });
+
+
+        AsyncStorage.getItem('popularNews').then((value) => {
+            if(value){
+                Def.popularNews = JSON.parse(value);
+            } else {
+                console.log('Async Storage PopularNews not exits');
+            }
+        });
+
+
 
         messaging().onNotificationOpenedApp(remoteMessage => {
             console.log(
@@ -722,7 +796,7 @@ export default class App extends Component {
                     );
                     setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
                 }
-                setLoading(false);
+                // setLoading(false);
             });
 
 
@@ -773,13 +847,11 @@ export default class App extends Component {
         return (
             <NavigationContainer>
                 <StatusBar backgroundColor={Style.DEFAUT_BLUE_COLOR} />
-                <AppDrawer />
+                <AppStack />
                 <View>
                     <Modal isVisible={this.state.showNoti}  coverScreen={true} hasBackdrop={true}
                            backdropOpacity={0}
                            onBackdropPress={this.setHideNoti}
-                           // deviceWidth={width}
-                           // deviceHeight={500}
                     >
                         <TouchableOpacity style={[styles.modalView,{backgroundColor:'#fff', width:0.9 * width}]}>
                             {/*<View style={{flexDirection:'row', justifyContent:'space-between'}} >*/}

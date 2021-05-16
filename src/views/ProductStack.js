@@ -12,19 +12,17 @@ import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
 import Def from "../../src/def/Def";
 
-import MenuIcon from '../../assets/icons/expand.svg';
 
 import CartIcon from '../../assets/icons/cart.svg'
 
 
 import EurotileLogo from '../../assets/icons/Logo w.svg'
-import AsyncStorage from "@react-native-community/async-storage";
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 
 class ProductStack extends React.Component {
-    focusListener = null;
+    // focusListener = null;
 
     constructor(props){
         super(props);
@@ -33,19 +31,15 @@ class ProductStack extends React.Component {
         this.state = {
           number_order: Def.cart_data.length
         };
-        AsyncStorage.getItem('cart_data').then((value) => {
-            if(value){
-                Def.cart_data = JSON.parse(value);
-                this.setState({number_order:Def.cart_data.length});
-            }
-        });
         this.goProductList = this.goProductList.bind(this);
         this.goToCreateCustomer = this.goToCreateCustomer.bind(this);
         this.forcusFunction = this.forcusFunction.bind(this);
+        this.updateCartNumber = this.updateCartNumber.bind(this);
+        Def.updateCartNumber = this.updateCartNumber;
+        this.getOrderNumber = this.getOrderNumber.bind(this);
     }
 
     goProductList() {
-        console.log("Go to Product List");
         if(this.props.navigation){
             this.props.navigation.navigate('Booking', {screen:'cart'});
         }
@@ -58,7 +52,24 @@ class ProductStack extends React.Component {
     }
 
     getOrderNumber(){
-        return Def.cart_data.length;
+        if(Def.calCartOrderNumber(Def.currentCart.orderItems)  != this.state.number_order){
+            let numerOrder = Def.calCartOrderNumber(Def.currentCart.orderItems);
+            console.log('Number Order : ' + numerOrder);
+            this.setState({number_order:numerOrder});
+            console.log('Number state : ' + this.state.number_order);
+
+        }
+        let {navigation} = this.props;
+        navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
+
+        if(navigation){
+            console.log('Isset Navigation : ' + JSON.stringify(navigation));
+            this.focusListener = navigation.addListener("focus", this.forcusFunction);
+        }
+    }
+
+    updateCartNumber = (number) => {
+        this.setState({number_order:number});
     }
 
     formatOrderNumber(order_number){
@@ -66,33 +77,43 @@ class ProductStack extends React.Component {
     }
 
     shouldComponentUpdate(){
-        console.log('Product Stack should update');
         return true;
     }
 
+
+
     componentDidMount(){
-        if(Def.cart_data.length != this.state.number_order){
-            this.setState({number_order:Def.cart_data.length});
-        }
+        // if(Def.currentCart && Def.currentCart.orderItems) {
+        //     console.log('Current Cart exits ');
+        //     this.getOrderNumber();
+        //
+        // } else {
+        //     console.log('Current Cart not exits ');
+        //     AsyncStorage.getItem('current_cart').then((value) => {
+        //         if(value){
+        //             Def.currentCart = JSON.parse(value);
+        //             this.getOrderNumber();
+        //         }
+        //     });
+        // }
+
         let {navigation} = this.props;
         navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
 
         if(navigation){
             console.log('Isset Navigation : ' + JSON.stringify(navigation));
-           this.focusListener = navigation.addListener("focus", this.forcusFunction);
+            this.focusListener = navigation.addListener("focus", this.forcusFunction);
         }
-
     }
 
     forcusFunction = () => {
-        console.log('forcus Product-Stack');
-      this.setState({number_order:Def.cart_data.length});
+      this.setState({number_order:Def.currentCart && Def.currentCart.orderItems ? Def.calCartOrderNumber(Def.currentCart.orderItems) : 0});
     };
 
     componentWillUnmount() {
         // Remove the event listener
-        if(this.focusListener){
-            this.focusListener.remove();
+        if(this.focusListener && (typeof this.focusListener.remove === 'function')){
+             this.focusListener.remove();
         }
 
     }
@@ -118,8 +139,7 @@ class ProductStack extends React.Component {
                                     paddingLeft:15 ,
                                     alignItems : 'center'
                                 }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            }>
                             <EurotileLogo
                                 width={Style.LOGO_WIDTH}
                                 height={Style.LOGO_HEIGHT}

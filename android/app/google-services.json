@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "491520516021-68e2tgcbv13abtqbf7qht9tm8485e4vg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eurotile_center_app",
+            "certificate_hash": "fd31d7df0a15a1f65fe8782a6b28e5c4228284e2"
+          }
+        },
+        {
           "client_id": "491520516021-omh62afgchc8re8kp524hesj0jc1mrqt.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -38,6 +46,13 @@
             {
               "client_id": "491520516021-13u08fsqn0v9g7u1bl49maqup74fkmqr.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "491520516021-3e9ojk6unr381nkju0q1gr0gbmnqr965.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.eurotile-center-app"
+              }
             }
           ]
         }

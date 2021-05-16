@@ -26,6 +26,8 @@ class NotificationScreen extends React.Component{
             NotificationController.getNotificationByCondition(this.onNotiSuccess,this.onNotiFailed, Def.user_info ? Def.user_info['id'] : "");
         }
 
+        this.notiClickHandle = this.notiClickHandle.bind(this);
+
     }
 
     onRefresh = () => {
@@ -38,7 +40,6 @@ class NotificationScreen extends React.Component{
     };
 
     onNotiSuccess(data){
-        console.log("onNotiSuccess : " + JSON.stringify(data) );
         if(data['err_code']){
             alert(data['msg']);
             this.setState({isRefresh:false});
@@ -54,27 +55,31 @@ class NotificationScreen extends React.Component{
         console.log('Noti false');
     }
 
+    notiClickHandle = (item) => {
+        this.props.navigation.navigate('Notification', {screen:'noti-detail', params: { item: item}});
+    }
+
+
 
     render() {
         const renderItem = ({ item }) => (
 
-                <NotificationItemrenderer item={item} navigation={this.props.navigation} />
+                <NotificationItemrenderer item={item} navigation={this.props.navigation} click={this.notiClickHandle} />
 
         );
         return (
-            <View style={{flex:1, backgroundColor:'#fff'}}>
-                <View style={styles.playList}>
+            <View style={{ backgroundColor:'#fff'}}>
                     <FlatList
                         refreshControl={
                             <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
                         }
-                        style={{ marginBottom : 120, paddingHorizontal : 5, backgroundColor : '#fff'}}
+                        style={{ paddingHorizontal : 5, backgroundColor : '#fff'}}
                         data={this.state.notiData}
                         renderItem={renderItem}
                         keyExtractor={item => (item.id + "")}
 
+
                     />
-                </View>
             </View>
         )
     }

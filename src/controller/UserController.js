@@ -45,10 +45,11 @@ export default class UserController{
 
     }
 
-    static async onLoginSuccess(data){
+    static async onLoginSuccess(data ){
         try {
+
             if(data){
-                if(data['err_code']) {
+                if( data['result'] == 0 ||data['err_code']) {
                     Alert.alert(
                         "Cảnh báo",
                         data['msg'],
@@ -63,7 +64,9 @@ export default class UserController{
                     );
                     return ;
                 }
+
                 console.log('data login success' + JSON.stringify(data));
+                data = data['user'];
                 let acess_token = data['access_token'];
                 AsyncStorage.setItem('access_token', `Bearer ${acess_token}`);
                 AsyncStorage.setItem('user_info', JSON.stringify(data));
@@ -75,6 +78,8 @@ export default class UserController{
 
                 let token = await messaging().getToken();
 
+                console.log('');
+
 
                 AsyncStorage.setItem('fcmId', token);
                 UserController.registerFcmId(token);
@@ -84,7 +89,19 @@ export default class UserController{
             console.log('Error : ' + err);
         }
         Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
-         Def.mainNavigate.navigate('My',{screen:'my-screen', params: {'refresh' : true}});
+        if(Def.mainNavigate){
+
+            if(Def.isSignup) {
+                Def.mainNavigate.navigate('My', {'screen':'update-partner'});
+                Def.isSignup = false;
+            } else {
+                Def.mainNavigate.goBack();
+            }
+        }
+
+
+
+         // Def.mainNavigate.navigate('My',{screen:'my-screen', params: {'refresh' : true}});
          console.log("Go to MyScreen");
 
         // if(Def.setLoader)
@@ -312,12 +329,20 @@ export default class UserController{
 
     static logoutLocal = async () => {
         try {
-            let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data'];
+            let keys = ['email','login_token','user_info','username','firebase_token', 'cart_data', 'current_cart'];
+
             await AsyncStorage.multiRemove(keys);
-        }catch (e){
+            Def.ressetCart();
+            if(Def.mainNavigate){
+                Def.mainNavigate.navigate('home', {'screen':'home-screen'});
+            }
+            RNRestart.Restart();
 
         }
-        RNRestart.Restart();
+        catch (e){
+        }
+
+
     }
 
 
@@ -359,13 +384,15 @@ export default class UserController{
 
     static async  signup(email, password , displayName,navigation=null, successCallback, falseCallback) {
 
+        Def.isSignup = true;
+
         let param = {'display_name' : displayName, 'email' : email ,'password' : password, 'password_confirm' : password};
 
         Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + 'api/user/sign-up' , Def.POST_METHOD , param);
         if(Def.setLoader)
             Def.setLoader(false);
 
-        navigation.navigate('My', {'screen':'update-partner'});
+
     };
 
     static async  updatePartnerInfo(updateInfo, navigation = null, successCallback, falseCallback) {
@@ -464,7 +491,6 @@ export default class UserController{
 
     static onSetNotiSuccess(data){
 
-        console.log("onLoginSuccess");
         //console.log(data);
         if(data['success']){
             token = data["data"]["token"];

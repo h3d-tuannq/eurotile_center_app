@@ -2,30 +2,25 @@ import React from 'react'
 import {Text, View, Button, TouchableOpacity} from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack';
 
-import SignInScreen from './user/SignIn'
-import SignUpScreen from './user/SignUp'
-// import ForgetPassScreen from './user/ForgetPassword'
-
-import MenuIcon from '../../assets/icons/expand.svg';
-
-import EurotileLogo from '../../assets/icons/Logo w.svg'
-
+import EurotileLogo from '../../assets/icons/Logo w.svg';
 import BackIconSvg from '../../assets/icon/icon-back.svg'
 import Style from "../../src/def/Style";
 
-import MyScreen from './my/MyScreen'
-import UserProfileScreen from  './my/UserProfileScreen'
-import ChangePassword from './my/ChangePassword';
-import UpdatePartnerInfoScreen from './my/UpdatePartnerScreen'
-import PartnerProfileScreen from './my/PartnerProfileScreen'
-import NotiIcon from "../../assets/icon/icon-notification.svg";
+import ExpandScreen from './expand/ExpandScreen'
+import ChangeUserInfo from "./expand/ChangeUserInfo";
+import ContactScreen from './expand/ContactScreen'
+import ShareAppScreen from './expand/ShareAppScreen'
+import TermScreen from './expand/TermScreen'
 import Def from "../def/Def";
+import NotiIcon from "../../assets/icon/icon-notification.svg";
 
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 
-class MyStack extends React.Component {
+
+
+class ExpandStack extends React.Component {
     constructor(props){
         super(props);
         this.showNotification = this.showNotification.bind(this);
@@ -41,6 +36,7 @@ class MyStack extends React.Component {
 
         Def.mainNavigate.navigate('Notification', {screen:'noti-screen', params:{refresh:1}});
     }
+
 
     render() {
         return (
@@ -77,8 +73,8 @@ class MyStack extends React.Component {
                 }}
             >
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
-                <RootStack.Screen name="my-screen" component={MyScreen} options={{
-                     title: null,
+                <RootStack.Screen name="expand-screen" component={ExpandScreen} options={{
+                    title: null,
                     headerLeft: () => (
                         <TouchableOpacity
                             style=  {
@@ -90,7 +86,6 @@ class MyStack extends React.Component {
                                     alignItems : 'center'
                                 }
                             }>
-
                             <EurotileLogo
                                 width={Style.LOGO_WIDTH}
                                 height={Style.LOGO_HEIGHT}
@@ -98,59 +93,6 @@ class MyStack extends React.Component {
                         </TouchableOpacity>
 
                     ),
-
-                    // headerRight: () => (
-                    //     <TouchableOpacity
-                    //         style=  {
-                    //             {
-                    //                 width: Style.DRAWER_MENU_SIZE,
-                    //                 height: Style.DRAWER_MENU_SIZE,
-                    //                 justifyContent: 'center',
-                    //                 paddingRight:15 ,
-                    //                 alignItems : 'center'
-                    //             }
-                    //         }
-                    //         onPress={() => this.props.navigation.toggleDrawer()}>
-                    //         <MenuIcon
-                    //             width={Style.DRAWER_MENU_ICON_SIZE}
-                    //             height={Style.DRAWER_MENU_ICON_SIZE}
-                    //         />
-                    //     </TouchableOpacity>
-                    //
-                    // ),
-
-                    headerStyle: {
-                        backgroundColor: Style.DEFAUT_BLUE_COLOR,
-                        height: Style.HEADER_HEIGHT,
-                    },
-                    headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        alignSelf: 'center'
-                    },
-                    headerBackImage: ()=> {
-                        return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
-                    }
-                }} />
-
-                <RootStack.Screen name="my-profile" component={UserProfileScreen} options={{
-                    title: 'Thông tin cá nhân',
-                    headerStyle: {
-                        backgroundColor: Style.DEFAUT_BLUE_COLOR,
-                        height: Style.HEADER_HEIGHT,
-                    },
-                    headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
-
-                    },
-                    headerBackImage: ()=> {
-                        return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
-                    }
-                }} />
-
-
-                <RootStack.Screen name="partner-info" component={PartnerProfileScreen} options={{
-                    title: 'Hồ sơ Partner',
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
@@ -164,8 +106,27 @@ class MyStack extends React.Component {
                     }
                 }} />
 
-                <RootStack.Screen name="change-password" component={ChangePassword} options={{
-                    title: 'Thiết lập tài khoản',
+                <RootStack.Screen name="contact-screen" component={ContactScreen} options={{
+                    title: null,
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.LOGO_WIDTH + 20,
+                                    height:Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingLeft:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            <EurotileLogo
+                                width={Style.LOGO_WIDTH}
+                                height={Style.LOGO_HEIGHT}
+                            />
+                        </TouchableOpacity>
+
+                    ),
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
@@ -178,8 +139,94 @@ class MyStack extends React.Component {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
                 }} />
-                <RootStack.Screen name="update-partner" component={UpdatePartnerInfoScreen} options={{
-                    title: 'Đăng ký Partner',
+
+                <RootStack.Screen name="share-app-screen" component={ShareAppScreen} options={{
+                    title: null,
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.LOGO_WIDTH + 20,
+                                    height:Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingLeft:15 ,
+                                    alignItems : 'center'
+                                }
+                            }>
+                            <EurotileLogo
+                                width={Style.LOGO_WIDTH}
+                                height={Style.LOGO_HEIGHT}
+                            />
+                        </TouchableOpacity>
+
+                    ),
+                    headerStyle: {
+                        backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                        height: Style.HEADER_HEIGHT,
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        // fontWeight: 'bold',
+                    },
+                    headerBackImage: ()=> {
+                        return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                    }
+                }} />
+
+                <RootStack.Screen name="setup-info-screen" component={ChangeUserInfo} options={{
+                    title: null,
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.LOGO_WIDTH + 20,
+                                    height:Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingLeft:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            <EurotileLogo
+                                width={Style.LOGO_WIDTH}
+                                height={Style.LOGO_HEIGHT}
+                            />
+                        </TouchableOpacity>
+
+                    ),
+                    headerStyle: {
+                        backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                        height: Style.HEADER_HEIGHT,
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        // fontWeight: 'bold',
+                    },
+                    headerBackImage: ()=> {
+                        return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                    }
+                }} />
+
+                <RootStack.Screen name="term-screen" component={TermScreen} options={{
+                    title: null,
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.LOGO_WIDTH + 20,
+                                    height:Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingLeft:15 ,
+                                    alignItems : 'center'
+                                }
+                            }>
+                            <EurotileLogo
+                                width={Style.LOGO_WIDTH}
+                                height={Style.LOGO_HEIGHT}
+                            />
+                        </TouchableOpacity>
+
+                    ),
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
@@ -199,4 +246,4 @@ class MyStack extends React.Component {
     }
 }
 
-export default MyStack;
+export default ExpandStack;

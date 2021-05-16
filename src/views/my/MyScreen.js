@@ -15,6 +15,13 @@ import  UserController from '../../../src/controller/UserController'
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
+
+const BUTTON_WIDTH = (width - 60 ) / 3;
+const BUTTON_HEIGHT = (width - 60 ) / 3;
+import StatisticalComponent from "../../com/common/StatisticalComponent";
+import OrderController from "../../controller/OrderController";
+import DashboardComponent from "../../com/common/DashboardComponent";
+
 const carouselItems = [
     {
         id:1,
@@ -34,17 +41,15 @@ class MyScreen extends React.Component {
         this.formatText    = this.formatText.bind(this);
         this.onGetUserInfoFun = this.onGetUserInfoFun.bind(this);
         console.log('MyScreen init');
-
         Def.mainNavigate = this.props.navigation;
         if(this.props.navigation){
             console.log('isset naviagtion');
         }
-
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
 
-        this.state = {
+        this.state ={
             user: Def.user_info,
             stateCount: 0.0,
             configMenu: Def.config_collection_menu,
@@ -60,11 +65,13 @@ class MyScreen extends React.Component {
         this.gotoOrderGuide = this.gotoOrderGuide.bind(this);
         this.gotoOrderTerm = this.gotoOrderTerm.bind(this);
         this.refresh = this.refresh.bind(this);
-        Def.refreshDashBoard = this.refresh;
+        Def.refreshMyDashboard = this.refreshMyDashboard.bind(this);
+        this.forcusFunction = this.forcusFunction.bind(this);
+        this.getOrderSuccess = this.getOrderSuccess.bind(this);
 
     }
 
-    componentDicMount(){
+    componentDidMount(){
         console.log("User info: " + Def.user_info);
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
@@ -74,6 +81,38 @@ class MyScreen extends React.Component {
         if (index > -1) {
             Def.REFESH_SCREEN.splice(index, 1);
             this.refresh();
+        }
+        let {navigation} = this.props;
+        navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
+        if(navigation){
+            this.focusListener = navigation.addListener("focus", this.forcusFunction);
+        } else {
+        }
+    }
+
+    getOrderSuccess(data){
+        Def.orderList = data['data'];
+        if(Def.refreshDashBoard && (typeof  Def.refreshDashBoard == 'function')) {
+            Def.refreshDashBoard();
+        }
+    }
+
+    forcusFunction = () => {
+
+        if((!Def.orderList || Def.orderList.length == 0 ) && Def.user_info) {
+            OrderController.getOrder(this.getOrderSuccess);
+            this.refresh();
+        }
+        this.setState({stateCount:Math.random()});
+        if(Def.refreshDashBoard && typeof Def.refreshDashBoard == 'function' && Def.user_info){
+            Def.refreshDashBoard();
+        }
+    };
+
+    componentWillUnmount() {
+        // Remove the event listener
+        if(this.focusListener && (typeof this.focusListener.remove === 'function')){
+            this.focusListener.remove();
         }
 
     }
@@ -91,6 +130,8 @@ class MyScreen extends React.Component {
         if(Def.checkPartnerPermission() <0){
             screen = 'update-partner';
         }
+        console.log('Screen : ' + screen);
+
         this.props.navigation.navigate('My', {'screen':screen});
     }
 
@@ -114,6 +155,10 @@ class MyScreen extends React.Component {
         this.props.navigation.navigate('Login', {'screen':'guide-screen'});
     }
 
+    refreshMyDashboard(){
+         this.setState({stateCount:Math.random()})
+    }
+
 
     onGetUserInfoFun(value){
         if(value){
@@ -121,7 +166,7 @@ class MyScreen extends React.Component {
             Def.username = Def.user_info['user_name'];
             Def.email = Def.user_info['email'];
             // this.setState({user:Def.user_info});
-            this.refresh();
+            // this.refresh();
         }
     }
 
@@ -136,11 +181,10 @@ class MyScreen extends React.Component {
         });
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
-        } else {
-           console.log('exits User info');
         }
-
-        this.setState({ stateCount: Math.random() });
+        if(Def.refreshDashBoard && typeof Def.refreshDashBoard == 'function') {
+            Def.refreshDashBoard();
+        }
     }
 
     onGetCollectionSuccess(data){
@@ -191,17 +235,14 @@ class MyScreen extends React.Component {
     shouldComponentUpdate(){
         // this.setState({ configMenu: Def.config_news_menu});
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
-
+        const index = Def.REFESH_SCREEN.indexOf('my-screen');
         if(!Def.user_info){
             AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
         }
-        const index = Def.REFESH_SCREEN.indexOf('my-screen');
-        console.log("Index in refresh : " + index);
         if (index > -1) {
             Def.REFESH_SCREEN.splice(index, 1);
             this.refresh();
         }
-
         return true;
     }
 
@@ -268,7 +309,7 @@ class MyScreen extends React.Component {
                     </Text>
 
                 </View> :
-                <View style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
+                <ScrollView style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
 
                     <View style={{alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginBottom: 10}}>
 
@@ -304,22 +345,14 @@ class MyScreen extends React.Component {
                         {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                     {/*</TouchableOpacity>*/}
 
+                    {
+                        Def.user_info && Def.user_info.partnerInfo ?
+                            <DashboardComponent  stateCount={this.state.stateCount}  />
+                       : null
 
 
+                    }
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                      onPress={this.gotoChangePass}>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                            <Icon name="user-cog" size={25} color={Style.GREY_TEXT_COLOR} />
-                            </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Thiết lập tài khoản
-                            </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
                         onPress={this.gotoPartnerInfo}
                     >
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
@@ -366,7 +399,7 @@ class MyScreen extends React.Component {
                                 <GuideIcon width={25} height={25} color={Style.GREY_TEXT_COLOR} />
                             </View>
                             <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Hướng dẫn sử dụng
+                                Chính sách bán hàng Eurotile
                             </Text>
                         </View>
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
@@ -380,26 +413,24 @@ class MyScreen extends React.Component {
                                 <RuleIcon width={25} height={25} color={Style.GREY_TEXT_COLOR} />
                             </View>
                             <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Điều khoản
+                                Điều khoản trở thành Partner
                             </Text>
                         </View>
                         <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                     </TouchableOpacity>
-
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                      onPress={ ()=>{UserController.logoutLocal()}}
-                    >
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                                <Icon name="sign-out-alt" size={25} color={Style.GREY_TEXT_COLOR} />
-                            </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                               Đăng xuất
-                            </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}*/}
+                                      {/*onPress={ ()=>{UserController.logoutLocal()}}*/}
+                    {/*>*/}
+                        {/*<View style={{flexDirection : 'row', alignItems : 'center'}}>*/}
+                            {/*<View style={{width :30}}>*/}
+                                {/*<Icon name="sign-out-alt" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                            {/*</View>*/}
+                            {/*<Text style={[Style.text_styles.middleText, {marginLeft :10}]}>*/}
+                               {/*Đăng xuất*/}
+                            {/*</Text>*/}
+                        {/*</View>*/}
+                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+                    {/*</TouchableOpacity>*/}
 
                     {/*<TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}*/}
                                       {/*onPress={this.updatePartnerInfo}*/}
@@ -415,7 +446,7 @@ class MyScreen extends React.Component {
                         {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                     {/*</TouchableOpacity>*/}
 
-                </View>
+                </ScrollView>
         )
     }
 }
@@ -466,6 +497,19 @@ const styles = StyleSheet.create({
         borderRadius: width / 16,
     },
     buttonText : { color:'#fff', fontSize : 18, paddingVertical: 8, marginLeft : 15},
+    overviewInfo: {
+        // height: height/4,
+        minHeight: 200,
+        width : width -20,
+        marginHorizontal:10,
+        paddingVertical:10,
+        paddingHorizontal:10,
+        // backgroundColor:'#FF5E62',
+        borderRadius:10,
+        marginTop:10,
+        borderColor : Style.DEFAUT_RED_COLOR,
+        borderWidth:2,
+    },
 
 });
 

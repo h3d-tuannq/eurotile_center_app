@@ -16,7 +16,7 @@ export default class OrderController{
     static async  saveOrder(orderInfo, navigation = null, successCallback, falseCallback) {
         // console.log("Order Info: "+ orderInfo);
 
-        Net.sendRequest(this.onUpdateSuccess,this.onSaveFalse,'https://eurotiledev.house3d.net/api/order/create-order' , Def.POST_METHOD , orderInfo, 'multipart/form-data');
+        Net.sendRequest(successCallback ?successCallback : this.onUpdateSuccess, falseCallback ? falseCallback : this.onSaveFalse, Def.URL_BASE + 'api/order/create-order' , Def.POST_METHOD , orderInfo, 'multipart/form-data');
 
     };
 
@@ -47,18 +47,30 @@ export default class OrderController{
 
     static getOrder(callback,errCallback ) {
         if(Def.user_info){
+            console.log("Call Get Order");
             Net.sendRequest(callback ? callback : this.getOrderSuccess,errCallback? errCallback: this.getOrderFalse ,Def.URL_BASE + "/api/order/get-order" ,Def.POST_METHOD, {booker_id:Def.user_info['id']});
+        } else {
+            AsyncStorage.getItem('user_info').then((value) => {
+                if(value){
+                    Def.user_info = JSON.parse(value);
+                    Def.username = Def.user_info['user_name'];
+                    Def.email = Def.user_info['email'];
+                    Net.sendRequest(callback ? callback : this.getOrderSuccess,errCallback? errCallback: this.getOrderFalse ,Def.URL_BASE + "/api/order/get-order" ,Def.POST_METHOD, {booker_id:Def.user_info['id']});
+                }
+            });
         }
     }
 
 
     static getOrderSuccess(data){
-        // console.log("Get Order Info : " + JSON.stringify(data));
-        Def.orderList = data;
+        Def.orderList = data['data'];
+        if(Def.refreshStatistical && (typeof  Def.refreshStatistical == 'function') ){
+            Def.refreshStatistical();
+        }
     }
 
     static getOrderFalse(data){
-        console.log("Get Order : " + JSON.stringify(data));
+        console.log("Get Order False : " + JSON.stringify(data));
     }
 
 

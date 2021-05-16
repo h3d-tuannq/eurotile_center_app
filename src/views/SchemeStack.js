@@ -35,7 +35,6 @@ class SchemeStack extends React.Component {
     }
 
     goProductList() {
-        console.log("Go to Product List");
         if(this.props.navigation){
             this.props.navigation.navigate('Booking', {screen:'cart'});
         }
@@ -64,8 +63,7 @@ class SchemeStack extends React.Component {
                                     paddingLeft:15 ,
                                     alignItems : 'center'
                                 }
-                            }
-                            onPress={() => this.props.navigation.toggleDrawer()}>
+                            }>
                             <EurotileLogo
                                 width={Style.LOGO_WIDTH}
                                 height={Style.LOGO_HEIGHT}
@@ -86,15 +84,6 @@ class SchemeStack extends React.Component {
                                 }
                             }
                             onPress={this.showNotification}>
-                            {/*{ this.state.new_noti ?*/}
-                                {/*<View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>*/}
-                                    {/*<Text style={{color: 'white', fontSize: this.state.new_noti > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>*/}
-                                        {/*{Def.formatOrderNumber(this.state.new_noti)}*/}
-                                    {/*</Text>*/}
-                                {/*</View>*/}
-                                {/*:<View/>*/}
-                            {/*}*/}
-
                             <NotiIcon
                                 width={Style.CART_ICON_SIZE -5}
                                 height={Style.CART_ICON_SIZE }

@@ -311,18 +311,20 @@ class CreateCustomerScreen extends React.Component {
         const {navigation} = this.props;
         console.log('Update user info');
         if (!this.state.name) {
-            alert("Vui lòng cập nhật ảnh Avatar");
+            alert("Vui lòng cập nhật tên khách hàng");
             return false;
         } else if (!this.state.mobile) {
             alert("Vui lòng điền số điện thoại");
         }
         let err = this.validateAddress();
-        if(err == false) {
+        if(err != 0) {
+            console.log('Err : ' + err);
+            alert("Vui lòng nhập thông tin địa chỉ");
             return false;
-            // alert("Vui lòng nhập thông tin địa chỉ");
+
         }
         let customerInfo = {
-            id: "",
+            id:"" ,
             user_id: this.state.user ? this.state.user.id : "",
             create_by : Def.user_info ? Def.user_info['id'] : 14,
             name: this.state.name,
@@ -332,7 +334,7 @@ class CreateCustomerScreen extends React.Component {
             customer_type:this.state.customer_type == "1" ? 1: 0,
             partner_id:  Def.user_info['id'],
         };
-        console.log('Customer Info: ' + JSON.stringify(customerInfo));
+        // console.log('Customer Info: ' + JSON.stringify(customerInfo));
 
         CustomerController.saveCustomer(customerInfo, navigation, this.saveCustomerSuccess, this.saveCustomerFalse);
 
@@ -342,10 +344,12 @@ class CreateCustomerScreen extends React.Component {
 
     saveCustomerSuccess(customer){
         console.log("Customer Info : " + JSON.stringify(customer));
-        if(customer['err_code']){
+        if(customer['result'] != 1 ){
             alert(customer['msg']);
             return ;
         }
+
+        customer = customer['customer'];
 
         if(Def.currentOrder){
             Def.currentOrder['customer'] = customer;
@@ -358,12 +362,16 @@ class CreateCustomerScreen extends React.Component {
             AsyncStorage.setItem('user_info', JSON.stringify(Def.user_info));
         }
 
+        if(Def.user_info.customer){
+            console.log('Customer info exits');
+        }
         let findCus = Def.customer.findIndex(element => element.id == customer.id);
         if(findCus){
             Def.customer[findCus] = customer;
         }else  {
             Def.customer.push(customer);
         }
+        Def.isUpdating = true;
         this.props.navigation.navigate('Booking', {screen: 'booking', params : {order:Def.currentOrder}});
         console.log("Navigate to Booking");
     }
@@ -404,8 +412,6 @@ class CreateCustomerScreen extends React.Component {
     }
 
     shouldComponentUpdate(){
-        console.log('should update');
-        console.log('Refresh Update Partner');
         const index = Def.REFESH_SCREEN.indexOf('update-partner-screen');
 
         if (index > -1 || (this.props.route && this.props.route.param && this.props.route.param.refresh)) {

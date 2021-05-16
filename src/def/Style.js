@@ -56,8 +56,9 @@ export default class Style{
         cardStyle: {
             justifyContent: 'center',
             alignItems: 'center',
-            width: width,
-            height: width/2,
+            width: width -20,
+            height:0.6*width,
+            borderRadius : 10,
 
         },
 
@@ -66,19 +67,22 @@ export default class Style{
 
         },
         carousel: {
-            // paddingVertical: 2,
+            paddingVertical: 5,
             // maxHeight : width*0.95,
             borderRadius: 5,
+            alignItems : 'center',
             // marginHorizontal : 10,
             justifyContent:'center',
+            marginTop:5
 
         },
 
         cardImg: {
-            width: width,
+            width: width -20,
+            marginHorizontal : 10,
             paddingVertical :5,
-            height: width * 0.5,
-            borderRadius : 5,
+            height: width * 0.6,
+            // borderRadius : 5,
         },
         schemeSlideImg: {
             width: width,

@@ -2,8 +2,12 @@ import AsyncStorage from "@react-native-community/async-storage";
 import {Dimensions, Platform} from 'react-native'
 
 export default class Def {
-    static URL_BASE = "https://eurotiledev.house3d.net";
+    // static URL_BASE = "https://eurotile-prod.house3d.net/";
+    // static URL_CONTENT_BASE = "https://eurotile-prod.house3d.net/data/eurotileData/";
+
+    static URL_BASE = "https://eurotiledev.house3d.net/";
     static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
+
     static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com/uploads/2019/07/02/5d1aa12048236.jpg";
 
     static PARTNER_ACTIVE_STATUS = 1;
@@ -21,6 +25,10 @@ export default class Def {
     static user_info = null;
 
     static order_number = 12;
+
+    static isSignup = false;
+
+    static refreshHome = [];
 
     static os = 'android';
 
@@ -57,9 +65,17 @@ export default class Def {
     static TYPE_NEWS = 4;
     static TYPE_DAILYCONTENT = 5;
 
+    static orderItemChange = {};
+
     static PLAYBACK_SUB_TYPE = 1;
 
     static OrderStatus = {0: "Chưa tiếp nhận", 1: "Xác nhận", 2: "Thanh toán", 3: "Giao hàng", 4: "Hoàn thành"}; // DRAFT, CONFIRM, PAID, DELIVERING, ACCOMPLISHED
+
+    static STATUS_DRAFT = 0;
+    static STATUS_CONFIRMED = 1;
+    static STATUS_PAID = 2;
+    static STATUS_DELIVERING = 3;
+    static STATUS_ACCOMPLISHED = 4;
 
     static news_data = null;
     static collection_data = null;
@@ -69,13 +85,15 @@ export default class Def {
     static design_cate = null;
     static product_data = [];
     static cart_data = [];
+    static currentCart = [];
     static customer = [];
     static currentOrder = null; // Model đang thực hiện thao tác
-
+    static popularNews = [];
 
     static currentCustomer = null;
 
     static orderList = [];
+    static refreshOrderList = [];
     static config_order_menu = [];
     static OrderListForStatus = [];
 
@@ -87,6 +105,8 @@ export default class Def {
     static config_design_menu = null;
 
     static refreshDashBoard = null;
+
+    static refreshStatistical = {};
 
     static isUpdating = false;
 
@@ -130,7 +150,6 @@ export default class Def {
         let rsUrl = Def.URL_DEFAULT_AVATAR;
         if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['avatar_path']) {
             if (Def.user_info['userProfile']['avatar_base_url'] && Def.user_info['userProfile']['avatar_base_url'].length > 0) {
-                console.log("Avatar Url" + Def.user_info['userProfile']['avatar_base_url'].length);
                 rsUrl = Def.user_info['userProfile']['avatar_base_url'] + '/' + Def.user_info['userProfile']['avatar_path'];
             } else {
                 rsUrl = Def.user_info['userProfile']['avatar_path'];
@@ -179,7 +198,7 @@ export default class Def {
         if (address && address['address_detail']) {
             return address['address_detail'];
         }
-        return null;
+        return "";
 
     }
 
@@ -208,10 +227,10 @@ export default class Def {
     }
 
     static getThumnailImg(img_path) {
+        // img_path = Def.URL_CONTENT_BASE + img_path;
         let rs = img_path.split(".");
         let lastItem = rs.pop();
         rs = rs.join('.') + '_200x200.' + lastItem;
-        // console.log(rs);
         return rs;
     }
 
@@ -256,6 +275,30 @@ export default class Def {
         return total;
     }
 
+    static calTotalOrderValue(orderList) {
+        var total = 0;
+        orderList.forEach(item =>  {
+            total += item.sale_value;
+        });
+        return total;
+    }
+
+    static calCartOrderNumber(orderList) {
+        var total = 0;
+        orderList.forEach(item =>  {
+            total += item.amount;
+        });
+        return total;
+    }
+
+    static calProfitValue(orderList) {
+        var total = 0;
+        orderList.forEach(item =>  {
+            total += item.sale_value * item.partner_discount / 100;
+        });
+        return total;
+    }
+
     static getOrderByStatus(orderList, status) {
         let filterData = [];
         // console.log("Status : "  + status);
@@ -264,11 +307,18 @@ export default class Def {
                 item.status == status
             );
         }
+
+        // console.log("Status : " + status + " Length : " + filterData.length + " OrderList Length : " + orderList.length);
+
         return filterData;
     }
 
+
+
+
     static numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // x = Math.floor(x);
+        return x != null ?  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
     }
 
     static clearCartData() {
@@ -292,6 +342,55 @@ export default class Def {
         return -3;
     }
 
+    static partnerlevelInfo = {1:'Vàng' , 2: 'Bạch kim', 3: 'Kim cương'};
+    static centerInfo = [
+        {
+            id:1,
+            name : 'EUROTILE CENTER HÀ NỘI',
+            phone: "(024)73008166",
+            address: 'M03-04 Võ Chí Công, P.Xuân La, Q. Tây Hồ, Hà Nội'
+        },
+        {
+            id:2,
+            name : 'EUROTILE CENTER VINH',
+            phone: "0913522308",
+            address: 'Lô C1+C2, KDT Minh Khang, Đại lộ Lenin, TP. Vinh'
+        },
+        {
+            id:3,
+            name : 'EUROTILE CENTER ĐÀ NẴNG',
+            phone: "(023) 6366 6899",
+            address: '297 Nguyễn Văn Linh, Q. Thanh Khê, TP. Đà Nẵng'
+        },
+        {
+            id:4,
+            name : 'EUROTILE CENTER ĐẮK LẮK',
+            phone: "0913446525",
+            address: '332-334 Phan Bội Châu, TP. Buôn Mê Thuột'
+        },
+        {
+            id:5,
+            name : 'EUROTILE CENTER HỒ CHÍ MINH',
+            phone: "(038)62876899",
+            address: '433 Cộng Hòa, P.15, Q. Tân Bình, TP. Hồ Chí Minh'
+        },
+        {
+            id:6,
+            name : 'EUROTILE CENTER CẦN THƠ',
+            phone: "0916639668",
+            address: '353 đường 30/4, Q. Ninh Kiều, TP. Cần Thơ'
+        },
+    ];
+
+    static getLevelPartnerName(levelId){
+        if(Def.partnerlevelInfo && Def.partnerlevelInfo[levelId - 1]){
+            return Def.partnerlevelInfo[levelId - 1].name;
+        }
+        return false;
+    }
+
+
+
     static getUserRole(){
         return Def.checkPartnerPermission() > 0 ? 'partner' : 'user';
     }
@@ -311,12 +410,12 @@ export default class Def {
         return rs;
     }
 
-
     static ressetCart() {
         Def.cart_data = [];
+        Def.currentCart = [];
         Def.order = null;
         AsyncStorage.setItem('cart_data', JSON.stringify(Def.cart_data));
-
+        AsyncStorage.setItem('current_data', JSON.stringify(Def.currentCart));
     }
 
     static createPaymentUrl(orderId){

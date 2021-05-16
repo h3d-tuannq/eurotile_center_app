@@ -7,6 +7,18 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import LocationIcon from '../../../assets/icons/Location.svg';
 
+const FlatStatusData = [
+    // {'id': 0 , 'name': "Chưa kích hoạt"},
+    // {'id': 1 , 'name' :"Hoạt động"},
+    {'id': 2 , 'name': "Hoàn thành nghĩa vụ tài chính"},
+    {'id': 3 , 'name': "Đủ điều kiện bàn giao"},
+    {'id': 4 , 'name': "Đang bàn giao"},
+    {'id': 5 , 'name':"Đã ký nhận bàn giao"} ,
+    {'id': 6 , 'name':"Sữa chữa sau bàn giao"},
+    {'id': 8 , 'name':"Đã hoàn thiện hồ sơ"},
+    {'id': 7 , 'name':"Đã hoàn thành"}
+];
+
 const initData = [
     {"id":1,"city_code":1,"city_name":"Tiền Giang"},
     {"id":2,"city_code":2,"city_name":"Hưng Yên"},
@@ -18,6 +30,7 @@ class AutocompleteModal extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            // data : this.props.data.length > 0 ? this.props.data : [],
             data : this.props.data.length > 0 ? this.props.data : [],
             query : ""
         };

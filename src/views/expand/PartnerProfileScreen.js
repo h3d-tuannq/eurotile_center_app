@@ -38,6 +38,9 @@ class PartnerProfileScreen extends React.Component {
         this.parseDataToView = this.parseDataToView.bind(this);
         this.setDate = this.setDate.bind(this);
         this.showAddressModal = this.showAddressModal.bind(this);
+
+        console.log("Constructor recall");
+
         let projectImg = this.getProjectImage();
         this.state = {
             focus : 0,

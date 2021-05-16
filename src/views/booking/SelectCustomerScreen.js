@@ -134,7 +134,6 @@ class SelectCustomerScreen extends React.Component {
     }
 
     shouldComponentUpdate(){
-        console.log('Should update select Customer');
         return true;
     }
 

@@ -38,7 +38,7 @@ export default class CustomerController{
 
 
     static async  saveCustomer(customerInfo, navigation = null, successCallback, falseCallback) {
-        Net.sendRequest(successCallback ? successCallback :this.saveSuccess, falseCallback? falseCallback : this.onSaveFalse,'https://eurotiledev.house3d.net/api/customer/save-customer' , Def.POST_METHOD , customerInfo, 'multipart/form-data');
+        Net.sendRequest(successCallback ? successCallback :this.saveSuccess, falseCallback? falseCallback : this.onSaveFalse,Def.URL_BASE + 'api/customer/save-customer' , Def.POST_METHOD , customerInfo, 'multipart/form-data');
 
     };
 

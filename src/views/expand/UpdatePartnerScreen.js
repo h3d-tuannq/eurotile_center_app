@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Modal, Keyboard} from 'react-native'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
+
+import AutocompleteModal from '../../../src/com/common/AutocompleteModal';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Style from '../../def/Style';
 
@@ -18,7 +20,7 @@ import UserController from "../../controller/UserController";
 import Net from "../../net/Net";
 import ImageResizer from 'react-native-image-resizer';
 
-class PartnerProfileScreen extends React.Component {
+class UpdatePartnerScreen extends React.Component {
     constructor(props){
         super(props);
         this.handleChoosePhoto = this.handleChoosePhoto.bind(this);
@@ -38,6 +40,9 @@ class PartnerProfileScreen extends React.Component {
         this.parseDataToView = this.parseDataToView.bind(this);
         this.setDate = this.setDate.bind(this);
         this.showAddressModal = this.showAddressModal.bind(this);
+
+        console.log("Constructor recall");
+
         let projectImg = this.getProjectImage();
         this.state = {
             focus : 0,
@@ -89,9 +94,7 @@ class PartnerProfileScreen extends React.Component {
 
     componentDidMount(){
         console.log('component did mount recall');
-
         Net.sendRequest(this.onGetCites,this.onGetCitesFalse,Def.URL_BASE + '/api/user/city' , Def.POST_METHOD);
-
     }
 
 
@@ -160,6 +163,12 @@ class PartnerProfileScreen extends React.Component {
     }
 
     choseDistrictClick(){
+        if(!this.state.city_item){
+            this.choseCityClick();
+            return;
+        }
+
+
         this.setState({currentAddress:2});
         if(!this.state.district || this.state.district.length == 0){
             console.log('Chưa tồn tại District : ');
@@ -174,6 +183,16 @@ class PartnerProfileScreen extends React.Component {
     }
 
     choseWardClick(){
+        if(!this.state.city_item){
+            this.choseCityClick();
+            return;
+        }
+
+        if(!this.state.district_item){
+            this.choseDistrictClick();
+            return;
+        }
+
         this.setState({currentAddress:3});
         if(!this.state.ward || this.state.ward.length == 0){
             this.getAdministrativeUnit(Def.URL_BASE + '/api/user/ward', {district_code: this.state.district_item.district_code}, this.showAutocompleteModal);
@@ -551,7 +570,7 @@ class PartnerProfileScreen extends React.Component {
                 <ScrollView keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}>
                     {this.state.showKeyboard == 0 ?
                         <View>
-                            <TouchableOpacity
+                            <TouchableOpacity onPress={() => this.handleChoosePhoto('avatarSource')}
                                               style={{alignItems: 'center', justifyContent: 'center', marginBottom: 5}}>
                                 {this.state.avatarSource && this.state.avatarSource.uri ?
                                     <Image
@@ -601,8 +620,9 @@ class PartnerProfileScreen extends React.Component {
                                         style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                         value={this.state.full_name}
                                         onChangeText={text => this.setState({full_name: text})}
-                                        editable={false}
+                                        placeholder={'Nhập họ tên'}
                                     />
+                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity style={{
@@ -626,8 +646,8 @@ class PartnerProfileScreen extends React.Component {
                                         value={this.state.mobile}
                                         onChangeText={text => this.setState({mobile: text})}
                                         placeholder={'Nhập số điện thoại'}
-                                        editable={false}
                                     />
+                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity style={{
@@ -648,7 +668,7 @@ class PartnerProfileScreen extends React.Component {
                                         height: ITEM_HEIGHT,
                                         justifyContent: 'center',
                                         borderColor: Style.GREY_TEXT_COLOR
-                                    }} >
+                                    }} onPress={() => this.showDateTimePicker('birth_day')}>
                                         <Text style={[Style.text_styles.titleTextNotBold, {
                                             justifyContent: 'center',
                                             paddingLeft: 5,
@@ -671,6 +691,7 @@ class PartnerProfileScreen extends React.Component {
                                         datePickerModeAndroid='spinner'
                                         timePickerModeAndroid='spinner'
                                     />
+                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity style={{
@@ -721,10 +742,12 @@ class PartnerProfileScreen extends React.Component {
                             <Text style={[Style.text_styles.middleText,{ marginRight : 5}]}>
                                 {this.state.city_item ? this.state.city_item.city_name : 'Chọn tỉnh/thành phố'}
                             </Text>
+                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}
+                                      onPress={this.choseDistrictClick}
                     >
                         <Text style={[Style.text_styles.middleText,{}]}>
                             Quận/Huyện
@@ -734,10 +757,12 @@ class PartnerProfileScreen extends React.Component {
                             <Text style={[Style.text_styles.middleText,{ marginRight : 5}]}>
                                 {this.state.district_item ? this.state.district_item.district_name : 'Chọn quận/huyện'}
                             </Text>
+                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}
+                                      onPress={this.choseWardClick}
                     >
                         <Text style={[Style.text_styles.middleText,{}]}>
                             Phường/Xã
@@ -747,6 +772,7 @@ class PartnerProfileScreen extends React.Component {
                             <Text style={[Style.text_styles.middleText,{ marginRight : 5}]}>
                                 {this.state.ward_item ? this.state.ward_item.ward_name : 'Chọn phường/xã'}
                             </Text>
+                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
                     </TouchableOpacity>
 
@@ -768,6 +794,7 @@ class PartnerProfileScreen extends React.Component {
 
                                 placeholder={'Số nhà, tên đường'}
                             />
+                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
                     </TouchableOpacity>
 
@@ -784,8 +811,8 @@ class PartnerProfileScreen extends React.Component {
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                 value={this.state.card_no}
                                 onChangeText={text => this.setState({card_no:text})}
-                                editable={false}
                             />
+                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
                     </TouchableOpacity>
 
@@ -794,7 +821,7 @@ class PartnerProfileScreen extends React.Component {
                             Ngày cấp
                         </Text>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <TouchableOpacity style={{ marginRight: 5, height :ITEM_HEIGHT, justifyContent : 'center', borderColor:Style.GREY_TEXT_COLOR}}  >
+                            <TouchableOpacity style={{ marginRight: 5, height :ITEM_HEIGHT, justifyContent : 'center', borderColor:Style.GREY_TEXT_COLOR}} onPress={() => this.showDateTimePicker('issue_on')} >
                                 <Text style={[Style.text_styles.titleTextNotBold, {justifyContent : 'center', paddingLeft: 5, color:Style.GREY_TEXT_COLOR} ]}>
                                     {this.state.birth_day ? Def.getDateString(this.state.issue_on , "yyyy-MM-dd")  : "chọn ngày cấp"}
                                 </Text>
@@ -810,6 +837,7 @@ class PartnerProfileScreen extends React.Component {
                                 datePickerModeAndroid='spinner'
                                 timePickerModeAndroid='spinner'
                             />
+                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
                     </TouchableOpacity>
 
@@ -825,12 +853,12 @@ class PartnerProfileScreen extends React.Component {
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                 value={this.state.issue_at}
                                 onChangeText={text => this.setState({issue_at:text})}
-                                editable={false}
                             />
+                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity  style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingVertical:5}}>
+                    <TouchableOpacity onPress={() => this.handleChoosePhoto('infront_cmt_img')} style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingVertical:5}}>
                         <View style={{flex:1, width : width -10, height:Style.HEADER_HEIGHT}}>
                             <Text style={[Style.text_styles.titleTextNotBold, {marginLeft:5}]}>
                                 CMND (Mặt trước)
@@ -854,7 +882,7 @@ class PartnerProfileScreen extends React.Component {
                     </TouchableOpacity>
 
 
-                    <TouchableOpacity  style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingVertical:5}}>
+                    <TouchableOpacity onPress={() => this.handleChoosePhoto('behind_cmt_img')} style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingVertical:5}}>
                         <View style={{flex:1, width : width -10, height:Style.HEADER_HEIGHT}}>
                             <Text style={[Style.text_styles.titleTextNotBold, {marginLeft:5}]}>
                                 CMND (Mặt sau)
@@ -882,7 +910,7 @@ class PartnerProfileScreen extends React.Component {
                         </Text>
                     </View>
 
-                    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingVertical:5}}>
+                    <TouchableOpacity onPress={() => this.handleChoosePhoto('project_img1')} style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingVertical:5}}>
                         <View style={{flex:1, width : width -10, height:Style.HEADER_HEIGHT}}>
                             <Text style={[Style.text_styles.titleTextNotBold, {marginLeft:5}]}>
                                 Dự án 1
@@ -903,7 +931,7 @@ class PartnerProfileScreen extends React.Component {
                     </TouchableOpacity>
 
 
-                    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingVertical:5}}>
+                    <TouchableOpacity onPress={() => this.handleChoosePhoto('project_img2')} style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingVertical:5}}>
                         <View style={{flex:1, width : width -10, height:Style.HEADER_HEIGHT}}>
                             <Text style={[Style.text_styles.titleTextNotBold, {marginLeft:5}]}>
                                 Dự án 2
@@ -923,7 +951,7 @@ class PartnerProfileScreen extends React.Component {
                         }
                     </TouchableOpacity>
 
-                    <TouchableOpacity  style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingTop:5}}>
+                    <TouchableOpacity onPress={() => this.handleChoosePhoto('project_img3')} style={{ alignItems: 'center', justifyContent: 'center', flex:1, marginTop:2, backgroundColor: '#fff', paddingTop:5}}>
                         <View style={{flex:1, width : width -10, height:Style.HEADER_HEIGHT}}>
                             <Text style={[Style.text_styles.titleTextNotBold, {marginLeft:5}]}>
                                 Dự án 3
@@ -942,9 +970,23 @@ class PartnerProfileScreen extends React.Component {
                             </View>
                         }
                     </TouchableOpacity>
-
-
                 </ScrollView>
+                <Modal onRequestClose={() => {this.closeFunction(null)}} visible={this.state.choseAddress}  transparent={false} styles={{backgroundColor : 'green'}} >
+                    {/*{this.state.choseAddress ?*/}
+                    <AutocompleteModal
+                        data={this.state.filterData}
+                        filterAttr={this.state.filterAttr}
+                        closeFunction={this.closeFunction}
+                        addressTitle={this.state.addressTitle}
+
+                    />
+                </Modal>
+                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.updatePartnerInfo}>
+
+                    <Text style={styles.buttonText}>
+                        Cập nhật
+                    </Text>
+                </TouchableOpacity>
             </View>
 
         )
@@ -956,4 +998,4 @@ const styles = StyleSheet.create({
     textEditableForcus : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black', fontSize : Style.MIDLE_SIZE  , marginRight : 5, textAlign: 'right'},
 });
 
-export default PartnerProfileScreen;
+export default UpdatePartnerScreen;

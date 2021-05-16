@@ -35,7 +35,6 @@ class NotificationScreen extends React.Component{
 
     }
     onNotiSuccess(data){
-        console.log("onNotiSuccess");
         this.setState({notiData:data["data"]});
     }
 
@@ -70,7 +69,7 @@ class NotificationScreen extends React.Component{
                 </View>
                 <View style={styles.playList}>
                     <FlatList
-                        style={{ marginBottom : 120, paddingLeft : 10, backgroundColor : '#fff'}}
+                        style={{  paddingLeft : 10, backgroundColor : '#fff'}}
                         data={this.state.notiData}
                         renderItem={renderItem}
                         keyExtractor={item => (item.id + "")}
