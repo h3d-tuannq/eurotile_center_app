@@ -24,7 +24,6 @@ export default class ForgetPassword extends Component {
             navigation.navigate('signIn');
         }else{
             alert("Email không đúng định dạng");
-
         }
     }
     render() {

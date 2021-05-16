@@ -1,5 +1,17 @@
 import React, {useState} from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, TextInput, Platform, Modal, Keyboard} from 'react-native'
+import {
+    Text,
+    View,
+    Button,
+    StyleSheet,
+    Dimensions,
+    ScrollView,
+    TouchableOpacity,
+    Image,
+    TextInput,
+    Platform,
+    Modal,
+} from 'react-native'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 
@@ -21,6 +33,9 @@ import Net from "../../net/Net";
 import ImageResizer from 'react-native-image-resizer';
 
 class UpdatePartnerScreen extends React.Component {
+    _container;
+    _txt;
+    _position = [];
     constructor(props){
         super(props);
         this.handleChoosePhoto = this.handleChoosePhoto.bind(this);
@@ -76,7 +91,6 @@ class UpdatePartnerScreen extends React.Component {
             nextAddress : 1, // 1 select city, 2 select district, 3 select ward
             filterAttr: 'city_name',
             filterData: [],
-            showKeyboard : 0,
             addressTitle: 'Tỉnh/Thành phố',
             isPartner: Def.checkPartnerPermission()>-1,
 
@@ -86,7 +100,18 @@ class UpdatePartnerScreen extends React.Component {
         this.refresh = this.refresh.bind(this);
         Def.mainNavigate = this.props.navigation;
         Def.setLoader = this.refresh;
+        this.scrollObjLayoutY = this.scrollObjLayoutY.bind(this);
         // this.parseDataToView();
+    }
+
+    scrollObjLayoutY = (y) => {
+        if(this._position && this._position[y]) {
+            this._container.scrollTo({
+                x: 0,
+                y: this._position[y] - height/3,
+                animated: true,
+            });
+        }
     }
 
     componentDidMount(){
@@ -95,7 +120,16 @@ class UpdatePartnerScreen extends React.Component {
         }
 
         Net.sendRequest(this.onGetCites,this.onGetCitesFalse,Def.URL_BASE + '/api/user/city' , Def.POST_METHOD);
+
+
     }
+
+
+
+    componentWillUnmount() {
+    }
+
+
 
 
 
@@ -564,8 +598,9 @@ class UpdatePartnerScreen extends React.Component {
         // const data = this.filterData(this.state.query);
         return (
             <View style={{flex:1}}>
-                <ScrollView keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}>
-                    {this.state.showKeyboard == 0 ?
+                <ScrollView keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}
+                            ref={(c) => { this._container = c; }}
+                >
                         <View>
                             <TouchableOpacity onPress={() => this.handleChoosePhoto('avatarSource')}
                                               style={{alignItems: 'center', justifyContent: 'center', marginBottom: 5}}>
@@ -726,8 +761,7 @@ class UpdatePartnerScreen extends React.Component {
                                     {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                                 </View>
                             </TouchableOpacity>
-                        </View> : <View/>
-                    }
+                        </View>
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:5}}
                         onPress={this.choseCityClick}
                     >
@@ -773,21 +807,38 @@ class UpdatePartnerScreen extends React.Component {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:1}}>
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:1}}
+                                      onLayout={(event) => {
+                                          const layout = event.nativeEvent.layout;
+                                          this._position[0] = layout.y;
+                                      }}
+                    >
                         <Text style={[Style.text_styles.middleText,{ marginRight : 5}]}>
                             Địa chỉ cụ thể
                         </Text>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <TextInput
-                                onFocus={() => this.setState({focus:1, showKeyboard: true})}
-                                onBlur={()=> this.setState({focus:0, showKeyboard: false})}
+                                ref={(c) => { this._txt = c; }}
+                                onFocus={
+                                    (e) => {
+                                        this.setState({focus:1});
+                                        this.scrollObjLayoutY(0);
+
+                                    }
+                                }
+                                onBlur={()=> this.setState({focus:0})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                 value={ typeof this.state.address ? this.state.address.toString() : ""}
                                 onChangeText={text => {
                                     this.setState({address:text})
                                 }}
 
-                                onSubmitEditing={Keyboard.dismiss}
+                                blurOnSubmit={true}
+                                onKeyPress={(e) => {
+                                    console.log("onKeyPress "  + JSON.stringify(e));
+                                }}
+
+
 
                                 placeholder={'Số nhà, tên đường'}
                             />
@@ -797,17 +848,27 @@ class UpdatePartnerScreen extends React.Component {
 
 
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:5}}>
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:5}}
+                                      onLayout={(event) => {
+                                          const layout = event.nativeEvent.layout;
+                                          this._position[1] = layout.y;
+                                      }}
+                    >
                         <Text style={[Style.text_styles.middleText,{}]}>
                             CMND
                         </Text>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <TextInput
-                                onFocus={() => this.setState({focus:1, showKeyboard: true})}
-                                onBlur={()=> this.setState({focus:0, showKeyboard: false})}
+                                onFocus={() => {
+                                    this.setState({focus:1});
+                                    this.scrollObjLayoutY(1);
+                                }}
+                                onBlur={()=> this.setState({focus:0})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                 value={this.state.card_no}
                                 onChangeText={text => this.setState({card_no:text})}
+                                placeholder={'Nhập CMND'}
+                                blurOnSubmit={true}
                             />
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
@@ -838,18 +899,28 @@ class UpdatePartnerScreen extends React.Component {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:1}}>
+                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:1}}
+                                      onLayout={(event) => {
+                                          const layout = event.nativeEvent.layout;
+                                          this._position[2] = layout.y;
+                                      }}
+                    >
                         <Text style={[Style.text_styles.middleText,{}]}>
                             Nơi cấp
                         </Text>
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
 
                             <TextInput
-                                onFocus={() => this.setState({focus:1, showKeyboard: true})}
-                                onBlur={()=> this.setState({focus:0, showKeyboard: false})}
+                                onFocus={() =>  {
+                                    this.setState({focus:1});
+                                    this.scrollObjLayoutY(2);
+                                }}
+                                onBlur={()=> this.setState({focus:0})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
                                 value={this.state.issue_at}
                                 onChangeText={text => this.setState({issue_at:text})}
+                                placeholder={'Nhập nơi cấp CMND'}
+                                blurOnSubmit={true}
                             />
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
