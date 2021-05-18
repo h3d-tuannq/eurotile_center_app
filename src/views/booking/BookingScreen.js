@@ -181,7 +181,9 @@ class BookingScreen extends React.Component {
     }
 
     onUpdateSuccess(data){
-        if(data){
+        console.log("Data : " + JSON.stringify(data));
+        if(data && data['result'] == 1){
+            data = data['order'];
             let orderIndex = -1;
             if(Def.orderList){
                 orderIndex = Def.orderList.findIndex(order => order.id == data.id);
