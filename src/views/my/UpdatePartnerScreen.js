@@ -522,6 +522,16 @@ class UpdatePartnerScreen extends React.Component {
         return true;
     }
 
+    checkTakePhotoImg = (uri) => {
+        var n = uri.search("com.eurotile_center_app");
+        return n != -1;
+    }
+
+    checkGallaryImg = (uri) => {
+        var n = uri.search("com.eurotile_center_app");
+    }
+
+
     handleChoosePhoto = (attr = null) => {
         const options = {
             title: 'Chọn ảnh đại diện',
@@ -544,10 +554,22 @@ class UpdatePartnerScreen extends React.Component {
                     if (maxsize > Def.DEFAULT_MAX_SIZE) {
                         console.log('Resize');
                         let compressType = response.type == "image/jpeg" ? "JPEG" : "PNG";
-                        ImageResizer.createResizedImage(response.uri, Def.DEFAULT_MAX_SIZE, Def.DEFAULT_MAX_SIZE, compressType, 50, 0, undefined, true)
+                        let rotation = 360;
+                        if ( response.originalRotation === 90 ) {
+                            if(this.checkTakePhotoImg(response.uri)){
+                                rotation = 90;
+                            }
+
+                        } else if ( response.originalRotation === 270 ) {
+                            rotation = -90
+                        }
+                        console.log('Rotate : ' + rotation);
+                        ImageResizer.createResizedImage(response.uri, Def.DEFAULT_MAX_SIZE, Def.DEFAULT_MAX_SIZE, compressType, 50, rotation, undefined, true)
                             .then(resizedImage => {
                                 console.log('sizeAfter: ' + '(' + resizedImage.width + ' , ' + resizedImage.height + ') : ' + JSON.stringify(resizedImage));
                                 console.log("Attr : " + attr);
+                                resizedImage['originalRotation'] = response['originalRotation'];
+                                resizedImage['isVertical'] = response['isVertical'];
                                 resizedImage['type'] = response.type;
                                 this.setState({[attr]: resizedImage});
                             })

@@ -57,7 +57,7 @@ class DashboardComponent extends React.Component{
                             alignItems: 'center'
                         }}>
                             <Text>
-                                {Def.getLevelPartnerName(user.partnerInfo.level_id) ? Def.getLevelPartnerName(user.partnerInfo.level_id) : "CK"}
+                                {"Chiếu Khấu"}
                             </Text>
                             <Text>
                                 {Def.partnerlevelInfo[user.partnerInfo.level_id - 1] ? Def.partnerlevelInfo[user.partnerInfo.level_id - 1].discount + "%" : "%"}
