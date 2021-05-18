@@ -61,7 +61,7 @@ class BookingScreen extends React.Component {
             text:''
 
         };
-
+        Def.totalValue = Def.calOrderValue(order);
 
 
         Def.mainNavigate = this.props.navigation;
@@ -81,8 +81,8 @@ class BookingScreen extends React.Component {
         Def.orderItemChange = this.orderItemChange;
         this.orderItemChange = this.orderItemChange.bind(this);
 
-
         this.closeFunction = this.closeFunction.bind(this);
+        this.orderItemClick = this.orderItemClick.bind(this);
     }
 
     checkCustomer(){
@@ -305,6 +305,8 @@ class BookingScreen extends React.Component {
                 orderItems[found].amount = item.amount;
                 orderItems[found].selectValue = item.selectValue;
                 order.orderItems = orderItems;
+                // Def.totalValue = Def.calOrderValue(order);
+                // this.setState({orderItems:orderItems, order:order});
                 // this.setState({canOrder:this.checkCanOrder()});
             }
 
@@ -315,6 +317,10 @@ class BookingScreen extends React.Component {
     closeFunction = (item) => {
         console.log("back button click!");
         this.setState({choseProduct: false })
+    }
+
+    orderItemClick = () => {
+        console.log("Back button click!");
     }
 
     render() {
@@ -336,7 +342,7 @@ class BookingScreen extends React.Component {
                                 {"Giá trị"}
                             </Text>
                             <Text style={[Style.text_styles.middleText, {color:Style.GREY_TEXT_COLOR, marginTop:3}]}>
-                                {Def.calOrderValue(this.state.order) + " đ"}
+                                {Def.calOrderValueByOrderItems(this.state.orderItems) + " đ"}
                             </Text>
                         </View>
                     </View>
@@ -521,12 +527,6 @@ class BookingScreen extends React.Component {
                                     </View>
                                     : null
                             }
-
-
-
-
-
-
                     </View>
 
                     }
@@ -728,16 +728,16 @@ class BookingScreen extends React.Component {
                 </View>
 
                 <View style={{alignItems:'center', justifyContent: 'space-around', marginBottom :10, flexDirection:'row', }}>
-                    <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', width: width/2.5 , alignItems:'center', height:45}]}
-                                      onPress={() => {
-                                          this.setState({choseProduct:true});
-                                      }}>
-                        <Text style={styles.buttonText}>
-                            Thêm sản phẩm
-                        </Text>
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', width: width/2.5 , alignItems:'center', height:45}]}*/}
+                    {/*                  onPress={() => {*/}
+                    {/*                      this.setState({choseProduct:true});*/}
+                    {/*                  }}>*/}
+                    {/*    <Text style={styles.buttonText}>*/}
+                    {/*        Thêm sản phẩm*/}
+                    {/*    </Text>*/}
+                    {/*</TouchableOpacity>*/}
 
-                    <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', width: width/2.5 ,alignItems:'center', height:45}]}
+                    <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', width: width -20,alignItems:'center', height:45}]}
                                       onPress={this.saveOrder}>
                         <Text style={styles.buttonText}>
                             { this.state.isUpdate ? "Cập nhật" :  "Đặt hàng"}

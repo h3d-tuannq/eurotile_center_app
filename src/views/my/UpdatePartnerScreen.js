@@ -202,10 +202,8 @@ class UpdatePartnerScreen extends React.Component {
 
         this.setState({currentAddress:2});
         if(!this.state.district || this.state.district.length == 0){
-            console.log('Chưa tồn tại District : ');
             this.getAdministrativeUnit(Def.URL_BASE + '/api/user/district', {city_code: this.state.city_item.city_code}, this.showAutocompleteModal);
         }else {
-            console.log('Isset District: ' + JSON.stringify(this.state.district));
             this.setState({ filterData: this.state.district, filterAttr: 'district_name'});
             this.showAddressModal();
         }
@@ -540,15 +538,15 @@ class UpdatePartnerScreen extends React.Component {
 
 
         ImagePicker.showImagePicker(options, response => {
-                console.log('Attr res' + attr);
                 if (response.uri) {
                     let maxsize = response.width > response.height ? response.width : response.height;
-
+                    console.log('sizeBefore: ' + '(' + response.width + ' , ' + response.height + ') : ' + JSON.stringify(response));
                     if (maxsize > Def.DEFAULT_MAX_SIZE) {
-
+                        console.log('Resize');
                         let compressType = response.type == "image/jpeg" ? "JPEG" : "PNG";
-                        ImageResizer.createResizedImage(response.uri, Def.DEFAULT_MAX_SIZE, Def.DEFAULT_MAX_SIZE, compressType, 50, 0, undefined, false)
+                        ImageResizer.createResizedImage(response.uri, Def.DEFAULT_MAX_SIZE, Def.DEFAULT_MAX_SIZE, compressType, 50, 0, undefined, true)
                             .then(resizedImage => {
+                                console.log('sizeAfter: ' + '(' + resizedImage.width + ' , ' + resizedImage.height + ') : ' + JSON.stringify(resizedImage));
                                 console.log("Attr : " + attr);
                                 resizedImage['type'] = response.type;
                                 this.setState({[attr]: resizedImage});
@@ -832,14 +830,7 @@ class UpdatePartnerScreen extends React.Component {
                                 onChangeText={text => {
                                     this.setState({address:text})
                                 }}
-
                                 blurOnSubmit={true}
-                                onKeyPress={(e) => {
-                                    console.log("onKeyPress "  + JSON.stringify(e));
-                                }}
-
-
-
                                 placeholder={'Số nhà, tên đường'}
                             />
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
