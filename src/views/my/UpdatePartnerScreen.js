@@ -11,7 +11,7 @@ import {
     TextInput,
     Platform,
     Modal,
-} from 'react-native'
+} from 'react-native';
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 
@@ -27,10 +27,25 @@ const ITEM_HEIGHT = 40;
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import {Picker} from '@react-native-community/picker';
 import UserController from "../../controller/UserController";
 import Net from "../../net/Net";
 import ImageResizer from 'react-native-image-resizer';
+
+import RNPickerSelect from 'react-native-picker-select';
+
+const Dropdown = () => {
+    return (
+        <RNPickerSelect
+            onValueChange={(value) => console.log(value)}
+            items={[
+                { label: 'Football', value: 'football' },
+                { label: 'Baseball', value: 'baseball' },
+                { label: 'Hockey', value: 'hockey' },
+            ]}
+        />
+    );
+};
+
 
 class UpdatePartnerScreen extends React.Component {
     _container;
@@ -759,25 +774,27 @@ class UpdatePartnerScreen extends React.Component {
                                     Giới Tính
                                 </Text>
                                 <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                    <View style={{
-                                        marginRight: -5,
-                                        height: ITEM_HEIGHT,
-                                        backgroundColor: '#fff',
-                                        borderRadius: 5
-                                    }}>
-                                        <Picker
-                                            selectedValue={this.state.gender + ''}
-                                            style={{height: ITEM_HEIGHT, width: 200, alignItems:'center'}}
-                                            itemStyle={{fontSize:20, fontWeight:'bold', color:'red', textAlign: "center",}}
-                                            onValueChange={(itemValue, itemIndex) => {
-                                                console.log("Gender change: " + itemValue);
-                                                this.setState({gender: itemValue})
-                                            }
-                                            }>
-                                            <Picker.Item label="Nam" value="0" color='red'/>
-                                            <Picker.Item label="Nữ" value="1" color='red'/>
-                                        </Picker>
-                                    </View>
+                                    <Dropdown/>
+                                    {/*<View style={{*/}
+                                    {/*    marginRight: -5,*/}
+                                    {/*    height: ITEM_HEIGHT,*/}
+                                    {/*    backgroundColor: '#fff',*/}
+                                    {/*    borderRadius: 5*/}
+                                    {/*}}>*/}
+                                    {/*    <Picker*/}
+                                    {/*        selectedValue={this.state.gender + ''}*/}
+                                    {/*        style={{height: ITEM_HEIGHT, width: 200, alignItems:'center'}}*/}
+                                    {/*        // itemStyle={{fontSize:20, fontWeight:'bold', color:'red', textAlign: "center",}}*/}
+
+                                    {/*        onValueChange={(itemValue, itemIndex) => {*/}
+                                    {/*            console.log("Gender change: " + itemValue);*/}
+                                    {/*            this.setState({gender: itemValue})*/}
+                                    {/*        }*/}
+                                    {/*        }>*/}
+                                    {/*        <Picker.Item label="Nam" value="0" />*/}
+                                    {/*        <Picker.Item label="Nữ" value="1" />*/}
+                                    {/*    </Picker>*/}
+                                    {/*</View>*/}
                                     {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                                 </View>
                             </TouchableOpacity>

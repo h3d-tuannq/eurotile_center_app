@@ -12,7 +12,7 @@ const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 
 const ITEM_HEIGHT = 40;
 
-import {Picker} from '@react-native-community/picker';
+// import {Picker} from '@react-native-community/picker';
 import UserController from "../../controller/UserController";
 import Autocomplete from 'react-native-autocomplete-input';
 import AutocompleteModal from '../../com/common/AutocompleteModal'
@@ -494,28 +494,28 @@ class CreateCustomerScreen extends React.Component {
                                 <Text style={[Style.text_styles.middleText, {}]}>
                                     Giới Tính
                                 </Text>
-                                <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                    <View style={{
-                                        marginRight: -5,
-                                        height: ITEM_HEIGHT,
-                                        backgroundColor: '#fff',
-                                        borderRadius: 5
-                                    }}>
-                                        <Picker
-                                            selectedValue={this.state.gender + ''}
-                                            style={{height: ITEM_HEIGHT, width: width / 3.5}}
-                                            mode="dropdown"
-                                            onValueChange={(itemValue, itemIndex) => {
-                                                console.log("Gender change: " + itemValue);
-                                                this.setState({gender: itemValue})
-                                            }
-                                            }>
-                                            <Picker.Item label="Nam" value="0"/>
-                                            <Picker.Item label="Nữ" value="1"/>
-                                        </Picker>
-                                    </View>
-                                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                                </View>
+                                {/*<View style={{flexDirection: 'row', alignItems: 'flex-end'}}>*/}
+                                {/*    <View style={{*/}
+                                {/*        marginRight: -5,*/}
+                                {/*        height: ITEM_HEIGHT,*/}
+                                {/*        backgroundColor: '#fff',*/}
+                                {/*        borderRadius: 5*/}
+                                {/*    }}>*/}
+                                {/*        <Picker*/}
+                                {/*            selectedValue={this.state.gender + ''}*/}
+                                {/*            style={{height: ITEM_HEIGHT, width: width / 3.5}}*/}
+                                {/*            mode="dropdown"*/}
+                                {/*            onValueChange={(itemValue, itemIndex) => {*/}
+                                {/*                console.log("Gender change: " + itemValue);*/}
+                                {/*                this.setState({gender: itemValue})*/}
+                                {/*            }*/}
+                                {/*            }>*/}
+                                {/*            <Picker.Item label="Nam" value="0"/>*/}
+                                {/*            <Picker.Item label="Nữ" value="1"/>*/}
+                                {/*        </Picker>*/}
+                                {/*    </View>*/}
+                                {/*    /!*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*!/*/}
+                                {/*</View>*/}
                             </TouchableOpacity>
                             <TouchableOpacity style={{
                                 flexDirection: 'row',
