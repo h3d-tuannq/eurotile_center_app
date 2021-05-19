@@ -2,10 +2,12 @@ import React from 'react'
 import {Text, View, StyleSheet, Dimensions, TouchableOpacity, TextInput} from 'react-native'
 import Autocomplete from 'react-native-autocomplete-input'
 import Style from "../../def/Style";
-const {width,  height} = Dimensions.get('window');
+const {width,height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import LocationIcon from '../../../assets/icons/Location.svg';
+import BackIcon from '../../../assets/icon/icon-back-black.svg';
+import BackIconSvg from '../../../assets/icon/icon-back.svg';
 
 const FlatStatusData = [
     // {'id': 0 , 'name': "Chưa kích hoạt"},
@@ -54,7 +56,18 @@ class AutocompleteModal extends React.Component {
     render() {
         const filterData = this.filterData(this.state.query);
         return (
-                <View style={{height: height, paddingBottom :50}}>
+                <View style={{height: height, paddingBottom :50, marginTop: 10}}>
+                        <TouchableOpacity style={{position: 'absolute',zIndex:3 , paddingLeft:0, paddingRight:10  , left: 0, flexDirection:'row', justifyContent : 'center', paddingVertical:10}}
+                           onPress={()=> {
+                               console.log('Close Autocomple click');
+                               this.props.closeFunction();
+                           }}
+                        >
+                            <BackIcon width={Style.BACK_ICON_SIZE -2} height={Style.BACK_ICON_SIZE -5}/>
+                            <Text>
+                                Back
+                            </Text>
+                        </TouchableOpacity>
                         <View style={{justifyContent: 'center', alignItems : 'center', paddingVertical: 10}}>
                             <Text style={Style.text_styles.titleTextNotBold}>
                                 {this.props.addressTitle}
@@ -81,6 +94,11 @@ class AutocompleteModal extends React.Component {
                                   </View>
                                 )
                               }
+
+                            flatListProps = {{
+                          maxHeight: height ,
+
+                            }}
                               keyboardShouldPersistTaps='always'
                               inputContainerStyle={{borderWidth:0}}
                             listStyle={{borderWidth:0}}

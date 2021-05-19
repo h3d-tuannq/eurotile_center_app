@@ -77,6 +77,9 @@ class ProductListScreen extends React.Component {
             NetCollection.getProductList(this.onGetProductSuccess, this.onGetProductFalse);
          }
     }
+    closeFunction = (item =null)=> {
+        this.setState({});
+    }
 
     render() {
         const {navigation} = this.props;
@@ -88,6 +91,7 @@ class ProductListScreen extends React.Component {
         return (
             <View style={{flex:1}}>
                     <ProductAutocomplete
+                        closeFunction={this.closeFunction}
                         data={this.state.productData}
                         filterAttr={'model'}
                         itemClick={this.itemClick}

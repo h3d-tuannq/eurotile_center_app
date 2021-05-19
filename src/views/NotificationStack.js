@@ -22,7 +22,11 @@ class NotificationStack extends React.Component {
 
     render() {
         return (
-            <RootStack.Navigator mode='modal' >
+            <RootStack.Navigator mode='modal'
+                                 screenOptions={{
+                                     headerBackTitleVisible: false,
+                                 }}
+            >
 
                 <RootStack.Screen name="noti-screen" component={NotificationScreen} options=
                     {({route}) => ({

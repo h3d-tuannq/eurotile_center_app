@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import LocationIcon from '../../../assets/icons/Location.svg';
 
 import ProductItemRenderer from '../../com/item-render/ProductItemrenderer';
+import DownIcon from '../../../assets/icon/icon-down-black.svg';
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -58,7 +59,15 @@ class ProductAutocomplete extends React.Component {
 
         return (
                 <View style={{height: height-Style.HEADER_HEIGHT +20, width: width,marginTop: Style.HEADER_HEIGHT, borderTopLeftRadius :20, borderTopRightRadius :20 , backgroundColor:'#fff', alignItems:'center', paddingBottom:20}}>
-                        <Autocomplete
+                    <TouchableOpacity style={{position: 'absolute',zIndex:3 , paddingLeft:0, paddingRight:10  , right: 0, flexDirection:'row', justifyContent : 'center', paddingVertical:10}}
+                                      onPress={()=> {
+                                          console.log('Close Autocomple click');
+                                          this.props.closeFunction();
+                                      }}
+                    >
+                        <DownIcon width={25} height={25}/>
+                    </TouchableOpacity>
+                    <Autocomplete
                               data={filterData}
                               defaultValue={this.state.query}
                               onChangeText={text => this.setState({ query : text })}
@@ -77,6 +86,7 @@ class ProductAutocomplete extends React.Component {
                                  alignItems : 'center',
                                  onEndReached : this.onEndReached,
                                  marginBottom:10,
+                                 maxHeight:height
 
                              }}
                              inputContainerStyle={{borderWidth:0}}
