@@ -159,7 +159,7 @@ export default class Def {
     }
 
     static getInfrontOfImg() {
-        let rsUrl = '';
+        let rsUrl = null;
         if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['infront_cmt_img']) {
             rsUrl = Def.URL_CONTENT_BASE + Def.user_info['userProfile']['infront_cmt_img'];
             console.log('' + Def.user_info['userProfile']['infront_cmt_img']);
@@ -168,7 +168,7 @@ export default class Def {
     }
 
     static getBehindImg() {
-        let rsUrl = '';
+        let rsUrl = null;
         if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['behind_cmt_img']) {
             rsUrl = Def.URL_CONTENT_BASE + Def.user_info['userProfile']['behind_cmt_img'];
         }
@@ -269,6 +269,19 @@ export default class Def {
         // return total;
         if (order.orderItems && Array.isArray(order.orderItems)) {
             order.orderItems.forEach(item =>  {
+                total += Def.getPriceByRole(item.product , Def.getUserRole()) * item.amount *  item.product.brickBoxInfo['total_area'] / 1000000;
+            });
+        }
+        return total;
+    }
+
+    static totalValue = 100;
+
+    static calOrderValueByOrderItems(orderItems) {
+        var total = 0;
+        // return total;
+        if (orderItems && Array.isArray(orderItems)) {
+            orderItems.forEach(item =>  {
                 total += Def.getPriceByRole(item.product , Def.getUserRole()) * item.amount *  item.product.brickBoxInfo['total_area'] / 1000000;
             });
         }

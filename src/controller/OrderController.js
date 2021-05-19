@@ -24,7 +24,8 @@ export default class OrderController{
     static onUpdateSuccess(data){
         console.log('Update Order success: '+ JSON.stringify(data));
 
-        if(data){
+        if(data['result' == 1]){
+            data = data['order'];
             Def.mainNavigate.navigate('Booking', {screen:'order-detail-screen', params:{item:data}});
             let orderIndex = -1;
             if(Def.orderList){
@@ -37,6 +38,8 @@ export default class OrderController{
                 Def.orderList[orderIndex] = data;
             }
 
+        } else {
+            console.log('Lỗi tạo đơn hàng : ' + JSON.stringify(data));
         }
     }
 
