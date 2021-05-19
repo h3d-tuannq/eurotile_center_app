@@ -604,7 +604,7 @@ class BookingScreen extends React.Component {
                         date={this.state.birth_day}
                         mode={'date'}
                         display='spinner'
-                        style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
+                        // style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
                         datePickerModeAndroid='spinner'
                         timePickerModeAndroid='spinner'
                     />

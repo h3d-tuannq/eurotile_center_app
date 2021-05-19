@@ -739,7 +739,7 @@ class UpdatePartnerScreen extends React.Component {
                                         date={this.state.birth_day}
                                         mode={'date'}
                                         display='spinner'
-                                        style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
+                                        // style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
                                         datePickerModeAndroid='spinner'
                                         timePickerModeAndroid='spinner'
                                     />
@@ -767,15 +767,15 @@ class UpdatePartnerScreen extends React.Component {
                                     }}>
                                         <Picker
                                             selectedValue={this.state.gender + ''}
-                                            style={{height: ITEM_HEIGHT, width: width / 3.5}}
-                                            mode="dropdown"
+                                            style={{height: ITEM_HEIGHT, width: 200, alignItems:'center'}}
+                                            itemStyle={{fontSize:20, fontWeight:'bold', color:'red', textAlign: "center",}}
                                             onValueChange={(itemValue, itemIndex) => {
                                                 console.log("Gender change: " + itemValue);
                                                 this.setState({gender: itemValue})
                                             }
                                             }>
-                                            <Picker.Item label="Nam" value="0"/>
-                                            <Picker.Item label="Nữ" value="1"/>
+                                            <Picker.Item label="Nam" value="0" color='red'/>
+                                            <Picker.Item label="Nữ" value="1" color='red'/>
                                         </Picker>
                                     </View>
                                     {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
@@ -904,7 +904,7 @@ class UpdatePartnerScreen extends React.Component {
                                 date={this.state.issue_on}
                                 mode={'date'}
                                 display='spinner'
-                                style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
+                                // style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
                                 datePickerModeAndroid='spinner'
                                 timePickerModeAndroid='spinner'
                             />
