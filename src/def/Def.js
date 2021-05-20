@@ -249,6 +249,10 @@ export default class Def {
         if (!address) {
             return strAddress;
         }
+        if(address['address_detail']) {
+            strAddress += address['address_detail'] + ', '  ;
+        }
+
         if (address['ward']) {
             strAddress += address['ward']['ward_name'] + ', ';
         }
@@ -259,6 +263,9 @@ export default class Def {
 
         if (address['city']) {
             strAddress += address['city']['city_name'];
+        }
+        if(strAddress.length > 2){
+            strAddress = strAddress.slice(0, -2);
         }
         return strAddress;
 
