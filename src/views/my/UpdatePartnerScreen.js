@@ -774,27 +774,28 @@ class UpdatePartnerScreen extends React.Component {
                                     Giới Tính
                                 </Text>
                                 <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                    <Dropdown/>
-                                    {/*<View style={{*/}
-                                    {/*    marginRight: -5,*/}
-                                    {/*    height: ITEM_HEIGHT,*/}
-                                    {/*    backgroundColor: '#fff',*/}
-                                    {/*    borderRadius: 5*/}
-                                    {/*}}>*/}
-                                    {/*    <Picker*/}
-                                    {/*        selectedValue={this.state.gender + ''}*/}
-                                    {/*        style={{height: ITEM_HEIGHT, width: 200, alignItems:'center'}}*/}
-                                    {/*        // itemStyle={{fontSize:20, fontWeight:'bold', color:'red', textAlign: "center",}}*/}
+                                    {/*<Dropdown/>*/}
+                                    <View style={{
+                                        marginRight: 10,
+                                        paddingRight: 10,
+                                        height: ITEM_HEIGHT,
+                                        backgroundColor: '#fff',
+                                        borderRadius: 5,paddingTop: 10
+                                    }}>
+                                        <RNPickerSelect
+                                            placeholder={{}}
+                                            onValueChange={(itemValue, itemIndex) => {
+                                                           console.log("Gender change: " + itemValue);
+                                                           this.setState({gender: itemValue});
+                                                        }}
+                                            style={{justifyContent:'center', alignItems:'center', paddingTop: 20, marginTop: 20}}
+                                            items={[
+                                                { label: 'Nam', value: '0' },
+                                                { label: 'Nữ', value: '1' },
 
-                                    {/*        onValueChange={(itemValue, itemIndex) => {*/}
-                                    {/*            console.log("Gender change: " + itemValue);*/}
-                                    {/*            this.setState({gender: itemValue})*/}
-                                    {/*        }*/}
-                                    {/*        }>*/}
-                                    {/*        <Picker.Item label="Nam" value="0" />*/}
-                                    {/*        <Picker.Item label="Nữ" value="1" />*/}
-                                    {/*    </Picker>*/}
-                                    {/*</View>*/}
+                                            ]}
+                                        />
+                                    </View>
                                     {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                                 </View>
                             </TouchableOpacity>
