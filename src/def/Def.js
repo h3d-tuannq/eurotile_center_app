@@ -9,6 +9,8 @@ export default class Def {
 
     static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com/uploads/2019/07/02/5d1aa12048236.jpg";
 
+    static PRIVACY_URL = "https://eurotile-prod.house3d.net/page/terms-and-policy";
+
     static PARTNER_ACTIVE_STATUS = 1;
 
     static DEFAULT_MAX_SIZE = 1024;

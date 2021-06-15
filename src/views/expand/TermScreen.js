@@ -10,14 +10,20 @@ import {
 } from 'react-native';
 import DownIconSvg from '../../../assets/icon/icon-down-black.svg';
 import Style from '../../../src/def/Style';
+import {WebView} from "react-native-webview";
+import Def from "../../def/Def";
 
 const {width, height} = Dimensions.get('window');
 
 class TermScreen extends React.Component {
     render() {
         return (
-            <View style={{flex: 1}}>
-                <Text>Điều khoản sử dụng</Text>
+            <View style={{marginTop : 5, paddingBottom : 5 }}>
+                <View style={styles.webView}>
+                    <WebView
+                        source={{ uri: Def.PRIVACY_URL }}
+                    />
+                </View>
             </View>
         );
     }
@@ -37,6 +43,11 @@ const styles = StyleSheet.create({
         color: Style.DEFAUT_RED_COLOR,
         fontWeight: 'bold',
         marginLeft: -20,
+    },
+    webView : {
+        height : height - Style.HEADER_HEIGHT - 60,
+        backgroundColor: '#e6e6e6',
+        marginRight: 15,
     },
 });
 
