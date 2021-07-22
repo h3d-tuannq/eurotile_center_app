@@ -3,6 +3,8 @@ import {Text, View, Button, TouchableOpacity} from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack';
 
 import ProductScreen from './product/ProductScreen'
+import SelectTagProductScreen from './product/SelectTagProductScreen'
+import ProductByTagScreen from './product/ProductByTagScreen'
 import CollectionDetailScreen from  './product/CollectionDetailScreen'
 import ProductDetailScreen from  './product/ProductDetailScreen'
 
@@ -123,7 +125,8 @@ class ProductStack extends React.Component {
         return (
             <RootStack.Navigator>
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
-                <RootStack.Screen name="product-screen" component={ProductScreen} options={{
+
+                <RootStack.Screen name="tag-product-screen" component={SelectTagProductScreen} options={{
                     title: null,
                     headerLeft: () => (
                         <TouchableOpacity
@@ -185,6 +188,116 @@ class ProductStack extends React.Component {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
                 }} />
+
+                <RootStack.Screen name="product-screen" component={ProductScreen} options={{
+                    title: null,
+                    // headerLeft: () => (
+                    //     <TouchableOpacity
+                    //         style=  {
+                    //             {
+                    //                 width: Style.LOGO_WIDTH + 20,
+                    //                 height:Style.DRAWER_MENU_SIZE,
+                    //                 justifyContent: 'center',
+                    //                 paddingLeft:15 ,
+                    //                 alignItems : 'center'
+                    //             }
+                    //         }>
+                    //         <EurotileLogo
+                    //             width={Style.LOGO_WIDTH}
+                    //             height={Style.LOGO_HEIGHT}
+                    //         />
+                    //     </TouchableOpacity>
+                    //
+                    // ),
+
+                    headerRight: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.DRAWER_MENU_SIZE,
+                                    height: Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingRight:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={this.goProductList}>
+                            { this.state.number_order ?
+                                <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
+                                    <Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>
+                                        {this.formatOrderNumber(this.state.number_order)}
+                                    </Text>
+                                </View>
+                                :<View/>
+                            }
+
+                            <CartIcon
+                                width={Style.CART_ICON_SIZE}
+                                height={Style.CART_ICON_SIZE}
+                            />
+                        </TouchableOpacity>
+
+                    ),
+
+                    headerStyle: {
+                        backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                        height: Style.HEADER_HEIGHT,
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        // fontWeight: 'bold',
+                    },
+                    headerBackImage: ()=> {
+                        return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                    }
+                }} />
+
+                <RootStack.Screen name="product-by-tag-screen" component={ProductByTagScreen} options=
+                    {({route}) => ({
+                        title: route.params.item && route.params.item.title ? route.params.item.title :'Mặt bằng',
+                        headerStyle: {
+                            backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                            height: Style.HEADER_HEIGHT,
+                        },
+                        headerTintColor: '#fff',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                        },
+                        headerRight: () => (
+                            <TouchableOpacity
+                                style=  {
+                                    {
+                                        width: Style.DRAWER_MENU_SIZE,
+                                        height: Style.DRAWER_MENU_SIZE,
+                                        justifyContent: 'center',
+                                        paddingRight:15 ,
+                                        alignItems : 'center'
+                                    }
+                                }
+                                onPress={this.goProductList}>
+                                { this.state.number_order ?
+                                    <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
+                                        <Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>
+                                            {this.formatOrderNumber(this.state.number_order)}
+                                        </Text>
+                                    </View>
+                                    :<View/>
+                                }
+
+                                <CartIcon
+                                    width={Style.CART_ICON_SIZE}
+                                    height={Style.CART_ICON_SIZE}
+                                />
+                            </TouchableOpacity>
+
+                        ),
+                        headerBackImage: ()=> {
+                            return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                        }
+                    })}
+                />
+
+
 
 
 

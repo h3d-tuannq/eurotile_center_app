@@ -44,7 +44,7 @@ class HotNewsVerItemrenderer extends PureComponent{
 
                 } >
                     <Image  style = {[Style.styles.cardImg , {resizeMode : 'stretch', flex: 1}]} source={{ uri: model.thumbnail_url}} />
-                    <View style = {{position:'absolute', width : width -20,  paddingVertical: 3 , paddingHorizontal:10, alignSelf:'center', backgroundColor : Style.DEFAUT_RED_COLOR }}>
+                    <View style = {{position:'absolute', width : width, bottom : 0, paddingVertical: 3 , paddingHorizontal:10, alignSelf:'center', backgroundColor : 'rgba(52, 52, 52, 0.8)' }}>
                         <Text style={[Style.text_styles.whiteTitleText , {  }]}>
                             {Def.formatText(model.title, 90)}
                         </Text>

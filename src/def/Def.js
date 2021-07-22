@@ -85,11 +85,13 @@ export default class Def {
     static config_collection_menu = null;
     static design_cate = null;
     static product_data = [];
+    static product_tree_data = {};
     static cart_data = [];
     static currentCart = [];
     static customer = [];
     static currentOrder = null; // Model đang thực hiện thao tác
     static popularNews = [];
+    static config_menus = [];
 
     static currentCustomer = null;
 
@@ -147,13 +149,16 @@ export default class Def {
         return formattedDate;
     };
 
-    static getAvatarUrlFromUserInfo() {
+    static getAvatarUrlFromUserInfo(user_info = null) {
         let rsUrl = Def.URL_DEFAULT_AVATAR;
-        if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['avatar_path']) {
-            if (Def.user_info['userProfile']['avatar_base_url'] && Def.user_info['userProfile']['avatar_base_url'].length > 0) {
-                rsUrl = Def.user_info['userProfile']['avatar_base_url'] + '/' + Def.user_info['userProfile']['avatar_path'];
+        if(!user_info) {
+            user_info = Def.user_info;
+        }
+        if (user_info && user_info['userProfile'] && user_info['userProfile']['avatar_path']) {
+            if (user_info['userProfile']['avatar_base_url'] && user_info['userProfile']['avatar_base_url'].length > 0) {
+                rsUrl = user_info['userProfile']['avatar_base_url'] + '/' + user_info['userProfile']['avatar_path'];
             } else {
-                rsUrl = Def.user_info['userProfile']['avatar_path'];
+                rsUrl = user_info['userProfile']['avatar_path'];
             }
         }
         return rsUrl;
@@ -366,40 +371,121 @@ export default class Def {
     static partnerlevelInfo = {1:'Vàng' , 2: 'Bạch kim', 3: 'Kim cương'};
     static centerInfo = [
         {
+            id:100,
+            name : 'MIỀN BẮC',
+            type : 1,
+        },
+        {
             id:1,
             name : 'EUROTILE CENTER HÀ NỘI',
             phone: "(024)73008166",
-            address: 'M03-04 Võ Chí Công, P.Xuân La, Q. Tây Hồ, Hà Nội'
+            address: 'M03-04 Võ Chí Công, P.Xuân La, Q. Tây Hồ, Hà Nội',
+            type : 0,
+        },
+        {
+            id:101,
+            name : 'MIỀN TRUNG',
+            type : 1,
         },
         {
             id:2,
             name : 'EUROTILE CENTER VINH',
             phone: "0913522308",
-            address: 'Lô C1+C2, KDT Minh Khang, Đại lộ Lenin, TP. Vinh'
+            address: 'Lô C1+C2, KDT Minh Khang, Đại lộ Lenin, TP. Vinh',
+            type : 0,
         },
         {
             id:3,
             name : 'EUROTILE CENTER ĐÀ NẴNG',
             phone: "(023) 6366 6899",
-            address: '297 Nguyễn Văn Linh, Q. Thanh Khê, TP. Đà Nẵng'
+            address: '297 Nguyễn Văn Linh, Q. Thanh Khê, TP. Đà Nẵng',
+            type : 0,
         },
         {
             id:4,
             name : 'EUROTILE CENTER ĐẮK LẮK',
             phone: "0913446525",
-            address: '332-334 Phan Bội Châu, TP. Buôn Mê Thuột'
+            address: '332-334 Phan Bội Châu, TP. Buôn Mê Thuột',
+            type : 0,
+        },
+        {
+            id:102,
+            name : 'MIỀN NAM',
+            type : 1,
         },
         {
             id:5,
             name : 'EUROTILE CENTER HỒ CHÍ MINH',
             phone: "(038)62876899",
-            address: '433 Cộng Hòa, P.15, Q. Tân Bình, TP. Hồ Chí Minh'
+            address: '433 Cộng Hòa, P.15, Q. Tân Bình, TP. Hồ Chí Minh',
+            type : 0,
         },
         {
             id:6,
             name : 'EUROTILE CENTER CẦN THƠ',
             phone: "0916639668",
-            address: '353 đường 30/4, Q. Ninh Kiều, TP. Cần Thơ'
+            address: '353 đường 30/4, Q. Ninh Kiều, TP. Cần Thơ',
+            type : 0,
+        },
+    ];
+
+    static centerInfoHardCode = [
+        {
+            id:100,
+            name : 'MIỀN BẮC',
+            type : 1,
+        },
+        {
+            id:1,
+            name : 'EUROTILE CENTER HÀ NỘI',
+            phone: "(024)73008166",
+            address: 'M03-04 Võ Chí Công, P.Xuân La, Q. Tây Hồ, Hà Nội',
+            type : 0,
+        },
+        {
+            id:101,
+            name : 'MIỀN TRUNG',
+            type : 1,
+        },
+        {
+            id:2,
+            name : 'EUROTILE CENTER VINH',
+            phone: "0913522308",
+            address: 'Lô C1+C2, KDT Minh Khang, Đại lộ Lenin, TP. Vinh',
+            type : 0,
+        },
+        {
+            id:3,
+            name : 'EUROTILE CENTER ĐÀ NẴNG',
+            phone: "(023) 6366 6899",
+            address: '297 Nguyễn Văn Linh, Q. Thanh Khê, TP. Đà Nẵng',
+            type : 0,
+        },
+        {
+            id:4,
+            name : 'EUROTILE CENTER ĐẮK LẮK',
+            phone: "0913446525",
+            address: '332-334 Phan Bội Châu, TP. Buôn Mê Thuột',
+            type : 0,
+        },
+        {
+            id:102,
+            name : 'MIỀN NAM',
+            type : 1,
+        },
+        {
+            id:5,
+            name : 'EUROTILE CENTER HỒ CHÍ MINH',
+            phone: "(038)62876899",
+            address: '433 Cộng Hòa, P.15, Q. Tân Bình, TP. Hồ Chí Minh',
+            type : 0,
+        },
+        {
+            id:6,
+            name : 'EUROTILE CENTER CẦN THƠ',
+            phone: "0916639668",
+            address: '353 đường 30/4, Q. Ninh Kiều, TP. Cần Thơ',
+            type : 0,
         },
     ];
 

@@ -12,6 +12,8 @@ export default class Style{
     static DEFAUT_RED_COLOR = '#AD2428';
     static DEFAUT_BLUE_COLOR = '#305E74';
 
+    static DEFAUT_BLACK_COLOR = '#000000';
+
     static PANEL_HEIGHT = PixelRatio.get() < 2? 35 :37;
 
     static GREY_TEXT_COLOR = '#b3b3b3';
@@ -50,8 +52,8 @@ export default class Style{
         cardStyle: {
             justifyContent: 'center',
             alignItems: 'center',
-            width: width -20,
-            height:0.6*width,
+            width: width,
+            height:0.5 * width,
             borderRadius : 10,
 
         },
@@ -61,21 +63,21 @@ export default class Style{
 
         },
         carousel: {
-            paddingVertical: 5,
+            paddingBottom: 5,
             // maxHeight : width*0.95,
             borderRadius: 5,
             alignItems : 'center',
             // marginHorizontal : 10,
             justifyContent:'center',
-            marginTop:5
+            // marginTop:5
 
         },
 
         cardImg: {
-            width: width -20,
-            marginHorizontal : 10,
+            width: width,
+            marginHorizontal : 0,
             paddingVertical :5,
-            height: width * 0.6,
+            height: width * 0.5,
             // borderRadius : 5,
         },
         schemeSlideImg: {

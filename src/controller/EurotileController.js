@@ -11,7 +11,7 @@ export default class EurotileController{
 
     static getCenterSuccess(data){
         if(data['rs'] == 1) {
-            Def.centerInfo = data['data'];
+            // Def.centerInfo = data['data'];
             AsyncStorage.setItem('centerInfo', JSON.stringify(Def.centerInfo));
         }
     }

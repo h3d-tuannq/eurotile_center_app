@@ -19,6 +19,8 @@ import MyCarousel from '../../../src/com/common/MyCarousel';
 import ProgramVerList from '../../com/common/ProgramVerList';
 import AsyncStorage  from '@react-native-community/async-storage'
 import EurotileController from "../../controller/EurotileController";
+import LocationIcon from "../../../assets/icons/Location.svg";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -164,7 +166,7 @@ class HomeScreen extends React.Component {
             console.log('not exit navigation')
         }
 
-        EurotileController.getCenters(this.getCenterSuccess);
+        // EurotileController.getCenters(this.getCenterSuccess);
 
         if(Def.centerInfo) {
             AsyncStorage.getItem('centerInfo').then((value) => {
@@ -180,7 +182,7 @@ class HomeScreen extends React.Component {
 
     getCenterSuccess= (data) => {
         if(data['rs'] == 1) {
-            Def.centerInfo = data['data'];
+            // Def.centerInfo = data['data'];
             AsyncStorage.setItem('centerInfo', JSON.stringify(Def.centerInfo));
             this.setState({centerItems:Def.centerInfo});
         }
@@ -311,22 +313,67 @@ class HomeScreen extends React.Component {
         const {navigation} = this.props;
         const configMenu = Def.config_collection_menu;
         const renderCenterItem = ({item}) => {
+                return (
+                    <View>
+                        {
+                            item.type == 1 ?
+                                <View style={{height: 80, paddingTop:10}}>
+                                    <View style={{paddingHorizontal: 10, alignItems: 'center'}}>
+                                        <Text style={[{marginTop: 20}, Style.text_styles.titleText]}>
+                                            {item.name}
+                                        </Text>
+                                        <View style={{ marginTop : 10, width:width /5, height : 2, backgroundColor:'#000'}}/>
+                                    </View>
 
-            return (
-                <View style={{width: width - 20, padding:5, marginTop:5, marginHorizontal:10, borderBottomWidth : 1 ,  borderColor: Style.DEFAUT_RED_COLOR}} >
-                    <Text style={[Style.text_styles.titleText, {color:Style.DEFAUT_RED_COLOR, marginLeft: 0, fontSize : Style.MIDLE_SIZE}]}>
-                        {item.name}
-                    </Text>
-                    <Text style={[Style.text_styles.titleText, {color:'#000', marginLeft: 0,fontSize : Style.MIDLE_SIZE, fontWeight:'800'}]}>
-                        {item.address ? Def.getAddressStr(item.address) : ""}
-                    </Text>
-                    <Text style={[Style.text_styles.titleText, {color:'#000', marginLeft: 0, fontSize : Style.MIDLE_SIZE, fontWeight:'800'}]}>
-                        {item.phone}
-                    </Text>
+                                </View> :
 
-                </View>
-                            )
-          };
+                                <View style={{
+                                    width: width - 20,
+                                    padding: 5,
+                                    marginTop: 5,
+                                    marginHorizontal: 10,
+                                    paddingBottom:20,
+                                    // borderBottomWidth: 1,
+                                    // borderColor: Style.DEFAUT_RED_COLOR,
+                                }}>
+                                    <Text style={[Style.text_styles.titleText, {
+                                        color: Style.DEFAUT_BLUE_COLOR,
+                                        marginLeft: 0,
+                                        fontSize: Style.MIDLE_SIZE
+                                    }]}>
+                                        {item.name}
+                                    </Text>
+                                    <View style={styles.contactStyle} >
+                                        <LocationIcon width={25} height={25} style={{padding:5}}/>
+                                        <Text style={[Style.text_styles.titleText, {
+                                            color: '#000',
+                                            marginLeft: 0,
+                                            fontSize: Style.MIDLE_SIZE,
+                                            fontWeight: '800'
+                                        }]}>
+                                            {item.address}
+                                        </Text>
+                                    </View>
+
+                                    <View style={[styles.contactStyle, {paddingLeft : 2}]}>
+                                        <Icon style={{marginLeft : 3}} name="phone" size={14} color={Style.DEFAUT_BLUE_COLOR} />
+                                        <Text style={[Style.text_styles.titleText, {
+                                            color: '#000',
+                                            marginLeft: 4,
+                                            fontSize: Style.MIDLE_SIZE,
+                                            fontWeight: '800'
+                                        }]}>
+                                            {item.phone}
+                                        </Text>
+                                    </View>
+                                </View>
+                        }
+
+                    </View>
+
+                )
+            }
+          ;
 
         const ListHeader = () => (
             <View >
@@ -335,8 +382,8 @@ class HomeScreen extends React.Component {
                         ref={(c) => { this._carousel = c; }}
                         data={this.state.slide_data}
                         renderItem={this.renderItem}
-                        itemWidth={width -20}
-                        sliderWidth={width -20}
+                        itemWidth={width}
+                        sliderWidth={width}
                         inactiveSlideOpacity={1}
                         inactiveSlideScale={1}
                         activeSlideAlignment={'start'}
@@ -414,10 +461,19 @@ class HomeScreen extends React.Component {
 
                 {/*}*/}
 
-                <View style={{ paddingHorizontal:10}}>
-                    <Text style={[{marginLeft:10, marginTop : 20 }, Style.text_styles.titleText]}>
+                <View style={{ paddingHorizontal:10, alignItems : 'center'}}>
+
+                    <Text style={[{ marginTop : 20 }, Style.text_styles.titleText]}>
                         HỆ THỐNG EUROTILE CENTER
                     </Text>
+
+                    <View style={{ marginTop : 15, width:width /5, height : 2, backgroundColor:'#000'}}>
+
+                    </View>
+
+                    <View style={{marginTop : 20}}>
+                        <Image style={{  width:width, height: 250}} source={require('../../../assets/img/eurotile_center.png')} />
+                    </View>
                 </View>
 
             </View>
@@ -427,7 +483,7 @@ class HomeScreen extends React.Component {
 
             <View style={{flex:1, paddingTop:0}}>
                 <ProgramVerList
-                    data={this.state.centerItems}
+                    data={Def.centerInfoHardCode}
                     navigation={this.props.navigation}
                     header={ListHeader}
                     renderFunction={renderCenterItem}
@@ -503,6 +559,12 @@ const styles = StyleSheet.create({
         width: PROGRAM_IMAGE_WIDTH -5,
         height : PROGRAM_IMAGE_HEIGHT -5,
         borderRadius: 5,
+    },
+    contactStyle :{
+        // height : 40,
+        flexDirection:'row',
+        alignItems : 'center',
+
     },
 });
 

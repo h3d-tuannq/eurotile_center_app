@@ -300,7 +300,7 @@ function MainTab() {
                     return false
                         ? {tabBarVisible: false}
                         : {
-                            tabBarLabel: 'Cá nhân',
+                            tabBarLabel: 'Đối tác',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
                                     // return <Icon name="user-circle" size={25} color={Style.DEFAUT_RED_COLOR} />
@@ -762,7 +762,7 @@ export default class App extends Component {
 
         AsyncStorage.getItem('centerInfo').then((value) => {
             if(value){
-                Def.centerInfo = JSON.parse(value);
+                // Def.centerInfo = JSON.parse(value);
             }
         });
 
