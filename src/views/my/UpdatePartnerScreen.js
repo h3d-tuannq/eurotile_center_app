@@ -31,7 +31,7 @@ import UserController from "../../controller/UserController";
 import Net from "../../net/Net";
 import ImageResizer from 'react-native-image-resizer';
 
-import RNPickerSelect from 'react-native-picker-select';
+import {Picker} from '@react-native-community/picker';
 
 const Dropdown = () => {
     return (
@@ -782,19 +782,18 @@ class UpdatePartnerScreen extends React.Component {
                                         backgroundColor: '#fff',
                                         borderRadius: 5,paddingTop: 10
                                     }}>
-                                        <RNPickerSelect
-                                            placeholder={{}}
+                                        <Picker
+                                            selectedValue={this.state.gender + ''}
+                                            style={{height: ITEM_HEIGHT, width: width / 3.5}}
+                                            mode="dropdown"
                                             onValueChange={(itemValue, itemIndex) => {
-                                                           console.log("Gender change: " + itemValue);
-                                                           this.setState({gender: itemValue});
-                                                        }}
-                                            style={{justifyContent:'center', alignItems:'center', paddingTop: 20, marginTop: 20}}
-                                            items={[
-                                                { label: 'Nam', value: '0' },
-                                                { label: 'Nữ', value: '1' },
-
-                                            ]}
-                                        />
+                                                console.log("Gender change: " + itemValue);
+                                                this.setState({gender: itemValue})
+                                            }
+                                            }>
+                                            <Picker.Item label="Nam" value="0"/>
+                                            <Picker.Item label="Nữ" value="1"/>
+                                        </Picker>
                                     </View>
                                     {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                                 </View>

@@ -21,6 +21,7 @@ import ChangePassword from './my/ChangePassword';
 import UpdatePartnerInfoScreen from './my/UpdatePartnerScreen'
 import PartnerProfileScreen from './my/PartnerProfileScreen'
 import NotiIcon from "../../assets/icon/icon-notification.svg";
+import CheckIcon from "../../assets/eurotile/check.svg";
 import Def from "../def/Def";
 
 
@@ -31,6 +32,7 @@ class MyStack extends React.Component {
     constructor(props){
         super(props);
         this.showNotification = this.showNotification.bind(this);
+        this.saveProfile = this.saveProfile.bind(this);
     }
 
     showNotification() {
@@ -42,6 +44,12 @@ class MyStack extends React.Component {
         console.log('Go to create Notification');
 
         Def.mainNavigate.navigate('Notification', {screen:'noti-screen', params:{refresh:1}});
+    }
+
+    saveProfile() {
+      if(Def.updateProfileFunc){
+          Def.updateProfileFunc();
+      }
     }
 
     render() {
@@ -208,7 +216,29 @@ class MyStack extends React.Component {
                     },
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
-                    }
+                    },
+
+                    headerRight: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.DRAWER_MENU_SIZE,
+                                    height: Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingRight:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={this.saveProfile}>
+
+                            <CheckIcon
+                                width={Style.CART_ICON_SIZE -5}
+                                height={Style.CART_ICON_SIZE }
+                            />
+                        </TouchableOpacity>
+
+                    )
+
                 }} />
 
 

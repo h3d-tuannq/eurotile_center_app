@@ -1,7 +1,9 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, FlatList, TouchableOpacity } from 'react-native'
 import ScrollableTabView, { ScrollableTabBar,DefaultTabBar  }  from 'react-native-scrollable-tab-view';
 import OrderTab from "../booking/OrderTab";
+import AsyncStorage from "@react-native-community/async-storage";
+
 import MyCustomizeTabBar from  '../../com/common/tabbar/MyCustomizeTabBar'
 import DashboardComponent from "../../com/common/DashboardComponent";
 
@@ -25,6 +27,7 @@ class MyScreen extends React.Component {
         this.forcusFunction = this.forcusFunction.bind(this);
         this.getOrderSuccess = this.getOrderSuccess.bind(this);
         this.updateProfile = this.updateProfile.bind(this);
+        this.signInBtnClick = this.signInBtnClick.bind(this);
 
         if(!Def.orderList || Def.orderList.length == 0) {
             OrderController.getOrder(this.onGetOrderSuccess, this.onGetOrderNewsFailed);
@@ -38,7 +41,8 @@ class MyScreen extends React.Component {
         this.state = {
             order_data: Def.orderList,
             stateCount: 0.0,
-            configMenu: Def.config_order_menu
+            configMenu: Def.config_order_menu,
+            user : Def.user_info,
         };
         Def.mainNavigate = this.props.navigation;
     }
@@ -51,6 +55,10 @@ class MyScreen extends React.Component {
         console.log('Screen : ' + screen);
 
         this.props.navigation.navigate('My', {'screen':screen});
+    }
+
+    signInBtnClick(){
+        this.props.navigation.navigate('Login', {'screen': 'signIn'});
     }
 
     updateProfile(){
@@ -68,11 +76,20 @@ class MyScreen extends React.Component {
 
     refresh()
     {
-        //NetChannel.listChannel(this.onChannelSuccess,this.onChannelFailed);
-        this.setState({ stateCount: Math.random() });
+            this.setState( {
+                user: Def.user_info,
+                stateCount: 0.0,
+            });
+            if(!Def.user_info){
+                AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
+            }
+            if(Def.refreshDashBoard && typeof Def.refreshDashBoard == 'function') {
+                Def.refreshDashBoard();
+            }
     }
 
     onGetOrderSuccess(data){
+        console.log('Return order list' +  data["data"]);
         this.setState({ order_data: data["data"] });
         Def.orderList = data["data"];
         Def.config_order_menu = this.createConfigData(data["data"]) ;
@@ -124,6 +141,30 @@ class MyScreen extends React.Component {
     shouldComponentUpdate(){
         // this.setState({ configMenu: Def.config_news_menu});
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
+        const index = Def.REFESH_SCREEN.indexOf('my-screen');
+        if(!Def.user_info){
+            AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
+        }
+        if (index > -1) {
+            Def.REFESH_SCREEN.splice(index, 1);
+            this.refresh();
+        }
+
+        let {navigation} = this.props;
+        navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
+        if(navigation){
+            this.focusListener = navigation.addListener("focus", this.forcusFunction);
+        } else {
+        }
+
+        if(!Def.orderList) {
+            OrderController.getOrder(this.onGetOrderSuccess, this.onGetOrderNewsFailed);
+        }
+        else if (!Def.config_order_menu) {
+            Def.config_order_menu = this.createConfigData(Def.orderList);
+            this.setState({configMenu: Def.config_order_menu});
+        }
+
         return true;
     }
 
@@ -131,11 +172,20 @@ class MyScreen extends React.Component {
 
     }
 
-    componentDidMount(){
+    async componentDidMount(){
 
-        console.log("User info: " + Def.user_info);
-        if(!Def.user_info){
-            AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
+        if(!this.state.user) {
+            if (!Def.user_info) {
+                let user_info_raw = await AsyncStorage.getItem('user_info');
+                if (user_info_raw) {
+                    Def.user_info = JSON.parse(user_info_raw);
+                    this.setState({user: Def.user_info})
+                } else {
+                    console.log('Return data');
+                    return;
+                }
+            }
+            this.setState({user: Def.user_info});
         }
         const index = Def.REFESH_SCREEN.indexOf('my-screen');
         console.log("Index in refresh : " + index);
@@ -174,48 +224,86 @@ class MyScreen extends React.Component {
         // console.log("Config : " + JSON.stringify(configMenu))
 
         return (
-            <View style={{flex:1}}
+
+
+            <View style={{flex: 1}}
             >
                 {
-                    Def.user_info && Def.user_info.partnerInfo ?
-                        <DashboardComponent  stateCount={this.state.stateCount} updateInfo={this.updateProfile}  />
-                        : null
+                    (this.state.user) ?
 
-
-                }
-                {
-                    configMenu ?
-                        <ScrollableTabView   renderTabBar={() => <MyCustomizeTabBar navigation={navigation}
-
-                        />}
-
-                        >
+                        <View style={{flex: 1}}>
                             {
-                                configMenu && Object.entries(configMenu).map((prop, key) => {
-                                    if ((prop[1]["hidden"]) == 0) {
-                                        return (
-                                            <OrderTab key={prop[0] + "acv"} navigation={navigation} refresh={this.refresh}
-                                                      tabLabel={this.formatText(prop[1]["name_vi"])}  onLoadDataSuccess={this.onGetOrderSuccess}
-                                                      title={this.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}/>
-                                        );
-                                    }
-                                })
+                                Def.user_info && Def.user_info.partnerInfo ?
+                                    <DashboardComponent stateCount={this.state.stateCount}
+                                                        updateInfo={this.updateProfile}/>
+                                    : null
+
+
                             }
-                        </ScrollableTabView>
+                            {
+                                configMenu ?
+                                    <ScrollableTabView renderTabBar={() => <MyCustomizeTabBar navigation={navigation}
+
+                                    />}
+
+                                    >
+                                        {
+                                            configMenu && Object.entries(configMenu).map((prop, key) => {
+                                                if ((prop[1]["hidden"]) == 0) {
+                                                    return (
+                                                        <OrderTab key={prop[0] + "acv"} navigation={navigation}
+                                                                  refresh={this.refresh}
+                                                                  tabLabel={this.formatText(prop[1]["name_vi"])}
+                                                                  onLoadDataSuccess={this.onGetOrderSuccess}
+                                                                  title={this.formatText(prop[1]["name_vi"])}
+                                                                  data={prop[1]["data"]}/>
+                                                    );
+                                                }
+                                            })
+                                        }
+                                    </ScrollableTabView>
+                                    :
+                                    <View style={{
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        width: width,
+                                        height: height
+                                    }}>
+                                        <Text style={{fontSize: Style.TITLE_SIZE, color: '#b3b3b3'}}>
+                                            Ứng dụng đang tải dữ liệu
+                                        </Text>
+                                    </View>
+                            }
+                        </View>
                         :
-                        <View style={{justifyContent :'center', alignItems : 'center', width: width, height: height}}>
-                            <Text style={{fontSize:Style.TITLE_SIZE, color:'#b3b3b3'}}>
-                                Ứng dụng đang tải dữ liệu
+                        <View style={{justifyContent: 'center', flex: 1, alignItems: 'center', width: width}}>
+                            <View style={{flexDirection: 'row'}}>
+                                <Text style={{fontSize: Style.TITLE_SIZE, color: '#b3b3b3'}}>
+                                    Vui lòng
+                                </Text>
+                                <TouchableOpacity onPress={this.signInBtnClick}>
+                                    <Text style={{
+                                        fontSize: Style.TITLE_SIZE,
+                                        marginLeft: 5,
+                                        color: Style.DEFAUT_RED_COLOR
+                                    }}>
+                                        đăng nhập
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={{fontSize: Style.TITLE_SIZE, color: '#b3b3b3'}}>
+                                để sử dụng đầy đủ tính năng cá nhân
                             </Text>
+
                         </View>
                 }
-
 
 
             </View>
 
         )
     }
+
 }
 
 const styles = StyleSheet.create({

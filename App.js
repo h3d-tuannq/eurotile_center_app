@@ -323,7 +323,7 @@ function MainTab() {
                             tabBarLabel: 'Mở rộng',
                             tabBarIcon: ({focused, color, size}) => {
                                 if (focused) {
-                                    return <Icon name="expand-arrows-alt" size={25} color={Style.DEFAUT_RED_COLOR} />
+                                    return <Icon name="expand-arrows-alt" size={25} color={Style.DEFAUT_BLUE_COLOR} />
                                     return <UserProfileSelectedIcon style={styles.tabBarIconStyle} />;
                                 }
                                 return <Icon name="expand-arrows-alt" size={25} color={Style.GREY_TEXT_COLOR} />

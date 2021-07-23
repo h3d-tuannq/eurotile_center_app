@@ -28,6 +28,7 @@ const ITEM_HEIGHT = 50;
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import {Picker} from '@react-native-community/picker';
+
 import UserController from "../../controller/UserController";
 import Net from "../../net/Net";
 import ImageResizer from 'react-native-image-resizer';
@@ -62,18 +63,9 @@ class UpdateProfileScreen extends React.Component {
             user: Def.user_info,
             stateCount: 0.0,
             avatarSource : {uri:Def.getAvatarUrlFromUserInfo() ? Def.getAvatarUrlFromUserInfo() :Def.URL_DEFAULT_AVATAR},
-            infront_cmt_img: Def.getInfrontOfImg() ? {uri:Def.getInfrontOfImg()} : null,
-            behind_cmt_img: Def.getBehindImg() ? {uri:Def.getBehindImg()} : null,
-            project_img1 : projectImg && projectImg.length > 0 ? projectImg[0]: null ,
-            project_img2 : projectImg && projectImg.length > 1 ? projectImg[1]: null,
-            project_img3 : projectImg && projectImg.length > 2 ? projectImg[2]: null,
             birth_day :Def.user_info['userProfile']['date_of_birth'] ? new Date(Def.user_info['userProfile']['date_of_birth']) :new Date() , //Def.user_info['userProfile']['birth_day'],
             full_name : Def.user_info['userProfile']['firstname'],
-            gender : Def.user_info['userProfile']['gender'],
             mobile:Def.user_info['userProfile']['phone'],
-            card_no : Def.user_info['userProfile']['card_number'],
-            issue_on : Def.user_info['userProfile']['issued_on'] ? new Date(Def.user_info['userProfile']['issued_on']) :new Date() , // Def.user_info['userProfile']['issued_on'], // Ngày cấp
-            issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
             address : Def.getAddressFromUserInfo() ? Def.getAddressFromUserInfo()['address_detail'] : '',
             isDateTimePickerVisible :false,
             isDateTimePickerVisibleIssueOn:false,
@@ -93,22 +85,21 @@ class UpdateProfileScreen extends React.Component {
             filterData: [],
             addressTitle: 'Tỉnh/Thành phố',
             isPartner: Def.checkPartnerPermission()>-1,
-
-
         };
 
         this.refresh = this.refresh.bind(this);
         Def.mainNavigate = this.props.navigation;
         Def.setLoader = this.refresh;
         this.scrollObjLayoutY = this.scrollObjLayoutY.bind(this);
-        // this.parseDataToView();
+        Def.updateProfileFunc = this.updatePartnerInfo;
     }
 
     scrollObjLayoutY = (y) => {
+        console.log('Scroll to 1' );
         if(this._position && this._position[y]) {
             this._container.scrollTo({
                 x: 0,
-                y: this._position[y] - height/3,
+                y: this._position[y] - height /3 ,
                 animated: true,
             });
         }
@@ -118,21 +109,10 @@ class UpdateProfileScreen extends React.Component {
         if(Def.user_info) {
             console.log('Exist User');
         }
-
         Net.sendRequest(this.onGetCites,this.onGetCitesFalse,Def.URL_BASE + '/api/user/city' , Def.POST_METHOD);
-
-
     }
-
-
-
     componentWillUnmount() {
     }
-
-
-
-
-
     onGetCites(res){
         this.setState({cities: res});
     }
@@ -198,8 +178,6 @@ class UpdateProfileScreen extends React.Component {
             this.choseCityClick();
             return;
         }
-
-
         this.setState({currentAddress:2});
         if(!this.state.district || this.state.district.length == 0){
             this.getAdministrativeUnit(Def.URL_BASE + '/api/user/district', {city_code: this.state.city_item.city_code}, this.showAutocompleteModal);
@@ -207,8 +185,6 @@ class UpdateProfileScreen extends React.Component {
             this.setState({ filterData: this.state.district, filterAttr: 'district_name'});
             this.showAddressModal();
         }
-
-        // setTimeout(this.showAddressModal, 500);
     }
 
     choseWardClick(){
@@ -229,7 +205,6 @@ class UpdateProfileScreen extends React.Component {
             this.setState({filterData: this.state.ward, filterAttr: 'ward_name'});
             this.showAddressModal();
         }
-        // setTimeout(this.showAddressModal, 500);
     }
 
     closeFunction = (item) => {
@@ -260,18 +235,10 @@ class UpdateProfileScreen extends React.Component {
         this.setState({
             user: Def.user_info,
             avatarSource : {uri:Def.getAvatarUrlFromUserInfo() ? Def.getAvatarUrlFromUserInfo() :Def.URL_DEFAULT_AVATAR},
-            infront_cmt_img: Def.getInfrontOfImg() ? {uri:Def.getInfrontOfImg()} : null,
-            behind_cmt_img: Def.getBehindImg() ? {uri:Def.getBehindImg()} : null,
-            project_img1 : projectImg && projectImg.length > 0 ? projectImg[0]: null ,
-            project_img2 : projectImg && projectImg.length > 1 ? projectImg[1]: null,
-            project_img3 : projectImg && projectImg.length > 2 ? projectImg[2]: null,
+
             birth_day :Def.user_info['userProfile']['date_of_birth'] ? new Date(Def.user_info['userProfile']['date_of_birth']) :new Date() , //Def.user_info['userProfile']['birth_day'],
             full_name : Def.user_info['userProfile']['firstname'],
-            gender : Def.user_info['userProfile']['gender'],
             mobile:Def.user_info['userProfile']['phone'],
-            card_no : Def.user_info['userProfile']['card_number'],
-            issue_on : Def.user_info['userProfile']['issued_on'] ? new Date(Def.user_info['userProfile']['issued_on']) :new Date() , // Def.user_info['userProfile']['issued_on'], // Ngày cấp
-            issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
             address : Def.getDetailAddressFromUserInfo(),
             city_item: Def.getCityItemFromUserInfo(),
             district_item: Def.getDistrictItemFromUserInfo(),
@@ -288,43 +255,8 @@ class UpdateProfileScreen extends React.Component {
             result = projectImg.map(x => {
                 return {uri:Def.URL_CONTENT_BASE +'partnerInfo/'+ x}
             });
-
-
         }
         return result;
-    }
-
-    validate(is_create = true){
-        if (is_create){
-            if(!this.state.avatarSource){
-                alert("Vui lòng cập nhật ảnh Avatar");
-            }else if(!this.state.mobile){
-                alert("Vui lòng điền số điện thoại");
-            }else if(!this.state.birth_day){
-                alert("Vui lòng nhập thông tin ngày sinh");
-            }else if(!this.state.gender){
-                alert("Vui lòng nhập thông tin giới tính");
-            }else if(!this.state.address){
-                alert("Vui lòng nhập địa chỉ");
-            }else if(!this.state.card_no){
-                alert("Vui lòng nhập số CMND");
-            } else if(!this.state.issue_on){
-                alert("Vui lòng nhập ngày cấp");
-            }else if(!this.state.issue_at){
-                alert("Vui lòng nhập nơi cấp");
-            }else if(!this.state.infront_cmt_img){
-                alert("Vui lòng chụp ảnh mặt trước CMND");
-            }else if(!this.state.behind_cmt_img){
-                alert("Vui lòng chụp ảnh mặt sau CMND");
-            }else if(!this.state.project_img1){
-                alert("Vui lòng tải lên ảnh dự án");
-            }else if(!this.state.project_img2){
-                alert("Vui lòng tải lên ảnh dự án");
-            }
-            else if(!this.state.project_img3){
-                alert("Vui lòng tải lên ảnh dự án");
-            }
-        }
     }
 
     validateAddress(){
@@ -374,51 +306,19 @@ class UpdateProfileScreen extends React.Component {
         }else if(!this.state.mobile){
             alert("Vui lòng điền số điện thoại");
             return;
-        }else if(!this.state.birth_day){
-            alert("Vui lòng nhập thông tin ngày sinh");
-            return;
         }else if(!this.state.address){
             alert("Vui lòng nhập địa chỉ");
             return;
-        }else if(!this.state.card_no){
-            alert("Vui lòng nhập số CMND");
-            return;
-        } else if(!this.state.issue_on){
-            alert("Vui lòng nhập ngày cấp");
-            return;
-        }else if(!this.state.issue_at){
-            alert("Vui lòng nhập nơi cấp");
-            return;
-        }else if(!this.state.infront_cmt_img){
-            alert("Vui lòng chụp ảnh mặt trước CMND");
-            return;
-        }else if(!this.state.behind_cmt_img){
-            alert("Vui lòng chụp ảnh mặt sau CMND");
-            return;
-        }else if(!this.state.project_img1){
-            alert("Vui lòng tải lên ảnh dự án");
-            return;
-        }else if(!this.state.project_img2){
-            alert("Vui lòng tải lên ảnh dự án");
-            return;
         }
-        else if(!this.state.project_img3){
-            alert("Vui lòng tải lên ảnh dự án");
-            return;
-        } else {
+        else {
         if(this.validateAddress()){
            return;
         }
         }
         let userInfo = {
             user_id : Def.user_info ? Def.user_info['id'] : 14,
-            card_no: this.state.card_no,
-            birth_day: this.state.birth_day ?  Def.getDateString(this.state.birth_day , "yyyy-MM-dd") : "",
             mobile: this.state.mobile,
             address: JSON.stringify(this.buildAddress()),
-            issue_on: this.state.issue_on ? Def.getDateString(this.state.issue_on , "yyyy-MM-dd") : "",
-            issue_at: this.state.issue_at,
-            gender: this.state.gender == "1" ? 1 :0,
             full_name: this.state.full_name,
         };
 
@@ -429,54 +329,8 @@ class UpdateProfileScreen extends React.Component {
                 uri: Platform.OS === "android" ? this.state.avatarSource.uri : this.state.avatarSource.uri.replace("file://", "")
             };
         }
-
-        console.log("In front cmt : " + JSON.stringify(this.state.infront_cmt_img));
-
-        if(this.state.infront_cmt_img && (this.state.infront_cmt_img.fileName || this.state.infront_cmt_img.name ) ) {
-
-
-            userInfo.infront_cmt_img =   {
-                name: this.state.infront_cmt_img.fileName ? this.state.infront_cmt_img.fileName : this.state.infront_cmt_img.name,
-                type: this.state.infront_cmt_img.type,
-                uri: Platform.OS === "android" ? this.state.infront_cmt_img.uri : this.state.infront_cmt_img.uri.replace("file://", "")
-            };
-        }
-
-        if(this.state.behind_cmt_img && (this.state.behind_cmt_img.fileName || this.state.behind_cmt_img.name)) {
-            userInfo.behind_cmt_img =   {
-                name: this.state.behind_cmt_img.fileName ? this.state.behind_cmt_img.fileName : this.state.behind_cmt_img.name ,
-                type: this.state.behind_cmt_img.type,
-                uri: Platform.OS === "android" ? this.state.behind_cmt_img.uri : this.state.behind_cmt_img.uri.replace("file://", "")
-            };
-        }
-
-        if(this.state.project_img1 && (this.state.project_img1.fileName || this.state.project_img1.name) ) {
-            userInfo.project_img1 =   {
-                name: this.state.project_img1.fileName ? this.state.project_img1.fileName : this.state.project_img1.name ,
-                type: this.state.project_img1.type,
-                uri: Platform.OS === "android" ? this.state.project_img1.uri : this.state.project_img1.uri.replace("file://", "")
-            };
-        }
-
-        if(this.state.project_img2 && (this.state.project_img2.fileName || this.state.project_img2.name) ) {
-            userInfo.project_img2 =   {
-                name: this.state.project_img2.fileName ? this.state.project_img2.fileName :  this.state.project_img2.name,
-                type: this.state.project_img2.type,
-                uri: Platform.OS === "android" ? this.state.project_img2.uri : this.state.project_img2.uri.replace("file://", "")
-            };
-        }
-
-        if(this.state.project_img3 && (this.state.project_img3.fileName || this.state.project_img3.name) ) {
-            userInfo.project_img3 =   {
-                name: this.state.project_img3.fileName ? this.state.project_img3.fileName : this.state.project_img3.name,
-                type: this.state.project_img3.type,
-                uri: Platform.OS === "android" ? this.state.project_img3.uri : this.state.project_img3.uri.replace("file://", "")
-            };
-        }
-        console.log('UserInfo: ' + JSON.stringify(userInfo));
         UserController.updatePartnerInfo(userInfo, navigation);
         Def.setLoader = this.refresh.bind(this);
-        // }
     }
 
 
@@ -513,7 +367,7 @@ class UpdateProfileScreen extends React.Component {
     }
 
     shouldComponentUpdate(){
-        const index = Def.REFESH_SCREEN.indexOf('update-partner-screen');
+        const index = Def.REFESH_SCREEN.indexOf('update-profile');
         if (index > -1) {
             Def.REFESH_SCREEN.splice(index, 1);
             this.refresh();
@@ -621,6 +475,7 @@ class UpdateProfileScreen extends React.Component {
                 <ScrollView keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: '#fff', paddingHorizontal : 5}}
                             ref={(c) => { this._container = c; }}
                 >
+                    <View>
                             <TouchableOpacity onPress={() => this.handleChoosePhoto('avatarSource')}
                                               style={{alignItems: 'center', justifyContent: 'center', marginBottom: 20, marginTop:20}}>
                                 {this.state.avatarSource && this.state.avatarSource.uri ?
@@ -745,6 +600,7 @@ class UpdateProfileScreen extends React.Component {
                                     />
                                 </View>
                             </TouchableOpacity>
+                    </View>
                     <TouchableOpacity style={{flexDirection: 'column',
                         alignItems: 'flex-start',
                         justifyContent:'space-between',paddingHorizontal:40 , paddingVertical: 5,
@@ -797,6 +653,7 @@ class UpdateProfileScreen extends React.Component {
                     <TouchableOpacity style={{flexDirection: 'column', alignItems: 'flex-start', justifyContent:'space-between',paddingHorizontal:40 ,paddingVertical: 5, paddingBottom : 10, backgroundColor : '#fff', marginTop:5}}
                                       onLayout={(event) => {
                                           const layout = event.nativeEvent.layout;
+                                          console.log('Layout Y ' + layout.y);
                                           this._position[0] = layout.y;
                                       }}
                     >
@@ -824,6 +681,10 @@ class UpdateProfileScreen extends React.Component {
                             />
                         </View>
                     </TouchableOpacity>
+                    <View style={{height : height /3}}>
+
+                    </View>
+
                 </ScrollView>
                 <Modal onRequestClose={() => {this.closeFunction(null)}} visible={this.state.choseAddress}  transparent={false} styles={{backgroundColor : 'green'}} >
                     {/*{this.state.choseAddress ?*/}
@@ -835,12 +696,12 @@ class UpdateProfileScreen extends React.Component {
 
                     />
                 </Modal>
-                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.updatePartnerInfo}>
+                {/*<TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.updatePartnerInfo}>*/}
 
-                    <Text style={[styles.buttonText, {fontSize : 18}]}>
-                        Cập nhật
-                    </Text>
-                </TouchableOpacity>
+                {/*    <Text style={[styles.buttonText, {fontSize : 18}]}>*/}
+                {/*        Cập nhật*/}
+                {/*    </Text>*/}
+                {/*</TouchableOpacity>*/}
             </View>
 
         )
