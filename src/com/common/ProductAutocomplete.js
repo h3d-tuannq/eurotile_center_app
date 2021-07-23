@@ -5,6 +5,7 @@ import Style from "../../def/Style";
 import Def from "../../def/Def";
 const {width,  height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import MyAutocompleteInput from './MyAutocompleteInput';
 
 import LocationIcon from '../../../assets/icons/Location.svg';
 
@@ -67,10 +68,35 @@ class ProductAutocomplete extends React.Component {
                     >
                         <DownIcon width={25} height={25}/>
                     </TouchableOpacity>
-                    <Autocomplete
+                    {/*<Autocomplete*/}
+                    {/*          data={filterData}*/}
+                    {/*          defaultValue={this.state.query}*/}
+                    {/*          onChangeText={text => this.setState({ query : text })}*/}
+                    {/*          keyExtractor={(item,index) => "hoz" + index}*/}
+                    {/*          renderItem={renderItem}*/}
+                    {/*          renderTextInput={()=> (*/}
+                    {/*              <View style={{ width : width -20, borderWidth : 0, borderBottomWidth:1 ,borderColor:Style.GREY_BACKGROUND_COLOR, flexDirection : 'row',alignItems : 'center', marginHorizontal : 10, marginBottom : 10}}>*/}
+                    {/*                  <Icon style={styles.searchIcon} name="search" size={24} color={Style.GREY_TEXT_COLOR}/>*/}
+                    {/*                  <TextInput onChangeText={text => this.setState({ query : text })} placeholder={"Nhập mã sản phẩm"} style={[styles.textInput, {marginTop:10, width: width -50}]}>*/}
+                    {/*                  </TextInput>*/}
+                    {/*              </View>*/}
+                    {/*            )*/}
+                    {/*          }*/}
+                    {/*         flatListProps = {{*/}
+                    {/*             numColumns : 2,*/}
+                    {/*             alignItems : 'center',*/}
+                    {/*             onEndReached : this.onEndReached,*/}
+                    {/*             marginBottom:10,*/}
+                    {/*             maxHeight:height*/}
+
+                    {/*         }}*/}
+                    {/*         inputContainerStyle={{borderWidth:0}}*/}
+                    {/*         listStyle={{borderWidth:0, marginBottom:50}}*/}
+
+                    {/*    />*/}
+
+                    <MyAutocompleteInput
                               data={filterData}
-                              defaultValue={this.state.query}
-                              onChangeText={text => this.setState({ query : text })}
                               keyExtractor={(item,index) => "hoz" + index}
                               renderItem={renderItem}
                               renderTextInput={()=> (
@@ -81,18 +107,14 @@ class ProductAutocomplete extends React.Component {
                                   </View>
                                 )
                               }
-                             flatListProps = {{
-                                 numColumns : 2,
-                                 alignItems : 'center',
-                                 onEndReached : this.onEndReached,
-                                 marginBottom:10,
-                                 maxHeight:height
+                              numColumns={2}
+                              style={{alignItems: 'center'}}
 
-                             }}
-                             inputContainerStyle={{borderWidth:0}}
-                             listStyle={{borderWidth:0, marginBottom:50}}
+                             listStyle={{borderWidth:0, marginBottom:50, paddingLeft: 15}}
 
-                        />
+                    />
+
+
                 </View>
         );
     }

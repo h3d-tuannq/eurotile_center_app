@@ -7,7 +7,10 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import LocationIcon from '../../../assets/icons/Location.svg';
 import BackIcon from '../../../assets/icon/icon-back-black.svg';
+import DownBackButton from  '../../../assets/icon/icon-down-black.svg';
 import BackIconSvg from '../../../assets/icon/icon-back.svg';
+import MyAutoCompleteInput from './MyAutocompleteInput';
+import MyAutocompleteInput from './MyAutocompleteInput';
 
 const FlatStatusData = [
     // {'id': 0 , 'name': "Chưa kích hoạt"},
@@ -55,54 +58,108 @@ class AutocompleteModal extends React.Component {
 
     render() {
         const filterData = this.filterData(this.state.query);
+
+
+
         return (
-                <View style={{height: height, paddingBottom :50, marginTop: 10}}>
-                        <TouchableOpacity style={{position: 'absolute',zIndex:3 , paddingLeft:0, paddingRight:10  , left: 0, flexDirection:'row', justifyContent : 'center', paddingVertical:10}}
-                           onPress={()=> {
-                               console.log('Close Autocomple click');
-                               this.props.closeFunction();
-                           }}
-                        >
-                            <BackIcon width={Style.BACK_ICON_SIZE -2} height={Style.BACK_ICON_SIZE -5}/>
-                            <Text>
-                                Back
-                            </Text>
-                        </TouchableOpacity>
+                <View style={{height: height, paddingBottom :50, marginTop: 25}}>
+
+                        <View
+                            style={{
+                                position: 'absolute',zIndex:50 ,right: 5,
+                                top: 50,
+                                backgroundColor: '#fff',}}>
+                            <TouchableOpacity style={{
+                                 paddingLeft:0, paddingRight:10, flexDirection:'row', justifyContent : 'center', paddingVertical:10,
+
+                            }}
+                                              onPress={()=> {
+                                                  console.log('Close Autocomple click');
+                                                  this.props.closeFunction();
+                                              }}
+                            >
+                                <DownBackButton width={Style.BACK_ICON_SIZE -2} height={Style.BACK_ICON_SIZE -5}/>
+                                {/*<Text>*/}
+                                {/*    Back*/}
+                                {/*</Text>*/}
+                            </TouchableOpacity>
+
+                        </View>
+
+
                         <View style={{justifyContent: 'center', alignItems : 'center', paddingVertical: 10}}>
                             <Text style={Style.text_styles.titleTextNotBold}>
                                 {this.props.addressTitle}
                             </Text>
                         </View>
-                        <Autocomplete
-                            data={filterData}
-                              defaultValue={this.state.query}
-                              onChangeText={text => this.setState({ query : text })}
-                              keyExtractor={(item,index) => "hoz" + index}
-                              renderItem={({ item, i }) => (
-                                  <TouchableOpacity style={styles.itemStyle} onPress={() => {
-                                      this.item_click(item)
-                                  }}>
-                                      <LocationIcon width={25} height={25} style={{padding:5}}/>
-                                      <Text style={{paddingHorizontal:10}} >{item[this.props.filterAttr] + ""}</Text>
-                                  </TouchableOpacity>
-                              )}
-                              renderTextInput={()=> (
-                                  <View style={{borderWidth : 0,borderBottomWidth:1 ,borderColor:Style.GREY_TEXT_COLOR, flexDirection : 'row',alignItems : 'center', marginHorizontal : 10, marginBottom : 10}}>
-                                      <Icon style={styles.searchIcon} name="search" size={24} color={Style.GREY_TEXT_COLOR}/>
-                                      <TextInput onChangeText={text => this.setState({ query : text })} placeholder={"Nhập " + this.props.addressTitle} style={[styles.textInput, {marginTop:10}]}>
-                                      </TextInput>
-                                  </View>
-                                )
-                              }
+                        {/*<Autocomplete*/}
+                        {/*    data={filterData}*/}
+                        {/*      defaultValue={this.state.query}*/}
+                        {/*      onChangeText={text => this.setState({ query : text })}*/}
+                        {/*      keyExtractor={(item,index) => "hoz" + index}*/}
+                        {/*      renderItem={({ item, i }) => (*/}
+                        {/*          <TouchableOpacity style={styles.itemStyle} onPress={() => {*/}
+                        {/*              this.item_click(item)*/}
+                        {/*          }}>*/}
+                        {/*              <LocationIcon width={25} height={25} style={{padding:5}}/>*/}
+                        {/*              <Text style={{paddingHorizontal:10}} >{item[this.props.filterAttr] + ""}</Text>*/}
+                        {/*          </TouchableOpacity>*/}
+                        {/*      )}*/}
+                        {/*      renderTextInput={()=> (*/}
+                        {/*          <View style={{borderWidth : 0,borderBottomWidth:1 ,borderColor:Style.GREY_TEXT_COLOR, flexDirection : 'row',alignItems : 'center', marginHorizontal : 10, marginBottom : 10}}>*/}
+                        {/*              <Icon style={styles.searchIcon} name="search" size={24} color={Style.GREY_TEXT_COLOR}/>*/}
+                        {/*              <TextInput onChangeText={text => this.setState({ query : text })} placeholder={"Nhập " + this.props.addressTitle} style={[styles.textInput, {marginTop:10}]}>*/}
+                        {/*              </TextInput>*/}
+                        {/*          </View>*/}
+                        {/*        )*/}
+                        {/*      }*/}
 
-                            flatListProps = {{
-                          maxHeight: height ,
+                        {/*    flatListProps = {{*/}
+                        {/*  maxHeight: height ,*/}
 
-                            }}
-                              keyboardShouldPersistTaps='always'
-                              inputContainerStyle={{borderWidth:0}}
-                            listStyle={{borderWidth:0}}
-                        />
+                        {/*    }}*/}
+                        {/*      keyboardShouldPersistTaps='always'*/}
+                        {/*      inputContainerStyle={{borderWidth:0}}*/}
+                        {/*    listStyle={{borderWidth:0}}*/}
+                        {/*/>*/}
+
+                    <MyAutocompleteInput
+                        data={filterData}
+                        keyExtractor={(item,index) => "hoz" + index}
+                        renderItem={({ item, i }) => (
+                            <TouchableOpacity style={styles.itemStyle} onPress={() => {
+                                this.item_click(item)
+                            }}>
+                                <LocationIcon width={25} height={25} style={{padding:5}}/>
+                                <Text style={{paddingHorizontal:10}} >{item[this.props.filterAttr] + ""}</Text>
+                            </TouchableOpacity>
+                        )}
+                        renderTextInput={()=> (
+                                <View style={{
+                                    borderWidth : 0,borderBottomWidth:1 ,borderColor:Style.GREY_TEXT_COLOR,
+
+                                    flexDirection : 'row',alignItems : 'center', marginHorizontal : 10, marginBottom : 10,
+                                    marginLeft : 15,
+                                }}>
+                                    <Icon style={styles.searchIcon} name="search" size={20} color={Style.GREY_TEXT_COLOR}/>
+
+                                    <TextInput onChangeText={text => this.setState({ query : text })}
+                                               placeholder={"Nhập " + this.props.addressTitle}
+                                               style={[styles.textInput, {marginTop:10}]}>
+
+                                    </TextInput>
+
+                                </View>
+                            )
+                        }
+
+                        style={{alignItems: 'center'}}
+
+                        listStyle={{borderWidth:0, paddingLeft: 15}}
+
+                    />
+
+
                 </View>
         );
     }
@@ -130,7 +187,10 @@ const styles = StyleSheet.create({
         // backgroundColor: 'red',
     },
 
-    textInput : {height: 40, backgroundColor : '#fff', borderColor: "#9e9e9e", borderWidth : 0, borderBottomWidth:0 ,color:'black', fontSize : Style.MIDLE_SIZE, borderRadius: 5, paddingHorizontal: 10  },
+    textInput : {height: 40, backgroundColor : '#fff', borderColor: "#9e9e9e", borderWidth : 0,
+        borderBottomWidth:0 ,color:'black', fontSize : Style.MIDLE_SIZE, borderRadius: 5, paddingHorizontal: 10 ,
+        width : width - 50
+    },
 
 });
 
