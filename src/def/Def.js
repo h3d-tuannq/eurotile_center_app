@@ -2,11 +2,11 @@ import AsyncStorage from "@react-native-community/async-storage";
 import {Dimensions, Platform} from 'react-native'
 
 export default class Def {
-    // static URL_BASE = "https://eurotile-prod.house3d.net/";
-    // static URL_CONTENT_BASE = "https://eurotile-prod.house3d.net/data/eurotileData/";
+    static URL_BASE = "https://eurotile-prod.house3d.net/";
+    static URL_CONTENT_BASE = "https://eurotile-prod.house3d.net/data/eurotileData/";
 
-    static URL_BASE = "https://eurotiledev.house3d.net/";
-    static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
+    // static URL_BASE = "https://eurotiledev.house3d.net/";
+    // static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
 
     static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com/uploads/2019/07/02/5d1aa12048236.jpg";
 

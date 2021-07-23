@@ -160,14 +160,14 @@ class OrderitemItemrenderer extends PureComponent{
                                     // colorMin={Style.DEFAUT_BLUE_COLOR}
                                     // colorMax={Style.DEFAUT_BLUE_COLOR}
                                     color={'#fff'}
-                                    style={{borderRadius:3, borderWidth:2, height:36, padding:0}}
+                                    style={{borderRadius:3, borderWidth:2, height:38, padding:0,  paddingBottom: 2}}
                                     buttonTextColor={Style.DEFAUT_RED_COLOR}
                                     onSubmitEditing={(e) => {
                                         console.log('Submit Editting');
                                     }}
 
-                                    inputStyle={{width:50, height:38 , borderWidth : 0, padding : 0}}
-                                    buttonStyle={{borderWidth : 2,borderRadius:1,borderColor:'#000' }}
+                                    inputStyle={{width:50, height:36 , borderWidth : 0, padding : 0}}
+                                    buttonStyle={{borderWidth : 2,borderRadius:1,borderColor:'#000', height: 35, marginBottom: 1}}
                                     max={10000} onChange={(newValue) => {this.quantityChange(newValue)}}
                                     value={this.state.amount}/>
                                 }
@@ -254,7 +254,8 @@ const  styles = StyleSheet.create({
     groupInfo: {
       flexDirection : 'row',
       justifyContent: 'space-between',
-      alignItems:'center'
+      alignItems:'center',
+
     },
 
     titleInfo : {
