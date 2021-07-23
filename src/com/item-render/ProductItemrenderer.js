@@ -46,19 +46,19 @@ class ProductItemrenderer extends PureComponent{
                     click(model);
                 }
             } >
-                {this.props.favorite ?
-                    <TouchableOpacity style={[styles.favoriteIcon, {width:30, height:30, backgroundColor : Style.GREY_TEXT_COLOR, alignItems : 'center', justifyContent:'center', borderRadius: 15}]}
-                          onPress={
-                              () => {
-                                  click(model);
-                              }
-                          }
-                    >
-                        <PlusCircleIcon />
-                    </TouchableOpacity>
-                    :
-                    <View/>
-                }
+                {/*{this.props.favorite ?*/}
+                {/*    <TouchableOpacity style={[styles.favoriteIcon, {width:30, height:30, backgroundColor : Style.GREY_TEXT_COLOR, alignItems : 'center', justifyContent:'center', borderRadius: 15}]}*/}
+                {/*          onPress={*/}
+                {/*              () => {*/}
+                {/*                  click(model);*/}
+                {/*              }*/}
+                {/*          }*/}
+                {/*    >*/}
+                {/*        <PlusCircleIcon />*/}
+                {/*    </TouchableOpacity>*/}
+                {/*    :*/}
+                {/*    <View/>*/}
+                {/*}*/}
 
 
                 {model.image_path ?
@@ -69,9 +69,14 @@ class ProductItemrenderer extends PureComponent{
 
                 </TouchableOpacity>
 
-                <View style = {{width:this.props.styleImage.width, justifyContent:'center', alignItems: (this.props.type == 'product' ? 'flex-start' :'center')}}>
+                <View style = {{width:this.props.styleImage.width, justifyContent:'center',
+                    backgroundColor: this.props.type == 'product' ? Style.DEFAUT_BLUE_COLOR :Style.DEFAUT_RED_COLOR,
+                    alignItems: (this.props.type == 'product' ? 'center' :'center')}}>
 
-                    <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:1 , borderRadius : 3 ,bottom:5, backgroundColor: this.props.type == 'product' ? Style.DEFAUT_BLUE_COLOR :Style.DEFAUT_RED_COLOR, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>
+                    <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:1 , borderRadius : 3 ,
+                        backgroundColor: this.props.type == 'product' ? Style.DEFAUT_BLUE_COLOR :Style.DEFAUT_RED_COLOR,
+                        width:this.props.styleImage.width,
+                        bottom:5, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>
                           {this.formatText(this.props.type == 'product' ? model.model :model.name, 15)}
                     </Text>
                 </View>

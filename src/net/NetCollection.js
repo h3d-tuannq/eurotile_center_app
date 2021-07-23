@@ -15,7 +15,10 @@ export default class NetCollection{
         let params = {tagType:tag};
         Net.sendRequest(callback,errCallback,Def.URL_BASE + "/api/product/get-product-by-tag" ,Def.POST_METHOD, params);
     }
-
+    static getProductByCollection(callback, errCallback, collectionId = 0){
+        let params = {collectionId:collectionId};
+        Net.sendRequest(callback,errCallback,Def.URL_BASE + "/api/product/get-product-by-collection" ,Def.POST_METHOD, params);
+    }
 
 }
 

@@ -12,6 +12,7 @@ import ScrollableTabView from "react-native-scrollable-tab-view";
 import MyCustomizeTabBar from "../../com/common/tabbar/MyCustomizeTabBar";
 import NewsTab from "../news/NewsTab";
 import ProductTab from "./ProductTab";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -65,9 +66,9 @@ class ProductByTagScreen extends React.Component {
         this.setState({ stateCount: Math.random() });
     }
 
-    onGetProductSuccess(data){
-
+    onGetProductSuccess = async (data) => {
         Def.product_tree_data[this.state.tag.id] = data["data"];
+        await AsyncStorage.setItem('product_tree_data', JSON.stringify(Def.product_tree_data));
         Def.config_menus[this.state.tag.id] = this.createConfigData(Def.product_tree_data[this.state.tag.id]);
         console.log('Config Menu : ' + JSON.stringify(Def.config_menus[this.state.tag.id]));
         this.setState({ productData: Def.product_tree_data[this.state.tag.id] , configMenu: Def.config_menus[this.state.tag.id] });
@@ -93,10 +94,20 @@ class ProductByTagScreen extends React.Component {
 
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         let tagInfo = this.state.tag;
         if(!Def.product_tree_data[tagInfo.id]){
-            NetCollection.getProductByTag(this.onGetProductSuccess, this.onGetProductFalse, this.state.tag.id);
+            let product_tree_data_raw = await AsyncStorage.getItem('product_tree_data');
+            if(product_tree_data_raw){
+                Def.product_tree_data = JSON.parse(product_tree_data_raw);
+            }
+            if(Def.product_tree_data.hasOwnProperty(tagInfo.id)) {
+                Def.config_menus[tagInfo.id] = this.createConfigData(Def.product_tree_data[this.state.tag.id]);
+                this.setState({configMenu: Def.config_menus[tagInfo.id]});
+            } else{
+                NetCollection.getProductByTag(this.onGetProductSuccess, this.onGetProductFalse, this.state.tag.id);
+            }
+
         }
         else if (!Def.config_menus[tagInfo.id]) {
             Def.config_menus[tagInfo.id] = this.createConfigData(Def.product_tree_data[this.state.tag.id]);

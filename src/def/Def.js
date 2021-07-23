@@ -86,6 +86,8 @@ export default class Def {
     static design_cate = null;
     static product_data = [];
     static product_tree_data = {};
+    static collection_tree_data = {};
+
     static cart_data = [];
     static currentCart = [];
     static customer = [];

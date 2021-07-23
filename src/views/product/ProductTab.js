@@ -19,14 +19,14 @@ class ProductTab extends React.Component {
 
     itemClick(item) {
         console.log(item.id);
-        let screen = this.props.type == 'product' ? 'product-detail' : 'collection-detail-screen';
+        let screen = this.props.type == 'product' ? 'product-detail' : 'product-detail';
         this.props.navigation.navigate(screen, {item: item});
     }
 
     render() {
         const {navigation} = this.props;
         const renderItem = ({item}) => (
-            <ProductItemrenderer click={this.itemClick} type={'product-detail'} item={item} favorite={true}
+            <ProductItemrenderer click={this.itemClick} type={'product'} item={item} favorite={true}
                                  styleImage={{
                                      width: PROGRAM_IMAGE_WIDTH - 2,
                                      height: PROGRAM_IMAGE_HEIGHT - 5,

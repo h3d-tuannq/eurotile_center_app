@@ -10,6 +10,8 @@ const {width, height} = Dimensions.get('window');
 import Carousel from 'react-native-snap-carousel';
 import Pagination from "react-native-snap-carousel/src/pagination/Pagination";
 import Style from '../../def/Style';
+import ProductDetailTab from "./ProductDetailTab";
+import DefaultProgramImage from "../../../assets/icon/logo-vov.svg";
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -34,9 +36,9 @@ class ProductDetailScreen extends React.Component {
         this.state = {
             // collection_data: null,
             stateCount: 0.0,
-            configMenu: Def.config_collection_menu,
             slide_data : this.getImageForCollection(this.props.route.params.item),
             item:this.props.route.params.item,
+            configMenu: this.createTabData(this.props.route.params.item),
             activeSlide:0,
         };
 
@@ -86,6 +88,18 @@ class ProductDetailScreen extends React.Component {
             });
             return configData;
         }
+
+    }
+
+    createTabData(data){
+        console.log("Data : " + JSON.stringify(data));
+        var configData = [];
+        if(data){
+                configData.push({key: 'info', type:'info' ,name_vi:"Thông tin", hidden:0, data:{product:data}});
+                configData.push({key: 'func', type:'func' ,name_vi:"Ứng dụng", hidden:0, data:{product:data}});
+                configData.push({key: 'relation', type:'relation' ,name_vi:"Tương tự", hidden:0, data:{product:data}});
+        }
+        return configData;
 
     }
 
@@ -148,56 +162,64 @@ class ProductDetailScreen extends React.Component {
 
     render() {
         const {navigation} = this.props;
+        const configMenu = this.state.configMenu;
         return (
-            <View style={{flex:1}}>
-                <View style={Style.styles.carousel}>
-                    <Carousel
-                        ref={(c) => { this._carousel = c; }}
-                        // keyExtractor={(item, index) => `${item.id}--${item.index}`}
-                        data={this.state.slide_data}
-                        renderItem={this.renderItem}
-                        itemWidth={width/2}
-                        sliderWidth={width}
-                        inactiveSlideOpacity={1}
-                        inactiveSlideScale={1}
-                        activeSlideAlignment={'start'}
-                        // loop={true}
-                        autoplay={true}
-                        autoplayInterval={5000}
-                        onSnapToItem={(index) => this.setState({ activeSlide: index }) }
-                    />
-                    { this.pagination }
-                </View>
+            <View style={{flex:1, backgroundColor: '#fff'}}>
+                {/*<View style={Style.styles.carousel}>*/}
+                {/*    <Carousel*/}
+                {/*        ref={(c) => { this._carousel = c; }}*/}
+                {/*        // keyExtractor={(item, index) => `${item.id}--${item.index}`}*/}
+                {/*        data={this.state.slide_data}*/}
+                {/*        renderItem={this.renderItem}*/}
+                {/*        itemWidth={width/2}*/}
+                {/*        sliderWidth={width}*/}
+                {/*        inactiveSlideOpacity={1}*/}
+                {/*        inactiveSlideScale={1}*/}
+                {/*        activeSlideAlignment={'start'}*/}
+                {/*        // loop={true}*/}
+                {/*        autoplay={true}*/}
+                {/*        autoplayInterval={5000}*/}
+                {/*        onSnapToItem={(index) => this.setState({ activeSlide: index }) }*/}
+                {/*    />*/}
+                {/*    { this.pagination }*/}
+                {/*</View>*/}
+                {/*<View style={Style.styles.carousel}>*/}
 
-                <View style={{flex:1, justifyContent: 'space-between', marginTop :10}}>
-                <View style={styles.productInfo}>
-                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Danh mục sản phẩm"}
-                    </Text>
-                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Mã sản phẩm " + this.state.item.model }
-                    </Text>
-                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Kích thước: 600*600"}
-                    </Text>
-                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Đóng hộp: 6 viên"}
-                    </Text>
-
-                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Trọng lượng: 36 kg"}
-                    </Text>
-
-                    <Text style={[Style.text_styles.normalText, {paddingVertical:5}]}>
-                        {"Bề mặt: Matt, in kỹ thuật số"}
+                {/*</View>*/}
+                <View style={{alignItems : 'center' , justifyContent : 'center'}}>
+                    {this.state.item.image_path ?
+                        <Image  style={styles.cardImg}  source={{uri: Def.getThumnailImg(this.state.item.image_path)}}  />
+                        :
+                        <DefaultProgramImage style={styles.cardImg} width={this.props.styleImage.width} height={this.props.styleImage.height}/>
+                    }
+                    <Text style={[{ marginTop : 20 }, Style.text_styles.titleText]}>
+                        {this.state.item.model}
                     </Text>
                 </View>
 
-                <TouchableOpacity style={styles.bookingBtn}>
-                    <Text style={Style.text_styles.whiteTitleText}>
-                        Đặt hàng
-                    </Text>
-                </TouchableOpacity>
+
+                <View style={{flex:1, justifyContent: 'space-between', marginTop :20}}>
+                    <ScrollableTabView  locked={true}   tabBarPosition={"top"} style={{height: height/2}}
+                                        renderTabBar={() => <MyCustomizeTabBar style={{borderTopWidth:1, borderTopColor : Style.GREY_TEXT_COLOR}} navigation={navigation} />}  >
+                        {
+                            configMenu && Object.entries(configMenu).map((prop, key) => {
+                                console.log("Props Item: " + JSON.stringify(prop));
+                                if((prop[1]["hidden"]) == 0){
+                                    return (
+                                        <ProductDetailTab key ={prop[0] + "acv"}  type={prop['type']} name={prop['name']}
+                                                          navigation={navigation}  tabLabel={Def.formatText(prop[1]["name_vi"])} title={Def.formatText(prop[1]["name_vi"])} data={prop[1]["data"]}  />
+                                    );
+                                }
+                            })
+                        }
+                    </ScrollableTabView>
+
+
+                {/*<TouchableOpacity style={styles.bookingBtn}>*/}
+                {/*    <Text style={Style.text_styles.whiteTitleText}>*/}
+                {/*        Đặt hàng*/}
+                {/*    </Text>*/}
+                {/*</TouchableOpacity>*/}
                 </View>
             </View>
         )
@@ -222,13 +244,10 @@ const styles = StyleSheet.create({
     },
 
     cardImg: {
-        width: width,
+        width: width - 20,
         paddingVertical :5,
-        height: width * 0.8,
-        borderRadius : 5,
-        paddingHorizontal:2,
-        borderWidth: 1,
-        borderColor : Style.DEFAUT_BLUE_COLOR
+        height: width * 0.6,
+        marginTop:10,
     },
     bookingBtn : {
         backgroundColor: Style.DEFAUT_RED_COLOR,

@@ -3,7 +3,19 @@ import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import RuleIcon from '../../../assets/icon/icon-rule.svg';
+import Document from '../../../assets/eurotile/Document.svg';
+import Ecatalog from '../../../assets/eurotile/Bookmark.svg';
+
+import Setting from '../../../assets/eurotile/Settings.svg';
+import CSKH from '../../../assets/eurotile/Headset.svg';
+import QRcode from '../../../assets/eurotile/QR Code.svg';
+import Social from '../../../assets/eurotile/People.svg';
+import Policy from '../../../assets/eurotile/Privacy Policy.svg';
+import Share from '../../../assets/eurotile/Share.svg';
+import Logout from '../../../assets/eurotile/Shutdown.svg';
+
+
+
 import Style from '../../def/Style';
 import AsyncStorage from "@react-native-community/async-storage";
 
@@ -36,7 +48,27 @@ class ExpandScreen extends React.Component {
         this.gotoSetupInfo = this.gotoSetupInfo.bind(this);
         this.forcusFunction = this.forcusFunction.bind(this);
         Def.refreshDashBoard = this.refresh;
+        this.buttonClickHandle = this.buttonClickHandle.bind(this);
+    }
 
+    buttonClickHandle = (buttonCode = 0) => {
+        switch (buttonCode) {
+            case 5:
+                this.shareApplication();
+                break;
+            case 6:
+                this.gotoTerm();
+                break;
+            case 7:
+                this.gotoSetupInfo()
+                break;
+            case 8:
+                if(Def.user_info){
+                    UserController.logoutLocal();
+                }
+                break;
+
+        }
     }
 
     onGetUserInfoFun(value){
@@ -105,78 +137,105 @@ class ExpandScreen extends React.Component {
         const {navigation} = this.props;
         const {user} = this.state;
         return (
-                <View style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR}}>
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
-                                      onPress={this.gotoContact}
-                    >
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                                <Icon name="file-signature" size={25} color={Style.GREY_TEXT_COLOR} />
-                            </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                {'Liên hệ'}
+                <View style={{flex:1, backgroundColor: '#fff'}}>
+                   <View style={styles.controlGroup}>
+                       <TouchableOpacity style={styles.buttonStyle} onPress={() => {
+                           this.buttonClickHandle(0);
+                       }}>
+                            <Ecatalog width={40} height={40} />
+                            <Text style={styles.buttonText}>
+                                E-Catalogue
                             </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                      onPress={this.shareApplication}
-                    >
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                                <Icon name="share" size={25} color={Style.GREY_TEXT_COLOR} />
-                            </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
+                       </TouchableOpacity>
+                       <TouchableOpacity style={styles.buttonStyle}onPress={() => {
+                           this.buttonClickHandle(1);
+                       }}>
+                           <Document width={40} height={40} />
+                           <Text style={styles.buttonText}>
+                               Tài liệu kỹ thuât
+                           </Text>
+
+                       </TouchableOpacity>
+                       <TouchableOpacity style={styles.buttonStyle}onPress={() => {
+                           this.buttonClickHandle(2);
+                       }}>
+                           <QRcode width={40} height={40} />
+                           <Text style={styles.buttonText}>
+                               QR Code
+                           </Text>
+
+                       </TouchableOpacity>
+                   </View>
+
+                    <View style={styles.controlGroup}>
+                        <TouchableOpacity style={styles.buttonStyle} onPress={() => {
+                            this.buttonClickHandle(3);
+                        }}>
+                            <Social width={40} height={40} />
+                            <Text style={styles.buttonText}>
+                                Mạng xã hội
+                            </Text>
+
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.buttonStyle}onPress={() => {
+                            this.buttonClickHandle(4);
+                        }}>
+                            <CSKH width={40} height={40} />
+                            <Text style={styles.buttonText}>
+                                Chăm sóc khách hàng
+                            </Text>
+
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.buttonStyle}onPress={() => {
+                            this.buttonClickHandle(5);
+                        }}>
+                            <Share width={40} height={40} />
+                            <Text style={styles.buttonText}>
                                 Chia sẻ ứng dụng
                             </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
 
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:2}}
-                                      onPress={this.gotoTerm}
-                    >
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                                <RuleIcon width={25} height={25} color={Style.GREY_TEXT_COLOR} />
-                            </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Điều khoản, chính sách sử dụng
-                            </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                      onPress={this.gotoSetupInfo}>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <View style={{width :30}}>
-                                <Icon name="user-cog" size={25} color={Style.GREY_TEXT_COLOR} />
-                            </View>
-                            <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                Cài đăt thông tin người dùng
-                            </Text>
-                        </View>
-                        <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                    </TouchableOpacity>
-                    {
-                        user ?
-                        <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:20}}
-                                          onPress={()=>{UserController.logoutLocal()}}
-                        >
-                            <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                                <View style={{width :30}}>
-                                    <Icon name="sign-out-alt" size={25} color={Style.GREY_TEXT_COLOR} />
-                                </View>
-                                <Text style={[Style.text_styles.middleText, {marginLeft :10}]}>
-                                    Đăng xuất
-                                </Text>
-                            </View>
-                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </TouchableOpacity>
-                        : null
-                    }
+                    </View>
+
+                    <View style={styles.controlGroup}>
+                        <TouchableOpacity style={styles.buttonStyle} onPress={() => {
+                            this.buttonClickHandle(6);
+                        }}>
+                            <Policy width={40} height={40} />
+
+                            <Text style={styles.buttonText}>
+                                Điều khoản và chính sách
+                            </Text>
+
+                        </TouchableOpacity>
+                        {this.state.user ?
+                            <View style={{flexDirection: 'row'}}>
+                                <TouchableOpacity style={styles.buttonStyle} onPress={() => {
+                                    this.buttonClickHandle(7);
+                                }}>
+                                    <Setting width={40} height={40} />
+                                    <Text style={styles.buttonText}>
+                                        Cài đặt
+                                    </Text>
+
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.buttonStyle} onPress={() => {
+                                    this.buttonClickHandle(8);
+                                }}>
+                                    <Logout width={40} height={40} />
+                                    <Text style={styles.buttonText}>
+                                        Đăng xuất
+                                    </Text>
+
+                                </TouchableOpacity>
+                            </View>
+                            : null }
+
+
+
+                    </View>
 
                 </View>
         )
@@ -228,7 +287,20 @@ const styles = StyleSheet.create({
 
         borderRadius: width / 16,
     },
-    buttonText : { color:'#fff', fontSize : 18, paddingVertical: 8, marginLeft : 15},
+    buttonText : { textAlign :'center'},
+    controlGroup: {
+        paddingTop:10,
+        padding:5,
+        marginTop:10,
+        flexDirection : 'row',
+    },
+    buttonStyle: {
+        width:width/3,
+        alignItems: 'center',
+        justifyContent : 'center',
+    }
+
+
 
 });
 
