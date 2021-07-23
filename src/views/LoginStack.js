@@ -27,7 +27,11 @@ class LoginStack extends React.Component {
 
     render() {
         return (
-            <RootStack.Navigator  mode='modal' >
+            <RootStack.Navigator  mode='modal'
+                                  screenOptions={{
+                                      headerBackTitleVisible: false,
+                                  }}
+            >
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="signIn" component={SignInScreen} options={{
                     title: 'Đăng nhập',

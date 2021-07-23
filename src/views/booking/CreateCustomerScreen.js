@@ -12,13 +12,14 @@ const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 
 const ITEM_HEIGHT = 40;
 
-import {Picker} from '@react-native-community/picker';
+// import {Picker} from '@react-native-community/picker';
 import UserController from "../../controller/UserController";
 import Autocomplete from 'react-native-autocomplete-input';
 import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
 import moment from 'moment'
 import CustomerController from "../../controller/CustomerController";
+import RNPickerSelect from 'react-native-picker-select';
 
 class CreateCustomerScreen extends React.Component {
     constructor(props){
@@ -495,24 +496,27 @@ class CreateCustomerScreen extends React.Component {
                                     Giới Tính
                                 </Text>
                                 <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                                    {/*<Dropdown/>*/}
                                     <View style={{
-                                        marginRight: -5,
+                                        marginRight: 10,
+                                        paddingRight: 10,
                                         height: ITEM_HEIGHT,
                                         backgroundColor: '#fff',
-                                        borderRadius: 5
+                                        borderRadius: 5,paddingTop: 10
                                     }}>
-                                        <Picker
-                                            selectedValue={this.state.gender + ''}
-                                            style={{height: ITEM_HEIGHT, width: width / 3.5}}
-                                            mode="dropdown"
+                                        <RNPickerSelect
+                                            placeholder={{}}
                                             onValueChange={(itemValue, itemIndex) => {
                                                 console.log("Gender change: " + itemValue);
-                                                this.setState({gender: itemValue})
-                                            }
-                                            }>
-                                            <Picker.Item label="Nam" value="0"/>
-                                            <Picker.Item label="Nữ" value="1"/>
-                                        </Picker>
+                                                this.setState({gender: itemValue});
+                                            }}
+                                            style={{justifyContent:'center', alignItems:'center', paddingTop: 20, marginTop: 20}}
+                                            items={[
+                                                { label: 'Nam', value: '0' },
+                                                { label: 'Nữ', value: '1' },
+
+                                            ]}
+                                        />
                                     </View>
                                     {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                                 </View>
@@ -530,27 +534,31 @@ class CreateCustomerScreen extends React.Component {
                                     Loại khách hàng
                                 </Text>
                                 <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                    <View style={{
-                                        marginRight: -5,
-                                        height: ITEM_HEIGHT,
-                                        backgroundColor: '#fff',
-                                        borderRadius: 5
-                                    }}>
-                                        <Picker
-                                            selectedValue={this.state.customer_type + ''}
-                                            style={{height: ITEM_HEIGHT, width: width / 2.5}}
-                                            mode="dropdown"
-                                            // itemStyle={{justifyContent: 'flex-end'}}
-                                            onValueChange={(itemValue, itemIndex) => {
-                                                console.log("Customer type change: " + itemValue);
-                                                this.setState({customer_type: itemValue})
-                                            }
-                                            }>
-                                            <Picker.Item label="Chủ nhà" value="0"/>
-                                            <Picker.Item label="Kiến trúc sư" value="1"/>
-                                        </Picker>
+                                    <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                                        {/*<Dropdown/>*/}
+                                        <View style={{
+                                            marginRight: 10,
+                                            paddingRight: 10,
+                                            height: ITEM_HEIGHT,
+                                            backgroundColor: '#fff',
+                                            borderRadius: 5,paddingTop: 10
+                                        }}>
+                                            <RNPickerSelect
+                                                placeholder={{}}
+                                                onValueChange={(itemValue, itemIndex) => {
+                                                    console.log("Gender change: " + itemValue);
+                                                    this.setState({customer_type: itemValue});
+                                                }}
+                                                style={{justifyContent:'center', alignItems:'center', paddingTop: 20, marginTop: 20}}
+                                                items={[
+                                                    { label: 'Chủ nhà', value: '0' },
+                                                    { label: 'Kiến trúc sư', value: '1' },
+
+                                                ]}
+                                            />
+                                        </View>
+                                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                                     </View>
-                                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                                 </View>
                             </TouchableOpacity>
                         </View>
