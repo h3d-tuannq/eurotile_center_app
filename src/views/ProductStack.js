@@ -123,7 +123,11 @@ class ProductStack extends React.Component {
 
     render() {
         return (
-            <RootStack.Navigator>
+            <RootStack.Navigator
+                screenOptions={{
+                    headerBackTitleVisible: false
+                }}
+            >
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
 
                 <RootStack.Screen name="tag-product-screen" component={SelectTagProductScreen} options={{

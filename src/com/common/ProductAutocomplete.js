@@ -5,10 +5,12 @@ import Style from "../../def/Style";
 import Def from "../../def/Def";
 const {width,  height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import MyAutocompleteInput from './MyAutocompleteInput';
 
 import LocationIcon from '../../../assets/icons/Location.svg';
 
 import ProductItemRenderer from '../../com/item-render/ProductItemrenderer';
+import DownIcon from '../../../assets/icon/icon-down-black.svg';
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -58,10 +60,43 @@ class ProductAutocomplete extends React.Component {
 
         return (
                 <View style={{height: height-Style.HEADER_HEIGHT +20, width: width,marginTop: Style.HEADER_HEIGHT, borderTopLeftRadius :20, borderTopRightRadius :20 , backgroundColor:'#fff', alignItems:'center', paddingBottom:20}}>
-                        <Autocomplete
+                    <TouchableOpacity style={{position: 'absolute',zIndex:3 , paddingLeft:0, paddingRight:10  , right: 0, flexDirection:'row', justifyContent : 'center', paddingVertical:10}}
+                                      onPress={()=> {
+                                          console.log('Close Autocomple click');
+                                          this.props.closeFunction();
+                                      }}
+                    >
+                        <DownIcon width={25} height={25}/>
+                    </TouchableOpacity>
+                    {/*<Autocomplete*/}
+                    {/*          data={filterData}*/}
+                    {/*          defaultValue={this.state.query}*/}
+                    {/*          onChangeText={text => this.setState({ query : text })}*/}
+                    {/*          keyExtractor={(item,index) => "hoz" + index}*/}
+                    {/*          renderItem={renderItem}*/}
+                    {/*          renderTextInput={()=> (*/}
+                    {/*              <View style={{ width : width -20, borderWidth : 0, borderBottomWidth:1 ,borderColor:Style.GREY_BACKGROUND_COLOR, flexDirection : 'row',alignItems : 'center', marginHorizontal : 10, marginBottom : 10}}>*/}
+                    {/*                  <Icon style={styles.searchIcon} name="search" size={24} color={Style.GREY_TEXT_COLOR}/>*/}
+                    {/*                  <TextInput onChangeText={text => this.setState({ query : text })} placeholder={"Nhập mã sản phẩm"} style={[styles.textInput, {marginTop:10, width: width -50}]}>*/}
+                    {/*                  </TextInput>*/}
+                    {/*              </View>*/}
+                    {/*            )*/}
+                    {/*          }*/}
+                    {/*         flatListProps = {{*/}
+                    {/*             numColumns : 2,*/}
+                    {/*             alignItems : 'center',*/}
+                    {/*             onEndReached : this.onEndReached,*/}
+                    {/*             marginBottom:10,*/}
+                    {/*             maxHeight:height*/}
+
+                    {/*         }}*/}
+                    {/*         inputContainerStyle={{borderWidth:0}}*/}
+                    {/*         listStyle={{borderWidth:0, marginBottom:50}}*/}
+
+                    {/*    />*/}
+
+                    <MyAutocompleteInput
                               data={filterData}
-                              defaultValue={this.state.query}
-                              onChangeText={text => this.setState({ query : text })}
                               keyExtractor={(item,index) => "hoz" + index}
                               renderItem={renderItem}
                               renderTextInput={()=> (
@@ -72,17 +107,14 @@ class ProductAutocomplete extends React.Component {
                                   </View>
                                 )
                               }
-                             flatListProps = {{
-                                 numColumns : 2,
-                                 alignItems : 'center',
-                                 onEndReached : this.onEndReached,
-                                 marginBottom:10,
+                              numColumns={2}
+                              style={{alignItems: 'center'}}
 
-                             }}
-                             inputContainerStyle={{borderWidth:0}}
-                             listStyle={{borderWidth:0, marginBottom:50}}
+                             listStyle={{borderWidth:0, marginBottom:50, paddingLeft: 15}}
 
-                        />
+                    />
+
+
                 </View>
         );
     }

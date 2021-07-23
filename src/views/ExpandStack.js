@@ -42,6 +42,7 @@ class ExpandStack extends React.Component {
         return (
             <RootStack.Navigator
                 screenOptions={{
+                    headerBackTitleVisible: false,
                     headerRight: () => (
                         <TouchableOpacity
                             style=  {

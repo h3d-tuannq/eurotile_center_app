@@ -223,7 +223,7 @@ class CartScreen extends React.Component {
 
     }
 
-    closeFunction = (item) => {
+    closeFunction = (item = null) => {
        console.log('Back click');
        this.setState({choseProduct: false})
     }
@@ -305,6 +305,7 @@ class CartScreen extends React.Component {
                     <KeyboardAvoidingView enabled  behavior={Platform.OS === "android" ? undefined : "position"}>
                         <View  style={{flex:1}} scrollEnabled={false} keyboardShouldPersistTaps="handled">
                     <ProductAutocomplete
+                        closeFunction={this.closeFunction}
                         data={this.state.productData}
                         filterAttr={'model'}
                         itemClick={this.itemClick}

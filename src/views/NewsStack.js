@@ -35,7 +35,11 @@ class NewsStack extends React.Component {
 
     render() {
         return (
-            <RootStack.Navigator>
+            <RootStack.Navigator
+                screenOptions={{
+                    headerBackTitleVisible: false,
+                }}
+            >
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="news-list" component={NewsScreen} options={{
                     title: null,

@@ -316,7 +316,7 @@ class BookingScreen extends React.Component {
         }
     }
 
-    closeFunction = (item) => {
+    closeFunction = (item = null) => {
         console.log("back button click!");
         this.setState({choseProduct: false })
     }
@@ -604,7 +604,7 @@ class BookingScreen extends React.Component {
                         date={this.state.birth_day}
                         mode={'date'}
                         display='spinner'
-                        style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
+                        // style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
                         datePickerModeAndroid='spinner'
                         timePickerModeAndroid='spinner'
                     />
@@ -639,6 +639,7 @@ class BookingScreen extends React.Component {
                     <KeyboardAvoidingView enabled  behavior={Platform.OS === "android" ? undefined : "position"}>
                         <View  style={{flex:1}} scrollEnabled={false} keyboardShouldPersistTaps="handled">
                     <ProductAutocomplete
+                        closeFunction={this.closeFunction}
                         data={this.state.productData}
                         filterAttr={'model'}
                         itemClick={this.itemClick}

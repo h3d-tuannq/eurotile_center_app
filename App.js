@@ -121,7 +121,8 @@ function MyTabBar(props) {
             <View style={{flexDirection: 'row',
                 backgroundColor : '#fff',
                 borderTopWidth:1,
-                borderTopColor : '#d1d3d4'
+                borderTopColor : '#d1d3d4',
+                marginBottom :  Def.isIphoneXorAbove() ?  15 : 0,
             }}
             >
                 {state.routes.map((route, index) => {
@@ -199,8 +200,6 @@ const Tab = createBottomTabNavigator();
 function MainTab() {
     return (
         <Tab.Navigator
-            style={{height: 120, paddingVertical: 20 , backgroundColor : 'red'}}
-
             tabBar={(props) => <MyTabBar {...props} item={null} />}
             initialRouteName={'home'}
             tabBarOptions={{
@@ -209,7 +208,8 @@ function MainTab() {
                 labelStyle: {
                     fontSize: Style.NORMAL_SIZE,
                 },
-                style: {height: 50},
+                style: {height: Style.BOTTOM_HEIGHT},
+
                 tabStyle: {
                     paddingVertical: 5,
                     paddingTop :8,
@@ -381,28 +381,28 @@ const logoutFunction = async () => {
 function CustomDrawerContent(props) {
     return (
         <View style={{flex: 1}}>
-            <View
-                style={{
-                    height: Style.HEADER_HEIGHT,
-                    backgroundColor: Style.DEFAUT_BLUE_COLOR,
-                    flexDirection: 'row',
-                    // justifyContent: 'space-between',
-                    alignItems: 'center',
-                }}>
-                <TouchableOpacity
-                    style={{padding: 5}}
-                    onPress={() => {
-                        props.navigation.closeDrawer();
+            <View style =  {{height: Style.HEADER_HEIGHT,justifyContent:'flex-end', backgroundColor: Style.DEFAUT_BLUE_COLOR,}}>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingBottom : Style.HEADER_HEIGHT  / 8,
                     }}>
-                    <BackIcon width={25} height={25} />
-                </TouchableOpacity>
-                <Text style={{marginLeft: 30, fontSize: Style.TITLE_SIZE , color: '#fff'}}>
-                    {Def.email == null || Def.email == '' ? 'Cài đặt' : Def.email}
-                </Text>
-                <View />
+                    <TouchableOpacity
+                        style={{padding: 5}}
+                        onPress={() => {
+                            props.navigation.closeDrawer();
+                        }}>
+                        <BackIcon width={25} height={25} />
+                    </TouchableOpacity>
+                    <Text style={{marginLeft: 30, fontSize:(Def.email == null || Def.email == '') ? Style.TITLE_SIZE : Style.NORMAL_SIZE, color: '#fff'}}>
+                        {Def.email == null || Def.email == '' ? 'Cài đặt' : Def.email}
+                    </Text>
+                    <View />
+                </View>
             </View>
-            <DrawerContentScrollView {...props}>
-                <View style={{flex: 1}}>
+            <DrawerContentScrollView  style={{paddingTop:0, marginTop:0}} {...props}>
+                <View style={{paddingTop:0 , flex:1}}>
                     {Def.email == null || Def.email == '' ? (
                         <View
                             style={{
@@ -412,7 +412,7 @@ function CustomDrawerContent(props) {
                                 paddingHorizontal: 10,
                                 marginTop: PixelRatio.get() < 2 ? 6 :10,
                                 marginBottom: PixelRatio.get() < 2 ? 6 :10,
-                                // backgroundColor : 'red'
+
                             }}>
                             <TouchableOpacity
                                 style={{
@@ -496,7 +496,7 @@ function CustomDrawerContent(props) {
 
 
 import Style from './src/def/Style';
-import Def from './src/def/Def'
+import Def from './src/def/Def';
 
 import PrivacyScreen from './src/com/common/PrivacyScreen';
 import TermScreen from './src/com/common/TermScreen';

@@ -11,7 +11,7 @@ import {
     TextInput,
     Platform,
     Modal,
-} from 'react-native'
+} from 'react-native';
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 
@@ -27,10 +27,25 @@ const ITEM_HEIGHT = 40;
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import {Picker} from '@react-native-community/picker';
 import UserController from "../../controller/UserController";
 import Net from "../../net/Net";
 import ImageResizer from 'react-native-image-resizer';
+
+import RNPickerSelect from 'react-native-picker-select';
+
+const Dropdown = () => {
+    return (
+        <RNPickerSelect
+            onValueChange={(value) => console.log(value)}
+            items={[
+                { label: 'Football', value: 'football' },
+                { label: 'Baseball', value: 'baseball' },
+                { label: 'Hockey', value: 'hockey' },
+            ]}
+        />
+    );
+};
+
 
 class UpdatePartnerScreen extends React.Component {
     _container;
@@ -739,7 +754,7 @@ class UpdatePartnerScreen extends React.Component {
                                         date={this.state.birth_day}
                                         mode={'date'}
                                         display='spinner'
-                                        style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
+                                        // style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
                                         datePickerModeAndroid='spinner'
                                         timePickerModeAndroid='spinner'
                                     />
@@ -759,24 +774,27 @@ class UpdatePartnerScreen extends React.Component {
                                     Giới Tính
                                 </Text>
                                 <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                                    {/*<Dropdown/>*/}
                                     <View style={{
-                                        marginRight: -5,
+                                        marginRight: 10,
+                                        paddingRight: 10,
                                         height: ITEM_HEIGHT,
                                         backgroundColor: '#fff',
-                                        borderRadius: 5
+                                        borderRadius: 5,paddingTop: 10
                                     }}>
-                                        <Picker
-                                            selectedValue={this.state.gender + ''}
-                                            style={{height: ITEM_HEIGHT, width: width / 3.5}}
-                                            mode="dropdown"
+                                        <RNPickerSelect
+                                            placeholder={{}}
                                             onValueChange={(itemValue, itemIndex) => {
-                                                console.log("Gender change: " + itemValue);
-                                                this.setState({gender: itemValue})
-                                            }
-                                            }>
-                                            <Picker.Item label="Nam" value="0"/>
-                                            <Picker.Item label="Nữ" value="1"/>
-                                        </Picker>
+                                                           console.log("Gender change: " + itemValue);
+                                                           this.setState({gender: itemValue});
+                                                        }}
+                                            style={{justifyContent:'center', alignItems:'center', paddingTop: 20, marginTop: 20}}
+                                            items={[
+                                                { label: 'Nam', value: '0' },
+                                                { label: 'Nữ', value: '1' },
+
+                                            ]}
+                                        />
                                     </View>
                                     {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
                                 </View>
@@ -904,7 +922,7 @@ class UpdatePartnerScreen extends React.Component {
                                 date={this.state.issue_on}
                                 mode={'date'}
                                 display='spinner'
-                                style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
+                                // style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
                                 datePickerModeAndroid='spinner'
                                 timePickerModeAndroid='spinner'
                             />
