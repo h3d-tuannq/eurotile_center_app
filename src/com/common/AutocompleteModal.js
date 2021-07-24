@@ -1,6 +1,5 @@
 import React from 'react'
 import {Text, View, StyleSheet, Dimensions, TouchableOpacity, TextInput} from 'react-native'
-import Autocomplete from 'react-native-autocomplete-input'
 import Style from "../../def/Style";
 const {width,height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -9,7 +8,6 @@ import LocationIcon from '../../../assets/icons/Location.svg';
 import BackIcon from '../../../assets/icon/icon-back-black.svg';
 import DownBackButton from  '../../../assets/icon/icon-down-black.svg';
 import BackIconSvg from '../../../assets/icon/icon-back.svg';
-import MyAutoCompleteInput from './MyAutocompleteInput';
 import MyAutocompleteInput from './MyAutocompleteInput';
 
 const FlatStatusData = [

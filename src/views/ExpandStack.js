@@ -43,6 +43,9 @@ class ExpandStack extends React.Component {
             <RootStack.Navigator
                 screenOptions={{
                     headerBackTitleVisible: false,
+                    headerTitleStyle: {
+                        textTransform: 'uppercase'
+                    },
                     headerLeft: () => (
                         <TouchableOpacity
                             style=  {
@@ -101,9 +104,7 @@ class ExpandStack extends React.Component {
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
-                    },
+
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
@@ -117,9 +118,7 @@ class ExpandStack extends React.Component {
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
-                    },
+
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
@@ -133,9 +132,7 @@ class ExpandStack extends React.Component {
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
-                    },
+
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
@@ -149,9 +146,7 @@ class ExpandStack extends React.Component {
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
-                    },
+
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
@@ -159,15 +154,11 @@ class ExpandStack extends React.Component {
 
                 <RootStack.Screen name="term-screen" component={TermScreen} options={{
                     title: null,
-
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
-                    },
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }

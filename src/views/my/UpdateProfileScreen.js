@@ -27,7 +27,7 @@ const ITEM_HEIGHT = 50;
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import {Picker} from '@react-native-community/picker';
+
 
 import UserController from "../../controller/UserController";
 import Net from "../../net/Net";

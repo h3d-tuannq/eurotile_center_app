@@ -13,11 +13,10 @@ const ITEM_HEIGHT = 40;
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import {Picker} from '@react-native-community/picker';
+import RNPickerSelect from 'react-native-picker-select';
 import UserController from "../../controller/UserController";
 import Net from "../../net/Net";
 import ImageResizer from 'react-native-image-resizer';
-// import RNPickerSelect from 'react-native-picker-select';
 
 class PartnerProfileScreen extends React.Component {
     constructor(props){
@@ -696,7 +695,7 @@ class PartnerProfileScreen extends React.Component {
                                             backgroundColor: '#fff',
                                             borderRadius: 5,paddingTop: 10
                                         }}>
-                                            <Picker
+                                            <RNPickerSelect
                                                 placeholder={{}}
                                                 onValueChange={(itemValue, itemIndex) => {
                                                     console.log("Gender change: " + itemValue);

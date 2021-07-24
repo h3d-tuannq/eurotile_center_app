@@ -71,7 +71,6 @@ class ProductDetailTab extends React.Component {
                              styleImage={{
                                  width: PROGRAM_IMAGE_WIDTH - 20,
                                  height: PROGRAM_IMAGE_HEIGHT - 20,
-                                 backgroundColor: 'red',
                              }}
                              styleItem={{
                                  width: PROGRAM_IMAGE_WIDTH ,

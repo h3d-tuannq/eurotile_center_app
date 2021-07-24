@@ -5,12 +5,13 @@ const {width, height} = Dimensions.get('window');
 import Style from '../../def/Style';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import CustomerItemRenderer from "../../com/item-render/CustomerItemrenderer";
-import Autocomplete from 'react-native-autocomplete-input'
+import MyAutoCompleteInput from "../../com/common/MyAutocompleteInput";
 import CustomerController from '../../../src/controller/CustomerController'
 // import PhoneInput from 'react-native-phone-input'
 import PhoneInput from "react-native-phone-number-input";
 
 import AddIcon from '../../../assets/icons/Plus circle.svg'
+import MyAutocompleteInput from "../../com/common/MyAutocompleteInput";
 
 const PROGRAM_IMAGE_WIDTH = (width - 30-8) /2;
 const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
@@ -185,9 +186,8 @@ class SelectCustomerScreen extends React.Component {
             <View style={{height: height-Style.HEADER_HEIGHT, width: width,paddingTop: 5, borderTopLeftRadius :0, borderTopRightRadius :0 , backgroundColor:'#fff', alignItems:'center', paddingBottom:20}}>
                 {
                     this.state.data && false ?
-                    <Autocomplete
+                    <MyAutoCompleteInput
                         data={filterData}
-                        defaultValue={this.state.query}
                         keyExtractor={(item,index) => "hoz" + index + item.id}
                         renderItem={renderItem}
                         renderTextInput={()=> (
@@ -199,21 +199,19 @@ class SelectCustomerScreen extends React.Component {
                         )
                         }
 
-                        flatListProps = {{
-                            alignItems : 'center',
-                            onEndReached : this.onEndReached,
-                            keyboardShouldPersistTaps:"handled",
-
-                        }}
+                        // flatListProps = {{
+                        //     alignItems : 'center',
+                        //     onEndReached : this.onEndReached,
+                        //     keyboardShouldPersistTaps:"handled",
+                        //
+                        // }}
 
                         // keyboardShouldPersistTaps='handled'
                         inputContainerStyle={{borderWidth:0}}
                         listStyle={{borderWidth:0, marginBottom:80}}
 
-                    /> :
-
-
-
+                    />
+                    :
                     <View style={{justifyContent :'flex-start',flex: 1, alignItems: 'center', width: width}}>
                          <View style={{flexDirection:'row', justifyContent:'space-between' ,  marginTop:10 , borderBottomWidth:1 , width: 0.9 * width,  height:50}}>
                             <PhoneInput

@@ -12,14 +12,12 @@ const PROGRAM_IMAGE_HEIGHT = (width - 30-8) /2;
 
 const ITEM_HEIGHT = 40;
 
-import {Picker} from '@react-native-community/picker';
 import UserController from "../../controller/UserController";
-import Autocomplete from 'react-native-autocomplete-input';
 import AutocompleteModal from '../../com/common/AutocompleteModal'
 import Net from "../../net/Net";
 import moment from 'moment'
 import CustomerController from "../../controller/CustomerController";
-// import RNPickerSelect from 'react-native-picker-select';
+import RNPickerSelect from 'react-native-picker-select';
 
 class CreateCustomerScreen extends React.Component {
     constructor(props){
@@ -504,7 +502,7 @@ class CreateCustomerScreen extends React.Component {
                                         backgroundColor: '#fff',
                                         borderRadius: 5,paddingTop: 10
                                     }}>
-                                        <Picker
+                                        <RNPickerSelect
                                             placeholder={{}}
                                             onValueChange={(itemValue, itemIndex) => {
                                                 console.log("Gender change: " + itemValue);

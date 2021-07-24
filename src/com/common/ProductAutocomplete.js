@@ -1,6 +1,5 @@
 import React from 'react'
 import {Text, View, StyleSheet, Dimensions, TouchableOpacity, TextInput} from 'react-native'
-import Autocomplete from 'react-native-autocomplete-input'
 import Style from "../../def/Style";
 import Def from "../../def/Def";
 const {width,  height} = Dimensions.get('window');

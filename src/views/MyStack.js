@@ -57,6 +57,9 @@ class MyStack extends React.Component {
             <RootStack.Navigator
                 screenOptions={{
                     headerBackTitleVisible: false,
+                    headerTitleStyle: {
+                        textTransform: 'uppercase'
+                    },
                     headerRight: () => (
                         <TouchableOpacity
                             style=  {
@@ -136,7 +139,8 @@ class MyStack extends React.Component {
                     },
                     headerTintColor: '#fff',
                     headerTitleStyle: {
-                        alignSelf: 'center'
+                        alignSelf: 'center',
+                        textTransform: 'uppercase'
                     },
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
@@ -150,10 +154,7 @@ class MyStack extends React.Component {
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
 
-                    },
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
@@ -167,9 +168,7 @@ class MyStack extends React.Component {
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
-                    },
+
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
@@ -182,9 +181,7 @@ class MyStack extends React.Component {
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
-                    },
+
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
@@ -196,9 +193,7 @@ class MyStack extends React.Component {
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
-                    },
+
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
@@ -211,9 +206,7 @@ class MyStack extends React.Component {
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
-                    },
+
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     },

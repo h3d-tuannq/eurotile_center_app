@@ -149,7 +149,6 @@ class ProductStack extends React.Component {
                 screenOptions={{
                     headerBackTitleVisible: false,
                     headerTitleStyle: {
-                        fontWeight: 'bold',
                         textTransform: 'uppercase'
                     },
                 }}

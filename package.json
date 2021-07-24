@@ -15,7 +15,6 @@
     "@react-native-community/datetimepicker": "^3.0.3",
     "@react-native-community/google-signin": "^5.0.0",
     "@react-native-community/masked-view": "^0.1.10",
-    "@react-native-community/picker": "^1.8.1",
     "@react-native-community/viewpager": "3.3.0",
     "@react-native-firebase/app": "^8.4.6",
     "@react-native-firebase/auth": "^9.3.1",
@@ -29,7 +28,6 @@
     "native-base": "^2.13.13",
     "react": "16.13.1",
     "react-native": "0.63.2",
-    "react-native-autocomplete-input": "github:mrlaessig/react-native-autocomplete-input",
     "react-native-datepicker": "^1.7.2",
     "react-native-draggable-flatlist": "^2.4.0",
     "react-native-fbsdk": "^2.0.0",
@@ -52,7 +50,8 @@
     "react-native-svg-transformer": "^0.14.3",
     "react-native-svg-uri": "^1.2.3",
     "react-native-vector-icons": "^7.1.0",
-    "react-native-webview": "^10.4.0"
+    "react-native-webview": "^10.4.0",
+    "react-native-picker-select": "^8.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

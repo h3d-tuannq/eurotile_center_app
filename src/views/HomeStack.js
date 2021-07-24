@@ -38,6 +38,9 @@ class HomeStack extends React.Component {
             <RootStack.Navigator
                 screenOptions={{
                     headerBackTitleVisible: false,
+                    headerTitleStyle: {
+                        textTransform: 'uppercase'
+                    },
                     headerRight: () => (
                         <TouchableOpacity
                             style=  {
@@ -93,9 +96,7 @@ class HomeStack extends React.Component {
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        // fontWeight: 'bold',
-                    },
+
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
