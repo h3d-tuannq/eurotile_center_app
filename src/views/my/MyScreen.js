@@ -74,29 +74,41 @@ class MyScreen extends React.Component {
         }
     }
 
-    refresh()
+    async refresh()
     {
-            this.setState( {
-                user: Def.user_info,
-                stateCount: 0.0,
-            });
-            if(!Def.user_info){
-                AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
+            console.log('Refresh Data -----');
+            if(!Def.orderList || Def.orderList.length == 0) {
+                console.log('Call get Order Data');
+                OrderController.getOrder(this.onGetOrderSuccess, this.onGetOrderNewsFailed);
+            }
+            else if (!Def.config_order_menu || Def.config_order_menu.length == 0) {
+                console.log('Call get Order Data');
+                Def.config_order_menu = this.createConfigData(Def.orderList);
+                console.log('set Data config -  on Refresh');
+            }
+            else {
+                console.log('Isset Daa');
             }
             if(Def.refreshDashBoard && typeof Def.refreshDashBoard == 'function') {
                 Def.refreshDashBoard();
             }
+            this.setState( {
+                user: Def.user_info,
+                stateCount: 0.0,
+                configMenu: Def.config_order_menu
+            });
+
     }
 
     onGetOrderSuccess(data){
-        console.log('Return order list' +  data["data"]);
-        this.setState({ order_data: data["data"] });
+        console.log('Return order list' +  JSON.stringify(data["data"]));
         Def.orderList = data["data"];
         Def.config_order_menu = this.createConfigData(data["data"]) ;
-        if(Def.refreshStatistical && (typeof  Def.refreshStatistical == 'function')){
-            Def.refreshStatistical();
+        if(Def.refreshDashBoard && (typeof  Def.refreshDashBoard == 'function')){
+            Def.refreshDashBoard();
         }
-        this.setState({ configMenu: Def.config_order_menu});
+        console.log('set config menu onGetOrderSuccess');
+        this.setState({ order_data: data["data"] , configMenu: Def.config_order_menu});
     }
 
     forcusFunction = () => {
@@ -141,30 +153,13 @@ class MyScreen extends React.Component {
     shouldComponentUpdate(){
         // this.setState({ configMenu: Def.config_news_menu});
         // console.log('SortData ddd:' + JSON.stringify(this.props.route));
+        console.log('Should Did mount');
         const index = Def.REFESH_SCREEN.indexOf('my-screen');
-        if(!Def.user_info){
-            AsyncStorage.getItem('user_info').then(this.onGetUserInfoFun);
-        }
         if (index > -1) {
+            console.log('Thực hiện refresh dữ liệu');
             Def.REFESH_SCREEN.splice(index, 1);
             this.refresh();
         }
-
-        let {navigation} = this.props;
-        navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
-        if(navigation){
-            this.focusListener = navigation.addListener("focus", this.forcusFunction);
-        } else {
-        }
-
-        if(!Def.orderList) {
-            OrderController.getOrder(this.onGetOrderSuccess, this.onGetOrderNewsFailed);
-        }
-        else if (!Def.config_order_menu) {
-            Def.config_order_menu = this.createConfigData(Def.orderList);
-            this.setState({configMenu: Def.config_order_menu});
-        }
-
         return true;
     }
 
@@ -173,7 +168,7 @@ class MyScreen extends React.Component {
     }
 
     async componentDidMount(){
-
+        console.log('Component Did mount');
         if(!this.state.user) {
             if (!Def.user_info) {
                 let user_info_raw = await AsyncStorage.getItem('user_info');

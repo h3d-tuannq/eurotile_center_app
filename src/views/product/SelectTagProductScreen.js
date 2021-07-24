@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, RefreshControl, TextInput} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, ImageBackground,RefreshControl, TextInput} from 'react-native'
 import NetCollection from '../../net/NetCollection'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
@@ -81,27 +81,33 @@ class SelectTagProductScreen extends React.Component {
                 <TouchableOpacity style={styles.buttonStyle} onPress={() => {
                     this.gotoProductByTag(0);
                 }}>
+                    <ImageBackground style={{  width:width, height: height/3 - 30, alignItems: 'center', justifyContent: 'center'}} source={require('../../../assets/img/be-mat.jpg')} >
                     <Text style={styles.textLabelStyle}>
                         BỀ MẶT
                     </Text>
+                    </ImageBackground>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.buttonStyle, {marginTop:5}]}
                                   onPress={() => {
                                       this.gotoProductByTag(1);
                                   }}
                 >
-                    <Text style={styles.textLabelStyle}>
-                        KÍCH THƯỚC
-                    </Text>
+                    <ImageBackground style={{  width:width, height: height/3 - 30, alignItems: 'center', justifyContent: 'center'}} source={require('../../../assets/img/kich-thuoc.jpg')} >
+                        <Text style={styles.textLabelStyle}>
+                            KÍCH THƯỚC
+                        </Text>
+                    </ImageBackground>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.buttonStyle, {marginTop:5}]}
                                   onPress={() => {
                                       this.gotoProductByTag(2);
                                   }}
                 >
-                    <Text style={styles.textLabelStyle}>
-                        ỨNG DỤNG
-                    </Text>
+                    <ImageBackground style={{  width:width, height: height/3 - 30, alignItems: 'center', justifyContent: 'center'}} source={require('../../../assets/img/ung-dung.jpg')} >
+                        <Text style={styles.textLabelStyle}>
+                            ỨNG DỤNG
+                        </Text>
+                    </ImageBackground>
                 </TouchableOpacity>
             </View>
         );
@@ -115,11 +121,15 @@ const styles = StyleSheet.create({
         width : width,
         justifyContent : 'center',
         alignItems : 'center',
+
     },
     textLabelStyle : {
         color: '#fff',
         fontSize : Style.BIG_SIZE,
-        fontWeight : 'bold'
+        fontWeight : 'bold',
+        backgroundColor: 'rgba(48, 94, 117, 0.6)',
+        paddingVertical : 5,
+        paddingHorizontal : 20,
     }
 });
 

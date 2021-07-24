@@ -128,7 +128,18 @@ class ProductByTagScreen extends React.Component {
             <View style={{flex:1}}>
                 {
                     configMenu ?
-                        <ScrollableTabView  style={{flex:1}} renderTabBar={() => <MyCustomizeTabBar navigation={navigation}/>}>
+                        <ScrollableTabView  style={{flex:1 }}
+                                            tabBarUnderlineStyle={{
+                                                position: 'absolute',
+                                                height: 0,
+                                                bottom: 0,
+                                            }}
+                                            tabBarTextStyle={{ fontFamily: 'Roboto'}}
+                                            tabBarActiveTextColor={Style.DEFAUT_BLUE_COLOR}
+                                            tabBarInactiveTextColor={Style.GREY_TEXT_COLOR}
+
+
+                    renderTabBar={() => <MyCustomizeTabBar  style={{borderWidth : 0}} navigation={navigation}/>}>
                             {
                                 configMenu && Object.entries(configMenu).map((prop, key) => {
                                     if ((prop[1]["hidden"]) == 0) {

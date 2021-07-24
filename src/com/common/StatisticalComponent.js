@@ -54,7 +54,7 @@ class StatisticalComponent extends React.Component{
                 </View>
                 <View style={{flex:2, paddingLeft : 30}}>
                     <Text style={[Style.text_styles.titleText, {color:Style.DEFAUT_BLACK_COLOR, marginLeft: 0, fontSize: Style.BIG_SIZE}]}>
-                        {this.state.user ? user['username'] : ''}
+                        {this.state.user ?  ( user['userProfile'] ? user['userProfile']['display_name'] :  user['username']) : ''}
                     </Text>
                     <View style={styles.styleInfoItem}>
                         <Text style={styles.styleInfoText}>

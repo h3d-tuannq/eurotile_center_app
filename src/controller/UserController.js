@@ -88,14 +88,15 @@ export default class UserController{
         } catch (err){
             console.log('Error : ' + err);
         }
-        Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+        Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen', 'update-profile');
         if(Def.mainNavigate){
 
             if(Def.isSignup) {
-                Def.mainNavigate.navigate('My', {'screen':'update-partner'});
+                Def.mainNavigate.navigate('My', {'screen':'update-profile'});
                 Def.isSignup = false;
             } else {
-                Def.mainNavigate.goBack();
+                console.log("Go to MyScreen");
+                Def.mainNavigate.navigate('My', {'screen':'my-screen', params: { userInfo: Def.user_info}});
             }
         }
 

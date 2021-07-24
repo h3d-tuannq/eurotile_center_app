@@ -51,14 +51,14 @@ export default class OrderController{
     static getOrder(callback,errCallback ) {
         if(Def.user_info){
             console.log("Call Get Order");
-            Net.sendRequest(callback ? callback : this.getOrderSuccess,errCallback? errCallback: this.getOrderFalse ,Def.URL_BASE + "/api/order/get-order" ,Def.POST_METHOD, {booker_id:Def.user_info['id']});
+            Net.sendRequest(callback ? callback : this.getOrderSuccess,errCallback? errCallback: this.getOrderFalse ,Def.URL_BASE + "/api/order/get-order" ,Def.POST_METHOD, {partner_id:Def.user_info['id']});
         } else {
             AsyncStorage.getItem('user_info').then((value) => {
                 if(value){
                     Def.user_info = JSON.parse(value);
                     Def.username = Def.user_info['user_name'];
                     Def.email = Def.user_info['email'];
-                    Net.sendRequest(callback ? callback : this.getOrderSuccess,errCallback? errCallback: this.getOrderFalse ,Def.URL_BASE + "/api/order/get-order" ,Def.POST_METHOD, {booker_id:Def.user_info['id']});
+                    Net.sendRequest(callback ? callback : this.getOrderSuccess,errCallback? errCallback: this.getOrderFalse ,Def.URL_BASE + "/api/order/get-order" ,Def.POST_METHOD, {partner_id:Def.user_info['id']});
                 }
             });
         }
@@ -69,6 +69,9 @@ export default class OrderController{
         Def.orderList = data['data'];
         if(Def.refreshStatistical && (typeof  Def.refreshStatistical == 'function') ){
             Def.refreshStatistical();
+        }
+        if(Def.refreshDashBoard && (typeof  Def.refreshDashBoard == 'function') ){
+            Def.refreshDashBoard();
         }
     }
 

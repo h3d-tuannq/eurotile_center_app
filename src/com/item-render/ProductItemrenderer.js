@@ -41,28 +41,16 @@ class ProductItemrenderer extends PureComponent{
         return (
             <View>
 
-            <TouchableOpacity style={[styles.itemStyle, this.props.styleImage]} onPress={
+            <TouchableOpacity style={[ this.props.styleItem]} onPress={
                 () => {
                     click(model);
                 }
             } >
-                {/*{this.props.favorite ?*/}
-                {/*    <TouchableOpacity style={[styles.favoriteIcon, {width:30, height:30, backgroundColor : Style.GREY_TEXT_COLOR, alignItems : 'center', justifyContent:'center', borderRadius: 15}]}*/}
-                {/*          onPress={*/}
-                {/*              () => {*/}
-                {/*                  click(model);*/}
-                {/*              }*/}
-                {/*          }*/}
-                {/*    >*/}
-                {/*        <PlusCircleIcon />*/}
-                {/*    </TouchableOpacity>*/}
-                {/*    :*/}
-                {/*    <View/>*/}
-                {/*}*/}
+
 
 
                 {model.image_path ?
-                    <Image  style={[this.props.styleImage, styles.imageStyle ]}  source={{uri: Def.getThumnailImg(model.image_path)}}  />
+                    <Image  style={[this.props.styleImage ]}  source={{uri: Def.getThumnailImg(model.image_path)}}  />
                     :
                     <DefaultProgramImage style={styles.imageStyle} width={this.props.styleImage.width} height={this.props.styleImage.height}/>
                 }
@@ -73,11 +61,12 @@ class ProductItemrenderer extends PureComponent{
                     backgroundColor: this.props.type == 'product' ? Style.DEFAUT_BLUE_COLOR :Style.DEFAUT_RED_COLOR,
                     alignItems: (this.props.type == 'product' ? 'center' :'center')}}>
 
-                    <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:1 , borderRadius : 3 ,
-                        backgroundColor: this.props.type == 'product' ? Style.DEFAUT_BLUE_COLOR :Style.DEFAUT_RED_COLOR,
+                    <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:1 , borderRadius : 0,
+                        backgroundColor: this.props.type == 'product' ? 'rgba(48, 94, 117, 0.6)' :'rgba(48, 94, 117, 0.6)',
                         width:this.props.styleImage.width,
-                        bottom:5, textAlign: 'center'}, Style.text_styles.whiteTitleText]}>
-                          {this.formatText(this.props.type == 'product' ? model.model :model.name, 15)}
+                        bottom:10, left:5,
+                        textAlign: 'center'}, { fontSize: Style.MIDLE_SIZE , color: '#fff' }]}>
+                          {this.formatText(this.props.type == 'product' ? model.model + (model.brickBoxInfo ? " - " + model.brickBoxInfo.width + "x" + model.brickBoxInfo.height : ""):model.name, 20)}
                     </Text>
                 </View>
             </View>
@@ -88,15 +77,14 @@ class ProductItemrenderer extends PureComponent{
 
 const  styles = StyleSheet.create({
     itemStyle : {
-            borderRadius: 5,
-            marginRight: 5,
+            borderRadius: 0,
             alignItems : 'flex-start',
-            marginTop: 5,
+            backgroundColor : 'red',
 
     },
     imageStyle : {
 
-        borderRadius: 5,
+
     },
 
     favoriteIcon : {

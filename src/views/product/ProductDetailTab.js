@@ -69,10 +69,17 @@ class ProductDetailTab extends React.Component {
     renderProItem = ({item}) => (
         <ProductItemrenderer click={this.itemClick} type={'product'} item={item} favorite={true}
                              styleImage={{
-                                 width: PROGRAM_IMAGE_WIDTH - 2,
-                                 height: PROGRAM_IMAGE_HEIGHT - 5,
-                                 marginRight: 6,
-                                 marginBottom: 5
+                                 width: PROGRAM_IMAGE_WIDTH - 20,
+                                 height: PROGRAM_IMAGE_HEIGHT - 20,
+                                 backgroundColor: 'red',
+                             }}
+                             styleItem={{
+                                 width: PROGRAM_IMAGE_WIDTH ,
+                                 height: PROGRAM_IMAGE_HEIGHT,
+                                 justifyContent:'center',
+                                 padding:10,
+                                 marginRight : 10,
+                                 paddingLeft: 5,
                              }}/>
     );
 

@@ -28,20 +28,26 @@ class ProductTab extends React.Component {
         const renderItem = ({item}) => (
             <ProductItemrenderer click={this.itemClick} type={'product'} item={item} favorite={true}
                                  styleImage={{
-                                     width: PROGRAM_IMAGE_WIDTH - 2,
-                                     height: PROGRAM_IMAGE_HEIGHT - 5,
-                                     marginRight: 6,
-                                     marginBottom: 5
-                                 }}/>
+                                     width: PROGRAM_IMAGE_WIDTH - 20,
+                                     height: PROGRAM_IMAGE_HEIGHT - 20,
+                                     backgroundColor: 'red',
+                                 }}
+                                 styleItem={{
+                                     width: PROGRAM_IMAGE_WIDTH ,
+                                     height: PROGRAM_IMAGE_HEIGHT,
+                                     justifyContent:'center',
+                                     padding:10,
+                                     marginRight : 10,
+                                     paddingLeft: 5,
+                                     // alignItems : 'center',
+                                     // padding:10,
+                                     // paddingLeft: 10,
+                                 }}
+            />
         );
         return (
             <View style={styles.container}>
-                <View>
-                    <Text style={[Style.text_styles.titleText, {textAlign: 'center', paddingVertical: 5}]}>
-                        {this.props.displayTitle}
-                    </Text>
-                </View>
-                <View style={{marginTop: 8, flex: 1}}>
+                <View style={{marginTop: 0, flex: 1}}>
                     <FlatList
                         data={this.props.data}
                         renderItem={renderItem}
@@ -62,7 +68,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingLeft: 15,
         backgroundColor: '#fff',
-        paddingTop: 5
+        paddingTop: 0
     }
 });
 
