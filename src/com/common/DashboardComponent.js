@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     styleInfoText : {
         fontSize :  Style.MIDLE_SIZE,
         color: Style.GREY_TEXT_COLOR,
-        fontFamily : 'Roboto',
+        // fontFamily : 'Roboto',
 
     },
 

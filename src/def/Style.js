@@ -4,11 +4,11 @@ import Def from './Def';
 const {width, height} = Dimensions.get('window');
 
 export default class Style{
-    static HEADER_HEIGHT = PixelRatio.get() < 2? 46 :47;
-    static TITLE_SIZE = PixelRatio.get() < 2 ? 15 :17;
+    // static HEADER_HEIGHT = PixelRatio.get() < 2? 46 :47;
+    // static TITLE_SIZE = PixelRatio.get() < 2 ? 15 :17;
 
-    // static HEADER_HEIGHT = PixelRatio.get() == 2 && !Def.isIphoneXorAbove() ? 60 : 85;
-    // static BOTTOM_HEIGHT = PixelRatio.get() == 2 && !Def.isIphoneXorAbove() ? 60 : 80;
+    static HEADER_HEIGHT = PixelRatio.get() == 2 && !Def.isIphoneXorAbove() ? 60 : 85;
+    static BOTTOM_HEIGHT = PixelRatio.get() == 2 && !Def.isIphoneXorAbove() ? 60 : 80;
 
 
     static MIDLE_SIZE = PixelRatio.get() < 2 ? 13 :14;

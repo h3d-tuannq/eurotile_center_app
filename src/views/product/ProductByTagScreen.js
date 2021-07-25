@@ -134,7 +134,7 @@ class ProductByTagScreen extends React.Component {
                                                 height: 0,
                                                 bottom: 0,
                                             }}
-                                            tabBarTextStyle={{ fontFamily: 'Roboto'}}
+                                            tabBarTextStyle={{ }}
                                             tabBarActiveTextColor={Style.DEFAUT_BLUE_COLOR}
                                             tabBarInactiveTextColor={Style.GREY_TEXT_COLOR}
 
