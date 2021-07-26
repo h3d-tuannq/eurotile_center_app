@@ -228,7 +228,7 @@ class MyScreen extends React.Component {
 
                         <View style={{flex: 1}}>
                             {
-                                Def.user_info && Def.user_info.partnerInfo ?
+                                Def.user_info ?
                                     <DashboardComponent stateCount={this.state.stateCount}
                                                         updateInfo={this.updateProfile}/>
                                     : null
