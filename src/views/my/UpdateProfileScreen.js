@@ -710,9 +710,9 @@ class UpdateProfileScreen extends React.Component {
 
 const styles = StyleSheet.create({
     textEditableNormal : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black',
-        fontSize : Style.TITLE_SIZE , marginRight : 5, textAlign: 'left' , fontWeight: '900', paddingLeft:0, paddingBottom : 12},
+        fontSize : Style.TITLE_SIZE , marginRight : 5, textAlign: 'left' , fontWeight: '600', paddingLeft:0, paddingBottom : 12},
     textEditableForcus : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black',
-        fontSize : Style.TITLE_SIZE  , marginRight : 5, textAlign: 'left', fontWeight: '900',paddingLeft:0 , paddingBottom : 12},
+        fontSize : Style.TITLE_SIZE  , marginRight : 5, textAlign: 'left', fontWeight: '600',paddingLeft:0 , paddingBottom : 12},
     label: {color:Style.GREY_TEXT_COLOR, fontSize : Style.TITLE_SIZE -1},
 });
 
