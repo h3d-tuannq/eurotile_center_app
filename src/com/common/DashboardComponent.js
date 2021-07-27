@@ -107,7 +107,7 @@ class DashboardComponent extends React.Component{
                                                   onPress={this.props.updatePartnerInfo}
                                 >
                                     <Text style={{color:'#fff'}}>
-                                        {Def.user_info.partnerInfo ? "Hồ sơ" : "Nâng cấp"}
+                                        {Def.user_info.partnerInfo ? "Hồ sơ Partner" : "Nâng cấp"}
                                     </Text>
                                 </TouchableOpacity>
 

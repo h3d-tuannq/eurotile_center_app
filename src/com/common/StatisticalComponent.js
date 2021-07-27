@@ -85,7 +85,7 @@ class StatisticalComponent extends React.Component{
                                 }}
                                 >
                                     <Text style={{color:'#fff'}}>
-                                        {Def.user_info.partnerInfo ? "Hồ sơ" : "Nâng cấp"}
+                                        {Def.user_info.partnerInfo ? "Hồ sơ Partner" : "Nâng cấp"}
                                     </Text>
                                 </TouchableOpacity>
 
