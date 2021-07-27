@@ -2,11 +2,11 @@ import AsyncStorage from "@react-native-community/async-storage";
 import {Dimensions, Platform} from 'react-native'
 
 export default class Def {
-    // static URL_BASE = "https://eurotile-prod.house3d.net/";
-    // static URL_CONTENT_BASE = "https://eurotile-prod.house3d.net/data/eurotileData/";
+    static URL_BASE = "https://eurotile-prod.house3d.net/";
+    static URL_CONTENT_BASE = "https://eurotile-prod.house3d.net/data/eurotileData/";
 
-    static URL_BASE = "https://eurotiledev.house3d.net/";
-    static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
+    // static URL_BASE = "https://eurotiledev.house3d.net/";
+    // static URL_CONTENT_BASE = "https://eurotiledev.house3d.net/data/eurotileData/";
 
     static URL_DEFAULT_AVATAR = "https://cdn-content1.house3d.com/uploads/2019/07/02/5d1aa12048236.jpg";
 
@@ -116,6 +116,8 @@ export default class Def {
 
     static updateProfileFunc = null;
 
+    static updatePartnerInfo = null;
+
     static isUpdating = false;
 
     static resetCart = false;
@@ -171,16 +173,19 @@ export default class Def {
 
     static getInfrontOfImg() {
         let rsUrl = null;
-        if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['infront_cmt_img']) {
+        if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['infront_cmt_img']
+            && Def.user_info['userProfile']['infront_cmt_img'] != '' && Def.user_info['userProfile']['infront_cmt_img'] != 0) {
             rsUrl = Def.URL_CONTENT_BASE + Def.user_info['userProfile']['infront_cmt_img'];
             console.log('' + Def.user_info['userProfile']['infront_cmt_img']);
         }
+        console.log('rscamera- ' + rsUrl);
         return rsUrl;
     }
 
     static getBehindImg() {
         let rsUrl = null;
-        if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['behind_cmt_img']) {
+        if (Def.user_info && Def.user_info['userProfile'] && Def.user_info['userProfile']['behind_cmt_img']
+            && Def.user_info['userProfile']['behind_cmt_img'] != '' && Def.user_info['userProfile']['behind_cmt_img'] != 0) {
             rsUrl = Def.URL_CONTENT_BASE + Def.user_info['userProfile']['behind_cmt_img'];
         }
         return rsUrl;

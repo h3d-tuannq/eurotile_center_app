@@ -56,22 +56,41 @@ class StatisticalComponent extends React.Component{
                     <Text style={[Style.text_styles.titleText, {color:Style.DEFAUT_BLACK_COLOR, marginLeft: 0, fontSize: Style.BIG_SIZE}]}>
                         {this.state.user ?  ( user['userProfile'] ? user['userProfile']['display_name'] :  user['username']) : ''}
                     </Text>
-                    <View style={styles.styleInfoItem}>
-                        <Text style={styles.styleInfoText}>
-                            {"Hạng" + " "}
-                        </Text>
-                        <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}, styles.styleInfoText]}>
-                            {Def.getLevelPartnerName(user.partnerInfo.level_id) }
-                        </Text>
-                    </View>
-                    <View style={styles.styleInfoItem}>
-                        <Text style={styles.styleInfoText} >
-                            {"Chiết khấu" + " "}
-                        </Text>
-                        <Text style={[Style.text_styles.middleText ,{color:Style.DEFAUT_RED_COLOR}, styles.styleInfoText]}>
-                            {Def.partnerlevelInfo[user.partnerInfo.level_id - 1] ? Def.partnerlevelInfo[user.partnerInfo.level_id - 1].discount + "%" : "%"}
-                        </Text>
-                    </View>
+                    {
+                        Def.user_info && Def.user_info.partnerInfo ?
+                            <View>
+                                <View style={styles.styleInfoItem}>
+                                    <Text style={styles.styleInfoText}>
+                                        {"Hạng" + " "}
+                                    </Text>
+                                    <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}, styles.styleInfoText]}>
+                                        {Def.getLevelPartnerName(user.partnerInfo.level_id) }
+                                    </Text>
+                                </View>
+                                <View style={styles.styleInfoItem}>
+                                    <Text style={styles.styleInfoText} >
+                                        {"Chiết khấu" + " "}
+                                    </Text>
+                                    <Text style={[Style.text_styles.middleText ,{color:Style.DEFAUT_RED_COLOR}, styles.styleInfoText]}>
+                                        {Def.partnerlevelInfo[user.partnerInfo.level_id - 1] ? Def.partnerlevelInfo[user.partnerInfo.level_id - 1].discount + "%" : "%"}
+                                    </Text>
+                                </View>
+                            </View> :
+                            <View style={styles.styleInfoItem}>
+                                <Text style={[styles.styleInfoText, {flex:1}]}>
+                                    {"Thành viên"}
+                                </Text>
+                                <TouchableOpacity style={{paddingHorizontal: 15, paddingVertical:3, borderRadius: 10,
+                                    backgroundColor: Style.DEFAUT_RED_COLOR, marginBottom : 2, alignItems: 'center', justifyContent: 'center'
+                                }}
+                                >
+                                    <Text style={{color:'#fff'}}>
+                                        {"Nâng cấp"}
+                                    </Text>
+                                </TouchableOpacity>
+
+                            </View>
+                    }
                     <View style={styles.styleInfoItem}>
                         <Text style={styles.styleInfoText}>
                             {"Doanh số" + " "}

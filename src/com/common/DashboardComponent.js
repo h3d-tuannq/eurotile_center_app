@@ -84,9 +84,18 @@ class DashboardComponent extends React.Component{
                             </View>
                         </View> :
                             <View style={styles.styleInfoItem}>
-                                <Text style={styles.styleInfoText}>
-                                    {"Tài khoản người dùng"}
+                                <Text style={[styles.styleInfoText, {flex:1}]}>
+                                    {"Thành viên"}
                                 </Text>
+                                <TouchableOpacity style={{paddingHorizontal: 15, paddingVertical:3, borderRadius: 10,
+                                    backgroundColor: Style.DEFAUT_RED_COLOR, marginBottom : 2, alignItems: 'center', justifyContent: 'center'
+                                }}
+                                                  onPress={this.props.updatePartnerInfo}
+                                >
+                                    <Text style={{color:'#fff'}}>
+                                        {"Nâng cấp"}
+                                    </Text>
+                                </TouchableOpacity>
 
                             </View>
                     }

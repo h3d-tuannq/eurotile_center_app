@@ -53,8 +53,7 @@ class MyScreen extends React.Component {
             screen = 'update-partner';
         }
         console.log('Screen : ' + screen);
-
-        this.props.navigation.navigate('My', {'screen':screen});
+        // this.props.navigation.navigate('My', {'screen':screen});
     }
 
     signInBtnClick(){
@@ -230,6 +229,7 @@ class MyScreen extends React.Component {
                             {
                                 Def.user_info ?
                                     <DashboardComponent stateCount={this.state.stateCount}
+                                                        updatePartnerInfo={this.gotoPartnerInfo}
                                                         updateInfo={this.updateProfile}/>
                                     : null
 

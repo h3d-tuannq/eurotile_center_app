@@ -116,6 +116,7 @@ class UpdatePartnerScreen extends React.Component {
         Def.mainNavigate = this.props.navigation;
         Def.setLoader = this.refresh;
         this.scrollObjLayoutY = this.scrollObjLayoutY.bind(this);
+        Def.updatePartnerInfo = this.updatePartnerInfo;
         // this.parseDataToView();
     }
 
@@ -383,19 +384,7 @@ class UpdatePartnerScreen extends React.Component {
     updatePartnerInfo() {
         const {navigation} = this.props;
         console.log('Update user info');
-        if(!this.state.avatarSource){
-            alert("Vui lòng cập nhật ảnh Avatar");
-            return;
-        }else if(!this.state.mobile){
-            alert("Vui lòng điền số điện thoại");
-            return;
-        }else if(!this.state.birth_day){
-            alert("Vui lòng nhập thông tin ngày sinh");
-            return;
-        }else if(!this.state.address){
-            alert("Vui lòng nhập địa chỉ");
-            return;
-        }else if(!this.state.card_no){
+        if(!this.state.card_no){
             alert("Vui lòng nhập số CMND");
             return;
         } else if(!this.state.issue_on){
@@ -420,33 +409,14 @@ class UpdatePartnerScreen extends React.Component {
         else if(!this.state.project_img3){
             alert("Vui lòng tải lên ảnh dự án");
             return;
-        } else {
-        if(this.validateAddress()){
-           return;
         }
-        }
+
         let userInfo = {
             user_id : Def.user_info ? Def.user_info['id'] : 14,
             card_no: this.state.card_no,
-            birth_day: this.state.birth_day ?  Def.getDateString(this.state.birth_day , "yyyy-MM-dd") : "",
-            mobile: this.state.mobile,
-            address: JSON.stringify(this.buildAddress()),
             issue_on: this.state.issue_on ? Def.getDateString(this.state.issue_on , "yyyy-MM-dd") : "",
             issue_at: this.state.issue_at,
-            gender: this.state.gender == "1" ? 1 :0,
-            full_name: this.state.full_name,
         };
-
-        if(this.state.avatarSource && (this.state.avatarSource.fileName || this.state.avatarSource.name ) ) {
-            userInfo.avatar =   {
-                name: this.state.avatarSource.fileName ? this.state.avatarSource.fileName : this.state.avatarSource.name ,
-                type: this.state.avatarSource.type,
-                uri: Platform.OS === "android" ? this.state.avatarSource.uri : this.state.avatarSource.uri.replace("file://", "")
-            };
-        }
-
-        console.log("In front cmt : " + JSON.stringify(this.state.infront_cmt_img));
-
         if(this.state.infront_cmt_img && (this.state.infront_cmt_img.fileName || this.state.infront_cmt_img.name ) ) {
 
 
@@ -636,253 +606,10 @@ class UpdatePartnerScreen extends React.Component {
                 <ScrollView keyboardShouldPersistTaps='always' style={{flex:1, backgroundColor: Style.GREY_BACKGROUND_COLOR, paddingHorizontal : 5}}
                             ref={(c) => { this._container = c; }}
                 >
-                        <View>
-                            <TouchableOpacity onPress={() => this.handleChoosePhoto('avatarSource')}
-                                              style={{alignItems: 'center', justifyContent: 'center', marginBottom: 5}}>
-                                {this.state.avatarSource && this.state.avatarSource.uri ?
-                                    <Image
-                                        source={{uri: this.state.avatarSource.uri}}
-                                        style={{
-                                            width: width / 3,
-                                            height: width / 3,
-                                            marginTop: 5,
-                                            borderRadius: width / 6
-                                        }}
-                                    /> :
-                                    <View style={{
-                                        width: width / 3,
-                                        height: width / 3,
-                                        marginTop: 5,
-                                        borderRadius: width / 6,
-                                        borderWidth: 2,
-                                        borderColor: Style.DEFAUT_RED_COLOR,
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}>
-                                        <Icon size={30} name="camera" color={Style.DEFAUT_RED_COLOR}/>
-                                        <Text style={Style.text_styles.normalText}>
-                                            Ảnh đại diện
-                                        </Text>
-                                    </View>
-                                }
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingHorizontal: 10,
-                                paddingVertical: 5,
-                                backgroundColor: '#fff',
-                                marginTop: 1
-                            }}>
-                                <Text style={[Style.text_styles.middleText, {}]}>
-                                    Họ & Tên
-                                </Text>
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-
-                                    <TextInput
-                                        onFocus={() => this.setState({focus: 1})}
-                                        onBlur={() =>  this.setState({focus: 0})}
-                                        style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
-                                        value={this.state.full_name}
-                                        onChangeText={text => this.setState({full_name: text})}
-                                        placeholder={'Nhập họ tên'}
-                                    />
-                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingHorizontal: 10,
-                                paddingVertical: 5,
-                                backgroundColor: '#fff',
-                                marginTop: 1
-                            }}>
-                                <Text style={[Style.text_styles.middleText, {}]}>
-                                    Điện thoại
-                                </Text>
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-
-                                    <TextInput
-                                        onFocus={() => this.setState({focus: 1})}
-                                        onBlur={() => this.setState({focus: 0})}
-                                        style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
-                                        value={this.state.mobile}
-                                        onChangeText={text => this.setState({mobile: text})}
-                                        placeholder={'Nhập số điện thoại'}
-                                    />
-                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingHorizontal: 10,
-                                paddingVertical: 5,
-                                backgroundColor: '#fff',
-                                marginTop: 1
-                            }}>
-                                <Text style={[Style.text_styles.middleText, {}]}>
-                                    Ngày sinh
-                                </Text>
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    <TouchableOpacity style={{
-                                        marginRight: 5,
-                                        height: ITEM_HEIGHT,
-                                        justifyContent: 'center',
-                                        borderColor: Style.GREY_TEXT_COLOR
-                                    }} onPress={() => this.showDateTimePicker('birth_day')}>
-                                        <Text style={[Style.text_styles.titleTextNotBold, {
-                                            justifyContent: 'center',
-                                            paddingLeft: 5,
-                                            color: Style.GREY_TEXT_COLOR
-                                        }]}>
-                                            {this.state.birth_day ? Def.getDateString(this.state.birth_day, "yyyy-MM-dd") : "Chọn ngày sinh"}
-                                        </Text>
-                                    </TouchableOpacity>
-                                    <DateTimePickerModal
-                                        isVisible={this.state.isDateTimePickerVisible}
-                                        onConfirm={(date) => {
-                                            this.handleDatePicked(date);
-                                            // this.hideDateTimePicker();
-                                        }}
-                                        onCancel={this.hideDateTimePicker}
-                                        date={this.state.birth_day}
-                                        mode={'date'}
-                                        display='spinner'
-                                        // style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
-                                        datePickerModeAndroid='spinner'
-                                        timePickerModeAndroid='spinner'
-                                    />
-                                    <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR}/>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingLeft: 10,
-                                paddingVertical: 5,
-                                backgroundColor: '#fff',
-                                marginTop: 1
-                            }}>
-                                <Text style={[Style.text_styles.middleText, {}]}>
-                                    Giới Tính
-                                </Text>
-                                <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                    {/*<Dropdown/>*/}
-                                    <View style={{
-                                        marginRight: 10,
-                                        paddingRight: 10,
-                                        height: ITEM_HEIGHT,
-                                        backgroundColor: '#fff',
-                                        borderRadius: 5,paddingTop: 10
-                                    }}>
-                                        <RNPickerSelect
-                                            placeholder={{}}
-                                            onValueChange={(itemValue, itemIndex) => {
-                                                console.log("Gender change: " + itemValue);
-                                                this.setState({gender: itemValue});
-                                            }}
-                                            style={{justifyContent:'center', alignItems:'center', paddingTop: 20, marginTop: 20}}
-                                            items={[
-                                                { label: 'Nam', value: '0' },
-                                                { label: 'Nữ', value: '1' },
-
-                                            ]}
-                                        />
-                                    </View>
-                                    {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:5}}
-                        onPress={this.choseCityClick}
-                    >
-                        <Text style={[Style.text_styles.middleText,{}]}>
-                            Tỉnh/Thành phố
-                        </Text>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-
-                            <Text style={[Style.text_styles.middleText,{ marginRight : 5}]}>
-                                {this.state.city_item ? this.state.city_item.city_name : 'Chọn tỉnh/thành phố'}
-                            </Text>
-                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}
-                                      onPress={this.choseDistrictClick}
-                    >
-                        <Text style={[Style.text_styles.middleText,{}]}>
-                            Quận/Huyện
-                        </Text>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-
-                            <Text style={[Style.text_styles.middleText,{ marginRight : 5}]}>
-                                {this.state.district_item ? this.state.district_item.district_name : 'Chọn quận/huyện'}
-                            </Text>
-                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:1}}
-                                      onPress={this.choseWardClick}
-                    >
-                        <Text style={[Style.text_styles.middleText,{}]}>
-                            Phường/Xã
-                        </Text>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-
-                            <Text style={[Style.text_styles.middleText,{ marginRight : 5}]}>
-                                {this.state.ward_item ? this.state.ward_item.ward_name : 'Chọn phường/xã'}
-                            </Text>
-                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:1}}
-                                      onLayout={(event) => {
-                                          const layout = event.nativeEvent.layout;
-                                          this._position[0] = layout.y;
-                                      }}
-                    >
-                        <Text style={[Style.text_styles.middleText,{ marginRight : 5}]}>
-                            Địa chỉ cụ thể
-                        </Text>
-                        <View style={{flexDirection : 'row', alignItems : 'center'}}>
-                            <TextInput
-                                ref={(c) => { this._txt = c; }}
-                                onFocus={
-                                    (e) => {
-                                        this.setState({focus:1});
-                                        this.scrollObjLayoutY(0);
-
-                                    }
-                                }
-                                onBlur={()=> this.setState({focus:0})}
-                                style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
-                                value={ typeof this.state.address ? this.state.address.toString() : ""}
-                                onChangeText={text => {
-                                    this.setState({address:text})
-                                }}
-                                blurOnSubmit={true}
-                                placeholder={'Số nhà, tên đường'}
-                            />
-                            <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
-                        </View>
-                    </TouchableOpacity>
-
-
-
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:5}}
                                       onLayout={(event) => {
                                           const layout = event.nativeEvent.layout;
-                                          this._position[1] = layout.y;
+                                          this._position[0] = layout.y;
                                       }}
                     >
                         <Text style={[Style.text_styles.middleText,{}]}>
@@ -892,7 +619,7 @@ class UpdatePartnerScreen extends React.Component {
                             <TextInput
                                 onFocus={() => {
                                     this.setState({focus:1});
-                                    this.scrollObjLayoutY(1);
+                                    this.scrollObjLayoutY(0);
                                 }}
                                 onBlur={()=> this.setState({focus:0})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
@@ -933,7 +660,7 @@ class UpdatePartnerScreen extends React.Component {
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 5, backgroundColor : '#fff', marginTop:1}}
                                       onLayout={(event) => {
                                           const layout = event.nativeEvent.layout;
-                                          this._position[2] = layout.y;
+                                          this._position[1] = layout.y;
                                       }}
                     >
                         <Text style={[Style.text_styles.middleText,{}]}>
@@ -944,7 +671,7 @@ class UpdatePartnerScreen extends React.Component {
                             <TextInput
                                 onFocus={() =>  {
                                     this.setState({focus:1});
-                                    this.scrollObjLayoutY(2);
+                                    this.scrollObjLayoutY(1);
                                 }}
                                 onBlur={()=> this.setState({focus:0})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {}]}
@@ -1080,12 +807,6 @@ class UpdatePartnerScreen extends React.Component {
 
                     />
                 </Modal>
-                <TouchableOpacity style={[styles.button, {backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent:'center', alignItems:'center', height:45}]}  onPress={this.updatePartnerInfo}>
-
-                    <Text style={[styles.buttonText, {fontSize : 18}]}>
-                        Cập nhật
-                    </Text>
-                </TouchableOpacity>
             </View>
 
         )
