@@ -57,7 +57,7 @@ class StatisticalComponent extends React.Component{
                         {this.state.user ?  ( user['userProfile'] ? user['userProfile']['display_name'] :  user['username']) : ''}
                     </Text>
                     {
-                        Def.user_info && Def.checkPartnerPermission() ?
+                        Def.user_info && Def.checkPartnerPermission() > -1 ?
                             <View>
                                 <View style={styles.styleInfoItem}>
                                     <Text style={styles.styleInfoText}>
