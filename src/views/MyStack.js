@@ -33,6 +33,7 @@ class MyStack extends React.Component {
         super(props);
         this.showNotification = this.showNotification.bind(this);
         this.saveProfile = this.saveProfile.bind(this);
+        this.savePartnerInfo = this.savePartnerInfo.bind(this);
     }
 
     showNotification() {
@@ -50,6 +51,12 @@ class MyStack extends React.Component {
       if(Def.updateProfileFunc){
           Def.updateProfileFunc();
       }
+    }
+
+    savePartnerInfo() {
+        if(Def.updatePartnerInfo){
+            Def.updatePartnerInfo();
+        }
     }
 
     render() {
@@ -187,12 +194,32 @@ class MyStack extends React.Component {
                     }
                 }} />
                 <RootStack.Screen name="update-partner" component={UpdatePartnerInfoScreen} options={{
-                    title: 'Đăng ký Partner',
+                    title: 'Hồ sơ Partner',
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
+                    headerRight: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.DRAWER_MENU_SIZE,
+                                    height: Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingRight:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={this.savePartnerInfo}>
+
+                            <CheckIcon
+                                width={Style.CART_ICON_SIZE -5}
+                                height={Style.CART_ICON_SIZE }
+                            />
+                        </TouchableOpacity>
+
+                    ),
 
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
