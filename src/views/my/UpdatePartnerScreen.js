@@ -33,20 +33,6 @@ import ImageResizer from 'react-native-image-resizer';
 
 import RNPickerSelect from 'react-native-picker-select';
 
-const Dropdown = () => {
-    return (
-        <RNPickerSelect
-            onValueChange={(value) => console.log(value)}
-            items={[
-                { label: 'Football', value: 'football' },
-                { label: 'Baseball', value: 'baseball' },
-                { label: 'Hockey', value: 'hockey' },
-            ]}
-        />
-    );
-};
-
-
 class UpdatePartnerScreen extends React.Component {
     _container;
     _txt;
@@ -134,20 +120,13 @@ class UpdatePartnerScreen extends React.Component {
         if(Def.user_info) {
             console.log('Exist User');
         }
-
         Net.sendRequest(this.onGetCites,this.onGetCitesFalse,Def.URL_BASE + '/api/user/city' , Def.POST_METHOD);
-
-
     }
 
 
 
     componentWillUnmount() {
     }
-
-
-
-
 
     onGetCites(res){
         this.setState({cities: res});

@@ -67,12 +67,26 @@ class DashboardComponent extends React.Component{
                         Def.user_info && Def.user_info.partnerInfo ?
                         <View>
                             <View style={styles.styleInfoItem}>
-                                <Text style={styles.styleInfoText}>
-                                    {"Hạng" + " "}
-                                </Text>
-                                <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}, styles.styleInfoText]}>
-                                    {Def.getLevelPartnerName(user.partnerInfo.level_id) }
-                                </Text>
+                                <View style={{flex: 1, flexDirection:'row'}}>
+                                    <Text style={styles.styleInfoText}>
+                                        {"Hạng" + " "}
+                                    </Text>
+                                    <Text style={[Style.text_styles.middleText, {color:Style.DEFAUT_RED_COLOR}, styles.styleInfoText]}>
+                                        {Def.getLevelPartnerName(user.partnerInfo.level_id) }
+                                    </Text>
+                                </View>
+
+
+                                <TouchableOpacity style={{paddingHorizontal: 15, paddingVertical:3, borderRadius: 10,
+                                    backgroundColor: Style.DEFAUT_RED_COLOR, marginBottom : 2, alignItems: 'center', justifyContent: 'center'
+                                }}
+                                                  onPress={this.props.updatePartnerInfo}
+                                >
+                                    <Text style={{color:'#fff'}}>
+                                        {"Hồ sơ"}
+                                    </Text>
+                                </TouchableOpacity>
+
                             </View>
                             <View style={styles.styleInfoItem}>
                                 <Text style={styles.styleInfoText} >
