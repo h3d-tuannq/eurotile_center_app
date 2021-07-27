@@ -53,7 +53,7 @@ class MyScreen extends React.Component {
             screen = 'update-partner';
         }
         console.log('Screen : ' + screen);
-        // this.props.navigation.navigate('My', {'screen':screen});
+        this.props.navigation.navigate('My', {'screen':screen});
     }
 
     signInBtnClick(){
