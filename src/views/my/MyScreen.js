@@ -52,6 +52,7 @@ class MyScreen extends React.Component {
         if(Def.checkPartnerPermission() <0){
             screen = 'update-partner';
         }
+
         console.log('Screen : ' + screen);
         this.props.navigation.navigate('My', {'screen':screen});
     }

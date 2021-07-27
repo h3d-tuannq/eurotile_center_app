@@ -178,7 +178,6 @@ export default class Def {
             rsUrl = Def.URL_CONTENT_BASE + Def.user_info['userProfile']['infront_cmt_img'];
             console.log('' + Def.user_info['userProfile']['infront_cmt_img']);
         }
-        console.log('rscamera- ' + rsUrl);
         return rsUrl;
     }
 

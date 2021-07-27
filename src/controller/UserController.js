@@ -36,7 +36,7 @@ export default class UserController{
 
         // if(Def.setLoader)
         //     Def.setLoader(false);
-        Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen');
+        Def.REFESH_SCREEN.push('my-screen', 'update-partner');
         Def.mainNavigate.navigate('My',{screen:'my-screen', params: {'refresh' : true}});
 
         // if(Def.refreshDashBoard)
@@ -88,7 +88,7 @@ export default class UserController{
         } catch (err){
             console.log('Error : ' + err);
         }
-        Def.REFESH_SCREEN.push('my-screen', 'update-partner-screen', 'update-profile');
+        Def.REFESH_SCREEN.push('my-screen', 'update-partner', 'update-profile');
         if(Def.mainNavigate){
 
             if(Def.isSignup) {
