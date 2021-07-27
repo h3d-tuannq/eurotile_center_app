@@ -673,46 +673,7 @@ class PartnerProfileScreen extends React.Component {
                                     />
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingLeft: 10,
-                                paddingVertical: 5,
-                                backgroundColor: '#fff',
-                                marginTop: 1
-                            }}>
-                                <Text style={[Style.text_styles.middleText, {}]}>
-                                    Giới Tính
-                                </Text>
-                                <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                    <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                        {/*<Dropdown/>*/}
-                                        <View style={{
-                                            marginRight: 10,
-                                            paddingRight: 10,
-                                            height: ITEM_HEIGHT,
-                                            backgroundColor: '#fff',
-                                            borderRadius: 5,paddingTop: 10
-                                        }}>
-                                            <RNPickerSelect
-                                                placeholder={{}}
-                                                onValueChange={(itemValue, itemIndex) => {
-                                                    console.log("Gender change: " + itemValue);
-                                                    this.setState({gender: itemValue});
-                                                }}
-                                                style={{justifyContent:'center', alignItems:'center', paddingTop: 20, marginTop: 20}}
-                                                items={[
-                                                    { label: 'Nam', value: '0' },
-                                                    { label: 'Nữ', value: '1' },
 
-                                                ]}
-                                            />
-                                        </View>
-                                        {/*<Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />*/}
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
                         </View> : <View/>
                     }
                     <TouchableOpacity style={{flexDirection : 'row', alignItems : 'center', justifyContent:'space-between',paddingHorizontal:10 , paddingVertical: 10, backgroundColor : '#fff', marginTop:5}}

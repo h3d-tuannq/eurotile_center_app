@@ -15,7 +15,6 @@ import {
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 
-import AutocompleteModal from '../../../src/com/common/AutocompleteModal';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Style from '../../def/Style';
 
@@ -31,8 +30,6 @@ import UserController from "../../controller/UserController";
 import Net from "../../net/Net";
 import ImageResizer from 'react-native-image-resizer';
 
-import RNPickerSelect from 'react-native-picker-select';
-
 class UpdatePartnerScreen extends React.Component {
     _container;
     _txt;
@@ -44,55 +41,28 @@ class UpdatePartnerScreen extends React.Component {
         this.handleDatePicked = this.handleDatePicked.bind();
         this.hideDateTimePicker = this.hideDateTimePicker.bind();
         this.updatePartnerInfo = this.updatePartnerInfo.bind(this);
-        this.onGetCites = this.onGetCites.bind(this);
-        this.onGetCitesFalse = this.onGetCitesFalse.bind(this);
-        this.onGetAddress = this.onGetAddress.bind(this);
-        this.onGetAddressFalse = this.onGetAddressFalse.bind(this);
 
-        this.choseCityClick = this.choseCityClick.bind(this);
-        this.choseDistrictClick = this.choseDistrictClick.bind(this);
-        this.choseWardClick = this.choseWardClick.bind(this);
         this.showAutocompleteModal = this.showAutocompleteModal.bind(this);
         this.parseDataToView = this.parseDataToView.bind(this);
         this.setDate = this.setDate.bind(this);
-        this.showAddressModal = this.showAddressModal.bind(this);
         let projectImg = this.getProjectImage();
         this.state = {
             focus : 0,
             isUpdate: 0,
             user: Def.user_info,
             stateCount: 0.0,
-            avatarSource : {uri:Def.getAvatarUrlFromUserInfo() ? Def.getAvatarUrlFromUserInfo() :Def.URL_DEFAULT_AVATAR},
             infront_cmt_img: Def.getInfrontOfImg() ? {uri:Def.getInfrontOfImg()} : null,
             behind_cmt_img: Def.getBehindImg() ? {uri:Def.getBehindImg()} : null,
             project_img1 : projectImg && projectImg.length > 0 ? projectImg[0]: null ,
             project_img2 : projectImg && projectImg.length > 1 ? projectImg[1]: null,
             project_img3 : projectImg && projectImg.length > 2 ? projectImg[2]: null,
-            birth_day :Def.user_info['userProfile']['date_of_birth'] ? new Date(Def.user_info['userProfile']['date_of_birth']) :new Date() , //Def.user_info['userProfile']['birth_day'],
-            full_name : Def.user_info['userProfile']['firstname'],
-            gender : Def.user_info['userProfile']['gender'],
-            mobile:Def.user_info['userProfile']['phone'],
             card_no : Def.user_info['userProfile']['card_number'],
             issue_on : Def.user_info['userProfile']['issued_on'] ? new Date(Def.user_info['userProfile']['issued_on']) :new Date() , // Def.user_info['userProfile']['issued_on'], // Ngày cấp
             issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
-            address : Def.getAddressFromUserInfo() ? Def.getAddressFromUserInfo()['address_detail'] : '',
             isDateTimePickerVisible :false,
             isDateTimePickerVisibleIssueOn:false,
             selectedDate : new Date(),
-            dateAttribute : 'birth_day',
-            cities : [],
-            district : [],
-            ward:[],
-            city_item: Def.getCityItemFromUserInfo(),
-            district_item: Def.getDistrictItemFromUserInfo(),
-            ward_item: Def.getWardItemFromUserInfo(),
             query : '',
-            choseAddress : false,
-            currentAddress : 1, // 1 select city, 2 select district, 3 select ward
-            nextAddress : 1, // 1 select city, 2 select district, 3 select ward
-            filterAttr: 'city_name',
-            filterData: [],
-            addressTitle: 'Tỉnh/Thành phố',
             isPartner: Def.checkPartnerPermission()>-1,
 
 
@@ -117,160 +87,29 @@ class UpdatePartnerScreen extends React.Component {
     }
 
     componentDidMount(){
-        if(Def.user_info) {
-            console.log('Exist User');
-        }
-        Net.sendRequest(this.onGetCites,this.onGetCitesFalse,Def.URL_BASE + '/api/user/city' , Def.POST_METHOD);
+        console.log('Partner Info : ' + JSON.stringify(Def.user_info.partnerInfo));
     }
 
 
 
     componentWillUnmount() {
     }
-
-    onGetCites(res){
-        this.setState({cities: res});
-    }
-
-    getAdministrativeUnit(url, params = null, callBack = null){
-        Net.sendRequest(callBack !== null ? callBack : this.onGetAddress,this.onGetCitesFalse,url , Def.POST_METHOD, params);
-    }
-
-
-
-    onGetAddress(res){
-        let unit = this.state.nextAddress == 1 ? 'cities' : this.state.nextAddress == 2 ? 'district' : 'ward';
-        this.setState({[unit]: res});
-    }
-
-    onGetAddressFalse(err){
-        console.log('onGetAddressFalse' + JSON.stringify(err));
-    }
-
-
-    onGetCitesFalse(res){
-
-    }
-
     showAutocompleteModal(res){
-        let unit = this.state.currentAddress == 1 ? 'city_item' : this.state.currentAddress == 2 ? 'district_item' : 'ward_item';
-        if(this.state.currentAddress == 1){
-            this.setState({ filterData: res, cites: res, filterAttr: 'city_name'});
-        }
-
-        if(this.state.currentAddress == 2){
-            this.setState({filterData: res, district: res, filterAttr: 'district_name'});
-        }
-        if(this.state.currentAddress == 3){
-            this.setState({filterData: res, ward: res, filterAttr: 'ward_name'});
-        }
-        this.showAddressModal();
-        // setTimeout(this.showAddressModal, 5);
     }
 
 
-    choseCityClick(){
-        this.setState({currentAddress:1});
-        if(!this.state.cities || this.state.cities.length == 0 ){
-            this.getAdministrativeUnit(Def.URL_BASE + '/api/user/city', null, this.showAutocompleteModal);
-        } else {
-            this.setState({filterData: this.state.cities, filterAttr: 'city_name'});
-            this.showAddressModal();
-        }
-
-        // setTimeout(this.showAddressModal, 500);
-
-    }
-
-    showAddressModal(){
-        let title = this.state.currentAddress == 1 ? "Tỉnh/Thành phố" : this.state.currentAddress == 2 ? "Quận/huyện" : "Phường/Thị trấn";
-
-        this.setState({choseAddress: true, addressTitle : title});
-    }
-
-    choseDistrictClick(){
-        if(!this.state.city_item){
-            this.choseCityClick();
-            return;
-        }
-
-
-        this.setState({currentAddress:2});
-        if(!this.state.district || this.state.district.length == 0){
-            this.getAdministrativeUnit(Def.URL_BASE + '/api/user/district', {city_code: this.state.city_item.city_code}, this.showAutocompleteModal);
-        }else {
-            this.setState({ filterData: this.state.district, filterAttr: 'district_name'});
-            this.showAddressModal();
-        }
-
-        // setTimeout(this.showAddressModal, 500);
-    }
-
-    choseWardClick(){
-        if(!this.state.city_item){
-            this.choseCityClick();
-            return;
-        }
-
-        if(!this.state.district_item){
-            this.choseDistrictClick();
-            return;
-        }
-
-        this.setState({currentAddress:3});
-        if(!this.state.ward || this.state.ward.length == 0){
-            this.getAdministrativeUnit(Def.URL_BASE + '/api/user/ward', {district_code: this.state.district_item.district_code}, this.showAutocompleteModal);
-        }else {
-            this.setState({filterData: this.state.ward, filterAttr: 'ward_name'});
-            this.showAddressModal();
-        }
-        // setTimeout(this.showAddressModal, 500);
-    }
-
-    closeFunction = (item) => {
-        if (item) {
-            if(this.state.currentAddress == 1){
-               if (!this.state.city_item || (this.state.city_item.city_code !== item.city_code)){
-                   this.setState({nextAddress:2, district_item : null, ward_item : null });
-                   this.getAdministrativeUnit(Def.URL_BASE + '/api/user/district', {city_code: item.city_code});
-               }
-            }
-
-            if(this.state.currentAddress == 2){
-                if (!this.state.district_item || this.state.district_item.district_code !== item.district_code){
-                    this.setState({nextAddress:3 , ward_item : null});
-                    this.getAdministrativeUnit(Def.URL_BASE + '/api/user/ward', {district_code: item.district_code});
-                }
-            }
-
-            let unit = this.state.currentAddress == 1 ? 'city_item' : this.state.currentAddress == 2 ? 'district_item' : 'ward_item';
-            this.setState({[unit]: item, choseAddress: false});
-
-        } else {
-            this.setState({choseAddress: false})
-        }
-    }
     parseDataToView(){
         let projectImg = this.getProjectImage();
         this.setState({
             user: Def.user_info,
-            avatarSource : {uri:Def.getAvatarUrlFromUserInfo() ? Def.getAvatarUrlFromUserInfo() :Def.URL_DEFAULT_AVATAR},
             infront_cmt_img: Def.getInfrontOfImg() ? {uri:Def.getInfrontOfImg()} : null,
             behind_cmt_img: Def.getBehindImg() ? {uri:Def.getBehindImg()} : null,
             project_img1 : projectImg && projectImg.length > 0 ? projectImg[0]: null ,
             project_img2 : projectImg && projectImg.length > 1 ? projectImg[1]: null,
             project_img3 : projectImg && projectImg.length > 2 ? projectImg[2]: null,
-            birth_day :Def.user_info['userProfile']['date_of_birth'] ? new Date(Def.user_info['userProfile']['date_of_birth']) :new Date() , //Def.user_info['userProfile']['birth_day'],
-            full_name : Def.user_info['userProfile']['firstname'],
-            gender : Def.user_info['userProfile']['gender'],
-            mobile:Def.user_info['userProfile']['phone'],
             card_no : Def.user_info['userProfile']['card_number'],
             issue_on : Def.user_info['userProfile']['issued_on'] ? new Date(Def.user_info['userProfile']['issued_on']) :new Date() , // Def.user_info['userProfile']['issued_on'], // Ngày cấp
             issue_at : Def.user_info['userProfile']['issued_at'], // Nơi cấp
-            address : Def.getDetailAddressFromUserInfo(),
-            city_item: Def.getCityItemFromUserInfo(),
-            district_item: Def.getDistrictItemFromUserInfo(),
-            ward_item: Def.getWardItemFromUserInfo(),
             stateCount: Math.random(),
         });
     }
@@ -288,77 +127,6 @@ class UpdatePartnerScreen extends React.Component {
         }
         return result;
     }
-
-    validate(is_create = true){
-        if (is_create){
-            if(!this.state.avatarSource){
-                alert("Vui lòng cập nhật ảnh Avatar");
-            }else if(!this.state.mobile){
-                alert("Vui lòng điền số điện thoại");
-            }else if(!this.state.birth_day){
-                alert("Vui lòng nhập thông tin ngày sinh");
-            }else if(!this.state.gender){
-                alert("Vui lòng nhập thông tin giới tính");
-            }else if(!this.state.address){
-                alert("Vui lòng nhập địa chỉ");
-            }else if(!this.state.card_no){
-                alert("Vui lòng nhập số CMND");
-            } else if(!this.state.issue_on){
-                alert("Vui lòng nhập ngày cấp");
-            }else if(!this.state.issue_at){
-                alert("Vui lòng nhập nơi cấp");
-            }else if(!this.state.infront_cmt_img){
-                alert("Vui lòng chụp ảnh mặt trước CMND");
-            }else if(!this.state.behind_cmt_img){
-                alert("Vui lòng chụp ảnh mặt sau CMND");
-            }else if(!this.state.project_img1){
-                alert("Vui lòng tải lên ảnh dự án");
-            }else if(!this.state.project_img2){
-                alert("Vui lòng tải lên ảnh dự án");
-            }
-            else if(!this.state.project_img3){
-                alert("Vui lòng tải lên ảnh dự án");
-            }
-        }
-    }
-
-    validateAddress(){
-        let err = 0;
-        if(!this.state.city_item){
-            alert("Vui cập nhật dữ liệu tỉnh/thành phố");
-            err = 1;
-        }
-
-        if(!this.state.district_item){
-            alert("Vui cập nhật dữ liệu quận/huyện");
-            err = 2;
-        }
-
-        if(!this.state.ward_item){
-            alert("Vui cập nhật dữ liệu phường/xã");
-            err = 3;
-        }
-
-        if(!this.state.address){
-            alert("Vui lòng cập nhật địa chỉ cụ thể");
-            err = 3;
-        }
-
-        return err;
-    }
-
-
-    buildAddress(){
-        let address = Def.getAddressFromUserInfo();
-        let submitAddress = {};
-            submitAddress.id = address ? address['id'] : null;
-            submitAddress.address_detail = this.state.address;
-            submitAddress.city_code = this.state.city_item.city_code;
-            submitAddress.district_code = this.state.district_item.district_code;
-            submitAddress.ward_code = this.state.ward_item.ward_code;
-        return submitAddress;
-    }
-
 
     updatePartnerInfo() {
         const {navigation} = this.props;
@@ -472,12 +240,12 @@ class UpdatePartnerScreen extends React.Component {
 
     refresh()
     {
-        this.parseDataToView();
+         this.parseDataToView();
         // this.setState({ stateCount: Math.random() });
     }
 
     shouldComponentUpdate(){
-        const index = Def.REFESH_SCREEN.indexOf('update-partner-screen');
+        const index = Def.REFESH_SCREEN.indexOf('update-partner');
         if (index > -1) {
             Def.REFESH_SCREEN.splice(index, 1);
             this.refresh();
@@ -618,7 +386,7 @@ class UpdatePartnerScreen extends React.Component {
                         <View style={{flexDirection : 'row', alignItems : 'center'}}>
                             <TouchableOpacity style={{ marginRight: 5, height :ITEM_HEIGHT, justifyContent : 'center', borderColor:Style.GREY_TEXT_COLOR}} onPress={() => this.showDateTimePicker('issue_on')} >
                                 <Text style={[Style.text_styles.titleTextNotBold, {justifyContent : 'center', paddingLeft: 5, color:Style.GREY_TEXT_COLOR} ]}>
-                                    {this.state.birth_day ? Def.getDateString(this.state.issue_on , "yyyy-MM-dd")  : "chọn ngày cấp"}
+                                    {this.state.issue_on ? Def.getDateString(this.state.issue_on , "yyyy-MM-dd")  : "Chọn ngày cấp"}
                                 </Text>
                             </TouchableOpacity>
                             <DateTimePickerModal
@@ -776,16 +544,7 @@ class UpdatePartnerScreen extends React.Component {
                         }
                     </TouchableOpacity>
                 </ScrollView>
-                <Modal onRequestClose={() => {this.closeFunction(null)}} visible={this.state.choseAddress}  transparent={false} styles={{backgroundColor : 'green'}} >
-                    {/*{this.state.choseAddress ?*/}
-                    <AutocompleteModal
-                        data={this.state.filterData}
-                        filterAttr={this.state.filterAttr}
-                        closeFunction={this.closeFunction}
-                        addressTitle={this.state.addressTitle}
 
-                    />
-                </Modal>
             </View>
 
         )

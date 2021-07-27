@@ -64,7 +64,7 @@ class DashboardComponent extends React.Component{
                         {this.state.user ?  ( user['userProfile'] ? user['userProfile']['display_name'] :  user['username']) : ''}
                     </Text>
                     {
-                        Def.user_info && Def.user_info.partnerInfo ?
+                        Def.user_info && Def.checkPartnerPermission() > -1 ?
                         <View>
                             <View style={styles.styleInfoItem}>
                                 <View style={{flex: 1, flexDirection:'row'}}>
@@ -107,7 +107,7 @@ class DashboardComponent extends React.Component{
                                                   onPress={this.props.updatePartnerInfo}
                                 >
                                     <Text style={{color:'#fff'}}>
-                                        {"Nâng cấp"}
+                                        {Def.user_info.partnerInfo ? "Hồ sơ Partner" : "Nâng cấp"}
                                     </Text>
                                 </TouchableOpacity>
 

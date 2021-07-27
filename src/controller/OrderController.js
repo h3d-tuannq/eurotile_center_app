@@ -52,7 +52,7 @@ export default class OrderController{
         if(Def.user_info){
             console.log("Call Get Order");
             let params = {};
-            if(Def.user_info.partner_info){
+            if(Def.checkPartnerPermission() > -1){
                 params = {partnerId:Def.user_info['id']};
             } else {
                 params = {booker_id:Def.user_info['id']};
@@ -65,7 +65,7 @@ export default class OrderController{
                     Def.username = Def.user_info['user_name'];
                     Def.email = Def.user_info['email'];
                     let params = {};
-                    if(Def.user_info.partner_info){
+                    if(Def.checkPartnerPermission() > -1){
                         params = {partnerId:Def.user_info['id']};
                     } else {
                         params = {booker_id:Def.user_info['id']};
