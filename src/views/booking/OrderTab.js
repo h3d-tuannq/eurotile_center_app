@@ -83,9 +83,9 @@ class OrderTab extends React.Component {
 
                         />
                         :
-                            <View style={{alignItems : 'center', justifyContent:'center'}}>
+                            <View style={{alignItems : 'center', justifyContent:'center', flex: 1}}>
                                 <Text>
-                                    {'Không có sản phẩm trong danh mục này'}
+                                    {'Chưa có đơn hàng'}
                                 </Text>
                             </View>
                     }
