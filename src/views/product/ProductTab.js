@@ -47,6 +47,7 @@ class ProductTab extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={{marginTop: 0, flex: 1}}>
+                    {this.props.data ?
                     <FlatList
                         data={this.props.data}
                         renderItem={renderItem}
@@ -54,6 +55,13 @@ class ProductTab extends React.Component {
                         showsHorizontalScrollIndicator={false}
                         numColumns={2}
                     />
+                    :
+                    <View>
+                        <Text>
+                            {'Không có sản phẩm trong danh mục này'}
+                        </Text>
+                    </View>
+                    }
                 </View>
             </View>
         )
