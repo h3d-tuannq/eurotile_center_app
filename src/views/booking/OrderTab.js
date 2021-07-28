@@ -58,7 +58,7 @@ class OrderTab extends React.Component {
         );
         return (
             <View style={styles.container}>
-                <View style={{}}>
+                <View style={{marginTop:0, flex:  1}}>
                     {
                         this.props.data && this.props.data.length > 0 ?
                         <FlatList
@@ -83,9 +83,11 @@ class OrderTab extends React.Component {
 
                         />
                         :
-                        <Text>
-                            {'Không có sản phẩm trong danh mục này'}
-                        </Text>
+                            <View style={{alignItems : 'center', justifyContent:'center'}}>
+                                <Text>
+                                    {'Không có sản phẩm trong danh mục này'}
+                                </Text>
+                            </View>
                     }
 
 
