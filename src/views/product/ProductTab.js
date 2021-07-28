@@ -56,11 +56,9 @@ class ProductTab extends React.Component {
                         numColumns={2}
                     />
                     :
-                    <View>
                         <Text>
                             {'Không có sản phẩm trong danh mục này'}
                         </Text>
-                    </View>
                     }
                 </View>
             </View>

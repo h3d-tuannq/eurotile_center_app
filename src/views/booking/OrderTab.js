@@ -59,27 +59,37 @@ class OrderTab extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={{}}>
-                    <FlatList
-                        refreshControl={
-                            <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
-                        }
-                        data={this.props.data}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.id + "" + this.state.stateCount}
-                        showsHorizontalScrollIndicator={false}
-                        ItemSeparatorComponent={
+                    {
+                        this.props.data && this.props.data.length > 0 ?
+                        <FlatList
+                            refreshControl={
+                                <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
+                            }
+                            data={this.props.data}
+                            renderItem={renderItem}
+                            keyExtractor={item => item.id + "" + this.state.stateCount}
+                            showsHorizontalScrollIndicator={false}
+                            ItemSeparatorComponent={
 
-                            (({ highlighted }) => (
-                                <View
-                                    style={[
-                                        {backgroundColor:Style.GREY_TEXT_COLOR, height:1, width:width -25, marginRight: 10},
-                                        highlighted && { marginRight: 10 }
-                                    ]}
-                                />
-                            ))
-                        }
+                                (({ highlighted }) => (
+                                    <View
+                                        style={[
+                                            {backgroundColor:Style.GREY_TEXT_COLOR, height:1, width:width -25, marginRight: 10},
+                                            highlighted && { marginRight: 10 }
+                                        ]}
+                                    />
+                                ))
+                            }
 
-                    />
+                        />
+                        :
+                        <Text>
+                            {'Không có sản phẩm trong danh mục này'}
+                        </Text>
+                    }
+
+
+
                 </View>
             </View>
         )
