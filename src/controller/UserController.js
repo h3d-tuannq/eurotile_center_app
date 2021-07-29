@@ -397,7 +397,7 @@ export default class UserController{
     };
 
     static async  updatePartnerInfo(updateInfo, navigation = null, successCallback, falseCallback) {
-        Net.uploadImage(this.onUpdateSuccess,this.onLoginFalse,'https://eurotiledev.house3d.net/api/user/update-partner' , Def.POST_METHOD , updateInfo, 'multipart/form-data');
+        Net.uploadImage(this.onUpdateSuccess,this.onLoginFalse,Def.URL_BASE + 'api/user/update-partner' , Def.POST_METHOD , updateInfo, 'multipart/form-data');
         // if(Def.setLoader)
         //     Def.setLoader(false);
         navigation.navigate('My', {'screen':'my-screen'});

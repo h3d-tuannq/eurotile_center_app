@@ -58,7 +58,7 @@ class ProductTab extends React.Component {
                     :
                         <View style={{alignItems : 'center', justifyContent:'center'}}>
                             <Text>
-                                {'Không có sản phẩm trong danh mục này'}
+                                {'Chưa có sản phẩm trong danh mục'}
                             </Text>
                         </View>
                     }
