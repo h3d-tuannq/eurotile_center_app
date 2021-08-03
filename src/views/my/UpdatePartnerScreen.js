@@ -374,6 +374,7 @@ class UpdatePartnerScreen extends React.Component {
                                 onChangeText={text => this.setState({card_no:text})}
                                 placeholder={'Nhập CMND'}
                                 blurOnSubmit={true}
+                                placeholderTextColor = "#000"
                             />
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>
@@ -426,6 +427,7 @@ class UpdatePartnerScreen extends React.Component {
                                 onChangeText={text => this.setState({issue_at:text})}
                                 placeholder={'Nhập nơi cấp CMND'}
                                 blurOnSubmit={true}
+                                placeholderTextColor = "#000"
                             />
                             <Icon name="angle-right" size={25} color={Style.GREY_TEXT_COLOR} />
                         </View>

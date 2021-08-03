@@ -523,6 +523,7 @@ class UpdateProfileScreen extends React.Component {
                                     <TextInput
                                         onFocus={() => this.setState({focus: 1})}
                                         onBlur={() =>  this.setState({focus: 0})}
+                                        placeholderTextColor = "#000"
                                         style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {borderBottomWidth:1, width: width - 80}]}
                                         value={this.state.full_name}
                                         onChangeText={text => this.setState({full_name: text})}
@@ -569,7 +570,7 @@ class UpdateProfileScreen extends React.Component {
                                         date={this.state.birth_day}
                                         mode={'date'}
                                         display='spinner'
-                                        style={{width: 400, opacity: 1, height: 100, marginTop: 540}}
+                                        style={{width: 400, opacity: 0.5, height: 200}}
                                         datePickerModeAndroid='spinner'
                                         timePickerModeAndroid='spinner'
                                     />
@@ -593,6 +594,7 @@ class UpdateProfileScreen extends React.Component {
                                     <TextInput
                                         onFocus={() => this.setState({focus: 1})}
                                         onBlur={() =>  this.setState({focus: 0})}
+                                        placeholderTextColor = "#000"
                                         style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {borderBottomWidth:1, width: width - 80}]}
                                         value={this.state.mobile}
                                         onChangeText={text => this.setState({mobile: text})}
@@ -670,6 +672,7 @@ class UpdateProfileScreen extends React.Component {
 
                                     }
                                 }
+                                placeholderTextColor = "#000"
                                 onBlur={()=> this.setState({focus:0})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {borderBottomWidth:1, width: width - 80}]}
                                 value={ typeof this.state.address ? this.state.address.toString() : ""}
