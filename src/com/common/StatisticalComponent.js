@@ -80,7 +80,9 @@ class StatisticalComponent extends React.Component{
                                 <Text style={[styles.styleInfoText, {flex:1}]}>
                                     {"Thành viên"}
                                 </Text>
-                                <TouchableOpacity style={{paddingHorizontal: 15, paddingVertical:3, borderRadius: 10,
+                                <TouchableOpacity
+                                    onPress={this.props.updatePartnerInfo}
+                                    style={{paddingHorizontal: 15, paddingVertical:3, borderRadius: 10,
                                     backgroundColor: Style.DEFAUT_RED_COLOR, marginBottom : 2, alignItems: 'center', justifyContent: 'center'
                                 }}
                                 >

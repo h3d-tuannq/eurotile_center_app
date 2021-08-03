@@ -98,7 +98,7 @@ export default class Def {
 
     static currentCustomer = null;
 
-    static orderList = [];
+    static orderList = null;
     static refreshOrderList = [];
     static config_order_menu = [];
     static OrderListForStatus = [];
