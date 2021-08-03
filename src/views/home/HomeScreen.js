@@ -195,7 +195,8 @@ class HomeScreen extends React.Component {
             screen = 'update-partner';
         }
         console.log('Screen : ' + screen);
-        this.props.navigation.navigate('My', {'screen':screen});
+        this.props.navigation.navigate('My');
+        // this.props.navigation.navigate('My', {'screen':screen});
     }
 
     forcusFunction = () => {
@@ -421,7 +422,7 @@ class HomeScreen extends React.Component {
                 </View>
 
                 {
-                    Def.user_info && Def.user_info.partnerInfo ?
+                    Def.user_info ?
                         <StatisticalComponent orderList={Def.orderList}
                                               updatePartnerInfo={this.gotoPartnerInfo}
                         />
