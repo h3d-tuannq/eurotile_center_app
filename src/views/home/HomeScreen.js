@@ -97,6 +97,7 @@ class HomeScreen extends React.Component {
         // Def.refreshHome = this.refresh.bind(this);
         this.forcusFunction = this.forcusFunction.bind(this);
         this.getCenterSuccess = this.getCenterSuccess.bind(this);
+        this.gotoPartnerInfo = this.gotoPartnerInfo.bind(this);
         Def.mainNavigate = this.props.navigation;
 
         if(!Def.collection_data) {
@@ -187,6 +188,15 @@ class HomeScreen extends React.Component {
             this.setState({centerItems:Def.centerInfo});
         }
     };
+
+    gotoPartnerInfo(){
+        let screen = 'partner-info';
+        if(Def.checkPartnerPermission() <0){
+            screen = 'update-partner';
+        }
+        console.log('Screen : ' + screen);
+        this.props.navigation.navigate('My', {'screen':screen});
+    }
 
     forcusFunction = () => {
         this.setState({stateCount:Math.random()});
@@ -412,7 +422,9 @@ class HomeScreen extends React.Component {
 
                 {
                     Def.user_info && Def.user_info.partnerInfo ?
-                        <StatisticalComponent orderList={Def.orderList} />
+                        <StatisticalComponent orderList={Def.orderList}
+                                              updatePartnerInfo={this.gotoPartnerInfo}
+                        />
                         : null
                 }
 

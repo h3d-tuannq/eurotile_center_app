@@ -29,15 +29,7 @@ class MyScreen extends React.Component {
         this.updateProfile = this.updateProfile.bind(this);
         this.signInBtnClick = this.signInBtnClick.bind(this);
 
-        if(!Def.orderList || Def.orderList.length == 0) {
-            OrderController.getOrder(this.onGetOrderSuccess, this.onGetOrderNewsFailed);
-        }
-        else if (!Def.config_order_menu || Def.config_order_menu.length == 0) {
-            console.log("Create order config: " + Def.config_order_menu);
 
-            Def.config_order_menu = this.createConfigData(Def.orderList);
-            // this.setState({configMenu: Def.config_news_menu});
-        }
         this.state = {
             order_data: Def.orderList,
             stateCount: 0.0,
@@ -77,7 +69,7 @@ class MyScreen extends React.Component {
     async refresh()
     {
             console.log('Refresh Data -----');
-            if(!Def.orderList || Def.orderList.length == 0) {
+            if(!Def.orderList) {
                 console.log('Call get Order Data');
                 OrderController.getOrder(this.onGetOrderSuccess, this.onGetOrderNewsFailed);
             }
@@ -112,12 +104,12 @@ class MyScreen extends React.Component {
     }
 
     forcusFunction = () => {
-
-        if((!Def.orderList || Def.orderList.length == 0 ) && Def.user_info) {
-            OrderController.getOrder(this.getOrderSuccess);
+        if((!Def.orderList  ) && Def.user_info) {
             this.refresh();
+        } else {
+            Def.config_order_menu = this.createConfigData(Def.orderList);
         }
-        this.setState({stateCount:Math.random()});
+
         if(Def.refreshDashBoard && typeof Def.refreshDashBoard == 'function' && Def.user_info){
             Def.refreshDashBoard();
         }
@@ -192,13 +184,12 @@ class MyScreen extends React.Component {
         navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
         if(navigation){
             this.focusListener = navigation.addListener("focus", this.forcusFunction);
-        } else {
         }
 
         if(!Def.orderList) {
             OrderController.getOrder(this.onGetOrderSuccess, this.onGetOrderNewsFailed);
         }
-        else if (!Def.config_order_menu) {
+        else if (!Def.config_order_menu || Def.config_order_menu.length < 1) {
             Def.config_order_menu = this.createConfigData(Def.orderList);
             this.setState({configMenu: Def.config_order_menu});
         }
