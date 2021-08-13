@@ -6,10 +6,13 @@ import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import { LoginManager, AccessToken , GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 import auth from '@react-native-firebase/auth';
+import {firebase} from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 
 import {Alert, Platform} from 'react-native'
 import RNRestart from 'react-native-restart';
+import {appleAuth} from '@invertase/react-native-apple-authentication';
+import jwt_decode from 'jwt-decode';
 
 GoogleSignin.configure({
     webClientId: Def.WEB_CLIENT_ID,
@@ -180,6 +183,107 @@ export default class UserController{
             //     Def.setLoader(false);
         }
     };
+
+    static async appleFirebaseLogin (navigation = null) {
+        console.log('Apple login start');
+        const appleAuthRequestResponse = await appleAuth.performRequest({
+            requestedOperation: appleAuth.Operation.LOGIN,
+            requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+        });
+
+
+        // 2). if the request was successful, extract the token and nonce
+        const { identityToken, nonce } = appleAuthRequestResponse;
+
+        // can be null in some scenarios
+        if (identityToken) {
+            // 3). create a Firebase `AppleAuthProvider` credential
+            const appleCredential = firebase.auth.AppleAuthProvider.credential(identityToken, nonce);
+
+            // 4). use the created `AppleAuthProvider` credential to start a Firebase auth request,
+            //     in this example `signInWithCredential` is used, but you could also call `linkWithCredential`
+            //     to link the account to an existing user
+            const userCredential = await firebase.auth().signInWithCredential(appleCredential);
+
+            // user is now signed in, any Firebase `onAuthStateChanged` listeners you have will trigger
+            console.warn(`Firebase authenticated via Apple, UID: ${userCredential.user.uid}`);
+            console.log('Login Data ' + JSON.stringify(userCredential));
+        } else {
+            console.log('Login error');
+            // handle this - retry?
+        }
+    }
+
+
+    static async appleLogin(navigation = null){
+        const appleAuthRequestResponse = await appleAuth.performRequest({
+            requestedOperation: appleAuth.Operation.LOGIN,
+            requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+        });
+
+        console.log('Login Data 1 ' + JSON.stringify(appleAuthRequestResponse));
+
+        // get current authentication state for user
+        // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+        const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+
+        // use credentialState response to ensure the user is authenticated
+        if (credentialState === appleAuth.State.AUTHORIZED) {
+            // user is authenticated
+
+
+            let verifyInfo = await AsyncStorage.getItem('verifyInfo');
+            if(verifyInfo){
+                console.log('verifyInfo is not null' + JSON.stringify(verifyInfo));
+                Def.verifyInfo = JSON.parse(verifyInfo);
+            }
+            // Lan very file dau tien
+            if(appleAuthRequestResponse.email){
+                Def.verifyInfo[appleAuthRequestResponse.user] = {
+                  email : appleAuthRequestResponse.email,
+                  fullName : appleAuthRequestResponse.fullName,
+                };
+                await AsyncStorage.setItem('verifyInfo', JSON.stringify(Def.verifyInfo));
+            }
+
+            const result = {};
+            result.oauth_client = 'apple';
+            result.token = appleAuthRequestResponse.identityToken;
+
+
+            if(Def.verifyInfo[appleAuthRequestResponse.user]){
+                result.email = Def.verifyInfo[appleAuthRequestResponse.user]['email'];
+                result.id = appleAuthRequestResponse.user;
+                let fullName = Def.verifyInfo[appleAuthRequestResponse.user]['fullName'];
+                result.name = fullName['familyName'] + ' ' + fullName['givenName'] ;
+                result.first_name = fullName['givenName'];
+                result.last_name = fullName['familyName'];
+                result.photo = '';
+            } else {
+                const decodeData = jwt_decode(appleAuthRequestResponse.identityToken);
+                result.email = decodeData.email;
+                result.id = appleAuthRequestResponse.user;
+                result.name = decodeData.email;
+                result.first_name = 'Tuan';
+                result.last_name = 'Nguyen Quan';
+                result.photo = '';
+                console.log('Login Data ' + JSON.stringify(decodeData));
+
+            }
+            if(result.email){
+
+                UserController.loginFirebase(result);
+            }
+
+
+
+
+
+
+
+
+        }
+    }
 
 
 
@@ -408,8 +512,9 @@ export default class UserController{
 
     static async onLoginFirebaseSuccess(data){
 
-        console.log('Login Success');
+        console.log('Login Success : ' + JSON.stringify(data));
         // console.log("onLoginFirebaseSuccess: " + JSON.stringify(data));
+        // return;
         var is_new = false;
         try {
             if(data){

@@ -26,6 +26,8 @@ export default class Def {
     static username = '';
     static user_info = null;
 
+    static verifyInfo = {};
+
     static order_number = 12;
 
     static isSignup = false;

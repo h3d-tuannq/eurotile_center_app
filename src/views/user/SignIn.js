@@ -15,6 +15,7 @@ import FacebookIcon from '../../../assets/icon/icon-facebook.svg'
 import GoogleIcon from '../../../assets/icon/icon-google.svg'
 import Def from "../../../src/def/Def";
 import UserController from  "../../../src/controller/UserController"
+import { AppleButton } from '@invertase/react-native-apple-authentication';
 
 const {width,height} = Dimensions.get('window');
 
@@ -174,6 +175,18 @@ export default class SignIn extends Component {
                             Đăng nhập với Google
                         </Text>
                     </TouchableOpacity>
+
+                    <AppleButton
+                        cornerRadius={5}
+                        style={[Style.login_style.button, {backgroundColor:'#ffffff', height : 50, alignItems : 'flex-start'}]}
+                        buttonStyle={AppleButton.Style.WHITE}
+                        buttonType={AppleButton.Type.SIGN_IN}
+                        onPress={()=> {
+                            // this.setState({isLoging:true});
+                            UserController.appleLogin(navigation);
+
+                        }}
+                    />
 
 
                 </View>
