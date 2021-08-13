@@ -412,7 +412,7 @@ export default class UserController{
         // console.log("onLoginFirebaseSuccess: " + JSON.stringify(data));
         var is_new = false;
         try {
-            if(data){
+            if(data && data['user']){
                 is_new = data['is_new'];
                 data = data['user'];
 
@@ -429,6 +429,20 @@ export default class UserController{
                 AsyncStorage.setItem('fcmId', token);
                 UserController.registerFcmId(token);
 
+            } else {
+                let msg = data['msg'] ? data['msg'] : 'Đăng nhập không thành công.';
+                Alert.alert(
+                    'Thông báo',
+                    'Đăng nhập không thành công.',
+                    [
+                        {
+                            text: 'Ok',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                        }
+                    ],
+                    {cancelable: false},
+                );
             }
         } catch (err){
             console.log('Error : ' + err);
