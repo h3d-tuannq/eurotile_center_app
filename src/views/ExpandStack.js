@@ -46,25 +46,10 @@ class ExpandStack extends React.Component {
                     headerTitleStyle: {
                         textTransform: 'uppercase'
                     },
-                    headerLeft: () => (
-                        <TouchableOpacity
-                            style=  {
-                                {
-                                    width: Style.LOGO_WIDTH + 20,
-                                    height:Style.DRAWER_MENU_SIZE,
-                                    justifyContent: 'center',
-                                    paddingLeft:15 ,
-                                    alignItems : 'center'
-                                }
-                            }>
+                    headerBackImage: ()=> {
+                        return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                    },
 
-                            <EurotileLogo
-                                width={Style.LOGO_WIDTH}
-                                height={Style.LOGO_HEIGHT}
-                            />
-                        </TouchableOpacity>
-
-                    ),
                     headerRight: () => (
                         <TouchableOpacity
                             style=  {
@@ -98,6 +83,25 @@ class ExpandStack extends React.Component {
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="expand-screen" component={ExpandScreen} options={{
                     title: null,
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    width: Style.LOGO_WIDTH + 20,
+                                    height:Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingLeft:15 ,
+                                    alignItems : 'center'
+                                }
+                            }>
+
+                            <EurotileLogo
+                                width={Style.LOGO_WIDTH}
+                                height={Style.LOGO_HEIGHT}
+                            />
+                        </TouchableOpacity>
+
+                    ),
 
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
@@ -111,7 +115,7 @@ class ExpandStack extends React.Component {
                 }} />
 
                 <RootStack.Screen name="contact-screen" component={ContactScreen} options={{
-                    title: null,
+                    title: 'Liên hệ',
 
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
@@ -125,7 +129,7 @@ class ExpandStack extends React.Component {
                 }} />
 
                 <RootStack.Screen name="share-app-screen" component={ShareAppScreen} options={{
-                    title: null,
+                    title: 'Chia sẻ ứng dụng',
 
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
@@ -139,7 +143,7 @@ class ExpandStack extends React.Component {
                 }} />
 
                 <RootStack.Screen name="setup-info-screen" component={ChangeUserInfo} options={{
-                    title: null,
+                    title: 'Cài đặt',
 
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
@@ -153,7 +157,7 @@ class ExpandStack extends React.Component {
                 }} />
 
                 <RootStack.Screen name="term-screen" component={TermScreen} options={{
-                    title: null,
+                    title: 'Điều khoản',
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
                         height: Style.HEADER_HEIGHT,

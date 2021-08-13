@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image} from 'react-native'
+import {Text, View, Button, StyleSheet, Dimensions, ScrollView, TouchableOpacity,Alert, Image} from 'react-native'
 import Def from '../../def/Def'
 const {width, height} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -66,6 +66,12 @@ class ExpandScreen extends React.Component {
                 if(Def.user_info){
                     UserController.logoutLocal();
                 }
+                break;
+            default :
+                Alert.alert(
+                    'Thông báo',
+                    'Chức năng đang phát triển',
+                );
                 break;
 
         }
