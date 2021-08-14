@@ -82,11 +82,15 @@ class MyScreen extends React.Component {
                 console.log('Isset Daa');
             }
             if(Def.refreshDashBoard && typeof Def.refreshDashBoard == 'function') {
+                console.log('refresh dashboard issset');
                 Def.refreshDashBoard();
+            } else {
+                console.log('refresh dashboard not issset');
             }
+            console.log('Display Name : ' + Def.user_info['userProfile']['display_name']);
             this.setState( {
                 user: Def.user_info,
-                stateCount: 0.0,
+                stateCount: Math.random(),
                 configMenu: Def.config_order_menu
             });
 
@@ -219,7 +223,7 @@ class MyScreen extends React.Component {
 
                         <View style={{flex: 1}}>
                             {
-                                Def.user_info ?
+                                this.state.user ?
                                     <DashboardComponent stateCount={this.state.stateCount}
                                                         updatePartnerInfo={this.gotoPartnerInfo}
                                                         updateInfo={this.updateProfile}/>

@@ -31,10 +31,10 @@ export default class ChangePassword extends Component {
         else if(this.state.password != this.state.re_password && !Def.user_info.oauth_client){
             alert("Mật khẩu và mật khẩu xác nhận phải giống nhau");
         } else if(this.state.password.length < 6 && !Def.user_info.oauth_client){
-            alert("Mật khẩu phải dài hơn 8 ký tự");
+            alert("Mật khẩu phải dài hơn 6 ký tự");
         }else{
             const {navigation} = this.props;
-            UserController.changePassword(this.state.email, this.state.display_name, this.state.oldpass , this.state.password, this.state.disableNextPrev,navigation);
+            // UserController.changePassword(this.state.email, this.state.display_name, this.state.oldpass , this.state.password, this.state.disableNextPrev,navigation);
         }
     }
     render() {
