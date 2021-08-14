@@ -57,7 +57,7 @@ class StatisticalComponent extends React.Component{
                         {this.state.user ?  ( user['userProfile'] ? user['userProfile']['display_name'] :  user['username']) : ''}
                     </Text>
                     {
-                        Def.user_info && Def.checkPartnerPermission() > -1 ?
+                        user && Def.checkPartnerPermission() > -1 ?
                             <View>
                                 <View style={styles.styleInfoItem}>
                                     <Text style={styles.styleInfoText}>
@@ -103,55 +103,6 @@ class StatisticalComponent extends React.Component{
                     </View>
 
                 </View>
-
-                    {/*<View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 10}}>*/}
-                    {/*    <TouchableOpacity style={{*/}
-                    {/*        width: BUTTON_WIDTH,*/}
-                    {/*        height: BUTTON_HEIGHT,*/}
-                    {/*        borderRadius: 10,*/}
-                    {/*        backgroundColor: '#20C0F0',*/}
-                    {/*        justifyContent: 'center',*/}
-                    {/*        alignItems: 'center'*/}
-                    {/*    }}>*/}
-                    {/*        <Text>*/}
-                    {/*            {"Chiết Khấu"}*/}
-                    {/*        </Text>*/}
-                    {/*        <Text>*/}
-                    {/*            {Def.partnerlevelInfo[user.partnerInfo.level_id - 1] ? Def.partnerlevelInfo[user.partnerInfo.level_id - 1].discount + "%" : "%"}*/}
-                    {/*        </Text>*/}
-                    {/*    </TouchableOpacity>*/}
-                    {/*    <TouchableOpacity style={{*/}
-                    {/*        width: BUTTON_WIDTH,*/}
-                    {/*        height: BUTTON_HEIGHT,*/}
-                    {/*        borderRadius: 10,*/}
-                    {/*        backgroundColor: '#F19C26',*/}
-                    {/*        justifyContent: 'center',*/}
-                    {/*        alignItems: 'center'*/}
-                    {/*    }}>*/}
-                    {/*        <Text>*/}
-                    {/*            Đơn hàng*/}
-                    {/*        </Text>*/}
-                    {/*        <Text>*/}
-                    {/*            {this.state.accomplishedOrder}*/}
-                    {/*        </Text>*/}
-                    {/*    </TouchableOpacity>*/}
-                    {/*    <TouchableOpacity style={{*/}
-                    {/*        width: BUTTON_WIDTH,*/}
-                    {/*        height: BUTTON_HEIGHT,*/}
-                    {/*        borderRadius: 10,*/}
-                    {/*        backgroundColor: '#20C0F0',*/}
-                    {/*        justifyContent: 'center',*/}
-                    {/*        alignItems: 'center'*/}
-                    {/*    }}>*/}
-                    {/*        <Text>*/}
-                    {/*            Hoa hồng*/}
-                    {/*        </Text>*/}
-                    {/*        <Text>*/}
-                    {/*            {Def.numberWithCommas(this.state.profit) + ' đ'}*/}
-                    {/*        </Text>*/}
-                    {/*    </TouchableOpacity>*/}
-                    {/*</View>*/}
-
             </View>
                 )
     }

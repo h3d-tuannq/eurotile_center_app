@@ -46,6 +46,7 @@ export default class UserController{
     }
 
     static async onLoginSuccess(data ){
+        console.log('return data');
         try {
 
             if(data){
@@ -113,6 +114,45 @@ export default class UserController{
         //
         // Def.mainNavigate.navigate('My');
     }
+
+    static async onChangeInfoSuccess(data ){
+        console.log('return data');
+        try {
+            if(data){
+                if( data['result'] == 0 ||data['err_code']) {
+                    Alert.alert(
+                        "Cảnh báo",
+                        data['msg'],
+                        [
+                            {
+                                text: "Ok",
+                                style: 'cancel',
+                            }
+                        ],
+                        {cancelable: false},
+                    );
+                    return ;
+                }
+
+                data = data['user'];
+                let acess_token = data['access_token'];
+                AsyncStorage.setItem('access_token', `Bearer ${acess_token}`);
+                AsyncStorage.setItem('user_info', JSON.stringify(data));
+                AsyncStorage.setItem('email', data['email']);
+                Def.login_token = `Bearer ${acess_token}`;
+                Def.email = data['email'];
+                Def.username = data['username'];
+                Def.user_info = data;
+            }
+        } catch (err){
+            console.log('Error : ' + err);
+        }
+        Def.REFESH_SCREEN.push('my-screen', 'update-partner', 'update-profile','setup-info-screen');
+        if(Def.mainNavigate){
+            Def.mainNavigate.navigate('My', {'screen':'my-screen', params: { userInfo: Def.user_info}});
+        }
+    }
+
 
     static onLoginFailed(data){
     }
@@ -347,15 +387,16 @@ export default class UserController{
     }
 
 
+    static successCallBack = null;
 
+    static async  changePassword(param,navigation=null, successCallback = null, falseCallback) {
 
-    static async  changePassword(email, displayName, oldPassword , newPass,navigation=null, successCallback, falseCallback) {
-
-        let param = {'email' : email, 'password' : newPass, 'old_password': oldPassword, 'display_name':displayName};
+        // let param = {'email' : email, 'password' : newPass, 'old_password': oldPassword, 'display_name':displayName};
         if(navigation){
             Def.mainNavigate = navigation;
         }
-        Net.sendRequest(this.onLoginSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/change-account-info' , Def.POST_METHOD , param);
+        Net.sendRequest(this.onChangeInfoSuccess,this.onLoginFalse,Def.URL_BASE + '/api/user/change-account-info' , Def.POST_METHOD , param);
+
         // if(Def.setLoader)
         //     Def.setLoader(false);
 

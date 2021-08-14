@@ -43,8 +43,9 @@ class DashboardComponent extends React.Component{
 
     refresh()
     {
+        console.log('Dashboard Refresh');
         let orderList = Def.orderList;
-        this.setState({orderList:Def.orderList , stateCount: this.props.stateCount != null ? this.props.stateCount : 0 ,  profit: Def.calProfitValue(Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED)),
+        this.setState({user : Def.user_info,orderList:Def.orderList , stateCount: this.props.stateCount != null ? this.props.stateCount : 0 ,  profit: Def.calProfitValue(Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED)),
             accomplishedOrder: this.props.numberOrder != null ? this.props.numberOrder : Def.getOrderByStatus(orderList, Def.STATUS_ACCOMPLISHED).length,  });
     }
     render(){
@@ -64,7 +65,7 @@ class DashboardComponent extends React.Component{
                         {this.state.user ?  ( user['userProfile'] ? user['userProfile']['display_name'] :  user['username']) : ''}
                     </Text>
                     {
-                        Def.user_info && Def.checkPartnerPermission() > -1 ?
+                        this.state.user && Def.checkPartnerPermission() > -1 ?
                         <View>
                             <View style={styles.styleInfoItem}>
                                 <View style={{flex: 1, flexDirection:'row'}}>

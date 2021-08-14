@@ -18,23 +18,60 @@ export default class ChangeUserInfo extends Component {
             re_password:""
         }
         this.updatePass = this.updatePass.bind(this);
+        this.clearData = this.clearData.bind(this);
+        this.forcusFunction = this.forcusFunction.bind(this);
+    }
+
+    clearData(){
+        this.setState({
+            oldpass:"",
+            password:"",
+            re_password:""
+        });
     }
 
     updatePass(){
         if(!this.state.display_name){
             alert("Vui nhập tên hiển thị");
+            return;
         }else if(!this.state.oldpass &&  !Def.user_info.oauth_client){
             alert("Vui nhập mật khẩu hiện tại");
+            return;
         }
-        else if(this.state.password != this.state.re_password && !Def.user_info.oauth_client){
-            alert("Mật khẩu và mật khẩu xác nhận phải giống nhau");
-        } else if(this.state.password.length < 6 && !Def.user_info.oauth_client){
-            alert("Mật khẩu phải dài hơn 8 ký tự");
-        }else{
-            const {navigation} = this.props;
-            UserController.changePassword(this.state.email, this.state.display_name, this.state.oldpass , this.state.password, this.state.disableNextPrev,navigation);
+        else if(this.state.password != "") {
+            if(this.state.password != this.state.re_password && !Def.user_info.oauth_client){
+                alert("Mật khẩu và mật khẩu xác nhận phải giống nhau");
+                return;
+            } else if(this.state.password.length < 6 && !Def.user_info.oauth_client) {
+                alert("Mật khẩu phải dài hơn 6 ký tự " + this.state.password);
+                return;
+            }
         }
+        const {navigation} = this.props;
+        const params = {'email' : this.state.email, 'password' : this.state.password, 'old_password': this.state.oldpass, 'display_name':this.state.display_name};
+        UserController.changePassword(params,navigation, this.clearData);
+
     }
+    componentDidMount() {
+        let {navigation} = this.props;
+        navigation =  this.props.navigation ? this.props.navigation : Def.mainNavigate ;
+        if(navigation){
+            this.focusListener = navigation.addListener("focus", this.forcusFunction);
+        }
+
+    }
+
+    forcusFunction = () => {
+        console.log('forcus function in Change Info');
+        const index = Def.REFESH_SCREEN.indexOf('setup-info-screen');
+        if (index > -1) {
+            Def.REFESH_SCREEN.splice(index, 1);
+            this.clearData();
+        }
+        return true;
+    };
+
+
     render() {
         const {navigation} = this.props;
         const {wraper,loginform, loginButton, loginText , labelInputNormal ,
