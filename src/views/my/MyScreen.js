@@ -28,6 +28,7 @@ class MyScreen extends React.Component {
         this.getOrderSuccess = this.getOrderSuccess.bind(this);
         this.updateProfile = this.updateProfile.bind(this);
         this.signInBtnClick = this.signInBtnClick.bind(this);
+        Def.config_order_menu = this.createConfigData(Def.orderList);
 
 
         this.state = {
@@ -69,6 +70,10 @@ class MyScreen extends React.Component {
     async refresh()
     {
             console.log('Refresh Data -----');
+            let newState = {
+                user: Def.user_info,
+                stateCount: Math.random(),
+            }
             if(!Def.orderList) {
                 console.log('Call get Order Data');
                 OrderController.getOrder(this.onGetOrderSuccess, this.onGetOrderNewsFailed);
@@ -76,6 +81,7 @@ class MyScreen extends React.Component {
             else if (!Def.config_order_menu || Def.config_order_menu.length == 0) {
                 console.log('Call get Order Data');
                 Def.config_order_menu = this.createConfigData(Def.orderList);
+                newState['configMenu'] = Def.config_order_menu;
                 console.log('set Data config -  on Refresh');
             }
             else {
@@ -88,11 +94,7 @@ class MyScreen extends React.Component {
                 console.log('refresh dashboard not issset');
             }
             console.log('Display Name : ' + Def.user_info['userProfile']['display_name']);
-            this.setState( {
-                user: Def.user_info,
-                stateCount: Math.random(),
-                configMenu: Def.config_order_menu
-            });
+            this.setState( newState);
 
     }
 
