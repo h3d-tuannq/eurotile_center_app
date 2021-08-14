@@ -47,7 +47,7 @@ class ExpandScreen extends React.Component {
         this.shareApplication = this.shareApplication.bind(this);
         this.gotoSetupInfo = this.gotoSetupInfo.bind(this);
         this.forcusFunction = this.forcusFunction.bind(this);
-        Def.refreshDashBoard = this.refresh;
+        // Def.refreshDashBoard = this.refresh;
         this.buttonClickHandle = this.buttonClickHandle.bind(this);
     }
 
