@@ -246,8 +246,39 @@ export default class UserController{
             const userCredential = await firebase.auth().signInWithCredential(appleCredential);
 
             // user is now signed in, any Firebase `onAuthStateChanged` listeners you have will trigger
-            console.warn(`Firebase authenticated via Apple, UID: ${userCredential.user.uid}`);
             console.log('Login Data ' + JSON.stringify(userCredential));
+
+            let verifyInfo = await AsyncStorage.getItem('verifyInfo');
+            if(verifyInfo){
+                console.log('verifyInfo is not null' + JSON.stringify(verifyInfo));
+                Def.verifyInfo = JSON.parse(verifyInfo);
+            }
+            // Lan very file dau tien
+            if(userCredential.user.email){
+                let fullName = userCredential.user.displayName && userCredential.user.displayName.length > 0 ? userCredential.user.displayName  :userCredential.user.providerData[0].displayName;
+                console.log("Fullname " + userCredential.user.providerData[0].displayName);
+                Def.verifyInfo[userCredential.user.email] = {
+                    email : userCredential.user.email,
+                    fullName : fullName,
+                };
+                await AsyncStorage.setItem('verifyInfo', JSON.stringify(Def.verifyInfo));
+                const result = {};
+                result.oauth_client = 'apple';
+                result.token = identityToken;
+                result.email = Def.verifyInfo[userCredential.user.email]['email'];
+                result.id = userCredential.user.uid;
+                result.name = fullName ;
+                result.first_name = '';
+                result.last_name = '';
+                result.photo = userCredential.user.photoURL  && userCredential.user.photoURL.length > 0 ? userCredential.user.photoURL  :userCredential.user.providerData[0].photoURL;
+                console.log('Result : ' + JSON.stringify(result));
+                if(result.email){
+
+                     UserController.loginFirebase(result);
+                }
+            }
+
+
         } else {
             console.log('Login error');
             // handle this - retry?

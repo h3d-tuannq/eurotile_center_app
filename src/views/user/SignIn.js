@@ -183,7 +183,7 @@ export default class SignIn extends Component {
                         buttonType={AppleButton.Type.SIGN_IN}
                         onPress={()=> {
                             // this.setState({isLoging:true});
-                            UserController.appleLogin(navigation);
+                            UserController.appleFirebaseLogin(navigation);
 
                         }}
                     />
