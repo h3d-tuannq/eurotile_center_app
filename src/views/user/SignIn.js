@@ -18,6 +18,7 @@ import UserController from  "../../../src/controller/UserController"
 import { appleAuthAndroid, AppleButton } from '@invertase/react-native-apple-authentication';
 import 'react-native-get-random-values';
 import { v4 as uuid } from 'uuid'
+import { AppleButton } from '@invertase/react-native-apple-authentication';
 
 const {width,height} = Dimensions.get('window');
 
@@ -210,6 +211,18 @@ export default class SignIn extends Component {
                         />
                     )}
 
+
+                    <AppleButton
+                        cornerRadius={5}
+                        style={[Style.login_style.button, {backgroundColor:'#ffffff', height : 50, alignItems : 'flex-start'}]}
+                        buttonStyle={AppleButton.Style.WHITE}
+                        buttonType={AppleButton.Type.SIGN_IN}
+                        onPress={()=> {
+                            // this.setState({isLoging:true});
+                            UserController.appleFirebaseLogin(navigation);
+
+                        }}
+                    />
 
 
                 </View>
