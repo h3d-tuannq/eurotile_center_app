@@ -21,6 +21,7 @@ import CartIcon from '../../assets/icons/cart.svg'
 
 import EurotileLogo from '../../assets/icons/Logo w.svg'
 import NotiIcon from "../../assets/icon/icon-notification.svg";
+import ExpandIcon from "../../assets/icons/expand.svg";
 
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
@@ -43,6 +44,14 @@ class ProductStack extends React.Component {
         this.getOrderNumber = this.getOrderNumber.bind(this);
         this.showNotification = this.showNotification.bind(this);
         this.searchClick = this.searchClick.bind(this);
+        this.showExpandPanel = this.showExpandPanel.bind(this);
+    }
+
+    showExpandPanel() {
+        if(this.props.navigation){
+            Def.mainNavigate = this.props.navigation;
+        }
+        Def.mainNavigate.navigate('Expand', {screen:'expand-screen', params:{refresh:1}});
     }
 
     searchClick = () => {
@@ -204,9 +213,9 @@ class ProductStack extends React.Component {
                                         alignItems : 'center'
                                     }
                                 }
-                                onPress={this.showNotification}>
-                                <NotiIcon
-                                    width={Style.CART_ICON_SIZE -5}
+                                onPress={this.showExpandPanel}>
+                                <ExpandIcon
+                                    width={Style.CART_ICON_SIZE }
                                     height={Style.CART_ICON_SIZE }
                                 />
                             </TouchableOpacity>
@@ -341,9 +350,9 @@ class ProductStack extends React.Component {
                                             alignItems : 'center'
                                         }
                                     }
-                                    onPress={this.showNotification}>
-                                    <NotiIcon
-                                        width={Style.CART_ICON_SIZE -5}
+                                    onPress={this.showExpandPanel()}>
+                                    <ExpandIcon
+                                        width={Style.CART_ICON_SIZE}
                                         height={Style.CART_ICON_SIZE }
                                     />
                                 </TouchableOpacity>

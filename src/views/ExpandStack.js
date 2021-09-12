@@ -50,55 +50,45 @@ class ExpandStack extends React.Component {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     },
 
-                    headerRight: () => (
-                        <TouchableOpacity
-                            style=  {
-                                {
-                                    width: Style.DRAWER_MENU_SIZE,
-                                    height: Style.DRAWER_MENU_SIZE,
-                                    justifyContent: 'center',
-                                    paddingRight:15 ,
-                                    alignItems : 'center'
-                                }
-                            }
-                            onPress={this.showNotification}>
-                            {/*{ this.state.new_noti ?*/}
-                            {/*<View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>*/}
-                            {/*<Text style={{color: 'white', fontSize: this.state.new_noti > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>*/}
-                            {/*{Def.formatOrderNumber(this.state.new_noti)}*/}
-                            {/*</Text>*/}
-                            {/*</View>*/}
-                            {/*:<View/>*/}
-                            {/*}*/}
-
-                            <NotiIcon
-                                width={Style.CART_ICON_SIZE -5}
-                                height={Style.CART_ICON_SIZE }
-                            />
-                        </TouchableOpacity>
-
-                    )
+                    // headerRight: () => (
+                    //     <TouchableOpacity
+                    //         style=  {
+                    //             {
+                    //                 width: Style.DRAWER_MENU_SIZE,
+                    //                 height: Style.DRAWER_MENU_SIZE,
+                    //                 justifyContent: 'center',
+                    //                 paddingRight:15 ,
+                    //                 alignItems : 'center'
+                    //             }
+                    //         }
+                    //         onPress={this.showNotification}>
+                    //         <NotiIcon
+                    //             width={Style.CART_ICON_SIZE -5}
+                    //             height={Style.CART_ICON_SIZE }
+                    //         />
+                    //     </TouchableOpacity>
+                    //
+                    // )
                 }}
             >
                 {/*<RootStack.Screen name="mainTv" component={MainStack} />*/}
                 <RootStack.Screen name="expand-screen" component={ExpandScreen} options={{
-                    title: null,
+                    title: "Mở rộng",
                     headerLeft: () => (
                         <TouchableOpacity
                             style=  {
                                 {
-                                    width: Style.LOGO_WIDTH + 20,
-                                    height:Style.DRAWER_MENU_SIZE,
+                                    // width: Style.LOGO_WIDTH + 20,
+                                    // height:Style.DRAWER_MENU_SIZE,
                                     justifyContent: 'center',
                                     paddingLeft:15 ,
                                     alignItems : 'center'
                                 }
-                            }>
+                            }
+                            onPress={() => this.props.navigation.goBack()}
+                        >
 
-                            <EurotileLogo
-                                width={Style.LOGO_WIDTH}
-                                height={Style.LOGO_HEIGHT}
-                            />
+                            <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                         </TouchableOpacity>
 
                     ),

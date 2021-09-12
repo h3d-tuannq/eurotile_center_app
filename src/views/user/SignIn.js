@@ -15,6 +15,9 @@ import FacebookIcon from '../../../assets/icon/icon-facebook.svg'
 import GoogleIcon from '../../../assets/icon/icon-google.svg'
 import Def from "../../../src/def/Def";
 import UserController from  "../../../src/controller/UserController"
+import { appleAuthAndroid, AppleButton } from '@invertase/react-native-apple-authentication';
+import 'react-native-get-random-values';
+import { v4 as uuid } from 'uuid'
 
 const {width,height} = Dimensions.get('window');
 
@@ -39,6 +42,7 @@ export default class SignIn extends Component {
         this.setLoader = this.setLoader.bind(this);
         this.loginFalseCallback = this.loginFalseCallback.bind(this);
         this.loginFalseCallback = this.loginFalseCallback.bind(this);
+        this.onAppleButtonPress = this.onAppleButtonPress.bind(this);
         Def.setLoader = this.setLoader;
         Def.setIsLogin = this.setLoader;
     }
@@ -86,6 +90,29 @@ export default class SignIn extends Component {
     loginFalseCallback(data){
         alert("Login lỗi " + JSON.stringify(data));
 
+    }
+
+    async  onAppleButtonPress() {
+        // Generate secure, random values for state and nonce
+        const rawNonce = uuid();
+        const state = uuid();
+
+        // Configure the request
+        appleAuthAndroid.configure({
+            clientId: 'com.eurotile.center',
+            redirectUri: 'https://eurotiledev.house3d.net/user/sign-in/apple-oauth',
+            responseType: appleAuthAndroid.ResponseType.ALL,
+            scope: appleAuthAndroid.Scope.ALL,
+            nonce: rawNonce,
+            state,
+        });
+
+        // Open the browser window for user sign in
+        const response = await appleAuthAndroid.signIn();
+
+        console.log('Response Data ' + JSON.stringify(response));
+
+        // Send the authorization code to your backend for verification
     }
 
 
@@ -174,6 +201,15 @@ export default class SignIn extends Component {
                             Đăng nhập với Google
                         </Text>
                     </TouchableOpacity>
+
+                    {appleAuthAndroid.isSupported && (
+                        <AppleButton
+                            buttonStyle={AppleButton.Style.BLACK}
+                            buttonType={AppleButton.Type.SIGN_IN}
+                            onPress={() => this.onAppleButtonPress()}
+                        />
+                    )}
+
 
 
                 </View>

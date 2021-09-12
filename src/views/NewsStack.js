@@ -13,6 +13,7 @@ import NewsDetail from './news/NewsDetailScreen';
 import EurotileLogo from '../../assets/icons/Logo w.svg';
 import CartIcon from '../../assets/icons/cart.svg';
 import Def from '../def/Def';
+import ExpandIcon from "../../assets/icons/expand.svg";
 class NewsStack extends React.Component {
     constructor(props){
         super(props);
@@ -20,6 +21,7 @@ class NewsStack extends React.Component {
             new_noti: Def.order_number
         };
         this.showNotification = this.showNotification.bind(this);
+        this.showExpandPanel = this.showExpandPanel.bind(this);
     }
 
     showNotification() {
@@ -31,6 +33,13 @@ class NewsStack extends React.Component {
         console.log('Go to create Notification');
 
         Def.mainNavigate.navigate('Notification', {screen:'noti-screen', params:{refresh:1}});
+    }
+
+    showExpandPanel() {
+        if(this.props.navigation){
+            Def.mainNavigate = this.props.navigation;
+        }
+        Def.mainNavigate.navigate('Expand', {screen:'expand-screen', params:{refresh:1}});
     }
 
     render() {
@@ -73,7 +82,7 @@ class NewsStack extends React.Component {
                                     alignItems : 'center'
                                 }
                             }
-                            onPress={this.showNotification}>
+                            onPress={this.showExpandPanel}>
                             {/*{ this.state.new_noti ?*/}
                                 {/*<View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>*/}
                                     {/*<Text style={{color: 'white', fontSize: this.state.new_noti > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>*/}
@@ -83,8 +92,8 @@ class NewsStack extends React.Component {
                                 {/*:<View/>*/}
                             {/*}*/}
 
-                            <NotiIcon
-                                width={Style.CART_ICON_SIZE -5}
+                            <ExpandIcon
+                                width={Style.CART_ICON_SIZE }
                                 height={Style.CART_ICON_SIZE }
                             />
                         </TouchableOpacity>

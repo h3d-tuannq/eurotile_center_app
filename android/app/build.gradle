@@ -134,7 +134,7 @@ android {
         applicationId "com.eurotile_center_app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 19
+        versionCode 21
         versionName "1.0"
         multiDexEnabled true
     }
@@ -186,6 +186,9 @@ android {
             }
 
         }
+    }
+    lintOptions {
+        checkReleaseBuilds false
     }
 }
 

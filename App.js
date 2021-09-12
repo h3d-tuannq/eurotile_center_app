@@ -313,24 +313,43 @@ function MainTab() {
                 }}
             />
 
+            {/*<Tab.Screen*/}
+            {/*    name="Expand"*/}
+            {/*    component={ExpandStack}*/}
+            {/*    options={(route) => {*/}
+            {/*        return false*/}
+            {/*            ? {tabBarVisible: false}*/}
+            {/*            : {*/}
+            {/*                tabBarLabel: 'Mở rộng',*/}
+            {/*                tabBarIcon: ({focused, color, size}) => {*/}
+            {/*                    if (focused) {*/}
+            {/*                        return <Icon name="expand-arrows-alt" size={25} color={Style.DEFAUT_BLUE_COLOR} />*/}
+            {/*                        return <UserProfileSelectedIcon style={styles.tabBarIconStyle} />;*/}
+            {/*                    }*/}
+            {/*                    return <Icon name="expand-arrows-alt" size={25} color={Style.GREY_TEXT_COLOR} />*/}
+            {/*                    return <UserProfileIcon style={styles.tabBarIconStyle} />;*/}
+            {/*                },*/}
+            {/*            };*/}
+            {/*    }}*/}
+            {/*/>*/}
+
             <Tab.Screen
-                name="Expand"
-                component={ExpandStack}
+                name="News"
+                component={NewsStack}
                 options={(route) => {
-                    return false
-                        ? {tabBarVisible: false}
-                        : {
-                            tabBarLabel: 'Mở rộng',
-                            tabBarIcon: ({focused, color, size}) => {
-                                if (focused) {
-                                    return <Icon name="expand-arrows-alt" size={25} color={Style.DEFAUT_BLUE_COLOR} />
-                                    return <UserProfileSelectedIcon style={styles.tabBarIconStyle} />;
-                                }
-                                return <Icon name="expand-arrows-alt" size={25} color={Style.GREY_TEXT_COLOR} />
-                                return <UserProfileIcon style={styles.tabBarIconStyle} />;
-                            },
-                        };
-                }}
+                            return false
+                            ? {tabBarVisible: false}
+                            : {
+                                tabBarLabel: 'Tin tức',
+                                tabBarIcon: ({focused, color, size}) => {
+                                    if (focused) {
+                                    return <NewsSelectedIcon style={styles.tabBarIconStyle} />;
+                                    // return <MyProfileIconSelect style={styles.tabBarIconStyle} />;
+                                    }
+                                    return <NewsIcon style={styles.tabBarIconStyle} />;
+                                },
+                            };
+            }}
             />
 
 
@@ -347,6 +366,7 @@ function AppStack() {
             <Stack.Screen name="Booking" component={BookingStack} />
             <Stack.Screen name="News" component={NewsStack} />
             <Stack.Screen name="Notification" component={NotificationStack} />
+            <Stack.Screen name="Expand" component={ExpandStack} />
         </RootStack.Navigator>
     );
 }

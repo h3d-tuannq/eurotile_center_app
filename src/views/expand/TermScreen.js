@@ -18,7 +18,7 @@ const {width, height} = Dimensions.get('window');
 class TermScreen extends React.Component {
     render() {
         return (
-            <View style={{marginTop : 5, paddingBottom : 5 }}>
+            <View style={{paddingTop : 5, paddingBottom : 5, paddingHorizontal: 10 , backgroundColor: '#fff'}}>
                 <View style={styles.webView}>
                     <WebView
                         source={{ uri: Def.PRIVACY_URL }}
@@ -30,24 +30,9 @@ class TermScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    header: {
-        height: Style.HEADER_HEIGHT,
-        flexDirection: 'row',
-        paddingVertical: 10,
-        width: width,
-        // flex:1,
-    },
-
-    title: {
-        fontSize: Style.TITLE_SIZE,
-        color: Style.DEFAUT_RED_COLOR,
-        fontWeight: 'bold',
-        marginLeft: -20,
-    },
     webView : {
-        height : height - Style.HEADER_HEIGHT - 60,
-        backgroundColor: '#e6e6e6',
-        marginRight: 15,
+        height : height - Style.HEADER_HEIGHT ,
+        backgroundColor: '#fff',
     },
 });
 

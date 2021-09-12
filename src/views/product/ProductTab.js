@@ -47,7 +47,7 @@ class ProductTab extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={{marginTop: 0, flex: 1}}>
-                    {this.props.data ?
+                    {this.props.data && this.props.data.length > 0 ?
                     <FlatList
                         data={this.props.data}
                         renderItem={renderItem}
@@ -56,9 +56,9 @@ class ProductTab extends React.Component {
                         numColumns={2}
                     />
                     :
-                        <View style={{alignItems : 'center', justifyContent:'center'}}>
+                        <View style={{alignItems : 'center', justifyContent:'center', flex: 1}}>
                             <Text>
-                                {'Chưa có sản phẩm trong danh mục'}
+                                {'Chưa có sản phẩm trong danh mục này'}
                             </Text>
                         </View>
                     }
