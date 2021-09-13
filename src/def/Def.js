@@ -34,6 +34,8 @@ export default class Def {
 
     static refreshHome = [];
 
+    static CATALOGUE_CODE = 'Catalogue';
+
     static os = 'android';
 
     // Select
@@ -88,8 +90,10 @@ export default class Def {
     static config_collection_menu = null;
     static design_cate = null;
     static product_data = [];
+    static catalogue_data = null;
     static product_tree_data = {};
     static collection_tree_data = {};
+    static  ITEM_HEIGHT = 38;
 
     static cart_data = [];
     static currentCart = [];
@@ -243,13 +247,18 @@ export default class Def {
         return rs;
     }
 
-    static getThumnailImg(img_path) {
+    static getThumnailImg(img_path, print = false) {
         // img_path = Def.URL_CONTENT_BASE + img_path;
         let rs = img_path.split(".");
         let lastItem = rs.pop();
         rs = rs.join('.') + '_200x200.' + lastItem;
+        if(print == true){
+            console.log('ThumbPath ' + rs);
+        }
         return rs;
     }
+
+
 
     static getTypeAccount() {
         if (Def.user_info && Def.user_info['partnerInfo']) {

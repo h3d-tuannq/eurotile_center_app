@@ -11,8 +11,10 @@ import messaging from '@react-native-firebase/messaging';
 
 import {Alert, Platform} from 'react-native'
 import RNRestart from 'react-native-restart';
-import {appleAuth} from '@invertase/react-native-apple-authentication';
+import {appleAuth, appleAuthAndroid} from '@invertase/react-native-apple-authentication';
 import jwt_decode from 'jwt-decode';
+import 'react-native-get-random-values';
+import { v4 as uuid } from 'uuid'
 
 GoogleSignin.configure({
     webClientId: Def.WEB_CLIENT_ID,
@@ -260,6 +262,7 @@ export default class UserController{
                 Def.verifyInfo[userCredential.user.email] = {
                     email : userCredential.user.email,
                     fullName : fullName,
+                    photo : userCredential.user.photoURL  && userCredential.user.photoURL.length > 0 ? userCredential.user.photoURL  :userCredential.user.providerData[0].photoURL
                 };
                 await AsyncStorage.setItem('verifyInfo', JSON.stringify(Def.verifyInfo));
                 const result = {};
@@ -273,7 +276,6 @@ export default class UserController{
                 result.photo = userCredential.user.photoURL  && userCredential.user.photoURL.length > 0 ? userCredential.user.photoURL  :userCredential.user.providerData[0].photoURL;
                 console.log('Result : ' + JSON.stringify(result));
                 if(result.email){
-
                      UserController.loginFirebase(result);
                 }
             }
@@ -291,24 +293,16 @@ export default class UserController{
             requestedOperation: appleAuth.Operation.LOGIN,
             requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
         });
-
         console.log('Login Data 1 ' + JSON.stringify(appleAuthRequestResponse));
-
-        // get current authentication state for user
-        // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
         const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
-
         // use credentialState response to ensure the user is authenticated
         if (credentialState === appleAuth.State.AUTHORIZED) {
             // user is authenticated
-
-
             let verifyInfo = await AsyncStorage.getItem('verifyInfo');
             if(verifyInfo){
                 console.log('verifyInfo is not null' + JSON.stringify(verifyInfo));
                 Def.verifyInfo = JSON.parse(verifyInfo);
             }
-            // Lan very file dau tien
             if(appleAuthRequestResponse.email){
                 Def.verifyInfo[appleAuthRequestResponse.user] = {
                   email : appleAuthRequestResponse.email,
@@ -316,12 +310,9 @@ export default class UserController{
                 };
                 await AsyncStorage.setItem('verifyInfo', JSON.stringify(Def.verifyInfo));
             }
-
             const result = {};
             result.oauth_client = 'apple';
             result.token = appleAuthRequestResponse.identityToken;
-
-
             if(Def.verifyInfo[appleAuthRequestResponse.user]){
                 result.email = Def.verifyInfo[appleAuthRequestResponse.user]['email'];
                 result.id = appleAuthRequestResponse.user;
@@ -342,17 +333,52 @@ export default class UserController{
 
             }
             if(result.email){
-
                 UserController.loginFirebase(result);
             }
+        }
+    }
 
+    static async androidLoginWithApple(navigation = null){
+        const rawNonce = uuid();
+        const state = uuid();
+        const result = {};
 
+        // Configure the request
+        appleAuthAndroid.configure({
+            clientId: 'com.eurotile.center',
+            redirectUri: Def.URL_BASE + 'user/sign-in/apple-oauth',
+            responseType: appleAuthAndroid.ResponseType.ALL,
+            scope: appleAuthAndroid.Scope.ALL,
+            nonce: rawNonce,
+            state,
+        });
 
+        // Open the browser window for user sign in
+        const response = await appleAuthAndroid.signIn();
+        console.log('Response Data ' + JSON.stringify(response));
+        // use credentialState response to ensure the user is authenticated
+        if (response['id_token']) {
+            // user is authenticated
+            const decodeData = jwt_decode(response['id_token']);
+            result.email = decodeData.email;
+            result.id = decodeData.sub;
 
-
-
-
-
+            result.oauth_client = 'apple';
+            result.token = response['id_token'];
+            result.id = decodeData.sub;
+            console.log('decodeData ' + JSON.stringify(decodeData));
+            let verifyInfo = await AsyncStorage.getItem('verifyInfo');
+            if(verifyInfo){
+                console.log('verifyInfo is not null' + JSON.stringify(verifyInfo));
+                Def.verifyInfo = JSON.parse(verifyInfo);
+                if(Def.verifyInfo[decodeData.email]) {
+                    result.name = Def.verifyInfo[decodeData.email]['fullName'];
+                    result.photo = Def.verifyInfo[decodeData.email]['photo'];
+                }
+            }
+            if(result.email){
+                UserController.loginFirebase(result);
+            }
         }
     }
 
@@ -589,7 +615,7 @@ export default class UserController{
         // return;
         var is_new = false;
         try {
-            if(data && data['user']){
+            if(data  && data['result'] == 1 && data['user']){
                 is_new = data['is_new'];
                 data = data['user'];
 

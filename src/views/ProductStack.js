@@ -350,7 +350,7 @@ class ProductStack extends React.Component {
                                             alignItems : 'center'
                                         }
                                     }
-                                    onPress={this.showExpandPanel()}>
+                                    onPress={this.showExpandPanel}>
                                     <ExpandIcon
                                         width={Style.CART_ICON_SIZE}
                                         height={Style.CART_ICON_SIZE }

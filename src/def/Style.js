@@ -1,4 +1,4 @@
-import {PixelRatio, StyleSheet, Dimensions} from 'react-native'
+import {PixelRatio, StyleSheet, Dimensions, Platform} from 'react-native'
 import Def from './Def';
 
 const {width, height} = Dimensions.get('window');
@@ -7,7 +7,7 @@ export default class Style{
     // static HEADER_HEIGHT = PixelRatio.get() < 2? 46 :47;
     static TITLE_SIZE = PixelRatio.get() < 2 ? 15 :17;
 
-    static HEADER_HEIGHT = PixelRatio.get() == 2 && !Def.isIphoneXorAbove() ? 60 : 85;
+    static HEADER_HEIGHT =  Platform.OS == 'ios'   ? (PixelRatio.get() == 2 && !Def.isIphoneXorAbove() ? 60 : 85 ) : (PixelRatio.get() < 2? 46 :47);
     static BOTTOM_HEIGHT = PixelRatio.get() == 2 && !Def.isIphoneXorAbove() ? 60 : 80;
 
 

@@ -163,7 +163,7 @@ class ProductScreen extends React.Component {
         }
 
     }
-r
+
     forcusFunction = () => {
         this.setState({orderItems : Def.currentCart && Def.currentCart.orderItems ? Def.currentCart.orderItems :  []});
     };

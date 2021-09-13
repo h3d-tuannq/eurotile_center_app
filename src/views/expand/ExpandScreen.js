@@ -49,6 +49,7 @@ class ExpandScreen extends React.Component {
         this.forcusFunction = this.forcusFunction.bind(this);
         // Def.refreshDashBoard = this.refresh;
         this.buttonClickHandle = this.buttonClickHandle.bind(this);
+        this.gotoEcatalogue = this.gotoEcatalogue.bind(this);
     }
 
     buttonClickHandle = (buttonCode = 0) => {
@@ -58,6 +59,9 @@ class ExpandScreen extends React.Component {
                 break;
             case 6:
                 this.gotoTerm();
+                break;
+            case 0:
+                this.gotoEcatalogue();
                 break;
             case 7:
                 this.gotoSetupInfo()
@@ -133,6 +137,10 @@ class ExpandScreen extends React.Component {
 
     gotoTerm = () => {
         this.props.navigation.navigate('Expand', {'screen':'term-screen'});
+    }
+
+    gotoEcatalogue = () => {
+        this.props.navigation.navigate('Expand', {'screen':'ecatalogue'});
     }
 
 

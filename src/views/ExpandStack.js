@@ -11,6 +11,7 @@ import ChangeUserInfo from "./expand/ChangeUserInfo";
 import ContactScreen from './expand/ContactScreen'
 import ShareAppScreen from './expand/ShareAppScreen'
 import TermScreen from './expand/TermScreen'
+import EcatalogueScreen from "./expand/EcatalogueScreen";
 import Def from "../def/Def";
 import NotiIcon from "../../assets/icon/icon-notification.svg";
 
@@ -103,6 +104,39 @@ class ExpandStack extends React.Component {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     }
                 }} />
+
+                <RootStack.Screen name="ecatalogue" component={EcatalogueScreen} options={{
+                    title: "Ecatalogue",
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            style=  {
+                                {
+                                    // width: Style.LOGO_WIDTH + 20,
+                                    // height:Style.DRAWER_MENU_SIZE,
+                                    justifyContent: 'center',
+                                    paddingLeft:15 ,
+                                    alignItems : 'center'
+                                }
+                            }
+                            onPress={() => this.props.navigation.goBack()}
+                        >
+
+                            <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                        </TouchableOpacity>
+
+                    ),
+
+                    headerStyle: {
+                        backgroundColor: Style.DEFAUT_BLUE_COLOR,
+                        height: Style.HEADER_HEIGHT,
+                    },
+                    headerTintColor: '#fff',
+
+                    headerBackImage: ()=> {
+                        return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
+                    }
+                }} />
+
 
                 <RootStack.Screen name="contact-screen" component={ContactScreen} options={{
                     title: 'Liên hệ',
