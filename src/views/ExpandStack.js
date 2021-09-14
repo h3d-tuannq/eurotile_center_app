@@ -42,11 +42,13 @@ class ExpandStack extends React.Component {
     render() {
         return (
             <RootStack.Navigator
+                mode={"modal"}
                 screenOptions={{
                     headerBackTitleVisible: false,
                     headerTitleStyle: {
                         textTransform: 'uppercase'
                     },
+
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
                     },

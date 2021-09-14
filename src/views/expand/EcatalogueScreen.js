@@ -141,11 +141,11 @@ class EcatalogueScreen extends React.Component {
             <CatalogueItemrenderer click={this.itemClick} type={'product'} item={item} favorite={true}
                                  styleImage={{
                                      width: PROGRAM_IMAGE_WIDTH - 20,
-                                     height: PROGRAM_IMAGE_HEIGHT - 20,
+                                     height: PROGRAM_IMAGE_HEIGHT ,
                                  }}
                                  styleItem={{
                                      width: PROGRAM_IMAGE_WIDTH ,
-                                     height: PROGRAM_IMAGE_HEIGHT,
+                                     height: PROGRAM_IMAGE_HEIGHT + 20,
                                      justifyContent:'center',
                                      padding:10,
                                      marginRight : 10,
@@ -158,13 +158,13 @@ class EcatalogueScreen extends React.Component {
         );
         return (
             <View style={styles.container}>
-                <View style={{ width : width -20, borderWidth : 0, height:Def.ITEM_HEIGHT + 10 ,borderBottomWidth:1 ,borderColor:Style.GREY_BACKGROUND_COLOR, flexDirection : 'row',alignItems : 'center', marginTop : 0, marginBottom : 5,}}>
-                    <TextInput value={this.state.name} onChangeText={text => this.setState({ name : text })} placeholder={"Nhập tên"} style={[styles.textInput, {backgroundColor:'#fff',marginTop:5, width: width -70, paddingHorizontal:10}]}>
-                    </TextInput>
-                    <TouchableOpacity onPress={this.searchButtonClick} style={{paddingLeft:5,paddingRight:0, paddingVertical:5 ,  }} >
-                        <Icon style={styles.searchIcon} name="search" size={27} color={Style.GREY_TEXT_COLOR}/>
-                    </TouchableOpacity>
-                </View>
+                {/*<View style={{ width : width -20, borderWidth : 0, height:Def.ITEM_HEIGHT + 10 ,borderBottomWidth:1 ,borderColor:Style.GREY_BACKGROUND_COLOR, flexDirection : 'row',alignItems : 'center', marginTop : 0, marginBottom : 5,}}>*/}
+                {/*    <TextInput value={this.state.name} onChangeText={text => this.setState({ name : text })} placeholder={"Nhập tên"} style={[styles.textInput, {backgroundColor:'#fff',marginTop:5, width: width -70, paddingHorizontal:10}]}>*/}
+                {/*    </TextInput>*/}
+                {/*    <TouchableOpacity onPress={this.searchButtonClick} style={{paddingLeft:5,paddingRight:0, paddingVertical:5 ,  }} >*/}
+                {/*        <Icon style={styles.searchIcon} name="search" size={27} color={Style.GREY_TEXT_COLOR}/>*/}
+                {/*    </TouchableOpacity>*/}
+                {/*</View>*/}
                     {this.state.data && this.state.data.length > 0 ?
                     <View>
                         <FlatList

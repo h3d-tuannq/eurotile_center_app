@@ -43,7 +43,7 @@ class CatalogueItemrenderer  extends PureComponent{
 
 
                 {model.thumb_path ?
-                    <Image  style={[this.props.styleImage ]}  source={{uri: Def.URL_CONTENT_BASE + Def.getThumnailImg(model.thumb_path, true)}}  />
+                    <Image  style={[this.props.styleImage , {borderWidth : 5, borderColor : Style.DEFAUT_BLUE_COLOR}]}  source={{uri: Def.URL_CONTENT_BASE + Def.getThumnailImg(model.thumb_path, true)}}  />
                     :
                     <DefaultProgramImage style={styles.imageStyle} width={this.props.styleImage.width} height={this.props.styleImage.height}/>
                 }
@@ -51,13 +51,13 @@ class CatalogueItemrenderer  extends PureComponent{
                 </TouchableOpacity>
 
                 <View style = {{width:this.props.styleImage.width, justifyContent:'center',
-                    backgroundColor: Style.DEFAUT_BLUE_COLOR ,
                     alignItems: 'center'}}>
-                    <Text style={[{position: 'absolute',zIndex:3 , paddingHorizontal : 4 , paddingVertical:1 , borderRadius : 0,
-                        backgroundColor: 'rgba(48, 94, 117, 0.6)',
+                    <Text style={[{
+                         paddingHorizontal : 4 , paddingVertical:1 , borderRadius : 0,
+                        // backgroundColor: 'rgba(48, 94, 117, 0.6)',
                         width:this.props.styleImage.width,
-                        bottom:10, left:5,
-                        textAlign: 'center'}, { fontSize: Style.MIDLE_SIZE , color: '#fff' }]}>
+                        // bottom:10, left:5,
+                        textAlign: 'center'}, { fontSize: Style.TITLE_SIZE , color: Style.DEFAUT_RED_COLOR }]}>
                           {this.formatText(model.name, 20)}
                     </Text>
                 </View>
