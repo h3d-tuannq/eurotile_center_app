@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, View, Text , TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, View, Text , TouchableOpacity, SafeAreaView } from 'react-native';
 
 import Pdf from 'react-native-pdf';
 import Def from "../../def/Def";
@@ -30,10 +30,11 @@ export default class PdfViewer extends React.Component {
         //const source = {uri:"data:application/pdf;base64,JVBERi0xLjcKJc..."};
 
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <View style={{
                     backgroundColor: Style.DEFAUT_BLUE_COLOR,
-                    height: Style.HEADER_HEIGHT,
+                    height: 47,
+                    // marginTop : Style.HEADER_HEIGHT -47,
                     width: width,
                     flexDirection : 'row',
                     alignItems: 'center',
@@ -54,6 +55,7 @@ export default class PdfViewer extends React.Component {
                 </View>
                 <Pdf
                     source={source}
+                    fitWidth={true}
                     onLoadComplete={(numberOfPages,filePath)=>{
                         console.log(`number of pages: ${numberOfPages}`);
                     }}
@@ -67,7 +69,7 @@ export default class PdfViewer extends React.Component {
                         console.log(`Link presse: ${uri}`)
                     }}
                     style={styles.pdf}/>
-            </View>
+            </SafeAreaView>
         )
     }
 }

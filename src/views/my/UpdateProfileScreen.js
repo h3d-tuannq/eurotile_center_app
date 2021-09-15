@@ -326,7 +326,7 @@ class UpdateProfileScreen extends React.Component {
             userInfo.avatar =   {
                 name: this.state.avatarSource.fileName ? this.state.avatarSource.fileName : this.state.avatarSource.name ,
                 type: this.state.avatarSource.type,
-                uri: Platform.OS === "android" ? this.state.avatarSource.uri : this.state.avatarSource.uri.replace("file://", "")
+                uri: Platform.OS === "android" ? this.state.avatarSource.uri : this.state.avatarSource.uri.replace("file://", "/")
             };
         }
         UserController.updatePartnerInfo(userInfo, navigation);
@@ -523,7 +523,7 @@ class UpdateProfileScreen extends React.Component {
                                     <TextInput
                                         onFocus={() => this.setState({focus: 1})}
                                         onBlur={() =>  this.setState({focus: 0})}
-                                        placeholderTextColor = "#000"
+                                        placeholderTextColor = {Style.GREY_TEXT_COLOR}
                                         style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {borderBottomWidth:1, width: width - 80}]}
                                         value={this.state.full_name}
                                         onChangeText={text => this.setState({full_name: text})}
@@ -594,7 +594,7 @@ class UpdateProfileScreen extends React.Component {
                                     <TextInput
                                         onFocus={() => this.setState({focus: 1})}
                                         onBlur={() =>  this.setState({focus: 0})}
-                                        placeholderTextColor = "#000"
+                                        placeholderTextColor = {Style.GREY_TEXT_COLOR}
                                         style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {borderBottomWidth:1, width: width - 80}]}
                                         value={this.state.mobile}
                                         onChangeText={text => this.setState({mobile: text})}
@@ -672,7 +672,7 @@ class UpdateProfileScreen extends React.Component {
 
                                     }
                                 }
-                                placeholderTextColor = "#000"
+                                placeholderTextColor = {Style.GREY_TEXT_COLOR}
                                 onBlur={()=> this.setState({focus:0})}
                                 style={[this.state.focus == 1 ? styles.textEditableForcus : styles.textEditableNormal, {borderBottomWidth:1, width: width - 80}]}
                                 value={ typeof this.state.address ? this.state.address.toString() : ""}
@@ -713,9 +713,9 @@ class UpdateProfileScreen extends React.Component {
 
 const styles = StyleSheet.create({
     textEditableNormal : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black',
-        fontSize : Style.TITLE_SIZE , marginRight : 5, textAlign: 'left' , fontWeight: '600', paddingLeft:0, paddingBottom : 12},
+        fontSize : Style.TITLE_SIZE , marginRight : 5, textAlign: 'left' , fontWeight: '500', paddingLeft:0, paddingBottom : 12},
     textEditableForcus : {height: ITEM_HEIGHT, backgroundColor : '#fff' ,color:'black',
-        fontSize : Style.TITLE_SIZE  , marginRight : 5, textAlign: 'left', fontWeight: '600',paddingLeft:0 , paddingBottom : 12},
+        fontSize : Style.TITLE_SIZE  , marginRight : 5, textAlign: 'left', fontWeight: '500',paddingLeft:0 , paddingBottom : 12},
     label: {color:Style.GREY_TEXT_COLOR, fontSize : Style.TITLE_SIZE -1},
 });
 
