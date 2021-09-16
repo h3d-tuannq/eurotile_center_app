@@ -4,14 +4,17 @@ import { StyleSheet, Dimensions, View, Text , TouchableOpacity, SafeAreaView } f
 import Pdf from 'react-native-pdf';
 import Def from "../../def/Def";
 import Style from "../../def/Style";
-const {width, height} = Dimensions.get('window');
+
 import BackIconSvg from '../../../assets/icon/icon-back.svg'
+const {width, height} = Dimensions.get('window');
+console.log('Width : ' + width);
 
 export default class PdfViewer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            item : this.props.item
+            item : this.props.item,
+            scale : 1,
         }
         this.goBack = this.goBack.bind(this);
     }
@@ -30,11 +33,11 @@ export default class PdfViewer extends React.Component {
         //const source = {uri:"data:application/pdf;base64,JVBERi0xLjcKJc..."};
 
         return (
-            <SafeAreaView style={styles.container}>
+            <View style={styles.container}>
                 <View style={{
                     backgroundColor: Style.DEFAUT_BLUE_COLOR,
                     height: 47,
-                    // marginTop : Style.HEADER_HEIGHT -47,
+                     marginTop : Style.HEADER_HEIGHT -47,
                     width: width,
                     flexDirection : 'row',
                     alignItems: 'center',
@@ -54,10 +57,23 @@ export default class PdfViewer extends React.Component {
                     </View>
                 </View>
                 <Pdf
+                     minScale={0.1}
+                    // maxScale={1}
+                    fitPolicy={0}
+                     ref={(pdf) => { this.pdf = pdf; }}
+                     scale={this.state.scale}
+
+
+
                     source={source}
                     fitWidth={true}
-                    onLoadComplete={(numberOfPages,filePath)=>{
-                        console.log(`number of pages: ${numberOfPages}`);
+                    onLoadComplete={(numberOfPages,filePath, {width, height})=>{
+                        console.log(`width ${width}`);
+                        let scale = (Dimensions.get('window').width  ) / width;
+                        console.log('Scale : ' + scale);
+                        this.setState({scale:scale});
+                        // this.pdf.setPageWidth(width);
+                        // this.pdf.setPageHeight(height);
                     }}
                     onPageChanged={(page,numberOfPages)=>{
                         console.log(`current page: ${page}`);
@@ -69,7 +85,7 @@ export default class PdfViewer extends React.Component {
                         console.log(`Link presse: ${uri}`)
                     }}
                     style={styles.pdf}/>
-            </SafeAreaView>
+            </View>
         )
     }
 }
@@ -81,8 +97,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     pdf: {
-        flex:1,
-        width:Dimensions.get('window').width,
-        height:Dimensions.get('window').height,
+         flex:1,
+        width:width,
+        paddingHorizontal : 0,
+        // backgroundColor : '#ff0000'
+         height:Dimensions.get('window').height,
     }
 });
