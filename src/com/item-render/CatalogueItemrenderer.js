@@ -43,7 +43,7 @@ class CatalogueItemrenderer  extends PureComponent{
 
 
                 {model.thumb_path ?
-                    <Image  style={[this.props.styleImage , {borderWidth : 5, borderColor : Style.DEFAUT_BLUE_COLOR}]}  source={{uri: Def.URL_CONTENT_BASE + Def.getThumnailImg(model.thumb_path, true)}}  />
+                    <Image  style={[this.props.styleImage , {borderWidth : 5, borderColor : Style.DEFAUT_BLUE_COLOR}]}  source={{uri: Def.URL_CONTENT_BASE + Def.getThumnailImg(model.thumb_path, false)}}  />
                     :
                     <DefaultProgramImage style={styles.imageStyle} width={this.props.styleImage.width} height={this.props.styleImage.height}/>
                 }
