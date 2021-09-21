@@ -64,7 +64,7 @@ export default class PdfViewer extends React.Component {
     };
 
     zoomOut = () => {
-        let scale = this.state.scale > 1 ? this.state.scale / 1.2 : 1;
+        let scale = this.state.scale > 0.5 ? this.state.scale / 1.2 : 0.5;
         this.setState({scale: scale});
         console.log(`zoomOut scale: ${scale}`);
     };
@@ -126,10 +126,12 @@ export default class PdfViewer extends React.Component {
                                         onPress={() => this.nextPage()}>
                         <Text style={styles.btnText}>{'+'}</Text>
                     </TouchableHighlight>
-                    <TouchableHighlight disabled={this.state.scale === 1}
-                                        style={this.state.scale === 1 ? styles.btnDisable : styles.btn}
+                    <TouchableHighlight disabled={this.state.scale === 0.5}
+                                        style={this.state.scale === 0.5 ? styles.btnDisable : styles.btn}
                                         onPress={() => this.zoomOut()}>
                         <Text style={styles.btnText}>{'-'}</Text>
+
+
                     </TouchableHighlight>
                     <View style={styles.btnText}><Text style={styles.btnText}>Scale</Text></View>
                     <TouchableHighlight disabled={this.state.scale >= 3}
