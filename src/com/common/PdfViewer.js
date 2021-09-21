@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, View, Text , TouchableOpacity,TouchableHighlight, SafeAreaView, BackHandler } from 'react-native';
+import { StyleSheet, Dimensions, View, Text , TouchableOpacity,TouchableHighlight, SafeAreaView, BackHandler, Platform } from 'react-native';
 
 import Pdf from 'react-native-pdf';
 import Def from "../../def/Def";
@@ -209,7 +209,7 @@ export default class PdfViewer extends React.Component {
                         {/*<TextInput style={{paddingHorizontal : 0, marginHorizontal:0 , backgroundColor : 'red'}}>*/}
                         {/*    {'/'}*/}
                         {/*</TextInput>*/}
-                        <TextInput editable={false} style={{paddingHorizontal : 0, marginLeft: -6 , marginHorizontal:0 , color:'#000'}}>
+                        <TextInput editable={false} style={{paddingHorizontal : 0, marginLeft: Platform.OS === 'android' ? -6 : 0 , marginHorizontal:0 , color:'#000'}}>
                             { '/ ' + this.state.numberOfPages}
                         </TextInput>
                     </View>
