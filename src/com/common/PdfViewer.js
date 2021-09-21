@@ -10,6 +10,8 @@ import {TextInput} from "react-native-gesture-handler";
 const {width, height} = Dimensions.get('window');
 console.log('Width : ' + width);
 
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 export default class PdfViewer extends React.Component {
     constructor(props) {
         super(props);
@@ -19,7 +21,9 @@ export default class PdfViewer extends React.Component {
             scale: 1,
             numberOfPages: 0,
             horizontal: false,
-            width: width
+            width: width,
+            minScale: 1,
+            maxScale: 3
         }
         this.goBack = this.goBack.bind(this);
         this.zoomIn = this.zoomIn.bind(this);
@@ -64,14 +68,14 @@ export default class PdfViewer extends React.Component {
     };
 
     zoomOut = () => {
-        let scale = this.state.scale > 0.5 ? this.state.scale / 1.2 : 0.5;
+        let scale = this.state.scale > this.state.minScale ? this.state.scale / 1.2 : this.state.minScale;
         this.setState({scale: scale});
         console.log(`zoomOut scale: ${scale}`);
     };
 
     zoomIn = () => {
         let scale = this.state.scale * 1.2;
-        scale = scale > 3 ? 3 : scale;
+        scale = scale > this.state.maxScale ? this.state.maxScale : scale;
         this.setState({scale: scale});
         console.log(`zoomIn scale: ${scale}`);
     };
@@ -113,70 +117,96 @@ export default class PdfViewer extends React.Component {
                     </View>
                 </View>
 
-                <View style={{flexDirection: 'row'}}>
+                <View style={{
+                        flexDirection: 'row', position : 'absolute', zIndex : 100, alignSelf : 'center', borderWidth: 0,
+                        backgroundColor : 'rgba(48, 94, 117, 0.6)' , paddingHorizontal: 10, borderRadius : 5,
+                        bottom : 3, height: 45, justifyContent: 'center', alignItems: 'center'
+                    }}
+                >
                     <TouchableHighlight disabled={this.state.page === 1}
                                         style={this.state.page === 1 ? styles.btnDisable : styles.btn}
                                         onPress={() => this.prePage()}>
-                        <Text style={styles.btnText}>{'-'}</Text>
+                        {/*<Text style={styles.btnText}>{'-'}</Text>*/}
+                        <Icon name="arrow-left" size={22} color={this.state.page === 1 ? Style.GREY_TEXT_COLOR : Style.DEFAUT_WHITE_COLOR } />
                     </TouchableHighlight>
-                    <View style={styles.btnText}><Text style={styles.btnText}>Page</Text></View>
+                    {/*<View style={styles.btnText}><Text style={styles.btnText}>Page</Text></View>*/}
                     <TouchableHighlight disabled={this.state.page === this.state.numberOfPages}
                                         style={this.state.page === this.state.numberOfPages ? styles.btnDisable : styles.btn}
                                         testID='NextPage'
                                         onPress={() => this.nextPage()}>
-                        <Text style={styles.btnText}>{'+'}</Text>
+                        {/*<Text style={styles.btnText}>{'+'}</Text>*/}
+                        <Icon name="arrow-right" size={22} color={this.state.page === this.state.numberOfPages ? Style.GREY_TEXT_COLOR : Style.DEFAUT_WHITE_COLOR } />
                     </TouchableHighlight>
-                    <TouchableHighlight disabled={this.state.scale === 0.5}
-                                        style={this.state.scale === 0.5 ? styles.btnDisable : styles.btn}
+                    <TouchableHighlight disabled={this.state.scale === this.state.minScale}
+                                        style={this.state.scale === this.state.minScale ? styles.btnDisable : styles.btn}
                                         onPress={() => this.zoomOut()}>
-                        <Text style={styles.btnText}>{'-'}</Text>
+                        {/*<Text style={styles.btnText}>{'-'}</Text>*/}
+                        <Icon name="search-minus" size={25} color={this.state.scale <= this.state.minScale ? Style.GREY_TEXT_COLOR : Style.DEFAUT_WHITE_COLOR } />
 
 
                     </TouchableHighlight>
-                    <View style={styles.btnText}><Text style={styles.btnText}>Scale</Text></View>
-                    <TouchableHighlight disabled={this.state.scale >= 3}
-                                        style={this.state.scale >= 3 ? styles.btnDisable : styles.btn}
+                    {/*<View style={styles.btnText}><Text style={styles.btnText}>Scale</Text></View>*/}
+                    <TouchableHighlight disabled={this.state.scale >= this.state.maxScale}
+                                        style={this.state.scale >= this.state.maxScale ? styles.btnDisable : styles.btn}
                                         onPress={() => this.zoomIn()}>
-                        <Text style={styles.btnText}>{'+'}</Text>
+                        {/*<Text style={styles.btnText}>{'+'}</Text>*/}
+                        <Icon name="search-plus" size={25} color={this.state.scale >= this.state.maxScale ?  Style.GREY_TEXT_COLOR : Style.DEFAUT_WHITE_COLOR} />
                     </TouchableHighlight>
-                    <View style={styles.btnText}><Text style={styles.btnText}>{'Horizontal:'}</Text></View>
+                    {/*<View style={styles.btnText}><Text style={styles.btnText}>{'Horizontal:'}</Text></View>*/}
                     <TouchableHighlight style={styles.btn} onPress={() => this.switchHorizontal()}>
-                        {!this.state.horizontal ? (<Text style={styles.btnText}>{'false'}</Text>) : (
-                            <Text style={styles.btnText}>{'true'}</Text>)}
+                        <Icon name="sync" size={22} color={Style.DEFAUT_WHITE_COLOR} />
+                        {/*{!this.state.horizontal ? (<Text style={styles.btnText}>{'false'}</Text>) : (*/}
+                        {/*    <Text style={styles.btnText}>{'true'}</Text>)}*/}
                     </TouchableHighlight>
 
                 </View>
+                <View
+                    style={{
+                        // paddingBottom : Style.HEADER_HEIGHT + 10
+                    }}
+                    onResponderMove={({ nativeEvent: PressEvent }) => {
+                                        console.log('Response Event');
+                                    }
+                    }>
+                    <Pdf
+                        minScale={this.state.minScale}
+                        maxScale={this.state.maxScale}
+                        ref={(pdf) => { this.pdf = pdf; }}
+                        scale={this.state.scale}
+                        source={source}
+                        horizontal={this.state.horizontal}
+                        onLoadComplete={(numberOfPages, filePath,{width,height},tableContents) => {
+                            let newState = {numberOfPages: numberOfPages};
+                            let scaleContent = Dimensions.get('window') / width;
+                            if(this.state.minScale > scaleContent){
+                                newState['minScale'] = scaleContent;
+                            }
+                            this.setState(newState);
+                            // console.log(`total page count: ${numberOfPages}`);
+                            // console.log(tableContents);
+                        }}
+                        onPageChanged={(page, numberOfPages) => {
+                            this.setState({
+                                page: page
+                            });
+                        }}
+                        onError={(error) => {
+                            console.log(error);
+                        }}
+                        onPageSingleTap={(page) => {
+                            console.log('Evvent Signlet Page Tab' + page);
+                        }}
 
-                <Pdf
-                    minScale={0.5}
-                    maxScale={3}
-                    ref={(pdf) => { this.pdf = pdf; }}
-                    scale={this.state.scale}
-                    source={source}
-                    horizontal={this.state.horizontal}
-                    onLoadComplete={(numberOfPages, filePath,{width,height},tableContents) => {
-                        this.setState({
-                            numberOfPages: numberOfPages
-                        });
-                        console.log(`total page count: ${numberOfPages}`);
-                        console.log(tableContents);
-                    }}
-                    onPageChanged={(page, numberOfPages) => {
-                        this.setState({
-                            page: page
-                        });
-                    }}
-                    onError={(error) => {
-                        console.log(error);
-                    }}
+                        style={styles.pdf}/>
 
-                    style={styles.pdf}/>
+                </View>
+
 
                     <View style={{
                         flexDirection : 'row', position : 'absolute', zIndex : 100, alignSelf : 'center', borderWidth: 0,
-                        backgroundColor : 'rgba(48, 94, 117, 0.9)' , paddingHorizontal: 10, borderRadius : 5,
-                        bottom : 5, height: 40, justifyContent: 'center', alignItems: 'center'}}>
-                        <TextInput style={{paddingHorizontal : 0, marginHorizontal:0 }}
+                        backgroundColor : 'rgba(48, 94, 117, 0.6)', paddingVertical:0 , paddingHorizontal: 10, borderRadius : 0,
+                        top: Style.HEADER_HEIGHT + 30,left : 0, height: 40, justifyContent: 'center', alignItems: 'center'}}>
+                        <TextInput style={{paddingHorizontal : 0, marginHorizontal:0 , color:'#fff'}}
                                    ref={(txtInput) => { this.txtInput = txtInput; }}
                                    onChangeText={text => {
                                        if(text.length > 0){
@@ -209,7 +239,7 @@ export default class PdfViewer extends React.Component {
                         {/*<TextInput style={{paddingHorizontal : 0, marginHorizontal:0 , backgroundColor : 'red'}}>*/}
                         {/*    {'/'}*/}
                         {/*</TextInput>*/}
-                        <TextInput editable={false} style={{paddingHorizontal : 0, marginLeft: Platform.OS === 'android' ? -6 : 0 , marginHorizontal:0 , color:'#000'}}>
+                        <TextInput editable={false} style={{paddingHorizontal : 0, marginLeft: Platform.OS === 'android' ? -6 : 0 , marginHorizontal:0 , color:'#fff'}}>
                             { '/ ' + this.state.numberOfPages}
                         </TextInput>
                     </View>
@@ -230,16 +260,19 @@ const styles = StyleSheet.create({
         paddingHorizontal : 0,
         // backgroundColor : '#ff0000'
          height:Dimensions.get('window').height,
+
     },
     btn: {
         margin: 2,
         padding: 2,
-        backgroundColor: "aqua",
+        paddingHorizontal: 10,
+        // backgroundColor: "aqua",
     },
     btnDisable: {
         margin: 2,
         padding: 2,
-        backgroundColor: "gray",
+        paddingHorizontal: 10,
+        // backgroundColor: "gray",
     },
     btnText: {
         margin: 2,
