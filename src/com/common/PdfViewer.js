@@ -177,7 +177,7 @@ export default class PdfViewer extends React.Component {
                         horizontal={this.state.horizontal}
                         onLoadComplete={(numberOfPages, filePath,{width,height},tableContents) => {
                             let newState = {numberOfPages: numberOfPages};
-                            let scaleContent = Dimensions.get('window') / width;
+                            let scaleContent = Dimensions.get('window').width / width;
                             if(this.state.minScale > scaleContent){
                                 newState['minScale'] = scaleContent;
                             }
