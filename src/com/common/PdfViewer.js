@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, View, Text , TouchableOpacity,TouchableHighlight, SafeAreaView, BackHandler, Platform } from 'react-native';
+import { StyleSheet, Dimensions, View, Text , TouchableOpacity,TouchableHighlight, SafeAreaView, BackHandler, Platform, ScrollView } from 'react-native';
 
 import Pdf from 'react-native-pdf';
 import Def from "../../def/Def";
@@ -180,7 +180,11 @@ export default class PdfViewer extends React.Component {
                             let scaleContent = Dimensions.get('window').width / width;
                             if(this.state.minScale > scaleContent){
                                 newState['minScale'] = scaleContent;
+                                if(Platform.OS == 'ios') {
+                                    newState['scale'] = (Dimensions.get('window').width)/ width;;
+                                }
                             }
+
                             this.setState(newState);
                             // console.log(`total page count: ${numberOfPages}`);
                             // console.log(tableContents);

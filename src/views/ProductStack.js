@@ -187,22 +187,22 @@ class ProductStack extends React.Component {
 
                     headerRight: () => (
                         <View style={{flexDirection : 'row'}}>
-                            <TouchableOpacity
-                                style=  {
-                                    {
-                                        width: Style.DRAWER_MENU_SIZE,
-                                        height: Style.DRAWER_MENU_SIZE,
-                                        justifyContent: 'center',
-                                        paddingRight:15 ,
-                                        alignItems : 'center'
-                                    }
-                                }
-                                onPress={this.searchClick}
-                            >
-                                <SearchIcon width={Style.CART_ICON_SIZE}
-                                            height={Style.CART_ICON_SIZE}
-                                />
-                            </TouchableOpacity>
+                            {/*<TouchableOpacity*/}
+                            {/*    style=  {*/}
+                            {/*        {*/}
+                            {/*            width: Style.DRAWER_MENU_SIZE,*/}
+                            {/*            height: Style.DRAWER_MENU_SIZE,*/}
+                            {/*            justifyContent: 'center',*/}
+                            {/*            paddingRight:15 ,*/}
+                            {/*            alignItems : 'center'*/}
+                            {/*        }*/}
+                            {/*    }*/}
+                            {/*    onPress={this.searchClick}*/}
+                            {/*>*/}
+                            {/*    <SearchIcon width={Style.CART_ICON_SIZE}*/}
+                            {/*                height={Style.CART_ICON_SIZE}*/}
+                            {/*    />*/}
+                            {/*</TouchableOpacity>*/}
                             <TouchableOpacity
                                 style=  {
                                     {
@@ -254,53 +254,7 @@ class ProductStack extends React.Component {
                     //
                     // ),
 
-                    headerRight: () => (
-                        <View style={{flexDirection : 'row'}}>
-                            <TouchableOpacity
-                                style=  {
-                                    {
-                                        width: Style.DRAWER_MENU_SIZE,
-                                        height: Style.DRAWER_MENU_SIZE,
-                                        justifyContent: 'center',
-                                        paddingRight:15 ,
-                                        alignItems : 'center'
-                                    }
-                                }
-                                onPress={this.searchClick}
-                            >
-                                <SearchIcon width={Style.CART_ICON_SIZE}
-                                            height={Style.CART_ICON_SIZE}
-                                />
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style=  {
-                                    {
-                                        width: Style.DRAWER_MENU_SIZE,
-                                        height: Style.DRAWER_MENU_SIZE,
-                                        justifyContent: 'center',
-                                        paddingRight:15 ,
-                                        alignItems : 'center'
-                                    }
-                                }
-                                onPress={this.goProductList}>
-                                { this.state.number_order ?
-                                    <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
-                                        <Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>
-                                            {this.formatOrderNumber(this.state.number_order)}
-                                        </Text>
-                                    </View>
-                                    :<View/>
-                                }
 
-                                <CartIcon
-                                    width={Style.CART_ICON_SIZE}
-                                    height={Style.CART_ICON_SIZE}
-                                />
-                            </TouchableOpacity>
-                        </View>
-
-
-                    ),
 
                     headerStyle: {
                         backgroundColor: Style.DEFAUT_BLUE_COLOR,
@@ -324,22 +278,22 @@ class ProductStack extends React.Component {
 
                         headerRight: () => (
                             <View style={{flexDirection : 'row'}}>
-                                <TouchableOpacity
-                                    style=  {
-                                        {
-                                            width: Style.DRAWER_MENU_SIZE,
-                                            height: Style.DRAWER_MENU_SIZE,
-                                            justifyContent: 'center',
-                                            paddingRight:15 ,
-                                            alignItems : 'center'
-                                        }
-                                    }
-                                    onPress={this.searchClick}
-                                >
-                                    <SearchIcon width={Style.CART_ICON_SIZE}
-                                                height={Style.CART_ICON_SIZE}
-                                    />
-                                </TouchableOpacity>
+                                {/*<TouchableOpacity*/}
+                                {/*    style=  {*/}
+                                {/*        {*/}
+                                {/*            width: Style.DRAWER_MENU_SIZE,*/}
+                                {/*            height: Style.DRAWER_MENU_SIZE,*/}
+                                {/*            justifyContent: 'center',*/}
+                                {/*            paddingRight:15 ,*/}
+                                {/*            alignItems : 'center'*/}
+                                {/*        }*/}
+                                {/*    }*/}
+                                {/*    onPress={this.searchClick}*/}
+                                {/*>*/}
+                                {/*    <SearchIcon width={Style.CART_ICON_SIZE}*/}
+                                {/*                height={Style.CART_ICON_SIZE}*/}
+                                {/*    />*/}
+                                {/*</TouchableOpacity>*/}
                                 <TouchableOpacity
                                     style=  {
                                         {
@@ -420,34 +374,27 @@ class ProductStack extends React.Component {
                         height: Style.HEADER_HEIGHT,
                     },
                     headerTintColor: '#fff',
-                    headerRight: () => (
-                        <TouchableOpacity
-                            style=  {
-                                {
-                                    width: Style.DRAWER_MENU_SIZE,
-                                    height: Style.DRAWER_MENU_SIZE,
-                                    justifyContent: 'center',
-                                    paddingRight:15 ,
-                                    alignItems : 'center'
-                                }
-                            }
-                            onPress={this.goProductList}>
-                            { this.state.number_order ?
-                                <View style={{width:20, zIndex: 1, top:-3, left : -8 ,height:20, borderRadius:10, backgroundColor: Style.DEFAUT_RED_COLOR, justifyContent: 'center', alignItems : 'center', position : 'absolute'}}>
-                                    <Text style={{color: 'white', fontSize: this.state.number_order > 10 ? Style.SMALL_SIZE : Style.NORMAL_SIZE}}>
-                                        {this.formatOrderNumber(this.state.number_order)}
-                                    </Text>
+                            headerRight: () => (
+                                <View style={{flexDirection : 'row'}}>
+                                    <TouchableOpacity
+                                        style=  {
+                                            {
+                                                width: Style.DRAWER_MENU_SIZE,
+                                                height: Style.DRAWER_MENU_SIZE,
+                                                justifyContent: 'center',
+                                                paddingRight:15 ,
+                                                alignItems : 'center'
+                                            }
+                                        }
+                                        onPress={this.showExpandPanel}>
+                                        <ExpandIcon
+                                            width={Style.CART_ICON_SIZE }
+                                            height={Style.CART_ICON_SIZE }
+                                        />
+                                    </TouchableOpacity>
                                 </View>
-                                :<View/>
-                            }
 
-                            <CartIcon
-                                width={Style.CART_ICON_SIZE}
-                                height={Style.CART_ICON_SIZE}
-                            />
-                        </TouchableOpacity>
-
-                    ),
+                            ),
 
                     headerBackImage: ()=> {
                         return <BackIconSvg width={Style.BACK_ICON_SIZE} height={Style.BACK_ICON_SIZE} />
