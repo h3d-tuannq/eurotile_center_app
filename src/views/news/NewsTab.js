@@ -53,35 +53,38 @@ class NewsTab extends React.Component {
         );
         return (
             <View style={styles.container}>
-                <View style={{}}>
-                    <FlatList
-                        refreshControl={
-                            <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
-                        }
-                        data={this.props.data}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.id + ""}
-                        showsHorizontalScrollIndicator={false}
-                        ItemSeparatorComponent={
+                <FlatList
+                    refreshControl={
+                        <RefreshControl refreshing={this.state.isRefresh} onRefresh={this.onRefresh}/>
+                    }
+                    data={this.props.data}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id + ""}
+                    showsHorizontalScrollIndicator={false}
+                    ItemSeparatorComponent={
 
-                            (({ highlighted }) => (
-                                <View
-                                    style={[
-                                        {backgroundColor:Style.GREY_TEXT_COLOR, height:1, width:width -25, marginRight: 10},
-                                        highlighted && { marginRight: 10 }
-                                    ]}
-                                />
-                            ))
-                        }
+                        (({ highlighted }) => (
+                            <View
+                                style={[
+                                    {backgroundColor:Style.GREY_TEXT_COLOR, height:1, width:width -25, marginRight: 10},
+                                    highlighted && { marginRight: 10 }
+                                ]}
+                            />
+                        ))
+                    }
 
-                    />
-                </View>
+                />
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    container:{
+        paddingHorizontal: 10,
+
+    }
+
 });
 
 export default NewsTab;
